@@ -1,0 +1,15 @@
+ifneq (,$(findstring GCC,$(TOOLCHAIN)))
+  CPPFLAGS += -Wall -Werror -Wextra -Wunreachable-code -Wno-missing-field-initializers -Wno-format
+else
+  CPPFLAGS += --diag_suppress=111,177,1293
+endif
+
+ifneq (,$(findstring GCC,$(TOOLCHAIN)))
+  CPPFLAGS+= -std=c++11 
+  LDFLAGS=
+  CFLAGS+=-std=c++11 
+  OBJS=
+  LDDFLAGS+= -lstdc++ -lc -lm -lnosys -lgcc
+else
+  CPPFLAGS+= --cpp11
+endif

@@ -1,0 +1,7 @@
+CPPFLAGS += -I azx/hdr
+OBJS += $(patsubst %.c,%.o,$(wildcard azx/src/*.c))
+ifneq (,$(findstring GCC,$(TOOLCHAIN)))
+  CPPFLAGS += -Wall -Werror -Wextra -Wunreachable-code -Wno-missing-field-initializers -Wno-format
+else
+  CPPFLAGS += --diag_suppress=111,177,1293
+endif

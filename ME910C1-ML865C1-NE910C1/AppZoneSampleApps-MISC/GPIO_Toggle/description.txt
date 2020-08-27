@@ -1,0 +1,1 @@
+Sample application showcasing GPIO usage with M2MB API

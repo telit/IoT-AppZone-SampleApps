@@ -1,0 +1,1 @@
+Sample application showing how to use GPIOs and interrupts. Debug prints on AUX UART
