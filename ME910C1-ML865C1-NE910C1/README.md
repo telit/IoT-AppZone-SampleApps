@@ -116,15 +116,15 @@ in the samples package, go in the HelloWorld folder (e.g. `AppZoneSampleApps-MAI
 
 
 
-\TelitTOC
 
-#Applications 
+
+# Applications 
 
 ## AUX UART 
 *Applications that provide usage examples for various functionalities, log output on Auxiliary UART*
 
 
-###App update OTA via FTP
+### App update OTA via FTP
 
 Sample application showcasing Application OTA over FTP with AZX FTP. Debug prints on **AUX UART**
 
@@ -181,9 +181,9 @@ AT#M2MWRITE="/mod/ota_config.txt",<filesize>
 
 ---------------------
 
-\pagebreak
 
-###ATI (AT Instance)
+
+### ATI (AT Instance)
 
 Sample application showing how to use AT Instance functionality (sending AT commands from code). The example supports both sync and async (using a callback) modes. Debug prints on **AUX UART**
 
@@ -234,9 +234,9 @@ Sample application showing how to use AT Instance functionality (sending AT comm
 
 ---------------------
 
-\pagebreak
 
-###CJSON example: 
+
+### CJSON example: 
 
 Sample application showcasing how to manage JSON objects. Debug prints on **AUX UART**
 
@@ -265,9 +265,9 @@ Sample application showcasing how to manage JSON objects. Debug prints on **AUX 
 
 ---------------------
 
-\pagebreak
 
-###Crypto Elliptic Curve Cryptography (ECC) example 
+
+### Crypto Elliptic Curve Cryptography (ECC) example 
 
 Sample application showcasing how to manage Elliptic Curve Cryptography functionalities. Debug prints on **AUX UART**
 
@@ -314,9 +314,9 @@ Sample application showcasing how to manage Elliptic Curve Cryptography function
 
 ---------------------
 
-\pagebreak
 
-###Events
+
+### Events
 
 Sample application showcasing events setup and usage. Debug prints on **AUX UART**
 
@@ -342,9 +342,9 @@ Sample application showcasing events setup and usage. Debug prints on **AUX UART
 
 ---------------------
 
-\pagebreak
 
-###Events - Barrier (multi events)
+
+### Events - Barrier (multi events)
 
 Sample application showcasing how to setup and use multiple events to create a barrier. Debug prints on **AUX UART**
 
@@ -373,9 +373,9 @@ Sample application showcasing how to setup and use multiple events to create a b
 
 ---------------------
 
-\pagebreak
 
-###File System example 
+
+### File System example 
 
 Sample application showcasing M2MB File system API usage. Debug prints on **AUX UART**
 
@@ -411,9 +411,9 @@ Sample application showcasing M2MB File system API usage. Debug prints on **AUX 
 
 ---------------------
 
-\pagebreak
 
-###FOTA example
+
+### FOTA example
 
 Sample application showcasing FOTA usage with M2MB API. Debug prints on **AUX UART**
 
@@ -467,9 +467,9 @@ Sample application showcasing FOTA usage with M2MB API. Debug prints on **AUX UA
 
 ---------------------
 
-\pagebreak
 
-###FTP
+
+### FTP
 
 Sample application showcasing FTP client demo with AZX FTP. Debug prints on **AUX UART**
 
@@ -513,9 +513,9 @@ Sample application showcasing FTP client demo with AZX FTP. Debug prints on **AU
 
 ---------------------
 
-\pagebreak
 
-###GNSS example 
+
+### GNSS example 
 
 Sample application showing how to use GNSS functionality. Debug prints on **AUX UART**
 
@@ -539,9 +539,9 @@ Sample application showing how to use GNSS functionality. Debug prints on **AUX 
 
 ---------------------
 
-\pagebreak
 
-###GPIO interrupt example 
+
+### GPIO interrupt example 
 
 Sample application showing how to use GPIOs and interrupts. Debug prints on **AUX UART**
 
@@ -571,9 +571,9 @@ Sample application showing how to use GPIOs and interrupts. Debug prints on **AU
 
 ---------------------
 
-\pagebreak
 
-###Hello World
+
+### Hello World
 
 The application prints "Hello World!" over selected output every two seconds. Debug prints on **AUX UART**, <ins>using AZX log example functions</ins>
 
@@ -596,9 +596,9 @@ The application prints "Hello World!" over selected output every two seconds. De
 
 ---------------------
 
-\pagebreak
 
-###HTTP Client
+
+### HTTP Client
 
 Sample application showing how to use HTTPs client functionalities. Debug prints on **AUX UART**
 
@@ -642,9 +642,9 @@ Sample application showing how to use HTTPs client functionalities. Debug prints
 
 ---------------------
 
-\pagebreak
 
-###HW Timer (Hardware Timer)
+
+### HW Timer (Hardware Timer)
 
 The sample application shows how to use HW Timers M2MB API. Debug prints on **AUX UART**
 
@@ -683,9 +683,9 @@ The sample application shows how to use HW Timers M2MB API. Debug prints on **AU
 
 ---------------------
 
-\pagebreak
 
-###I2C example 
+
+### I2C example 
 
 Sample application showing how to communicate with an I2C slave device. Debug prints on **AUX UART**
 
@@ -713,9 +713,9 @@ Sample application showing how to communicate with an I2C slave device. Debug pr
 
 ---------------------
 
-\pagebreak
 
-###Logging Demo
+
+### Logging Demo
 
 Sample application showing how to print on one of the available output interfaces. Debug prints on **AUX UART**
 
@@ -742,9 +742,9 @@ Sample application showing how to print on one of the available output interface
 
 ---------------------
 
-\pagebreak
 
-###LWM2M
+
+### LWM2M
 
 Sample application showcasing TLS/SSL with client certificates usage with M2MB API. Debug prints on **AUX UART**
 
@@ -806,7 +806,7 @@ Sample application showcasing TLS/SSL with client certificates usage with M2MB A
 - Manage events arriving from client \(operations completion status and unsolicited events\)
 - Run lwm2m_taskCB when a monitored resource changes, to manage the action to be done
 
-####Custom Object configuration
+#### Custom Object configuration
 
 The XML file content must be loaded on the Telit IoT Portal for the demo application to be fully executed.
 
@@ -851,7 +851,7 @@ The file is successfully loaded on the module
 ![](pictures/samples/lwm2m_xml_7_done_bordered.png)
 
 
-####Application execution example
+#### Application execution example
 
 ![](pictures/samples/lwm2m_1_bordered.png)
 
@@ -876,9 +876,9 @@ Writing a string resource (id /35000/0/11 ), the application will notify the cha
 
 ---------------------
 
-\pagebreak
 
-###MD5 example 
+
+### MD5 example 
 
 Sample application showing how to compute MD5 hashes using m2mb crypto. Debug prints on **AUX UART**
 
@@ -905,9 +905,9 @@ Sample application showing how to compute MD5 hashes using m2mb crypto. Debug pr
 
 ---------------------
 
-\pagebreak
 
-###MQTT Client
+
+### MQTT Client
 
 Sample application showcasing MQTT client functionalities (with SSL). Debug prints on **AUX UART**
 
@@ -952,9 +952,9 @@ Sample application showcasing MQTT client functionalities (with SSL). Debug prin
 
 ---------------------
 
-\pagebreak
 
-###MultiTask
+
+### MultiTask
 
 Sample application showcasing multi tasking functionalities with M2MB API. Debug prints on **AUX UART**
 
@@ -1003,9 +1003,9 @@ Sample application showcasing multi tasking functionalities with M2MB API. Debug
 
 ---------------------
 
-\pagebreak
 
-###MutEx
+
+### MutEx
 
 Sample application showing mutex usage, with ownership and prioritization usage. Debug prints on **AUX UART**
 
@@ -1041,9 +1041,9 @@ Sample application showing mutex usage, with ownership and prioritization usage.
 
 ---------------------
 
-\pagebreak
 
-###Secure MicroService 
+
+### Secure MicroService 
 
 Sample application showcasing how to manage secure microservice functionalities. Debug prints on **AUX UART**
 
@@ -1087,9 +1087,9 @@ Sample application showcasing how to manage secure microservice functionalities.
 
 ---------------------
 
-\pagebreak
 
-###SMS PDU
+
+### SMS PDU
 
 Sample application showcasing how to create and decode PDUs to be used with m2mb_sms_* API set. A SIM card and antenna must be present. Debug prints on **AUX UART**
 
@@ -1117,9 +1117,9 @@ Sample application showcasing how to create and decode PDUs to be used with m2mb
 
 ---------------------
 
-\pagebreak
 
-###SW Timer (Software Timer)
+
+### SW Timer (Software Timer)
 
 The sample application shows how to use SW Timers M2MB API. Debug prints on **AUX UART**
 
@@ -1159,9 +1159,9 @@ The sample application shows how to use SW Timers M2MB API. Debug prints on **AU
 
 ---------------------
 
-\pagebreak
 
-###TCP IP 
+
+### TCP IP 
 
 Sample application showcasing TCP echo demo with M2MB API. Debug prints on **AUX UART**
 
@@ -1206,9 +1206,9 @@ Sample application showcasing TCP echo demo with M2MB API. Debug prints on **AUX
 
 ---------------------
 
-\pagebreak
 
-###TCP Server 
+
+### TCP Server 
 
 Sample application showcasing TCP listening socket demo with M2MB API. Debug prints on **AUX UART**
 
@@ -1265,9 +1265,9 @@ Data on a PuTTY terminal
 
 ---------------------
 
-\pagebreak
 
-###TLS SSL Client
+
+### TLS SSL Client
 
 Sample application showcasing TLS/SSL with client certificates usage with M2MB API. Debug prints on **AUX UART**
 
@@ -1327,9 +1327,9 @@ The application requires the certificates to be stored in `/test_ssl_certs/` fol
 
 ---------------------
 
-\pagebreak
 
-###UDP client
+
+### UDP client
 
 Sample application showcasing UDP echo demo with M2MB API. Debug prints on **AUX UART**
 
@@ -1362,9 +1362,9 @@ Sample application showcasing UDP echo demo with M2MB API. Debug prints on **AUX
 
 ---------------------
 
-\pagebreak
 
-###ZLIB example 
+
+### ZLIB example 
 
 Sample application showing how to compress/uncompress with ZLIB. Debug prints on **AUX UART**
 
@@ -1394,7 +1394,7 @@ AT#M2MWRITE="/mod/test.gz",138
 
 ---------------------
 
-\pagebreak
+
 
 ## BASIC 
 *Basic applications showing simple operations with minimum code overhead*
@@ -1424,7 +1424,7 @@ The application prints "Hello World!" on Auxiliary UART every 2 seconds using
 
 ---------------------
 
-\pagebreak
+
 
 ### Basic Hello World (Main UART)
 
@@ -1450,7 +1450,7 @@ The application prints "Hello World!" on Main UART every 2 seconds using
 
 ---------------------
 
-\pagebreak
+
 
 ### Basic Hello World (USB0)
 
@@ -1476,7 +1476,7 @@ The application prints "Hello World!" on USB 0 every 2 seconds using
 
 ---------------------
 
-\pagebreak
+
 
 ### Basic Task 
 
@@ -1509,13 +1509,13 @@ The application shows how to create and manage tasks with m2mb APIs. Debug print
 
 ---------------------
 
-\pagebreak
+
 
 ## C++ 
 *Applications that provide usage examples with C++*
 
 
-###Logging C++ 
+### Logging C++ 
 
 Sample application showcasing how to create a C++ OO code, providing a logging class (equivalent to the one in Logging demo)
 
@@ -1543,9 +1543,9 @@ Sample application showcasing how to create a C++ OO code, providing a logging c
 
 ---------------------
 
-\pagebreak
 
-###C++  method to function pointer
+
+### C++  method to function pointer
 
 Sample application showing how to manage class methods as function pointers. Debug prints on MAIN_UART
 
@@ -1575,13 +1575,13 @@ Sample application showing how to manage class methods as function pointers. Deb
 
 ---------------------
 
-\pagebreak
+
 
 ## MAIN UART 
 *Applications that provide usage examples for various functionalities, log output on Main UART*
 
 
-###App update OTA via FTP
+### App update OTA via FTP
 
 Sample application showcasing Application OTA over FTP with AZX FTP. Debug prints on **MAIN UART**
 
@@ -1638,9 +1638,9 @@ AT#M2MWRITE="/mod/ota_config.txt",<filesize>
 
 ---------------------
 
-\pagebreak
 
-###ATI (AT Instance)
+
+### ATI (AT Instance)
 
 Sample application showing how to use AT Instance functionality (sending AT commands from code). The example supports both sync and async (using a callback) modes. Debug prints on **MAIN UART**
 
@@ -1691,9 +1691,9 @@ Sample application showing how to use AT Instance functionality (sending AT comm
 
 ---------------------
 
-\pagebreak
 
-###AT Tunnel 
+
+### AT Tunnel 
 
 Sample application showcasing how to perform an AT tunnel from Main UART to an AT instance. Debug prints on **USB1**.
 
@@ -1725,9 +1725,9 @@ USB1 debug log:
 ---------------------
 
 
-\pagebreak
 
-###CJSON example: 
+
+### CJSON example: 
 
 Sample application showcasing how to manage JSON objects. Debug prints on **MAIN UART**
 
@@ -1756,9 +1756,9 @@ Sample application showcasing how to manage JSON objects. Debug prints on **MAIN
 
 ---------------------
 
-\pagebreak
 
-###Crypto Elliptic Curve Cryptography (ECC) example 
+
+### Crypto Elliptic Curve Cryptography (ECC) example 
 
 Sample application showcasing how to manage Elliptic Curve Cryptography functionalities. Debug prints on **MAIN UART**
 
@@ -1805,9 +1805,9 @@ Sample application showcasing how to manage Elliptic Curve Cryptography function
 
 ---------------------
 
-\pagebreak
 
-###Events
+
+### Events
 
 Sample application showcasing events setup and usage. Debug prints on **MAIN UART**
 
@@ -1833,9 +1833,9 @@ Sample application showcasing events setup and usage. Debug prints on **MAIN UAR
 
 ---------------------
 
-\pagebreak
 
-###Events - Barrier (multi events)
+
+### Events - Barrier (multi events)
 
 Sample application showcasing how to setup and use multiple events to create a barrier. Debug prints on **MAIN UART**
 
@@ -1864,9 +1864,9 @@ Sample application showcasing how to setup and use multiple events to create a b
 
 ---------------------
 
-\pagebreak
 
-###File System example 
+
+### File System example 
 
 Sample application showcasing M2MB File system API usage. Debug prints on **MAIN UART**
 
@@ -1902,9 +1902,9 @@ Sample application showcasing M2MB File system API usage. Debug prints on **MAIN
 
 ---------------------
 
-\pagebreak
 
-###FOTA example
+
+### FOTA example
 
 Sample application showcasing FOTA usage with M2MB API. Debug prints on **MAIN UART**
 
@@ -1958,9 +1958,9 @@ Sample application showcasing FOTA usage with M2MB API. Debug prints on **MAIN U
 
 ---------------------
 
-\pagebreak
 
-###FTP
+
+### FTP
 
 Sample application showcasing FTP client demo with AZX FTP. Debug prints on **MAIN UART**
 
@@ -2004,9 +2004,9 @@ Sample application showcasing FTP client demo with AZX FTP. Debug prints on **MA
 
 ---------------------
 
-\pagebreak
 
-###GNSS example 
+
+### GNSS example 
 
 Sample application showing how to use GNSS functionality. Debug prints on **MAIN UART**
 
@@ -2030,9 +2030,9 @@ Sample application showing how to use GNSS functionality. Debug prints on **MAIN
 
 ---------------------
 
-\pagebreak
 
-###GPIO interrupt example 
+
+### GPIO interrupt example 
 
 Sample application showing how to use GPIOs and interrupts. Debug prints on **MAIN UART**
 
@@ -2062,9 +2062,9 @@ Sample application showing how to use GPIOs and interrupts. Debug prints on **MA
 
 ---------------------
 
-\pagebreak
 
-###Hello World
+
+### Hello World
 
 The application prints "Hello World!" over selected output every two seconds. Debug prints on **MAIN UART**, <ins>using AZX log example functions</ins>
 
@@ -2087,9 +2087,9 @@ The application prints "Hello World!" over selected output every two seconds. De
 
 ---------------------
 
-\pagebreak
 
-###HTTP Client
+
+### HTTP Client
 
 Sample application showing how to use HTTPs client functionalities. Debug prints on **MAIN UART**
 
@@ -2133,9 +2133,9 @@ Sample application showing how to use HTTPs client functionalities. Debug prints
 
 ---------------------
 
-\pagebreak
 
-###HW Timer (Hardware Timer)
+
+### HW Timer (Hardware Timer)
 
 The sample application shows how to use HW Timers M2MB API. Debug prints on **MAIN UART**
 
@@ -2174,9 +2174,9 @@ The sample application shows how to use HW Timers M2MB API. Debug prints on **MA
 
 ---------------------
 
-\pagebreak
 
-###I2C example 
+
+### I2C example 
 
 Sample application showing how to communicate with an I2C slave device. Debug prints on **MAIN UART**
 
@@ -2204,9 +2204,9 @@ Sample application showing how to communicate with an I2C slave device. Debug pr
 
 ---------------------
 
-\pagebreak
 
-###Logging Demo
+
+### Logging Demo
 
 Sample application showing how to print on one of the available output interfaces. Debug prints on **MAIN UART**
 
@@ -2233,9 +2233,9 @@ Sample application showing how to print on one of the available output interface
 
 ---------------------
 
-\pagebreak
 
-###LWM2M
+
+### LWM2M
 
 Sample application showcasing TLS/SSL with client certificates usage with M2MB API. Debug prints on **MAIN UART**
 
@@ -2297,7 +2297,7 @@ Sample application showcasing TLS/SSL with client certificates usage with M2MB A
 - Manage events arriving from client \(operations completion status and unsolicited events\)
 - Run lwm2m_taskCB when a monitored resource changes, to manage the action to be done
 
-####Custom Object configuration
+#### Custom Object configuration
 
 The XML file content must be loaded on the Telit IoT Portal for the demo application to be fully executed.
 
@@ -2342,7 +2342,7 @@ The file is successfully loaded on the module
 ![](pictures/samples/lwm2m_xml_7_done_bordered.png)
 
 
-####Application execution example
+#### Application execution example
 
 ![](pictures/samples/lwm2m_1_bordered.png)
 
@@ -2367,9 +2367,9 @@ Writing a string resource (id /35000/0/11 ), the application will notify the cha
 
 ---------------------
 
-\pagebreak
 
-###MD5 example 
+
+### MD5 example 
 
 Sample application showing how to compute MD5 hashes using m2mb crypto. Debug prints on **MAIN UART**
 
@@ -2396,9 +2396,9 @@ Sample application showing how to compute MD5 hashes using m2mb crypto. Debug pr
 
 ---------------------
 
-\pagebreak
 
-###MQTT Client
+
+### MQTT Client
 
 Sample application showcasing MQTT client functionalities (with SSL). Debug prints on **MAIN UART**
 
@@ -2443,9 +2443,9 @@ Sample application showcasing MQTT client functionalities (with SSL). Debug prin
 
 ---------------------
 
-\pagebreak
 
-###MultiTask
+
+### MultiTask
 
 Sample application showcasing multi tasking functionalities with M2MB API. Debug prints on **MAIN UART**
 
@@ -2494,9 +2494,9 @@ Sample application showcasing multi tasking functionalities with M2MB API. Debug
 
 ---------------------
 
-\pagebreak
 
-###MutEx
+
+### MutEx
 
 Sample application showing mutex usage, with ownership and prioritization usage. Debug prints on **MAIN UART**
 
@@ -2532,9 +2532,9 @@ Sample application showing mutex usage, with ownership and prioritization usage.
 
 ---------------------
 
-\pagebreak
 
-###Secure MicroService 
+
+### Secure MicroService 
 
 Sample application showcasing how to manage secure microservice functionalities. Debug prints on **MAIN UART**
 
@@ -2578,9 +2578,9 @@ Sample application showcasing how to manage secure microservice functionalities.
 
 ---------------------
 
-\pagebreak
 
-###SMS PDU
+
+### SMS PDU
 
 Sample application showcasing how to create and decode PDUs to be used with m2mb_sms_* API set. A SIM card and antenna must be present. Debug prints on **MAIN UART**
 
@@ -2608,9 +2608,9 @@ Sample application showcasing how to create and decode PDUs to be used with m2mb
 
 ---------------------
 
-\pagebreak
 
-###SPI Echo
+
+### SPI Echo
 
 Sample application showing how to communicate over SPI with m2mb API. Debug prints on **MAIN UART**
 
@@ -2637,9 +2637,9 @@ Sample application showing how to communicate over SPI with m2mb API. Debug prin
 
 ---------------------
 
-\pagebreak
 
-###SPI sensors
+
+### SPI sensors
 
 Sample application showing SPI usage, configuring two ST devices: a magnetometer (ST LIS3MDL) and a gyroscope (ST L3G4200D). The application will read values from both devices using GPIO4 and 3 (respectively) as magnetometer CS and gyro CS. Debug prints on **MAIN UART**
 
@@ -2666,9 +2666,9 @@ Sample application showing SPI usage, configuring two ST devices: a magnetometer
 
 ---------------------
 
-\pagebreak
 
-###SW Timer (Software Timer)
+
+### SW Timer (Software Timer)
 
 The sample application shows how to use SW Timers M2MB API. Debug prints on **MAIN UART**
 
@@ -2708,9 +2708,9 @@ The sample application shows how to use SW Timers M2MB API. Debug prints on **MA
 
 ---------------------
 
-\pagebreak
 
-###TCP IP 
+
+### TCP IP 
 
 Sample application showcasing TCP echo demo with M2MB API. Debug prints on **MAIN UART**
 
@@ -2755,9 +2755,9 @@ Sample application showcasing TCP echo demo with M2MB API. Debug prints on **MAI
 
 ---------------------
 
-\pagebreak
 
-###TCP Server 
+
+### TCP Server 
 
 Sample application showcasing TCP listening socket demo with M2MB API. Debug prints on **MAIN UART**
 
@@ -2814,9 +2814,9 @@ Data on a PuTTY terminal
 
 ---------------------
 
-\pagebreak
 
-###TLS SSL Client
+
+### TLS SSL Client
 
 Sample application showcasing TLS/SSL with client certificates usage with M2MB API. Debug prints on **MAIN UART**
 
@@ -2876,9 +2876,9 @@ The application requires the certificates to be stored in `/test_ssl_certs/` fol
 
 ---------------------
 
-\pagebreak
 
-###Uart To Server
+
+### Uart To Server
 
 Sample application showcasing how to send data from main UART to a connected TCP server. Debug messages are printed on AUX UART port.
 
@@ -2912,9 +2912,9 @@ Debug log on AUX UART:
 
 ---------------------
 
-\pagebreak
 
-###UDP client
+
+### UDP client
 
 Sample application showcasing UDP echo demo with M2MB API. Debug prints on **MAIN UART**
 
@@ -2947,9 +2947,9 @@ Sample application showcasing UDP echo demo with M2MB API. Debug prints on **MAI
 
 ---------------------
 
-\pagebreak
 
-###ZLIB example 
+
+### ZLIB example 
 
 Sample application showing how to compress/uncompress with ZLIB. Debug prints on **MAIN UART**
 
@@ -2979,13 +2979,13 @@ AT#M2MWRITE="/mod/test.gz",138
 
 ---------------------
 
-\pagebreak
+
 
 ## MISC 
 *Applications that provide usage examples for various functionalities, without prints*
 
 
-###GPIO toggle example 
+### GPIO toggle example 
 
 Sample application showcasing GPIO usage with M2MB API
 
@@ -2996,13 +2996,13 @@ Sample application showcasing GPIO usage with M2MB API
 - How to open a gpio in output mode and change its status
 
 
-\pagebreak
+
 
 ## USB0 
 *Applications that provide usage examples for various functionalities, log output on USB0*
 
 
-###App update OTA via FTP
+### App update OTA via FTP
 
 Sample application showcasing Application OTA over FTP with AZX FTP. Debug prints on **USB0**
 
@@ -3059,9 +3059,9 @@ AT#M2MWRITE="/mod/ota_config.txt",<filesize>
 
 ---------------------
 
-\pagebreak
 
-###ATI (AT Instance)
+
+### ATI (AT Instance)
 
 Sample application showing how to use AT Instance functionality (sending AT commands from code). The example supports both sync and async (using a callback) modes. Debug prints on **USB0**
 
@@ -3112,9 +3112,9 @@ Sample application showing how to use AT Instance functionality (sending AT comm
 
 ---------------------
 
-\pagebreak
 
-###CJSON example: 
+
+### CJSON example: 
 
 Sample application showcasing how to manage JSON objects. Debug prints on **USB0**
 
@@ -3143,9 +3143,9 @@ Sample application showcasing how to manage JSON objects. Debug prints on **USB0
 
 ---------------------
 
-\pagebreak
 
-###Crypto Elliptic Curve Cryptography (ECC) example 
+
+### Crypto Elliptic Curve Cryptography (ECC) example 
 
 Sample application showcasing how to manage Elliptic Curve Cryptography functionalities. Debug prints on **USB0**
 
@@ -3192,9 +3192,9 @@ Sample application showcasing how to manage Elliptic Curve Cryptography function
 
 ---------------------
 
-\pagebreak
 
-###Events
+
+### Events
 
 Sample application showcasing events setup and usage. Debug prints on **USB0**
 
@@ -3220,9 +3220,9 @@ Sample application showcasing events setup and usage. Debug prints on **USB0**
 
 ---------------------
 
-\pagebreak
 
-###Events - Barrier (multi events)
+
+### Events - Barrier (multi events)
 
 Sample application showcasing how to setup and use multiple events to create a barrier. Debug prints on **USB0**
 
@@ -3251,9 +3251,9 @@ Sample application showcasing how to setup and use multiple events to create a b
 
 ---------------------
 
-\pagebreak
 
-###File System example 
+
+### File System example 
 
 Sample application showcasing M2MB File system API usage. Debug prints on **USB0**
 
@@ -3289,9 +3289,9 @@ Sample application showcasing M2MB File system API usage. Debug prints on **USB0
 
 ---------------------
 
-\pagebreak
 
-###FOTA example
+
+### FOTA example
 
 Sample application showcasing FOTA usage with M2MB API. Debug prints on **USB0**
 
@@ -3345,9 +3345,9 @@ Sample application showcasing FOTA usage with M2MB API. Debug prints on **USB0**
 
 ---------------------
 
-\pagebreak
 
-###FTP
+
+### FTP
 
 Sample application showcasing FTP client demo with AZX FTP. Debug prints on **USB0**
 
@@ -3391,9 +3391,9 @@ Sample application showcasing FTP client demo with AZX FTP. Debug prints on **US
 
 ---------------------
 
-\pagebreak
 
-###GNSS example 
+
+### GNSS example 
 
 Sample application showing how to use GNSS functionality. Debug prints on **USB0**
 
@@ -3417,9 +3417,9 @@ Sample application showing how to use GNSS functionality. Debug prints on **USB0
 
 ---------------------
 
-\pagebreak
 
-###GPIO interrupt example 
+
+### GPIO interrupt example 
 
 Sample application showing how to use GPIOs and interrupts. Debug prints on **USB0**
 
@@ -3449,9 +3449,9 @@ Sample application showing how to use GPIOs and interrupts. Debug prints on **US
 
 ---------------------
 
-\pagebreak
 
-###Hello World
+
+### Hello World
 
 The application prints "Hello World!" over selected output every two seconds. Debug prints on **USB0**, <ins>using AZX log example functions</ins>
 
@@ -3474,9 +3474,9 @@ The application prints "Hello World!" over selected output every two seconds. De
 
 ---------------------
 
-\pagebreak
 
-###HTTP Client
+
+### HTTP Client
 
 Sample application showing how to use HTTPs client functionalities. Debug prints on **USB0**
 
@@ -3520,9 +3520,9 @@ Sample application showing how to use HTTPs client functionalities. Debug prints
 
 ---------------------
 
-\pagebreak
 
-###HW Timer (Hardware Timer)
+
+### HW Timer (Hardware Timer)
 
 The sample application shows how to use HW Timers M2MB API. Debug prints on **USB0**
 
@@ -3561,9 +3561,9 @@ The sample application shows how to use HW Timers M2MB API. Debug prints on **US
 
 ---------------------
 
-\pagebreak
 
-###I2C example 
+
+### I2C example 
 
 Sample application showing how to communicate with an I2C slave device. Debug prints on **USB0**
 
@@ -3591,9 +3591,9 @@ Sample application showing how to communicate with an I2C slave device. Debug pr
 
 ---------------------
 
-\pagebreak
 
-###Logging Demo
+
+### Logging Demo
 
 Sample application showing how to print on one of the available output interfaces. Debug prints on **USB0**
 
@@ -3620,9 +3620,9 @@ Sample application showing how to print on one of the available output interface
 
 ---------------------
 
-\pagebreak
 
-###LWM2M
+
+### LWM2M
 
 Sample application showcasing TLS/SSL with client certificates usage with M2MB API. Debug prints on **USB0**
 
@@ -3684,7 +3684,7 @@ Sample application showcasing TLS/SSL with client certificates usage with M2MB A
 - Manage events arriving from client \(operations completion status and unsolicited events\)
 - Run lwm2m_taskCB when a monitored resource changes, to manage the action to be done
 
-####Custom Object configuration
+#### Custom Object configuration
 
 The XML file content must be loaded on the Telit IoT Portal for the demo application to be fully executed.
 
@@ -3729,7 +3729,7 @@ The file is successfully loaded on the module
 ![](pictures/samples/lwm2m_xml_7_done_bordered.png)
 
 
-####Application execution example
+#### Application execution example
 
 ![](pictures/samples/lwm2m_1_bordered.png)
 
@@ -3754,9 +3754,9 @@ Writing a string resource (id /35000/0/11 ), the application will notify the cha
 
 ---------------------
 
-\pagebreak
 
-###MD5 example 
+
+### MD5 example 
 
 Sample application showing how to compute MD5 hashes using m2mb crypto. Debug prints on **USB0**
 
@@ -3783,9 +3783,9 @@ Sample application showing how to compute MD5 hashes using m2mb crypto. Debug pr
 
 ---------------------
 
-\pagebreak
 
-###MQTT Client
+
+### MQTT Client
 
 Sample application showcasing MQTT client functionalities (with SSL). Debug prints on **USB0**
 
@@ -3830,9 +3830,9 @@ Sample application showcasing MQTT client functionalities (with SSL). Debug prin
 
 ---------------------
 
-\pagebreak
 
-###MultiTask
+
+### MultiTask
 
 Sample application showcasing multi tasking functionalities with M2MB API. Debug prints on **USB0**
 
@@ -3881,9 +3881,9 @@ Sample application showcasing multi tasking functionalities with M2MB API. Debug
 
 ---------------------
 
-\pagebreak
 
-###MutEx
+
+### MutEx
 
 Sample application showing mutex usage, with ownership and prioritization usage. Debug prints on **USB0**
 
@@ -3919,9 +3919,9 @@ Sample application showing mutex usage, with ownership and prioritization usage.
 
 ---------------------
 
-\pagebreak
 
-###Secure MicroService 
+
+### Secure MicroService 
 
 Sample application showcasing how to manage secure microservice functionalities. Debug prints on **USB0**
 
@@ -3965,9 +3965,9 @@ Sample application showcasing how to manage secure microservice functionalities.
 
 ---------------------
 
-\pagebreak
 
-###SMS PDU
+
+### SMS PDU
 
 Sample application showcasing how to create and decode PDUs to be used with m2mb_sms_* API set. A SIM card and antenna must be present. Debug prints on **USB0**
 
@@ -3995,9 +3995,9 @@ Sample application showcasing how to create and decode PDUs to be used with m2mb
 
 ---------------------
 
-\pagebreak
 
-###SPI Echo
+
+### SPI Echo
 
 Sample application showing how to communicate over SPI with m2mb API. Debug prints on **USB0**
 
@@ -4024,9 +4024,9 @@ Sample application showing how to communicate over SPI with m2mb API. Debug prin
 
 ---------------------
 
-\pagebreak
 
-###SPI sensors
+
+### SPI sensors
 
 Sample application showing SPI usage, configuring two ST devices: a magnetometer (ST LIS3MDL) and a gyroscope (ST L3G4200D). The application will read values from both devices using GPIO4 and 3 (respectively) as magnetometer CS and gyro CS. Debug prints on **USB0**
 
@@ -4053,9 +4053,9 @@ Sample application showing SPI usage, configuring two ST devices: a magnetometer
 
 ---------------------
 
-\pagebreak
 
-###SW Timer (Software Timer)
+
+### SW Timer (Software Timer)
 
 The sample application shows how to use SW Timers M2MB API. Debug prints on **USB0**
 
@@ -4095,9 +4095,9 @@ The sample application shows how to use SW Timers M2MB API. Debug prints on **US
 
 ---------------------
 
-\pagebreak
 
-###TCP IP 
+
+### TCP IP 
 
 Sample application showcasing TCP echo demo with M2MB API. Debug prints on **USB0**
 
@@ -4142,9 +4142,9 @@ Sample application showcasing TCP echo demo with M2MB API. Debug prints on **USB
 
 ---------------------
 
-\pagebreak
 
-###TCP Server 
+
+### TCP Server 
 
 Sample application showcasing TCP listening socket demo with M2MB API. Debug prints on **USB0**
 
@@ -4201,9 +4201,9 @@ Data on a PuTTY terminal
 
 ---------------------
 
-\pagebreak
 
-###TLS SSL Client
+
+### TLS SSL Client
 
 Sample application showcasing TLS/SSL with client certificates usage with M2MB API. Debug prints on **USB0**
 
@@ -4263,9 +4263,9 @@ The application requires the certificates to be stored in `/test_ssl_certs/` fol
 
 ---------------------
 
-\pagebreak
 
-###UDP client
+
+### UDP client
 
 Sample application showcasing UDP echo demo with M2MB API. Debug prints on **USB0**
 
@@ -4298,9 +4298,9 @@ Sample application showcasing UDP echo demo with M2MB API. Debug prints on **USB
 
 ---------------------
 
-\pagebreak
 
-###ZLIB example 
+
+### ZLIB example 
 
 Sample application showing how to compress/uncompress with ZLIB. Debug prints on **USB0**
 
@@ -4330,7 +4330,7 @@ AT#M2MWRITE="/mod/test.gz",138
 
 ---------------------
 
-\pagebreak
+
 
 # Installing beta version libraries Plug-in
 
