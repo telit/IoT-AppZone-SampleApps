@@ -13,3 +13,6 @@ Each module family has its own subfolder, containing all the sample apps availab
   - [ME310G1-ME910G1-ML865G1](ME310G1-ME910G1-ML865G1): Samples supported from 37.00.xx1 firmware version
 
 For further info, please go on Telit's cellular modules product webpage https://www.telit.com/m2m-iot-products/cellular-modules/standard-industrial-grade/
+
+AppZone development resources are available at the link https://www.telit.com/developer-zone/iot-app-zone/iot-app-zone-developer-resources/
+
