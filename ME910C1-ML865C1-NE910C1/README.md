@@ -1,30 +1,3 @@
----
-title: 'AppZone m2mb Sample Apps'
-
-date: '2020-05-05'
-author: [Telit]
-keywords: [AppZone, sample apps]
-   
-doc_code: '80000NT11840A'
-revision: 0
-    
-#for pdf metadata
-title-meta: 'AppZone Sample apps'    
-author-meta: 'Telit'
-subject: 'AppZone Sample Apps'
-
-
-lang: "en"
-titlepage: true,
-titlepage-rule-color: "000000"
-titlepage-rule-height: 0
-titlepage-background: "static/img/title.jpg"
-footerpage-background: "static/img/footer.jpg"
-page-background: "static/img/page.jpg"
-mainfont: DejaVu Sans
-monofont: DejaVu Sans Mono
-table-use-row-colors: true
----
 
 
 # AppZone m2mb Sample Apps 
