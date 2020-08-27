@@ -1,0 +1,1 @@
+Sample application showcasing TCP echo demo with M2MB API. Debug prints on USB0
