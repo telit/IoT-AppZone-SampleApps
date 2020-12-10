@@ -1,7 +1,7 @@
 
-###LWM2M
+### LWM2M
 
-Sample application showcasing TLS/SSL with client certificates usage with M2MB API. Debug prints on **AUX UART**
+Sample application showcasing LWM2M client usage with M2MB API. Debug prints on **AUX UART**
 
 
 **Features**
@@ -61,7 +61,7 @@ Sample application showcasing TLS/SSL with client certificates usage with M2MB A
 - Manage events arriving from client \(operations completion status and unsolicited events\)
 - Run lwm2m_taskCB when a monitored resource changes, to manage the action to be done
 
-####Custom Object configuration
+#### Custom Object configuration
 
 The XML file content must be loaded on the Telit IoT Portal for the demo application to be fully executed.
 
@@ -106,7 +106,7 @@ The file is successfully loaded on the module
 ![](../../pictures/samples/lwm2m_xml_7_done_bordered.png)
 
 
-####Application execution example
+#### Application execution example
 
 ![](../../pictures/samples/lwm2m_1_bordered.png)
 

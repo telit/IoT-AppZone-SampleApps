@@ -1,5 +1,5 @@
 
-###GPIO toggle example 
+### GPIO toggle example 
 
 Sample application showcasing GPIO usage with M2MB API
 

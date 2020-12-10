@@ -5,8 +5,8 @@
 #define HDR_AZX_TASKS_H_
 /**
  * @file azx_tasks.h
- * @version 1.0.3
- * @dependencies azx_log azx_utils
+ * @version 1.0.4
+ * @dependencies core/azx_log core/azx_utils
  * @author Alessio Quieti
  * @date 07/04/2018
  *

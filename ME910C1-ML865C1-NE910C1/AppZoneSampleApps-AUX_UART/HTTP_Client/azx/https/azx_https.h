@@ -7,7 +7,7 @@
 
 /**
   @file azx_https.h
-  @version 1.0.0
+  @version 1.0.1
   @dependencies azx_string_utils gnu azx_base64
 
   @brief HTTPs client
@@ -244,7 +244,7 @@ typedef struct
   AZX_HTTP_HEADER response;           /**< \internal */
   AZX_HTTP_SSL    tls;                /**< \internal */
 
-  unsigned long        length;        /**< \internal  body length or chunk length remaining to read */
+  UINT32         length;                 /**< \internal  body length or chunk length remaining to read */
   BOOLEAN        header_end;             /**< \internal */
   BOOLEAN        body_start;             /**< \internal */
   azx_httpCallbackOptions http_cb;    /**< \internal */

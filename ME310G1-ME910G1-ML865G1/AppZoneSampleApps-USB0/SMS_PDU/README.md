@@ -1,5 +1,5 @@
 
-###SMS PDU
+### SMS PDU
 
 Sample application showcasing how to create and decode PDUs to be used with m2mb_sms_* API set. A SIM card and antenna must be present. Debug prints on **USB0**
 

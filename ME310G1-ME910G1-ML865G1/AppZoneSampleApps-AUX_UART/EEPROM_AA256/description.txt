@@ -1,0 +1,1 @@
+Sample application showing how to communicate with a MicroChip 24AA256T I2C EEPROM chip using azx eeprom utility APIs. Debug prints on AUX UART

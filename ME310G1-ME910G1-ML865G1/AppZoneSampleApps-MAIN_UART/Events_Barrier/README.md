@@ -1,5 +1,5 @@
 
-###Events - Barrier (multi events)
+### Events - Barrier (multi events)
 
 Sample application showcasing how to setup and use multiple events to create a barrier. Debug prints on **MAIN UART**
 

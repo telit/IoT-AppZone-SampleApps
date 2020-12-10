@@ -8,6 +8,7 @@
 #include <string.h>
 #include <errno.h>
 #include <signal.h>
+
 #include "m2mb_types.h"
 
 #include <unistd.h>
@@ -57,7 +58,7 @@ static char *methodTo_string( AZX_HTTP_METHOD method );
 static char *auth_schemaTo_string( AZX_HTTP_AUTH_SCHEMA auth_schema );
 static int strtoken( char *src, char *field_title, char *field_value );
 
-static int parse_url( char *src_url, int *https, char *host, char *port, char *url,
+static int parse_url( char *src_url, int *https, char *host, int *port, char *url,
                       char *auth_credentials );
 
 static int https_init( AZX_HTTP_INFO *hi, char *url );
@@ -145,11 +146,12 @@ static int strtoken( char *src, char *field_title, char *field_value )
 }
 
 
-static int parse_url( char *src_url, int *https, char *host, char *port, char *url,
+static int parse_url( char *src_url, int *https, char *host, int *port, char *url,
                       char *auth_credentials )
 {
   char *p1, *p2;
   char str[300];
+  char port_buffer[6];
   memset( str, 0, sizeof( str ) );
 
   if( strncmp( src_url, "http://", 7 ) == 0 )
@@ -191,7 +193,7 @@ static int parse_url( char *src_url, int *https, char *host, char *port, char *u
   {
     *p1 = 0;
     snprintf( host, 256, "%s", str );
-    snprintf( port, 6, "%s", p1 + 1 );
+    snprintf( port_buffer, 6, "%s", p1 + 1 );
   }
   else
   {
@@ -199,13 +201,14 @@ static int parse_url( char *src_url, int *https, char *host, char *port, char *u
 
     if( *https == 0 )
     {
-      snprintf( port, 5, "80" );
+      snprintf( port_buffer, 5, "80" );
     }
     else
     {
-      snprintf( port, 5, "443" );
+      snprintf( port_buffer, 5, "443" );
     }
   }
+  *port = atoi(port_buffer);
 
   return 0;
   /*
@@ -223,8 +226,7 @@ static int parse_url( char *src_url, int *https, char *host, char *port, char *u
 
 static int https_init( AZX_HTTP_INFO *hi, char *url )
 {
-  //char host[256] = {0}, port[10] = {0}, dir[1024] = {0}, auth_credentials[256] = {0};
-  char *host, port[10] = {0}, *dir, *auth_credentials;
+  char auth_credentials[256] = {0};
   int ret;
 
   if( !http_isInit() )
@@ -232,46 +234,16 @@ static int https_init( AZX_HTTP_INFO *hi, char *url )
     return -1;
   }
 
-  host = ( char * )m2mb_os_malloc( 256 );
-
-  if( !host )
-  {
-    return -1;
-  }
-
-  dir = ( char * )m2mb_os_malloc( 1024 );
-
-  if( !dir )
-  {
-    m2mb_os_free( host );
-    return -1;
-  }
-
-  auth_credentials = ( char * ) m2mb_os_malloc( 256 );
-
-  if( !auth_credentials )
-  {
-    m2mb_os_free( host );
-    m2mb_os_free( dir );
-    return -1;
-  }
-
-  parse_url( url, &hi->url.https, host, port, dir, auth_credentials );
+  parse_url( url, &hi->url.https, hi->url.host, &hi->url.port, hi->url.path, auth_credentials );
 
   if( strlen( auth_credentials ) )
   {
     azx_base64Encoder( ( unsigned char * )hi->url.auth_credentials,
                        ( const unsigned char * )auth_credentials, strlen( auth_credentials ) );
-    //HTTP_LOG(HTTP_DEBUG_HOOK_DEBUG, "\nCredentials (B64): %s\n\r",hi->url.auth_credentials);
+    AZX_HTTP_LOG(AZX_HTTP_LOG_DEBUG, "\nCredentials (B64): %s\n\r",hi->url.auth_credentials);
   }
 
-  strcpy( hi->url.host, host );
-  strcpy( hi->url.path, dir );
-  hi->url.port = atoi( port );
-  m2mb_os_free( host );
-  m2mb_os_free( dir );
-  m2mb_os_free( auth_credentials );
-  AZX_HTTP_LOG( AZX_HTTP_LOG_INFO, "\nHost Address: %s Port %d \n\r", hi->url.host, hi->url.port );
+  AZX_HTTP_LOG(AZX_HTTP_LOG_INFO, "Connecting to %s:%d/%s\n\r", hi->url.host, hi->url.port, hi->url.path );
 
   if( ( ret = https_secure_connect( hi ) ) < 0 )
   {
@@ -338,11 +310,11 @@ static int https_header( AZX_HTTP_INFO *hi, char *header )
     else
       if( strncasecmp( t1, "Set-cookie", 10 ) == 0 )
       {
-        hi->response.cookie = ( char * )m2mb_os_malloc( 512 );
+        /* hi->response.cookie = ( char * )m2mb_os_malloc( 512 ); */
 
         if( hi->response.cookie != NULL )
         {
-          snprintf( hi->response.cookie, AZX_HTTP_H_FIELD_SIZE - 1, "%s", t2 );
+          snprintf( hi->response.cookie, AZX_HTTP_H_FIELD_SIZE, "%s", t2 );
         }
       }
       else
@@ -421,7 +393,7 @@ static int https_parse( AZX_HTTP_INFO *hi )
 
     if( hi->response.chunked == TRUE && hi->length == 0 ) //begin of the chunk. Read the chunk-size
     {
-      strncpy( &( hi->chunk_size_buf[hi->chunk_buf_len] ), p1, hi->r_size );
+      memcpy( &( hi->chunk_size_buf[hi->chunk_buf_len] ), p1, hi->r_size );
       hi->chunk_buf_len += 1;
       hi->r_len = 0;
 
@@ -431,7 +403,7 @@ static int https_parse( AZX_HTTP_INFO *hi )
         azx_str_rem_ch( hi->chunk_size_buf, '\r' );
         azx_str_rem_ch( hi->chunk_size_buf, '\n' );
 
-        if( azx_str_to_ul_hex( hi->chunk_size_buf, &hi->length ) != 0 )
+        if( azx_str_to_ul_hex( hi->chunk_size_buf, (UINT32 *) &hi->length ) != 0 )
         {
           return -1;
         }
@@ -441,18 +413,18 @@ static int https_parse( AZX_HTTP_INFO *hi )
           return 1;
         }
 
-        hi->length > AZX_HTTP_H_READ_SIZE ? hi->r_size = AZX_HTTP_H_READ_SIZE : hi->r_size = hi->length ;
+        hi->r_size = (hi->length > AZX_HTTP_H_READ_SIZE )? AZX_HTTP_H_READ_SIZE : hi->length ;
         //clean writing buffer
         memset( hi->chunk_size_buf, 0, AZX_HTTP_H_CHUNK_SIZE );
         hi->chunk_buf_len = 0;
       }
     }
-    else   //if length > 0 you started to read the chunck
+    else   //if length > 0 the client started to read the chunk
     {
       if((UINT32) hi->r_len < ( hi->http_cb.user_cb_bytes_size -
                         hi->w_len ) ) //if w_buf can contain all the read data. copy all
       {
-        strncpy( &( hi->w_buf[hi->w_len] ), p1, hi->r_len );
+        memcpy( &( hi->w_buf[hi->w_len] ), p1, hi->r_len );
         hi->w_len += hi->r_len;
         hi->length -= hi->r_len;
         hi->r_len = 0;
@@ -460,10 +432,10 @@ static int https_parse( AZX_HTTP_INFO *hi )
       else                                                          //else copy only the partial data to fill w_buf
       {
         int part_len = hi->http_cb.user_cb_bytes_size - hi->w_len;
-        strncpy( &( hi->w_buf[hi->w_len] ), p1, ( part_len ) );
+        memcpy( &( hi->w_buf[hi->w_len] ), p1, ( part_len ) );
         //trim the read buffer in order to let only the data not copied in w_buff for the next run
         hi->r_len -=  part_len;
-        strncpy( hi->r_buf, p1 + ( part_len ), hi->r_len );
+        memcpy( hi->r_buf, p1 + ( part_len ), hi->r_len );
         hi->w_len = hi->http_cb.user_cb_bytes_size;
         hi->r_buf[hi->r_len] = 0;
         hi->length -= part_len;
@@ -514,8 +486,7 @@ static int https_close( AZX_HTTP_INFO *hi )
     https_SSLDeinit( &hi->tls );
   }
 
-  m2mb_socket_bsd_close( hi->sck_fd );
-  return 0;
+  return m2mb_socket_bsd_close( hi->sck_fd );
 }
 
 
@@ -617,11 +588,10 @@ static int https_read( AZX_HTTP_INFO *hi, char *buffer, int len )
 static int https_write( AZX_HTTP_INFO *hi, char *buffer, int len )
 {
   int ret, slen = 0;
-  //HTTP_LOG(HTTP_LOG_HOOK_DEBUG,  "https_write.\r\n");
 
+  AZX_HTTP_LOG(AZX_HTTP_LOG_DEBUG, "%s", buffer);
   while( 1 )
   {
-    //HTTP_LOG(HTTP_LOG_HOOK_INFO, "%.*s", (len-slen), &buffer[slen]);
     if( hi->url.https == 1 )
     {
       ret = m2mb_ssl_write( hi->ssl_fd, ( u_char * )&buffer[slen], ( size_t )( len - slen ) );
@@ -747,6 +717,7 @@ static int https_write_header( AZX_HTTP_INFO *hi )
 
   len += snprintf( &request[len], AZX_HTTP_H_FIELD_SIZE, "\r\n" );
 
+  AZX_HTTP_LOG( AZX_HTTP_LOG_DEBUG, "Header: %s\r\n", request);
   if( ( ret = https_write( hi, request, len ) ) != len )
   {
     https_close( hi );
@@ -820,7 +791,7 @@ static int https_read_chunked( AZX_HTTP_INFO *hi, BOOLEAN only_header )
         {
           if( hi->http_cb.cbFunc != NULL )
           {
-            hi->http_cb.cbFunc( hi->w_buf, hi->http_cb.user_cb_bytes_size, hi->http_cb.cbEvtFlag );
+            hi->http_cb.cbFunc( hi->w_buf, hi->w_len, hi->http_cb.cbEvtFlag );
           }
 
           return hi->response.status;
@@ -835,7 +806,7 @@ static int https_read_chunked( AZX_HTTP_INFO *hi, BOOLEAN only_header )
       {
         if( hi->http_cb.cbFunc != NULL )
         {
-          hi->http_cb.cbFunc( hi->w_buf, hi->http_cb.user_cb_bytes_size, hi->http_cb.cbEvtFlag );
+          hi->http_cb.cbFunc( hi->w_buf, hi->w_len, hi->http_cb.cbEvtFlag );
         }
 
         if( *( hi->http_cb.cbEvtFlag ) )
@@ -846,6 +817,7 @@ static int https_read_chunked( AZX_HTTP_INFO *hi, BOOLEAN only_header )
         hi->w_len = 0;
         memset( hi->w_buf, 0, hi->http_cb.user_cb_bytes_size );
       }
+
     }
     while( hi->r_len > 0 );
 
@@ -857,7 +829,7 @@ static int https_read_chunked( AZX_HTTP_INFO *hi, BOOLEAN only_header )
 
   if( hi->http_cb.cbFunc != NULL )
   {
-    hi->http_cb.cbFunc( hi->w_buf, hi->http_cb.user_cb_bytes_size, hi->http_cb.cbEvtFlag );
+    hi->http_cb.cbFunc( hi->w_buf, hi->w_len, hi->http_cb.cbEvtFlag );
   }
 
   return hi->response.status;
@@ -1173,7 +1145,3 @@ int azx_http_post( AZX_HTTP_INFO *hi, char *url )
   https_close( hi );
   return ret;
 }
-
-
-
-

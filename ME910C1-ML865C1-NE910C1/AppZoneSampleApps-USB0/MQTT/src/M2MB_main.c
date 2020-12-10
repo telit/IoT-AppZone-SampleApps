@@ -13,7 +13,7 @@
   @description
     Sample application showcasing MQTT client functionalities (with SSL). Debug prints on USB0
   @version
-    1.0.1
+    1.0.2
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()

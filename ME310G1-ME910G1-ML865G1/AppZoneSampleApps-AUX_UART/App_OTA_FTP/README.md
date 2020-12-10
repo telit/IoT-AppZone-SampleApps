@@ -1,5 +1,5 @@
 
-###App update OTA via FTP
+### App update OTA via FTP
 
 Sample application showcasing Application OTA over FTP with AZX FTP. Debug prints on **AUX UART**
 

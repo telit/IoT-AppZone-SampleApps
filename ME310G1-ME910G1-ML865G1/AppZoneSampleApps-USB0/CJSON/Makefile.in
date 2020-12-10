@@ -1,9 +1,52 @@
-CPPFLAGS += -I azx/hdr
-OBJS += $(patsubst %.c,%.o,$(wildcard azx/src/*.c))
-CPPFLAGS += -I azx/cjson
-OBJS += $(patsubst %.c,%.o,$(wildcard azx/cjson/*.c))
-ifneq (,$(findstring GCC,$(TOOLCHAIN)))
+# Log settings
+LOGS_ENABLE = 1
+
+# If logs are enabled, channel can be: MAIN_UART AUX_UART USB0 USB1
+LOGS_CHANNEL = AZX_LOG_TO_USB0
+
+# How detailed should the logs be. See AZX_LOG_LEVEL_E
+LOGS_LEVEL = DEBUG
+
+# Enable to add ANSI colours to the logs
+LOGS_COLOUR = 0
+
+
+# -------------------------
+
+## ---- do not touch below this line
+
+SW_VER = 1.0.14
+
+CLEAN_BEFORE_BUILD = clean
+
+# The current version of the API
+CPPFLAGS += -DVERSION=\"$(SW_VER)\"
+
+
+ifeq ($(strip $(LOGS_ENABLE)),1)
+CPPFLAGS += -DAZX_LOG_ENABLE
+CPPFLAGS += -DLOG_CHANNEL=$(LOGS_CHANNEL)
+CPPFLAGS += -DAZX_LOG_LEVEL=AZX_LOG_LEVEL_$(LOGS_LEVEL)
+
+CPPFLAGS += -DAZX_LOG_ENABLE_COLOURS=$(LOGS_COLOUR)
+
+endif
+
+
+
+
+# Disable the missing-field-initializers as GCC sometimes complains about
+# legitimate struct initialization
+# (https://stackoverflow.com/questions/1538943/why-is-the-compiler-throwing-this-warning-missing-initializer-isnt-the-stru)
+ifneq (,\$(findstring GCC,\$(TOOLCHAIN)))
   CPPFLAGS += -Wall -Werror -Wextra -Wunreachable-code -Wno-missing-field-initializers -Wno-format
 else
   CPPFLAGS += --diag_suppress=111,177,1293
 endif
+# --------------------------------------------------------------------------
+
+
+CPPFLAGS += -I azx/hdr
+OBJS += $(patsubst %.c,%.o,$(wildcard azx/src/*.c))
+CPPFLAGS += -I azx/cjson
+OBJS += $(patsubst %.c,%.o,$(wildcard azx/cjson/*.c))

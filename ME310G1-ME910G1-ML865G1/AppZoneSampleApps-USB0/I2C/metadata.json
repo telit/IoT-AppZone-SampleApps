@@ -1,0 +1,42 @@
+{
+	"name": "Sample App for I2C communication usage",
+	"type": "sample-app",
+	"description": "A sample app that shows how to communicate with an I2C slave device.",
+	"copyright": "Telit Communications, 2020",
+	"homepage": "https://www.telit.com/",
+	"keywords": [
+		"IoT AppZone",
+		"I2C"
+	],
+	"availability": {
+		"MXXXXC1": {
+			"firmwares": [ "30.00.xx6", "30.00.xx7", "30.00.xx8", "30.00.xx9" ]
+		},
+		"MXXXXG1": {
+			"firmwares": [ "37.00.xx1", "37.00.xx2" ]
+		}
+
+	},
+  "groups": [
+    "MAIN_UART",
+    "AUX_UART",
+    "USB0"
+  ],
+	"platform": "GCC",
+	"license": "MIT",
+	"support": {
+		"email": "ts-emea@telit.com"
+	},
+	"authors": [
+		{
+			"name": "Fabio Pintus",
+			"email": "fabio.pintus@telit.com",
+			"homepage": "http://www.telit.com/",
+			"role": "Developer"
+		}
+	],
+	"requires": {
+		"core/azx_log": "master",
+		"core/azx_utils": "master"
+	}
+}

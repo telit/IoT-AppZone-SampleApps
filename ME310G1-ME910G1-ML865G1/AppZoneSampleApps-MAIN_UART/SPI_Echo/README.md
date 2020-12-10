@@ -1,5 +1,5 @@
 
-###SPI Echo
+### SPI Echo
 
 Sample application showing how to communicate over SPI with m2mb API. Debug prints on **MAIN UART**
 

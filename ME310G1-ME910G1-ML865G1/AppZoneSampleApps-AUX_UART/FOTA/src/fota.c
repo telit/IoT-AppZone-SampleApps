@@ -45,8 +45,6 @@
 #include "azx_utils.h"
 #include "azx_tasks.h"
 
-#include "app_cfg.h"
-
 #include "fota.h"
 
 /* Macro =============================================================================*/

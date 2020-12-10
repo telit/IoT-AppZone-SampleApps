@@ -5,7 +5,7 @@
 #define HDR_AZX_LOG_H_
 /**
  * @file azx_log.h
- * @version 1.0.5
+ * @version 1.0.6
  * @dependencies 
  * @author Fabio Pintus
  * @author Ioannis Demetriou
@@ -17,7 +17,7 @@
  * their application.
  */
 #include "m2mb_types.h"
-#include "app_cfg.h"
+
 
 /* Global declarations =======================================================*/
 
@@ -242,4 +242,89 @@ BOOLEAN azx_log_send_to_file(const CHAR* filename, UINT32 circular_chunks,
  */
 void azx_log_flush_to_file(void);
 
+
+
+/**
+ * @brief Application logs are printed to the specified channel
+ *
+ * If enabled, all AZX_LOG* messages will be printed to the channel
+ * specified in @ref AZX_LOG_INIT.
+ *
+ * If disabled, these messages will be printed using the internal
+ * m2mb_trace.h API.
+ */
+#ifdef AZX_LOG_ENABLE
+
+/** @cond DEV */
+#if AZX_LOG_ENABLE_COLOURS
+#define _LOG_COLOURS 1
+#else
+#define _LOG_COLOURS 0
+#endif
+/** @endcond */
+/**
+ * @brief Call this at your AZ entry point to easily configure logging
+ */
+/* Set to 1 below to get coloured logs*/
+#define AZX_LOG_INIT() do {\
+  AZX_LOG_CFG_T cfg =\
+	{\
+		.log_level=AZX_LOG_LEVEL,\
+		.log_channel=LOG_CHANNEL,\
+		.log_colours=_LOG_COLOURS,\
+	};\
+  azx_log_init(&cfg);\
+} while(0)
+
+/** \addtogroup  logUsage
+@{ */
+
+/**
+ * @name Public Log Macros
+ * @brief These function-like macros can be used to print different messages with different log levels
+ * @{ */
+
+#define AZX_LOG_CRITICAL(a...)  azx_log_formatted(AZX_LOG_LEVEL_CRITICAL, __FUNCTION__, __FILE__, __LINE__, a)
+/**<Prints a critical error message.*/
+
+#define AZX_LOG_ERROR(a...)     azx_log_formatted(AZX_LOG_LEVEL_ERROR, __FUNCTION__, __FILE__, __LINE__, a)
+/**<Prints an error message.*/
+
+#define AZX_LOG_WARN(a...)      azx_log_formatted(AZX_LOG_LEVEL_WARN, __FUNCTION__, __FILE__, __LINE__, a)
+/**<Prints a warning message.*/
+
+#define AZX_LOG_INFO(a...)      azx_log_formatted(AZX_LOG_LEVEL_INFO, "", "", 0, a)
+/**<Prints an informative message.*/
+
+#define AZX_LOG_DEBUG(a...)     azx_log_formatted(AZX_LOG_LEVEL_DEBUG, __FUNCTION__, __FILE__, __LINE__, a)
+/**<Prints a debug message.*/
+
+#define AZX_LOG_TRACE(a...)     azx_log_formatted(AZX_LOG_LEVEL_TRACE, __FUNCTION__, __FILE__, __LINE__, a)
+/**<Prints a trace level message.*/
+
+/** @} */
+/** @} */
+
+#else /* !AZX_LOG_ENABLE */
+
+#include "m2mb_types.h"
+#include "m2mb_trace.h"
+
+/**
+ * @brief Call this at your AZ entry point to easily configure logging
+ */
+#define AZX_LOG_INIT() do { \
+  m2mb_trace_init(); \
+  m2mb_trace_enable(M2MB_TC_M2M_USER); \
+} while(0)
+
+#define AZX_LOG_CRITICAL(a...) m2mb_trace_file_line_printf(__FILE__, __LINE__, M2MB_TC_M2M_USER, M2MB_TL_FATAL, (CHAR*)a)
+#define AZX_LOG_ERROR(a...)    m2mb_trace_file_line_printf(__FILE__, __LINE__, M2MB_TC_M2M_USER, M2MB_TL_ERROR, (CHAR*)a)
+#define AZX_LOG_WARN(a...)     m2mb_trace_file_line_printf(__FILE__, __LINE__, M2MB_TC_M2M_USER, M2MB_TL_WARNING, (CHAR*)a)
+#define AZX_LOG_INFO(a...)     m2mb_trace_file_line_printf(__FILE__, __LINE__, M2MB_TC_M2M_USER, M2MB_TL_LOG, (CHAR*)a)
+#define AZX_LOG_DEBUG(a...)    m2mb_trace_file_line_printf(__FILE__, __LINE__, M2MB_TC_M2M_USER, M2MB_TL_DEBUG, (CHAR*)a)
+#define AZX_LOG_TRACE(a...)
+
+#endif /* AZX_LOG_ENABLE */
+/** @} */
 #endif /* HDR_AZX_LOG_H_ */

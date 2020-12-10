@@ -1,5 +1,5 @@
 
-###MultiTask
+### MultiTask
 
 Sample application showcasing multi tasking functionalities with M2MB API. Debug prints on **USB0**
 

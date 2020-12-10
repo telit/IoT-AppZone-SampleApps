@@ -1,5 +1,5 @@
 
-###FOTA example
+### FOTA example
 
 Sample application showcasing FOTA usage with M2MB API. Debug prints on **AUX UART**
 

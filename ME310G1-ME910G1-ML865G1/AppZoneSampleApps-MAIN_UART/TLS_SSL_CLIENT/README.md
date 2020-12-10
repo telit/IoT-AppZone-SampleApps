@@ -1,5 +1,5 @@
 
-###TLS SSL Client
+### TLS SSL Client
 
 Sample application showcasing TLS/SSL with client certificates usage with M2MB API. Debug prints on **MAIN UART**
 

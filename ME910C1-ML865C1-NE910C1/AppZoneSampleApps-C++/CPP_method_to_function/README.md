@@ -1,5 +1,5 @@
 
-###C++  method to function pointer
+### C++  method to function pointer
 
 Sample application showing how to manage class methods as function pointers. Debug prints on MAIN_UART
 

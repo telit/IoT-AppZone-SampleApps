@@ -1,5 +1,5 @@
 
-###MutEx
+### MutEx
 
 Sample application showing mutex usage, with ownership and prioritization usage. Debug prints on **USB0**
 

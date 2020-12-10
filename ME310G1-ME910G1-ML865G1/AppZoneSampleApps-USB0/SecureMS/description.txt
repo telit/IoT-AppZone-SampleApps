@@ -1,0 +1,1 @@
+Sample application showcasing how to manage secure microservice functionalities. Debug prints on USB0

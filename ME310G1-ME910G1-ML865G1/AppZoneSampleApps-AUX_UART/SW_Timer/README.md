@@ -1,5 +1,5 @@
 
-###SW Timer (Software Timer)
+### SW Timer (Software Timer)
 
 The sample application shows how to use SW Timers M2MB API. Debug prints on **AUX UART**
 

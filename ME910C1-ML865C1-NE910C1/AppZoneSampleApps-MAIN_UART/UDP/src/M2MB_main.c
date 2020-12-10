@@ -13,7 +13,7 @@
   @description
     Sample application showcasing UDP echo demo with M2MB API. Debug prints on MAIN UART
   @version 
-    1.0.2
+    1.0.3
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -32,13 +32,12 @@
 #include "m2mb_os_api.h"
 #include "m2mb_os.h"
 
-
-
 #include "azx_log.h"
 #include "azx_utils.h"
 #include "azx_tasks.h"
 
 #include "app_cfg.h"
+
 
 #include "m2m_udp_test.h"
 
