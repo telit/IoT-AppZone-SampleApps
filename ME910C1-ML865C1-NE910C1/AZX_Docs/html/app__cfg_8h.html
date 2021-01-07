@@ -34,7 +34,7 @@
   <td id="projectlogo"><img alt="Logo" src="telit-logo.png"/></td>
   <td id="projectalign" style="padding-left: 2em;">
    <div id="projectname">AZX (AppZone eXtensions) documentation
-   &#160;<span id="projectnumber">1.0.13-C1</span>
+   &#160;<span id="projectnumber">1.0.14-G1</span>
    </div>
    <div id="projectbrief">A set of companion utilities that make AZ development easier</div>
   </td>
@@ -91,8 +91,6 @@ $(document).ready(function(){initNavTree('app__cfg_8h.html','');});
 </div>
 
 <div class="header">
-  <div class="summary">
-<a href="#define-members">Macros</a>  </div>
   <div class="headertitle">
 <div class="title">app_cfg.h File Reference</div>  </div>
 </div><!--header-->
@@ -100,121 +98,15 @@ $(document).ready(function(){initNavTree('app__cfg_8h.html','');});
 
 <p>Application configuration settings conveniently located here.  
 <a href="#details">More...</a></p>
-<div class="textblock"><div class="dynheader">
-This graph shows which files directly or indirectly include this file:</div>
-<div class="dyncontent">
-<div class="center"><img src="app__cfg_8h__dep__incl.png" border="0" usemap="#hdr_2app__cfg_8hdep" alt=""/></div>
-<map name="hdr_2app__cfg_8hdep" id="hdr_2app__cfg_8hdep">
-<area shape="rect" title="Application configuration settings conveniently located here." alt="" coords="79,5,180,32"/>
-<area shape="rect" href="azx__log_8h.html" title="Logging utilities to print on available output channels." alt="" coords="79,80,179,107"/>
-<area shape="rect" href="azx__tasks_8h.html" title="Tasks related utilities." alt="" coords="5,155,120,181"/>
-<area shape="rect" href="azx__utils_8h.html" title="Various helpful utilities." alt="" coords="144,155,251,181"/>
-</map>
-</div>
-</div>
+
 <p><a href="app__cfg_8h_source.html">Go to the source code of this file.</a></p>
-<table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
-Macros</h2></td></tr>
-<tr class="memitem:a1c6d5de492ac61ad29aec7aa9a436bbf"><td class="memItemLeft" align="right" valign="top"><a id="a1c6d5de492ac61ad29aec7aa9a436bbf"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="app__cfg_8h.html#a1c6d5de492ac61ad29aec7aa9a436bbf">VERSION</a>&#160;&#160;&#160;&quot;1.0.13-C1&quot;</td></tr>
-<tr class="memdesc:a1c6d5de492ac61ad29aec7aa9a436bbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">The current version of the Samples. <br /></td></tr>
-<tr class="separator:a1c6d5de492ac61ad29aec7aa9a436bbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader">Log Settings</div></td></tr>
-<tr class="memitem:a0b87e0d3bf5853bcbb0b66a7c48fdc05"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="app__cfg_8h.html#a0b87e0d3bf5853bcbb0b66a7c48fdc05">LOG_LEVEL</a>&#160;&#160;&#160;<a class="el" href="group__log_conf.html#ggae9fa7be40e4fcae6093707def57f82a5aa77afa2490f92d58d965e30ce97c8048">AZX_LOG_LEVEL_DEBUG</a></td></tr>
-<tr class="separator:a0b87e0d3bf5853bcbb0b66a7c48fdc05"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d748cfacef739397c0bb64a842ec502"><td class="memItemLeft" align="right" valign="top"><a id="a1d748cfacef739397c0bb64a842ec502"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>LOG_CHANNEL</b>&#160;&#160;&#160;<a class="el" href="group__log_conf.html#gga03b618927cb5d884386832ab76781760a2b9fdc468ce514e4118797ad0e624841">AZX_LOG_TO_USB0</a></td></tr>
-<tr class="separator:a1d748cfacef739397c0bb64a842ec502"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a490faa4d74e7d551583e681f9b8c2dfe"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="app__cfg_8h.html#a490faa4d74e7d551583e681f9b8c2dfe">LOG_WITH_COLOUR</a>&#160;&#160;&#160;0</td></tr>
-<tr class="separator:a490faa4d74e7d551583e681f9b8c2dfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4af7b5c67a5df4ffbcafe9a91a4677bc"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="app__cfg_8h.html#a4af7b5c67a5df4ffbcafe9a91a4677bc">AZX_LOG_INIT</a>()</td></tr>
-<tr class="memdesc:a4af7b5c67a5df4ffbcafe9a91a4677bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call this at your AZ entry point to easily configure logging.  <a href="app__cfg_8h.html#a4af7b5c67a5df4ffbcafe9a91a4677bc">More...</a><br /></td></tr>
-<tr class="separator:a4af7b5c67a5df4ffbcafe9a91a4677bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader">Public log Macros</div></td></tr>
-<tr><td colspan="2"><div class="groupText"><p>These function-like macros can be used to print different messages with different log levels </p>
-</div></td></tr>
-<tr class="memitem:ga4cbebf6589190814b5ee9adb22bb1d44"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__log_usage.html#ga4cbebf6589190814b5ee9adb22bb1d44">AZX_LOG_CRITICAL</a>(a...)&#160;&#160;&#160;azx_log_formatted(<a class="el" href="group__log_conf.html#ggae9fa7be40e4fcae6093707def57f82a5a51671d346b1e7d44f8993fa9d2ca174c">AZX_LOG_LEVEL_CRITICAL</a>, __FUNCTION__, __FILE__, __LINE__, a)</td></tr>
-<tr class="separator:ga4cbebf6589190814b5ee9adb22bb1d44"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga81e4f03b2a752e5e9cfae1e037ce7256"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(a...)&#160;&#160;&#160;azx_log_formatted(<a class="el" href="group__log_conf.html#ggae9fa7be40e4fcae6093707def57f82a5acc52fcbd7aa2088fe583a11661b4abf2">AZX_LOG_LEVEL_ERROR</a>, __FUNCTION__, __FILE__, __LINE__, a)</td></tr>
-<tr class="separator:ga81e4f03b2a752e5e9cfae1e037ce7256"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga47bb701aa779a05aa34ed01fcfbbdd54"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__log_usage.html#ga47bb701aa779a05aa34ed01fcfbbdd54">AZX_LOG_WARN</a>(a...)&#160;&#160;&#160;azx_log_formatted(<a class="el" href="group__log_conf.html#ggae9fa7be40e4fcae6093707def57f82a5a0d4c7c18f82729850d7a1c3e35e2f0b8">AZX_LOG_LEVEL_WARN</a>, __FUNCTION__, __FILE__, __LINE__, a)</td></tr>
-<tr class="separator:ga47bb701aa779a05aa34ed01fcfbbdd54"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga847d9b9f62e31bf14b31882be7418675"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(a...)&#160;&#160;&#160;azx_log_formatted(<a class="el" href="group__log_conf.html#ggae9fa7be40e4fcae6093707def57f82a5a2bdb3bd46fb4a347265f0c966ded4f25">AZX_LOG_LEVEL_INFO</a>, &quot;&quot;, &quot;&quot;, 0, a)</td></tr>
-<tr class="separator:ga847d9b9f62e31bf14b31882be7418675"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gacd61f6160b4cd02c2ec2259b5bc94670"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__log_usage.html#gacd61f6160b4cd02c2ec2259b5bc94670">AZX_LOG_DEBUG</a>(a...)&#160;&#160;&#160;azx_log_formatted(<a class="el" href="group__log_conf.html#ggae9fa7be40e4fcae6093707def57f82a5aa77afa2490f92d58d965e30ce97c8048">AZX_LOG_LEVEL_DEBUG</a>, __FUNCTION__, __FILE__, __LINE__, a)</td></tr>
-<tr class="separator:gacd61f6160b4cd02c2ec2259b5bc94670"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaa85ac7254570a307564019c5dfb98d83"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__log_usage.html#gaa85ac7254570a307564019c5dfb98d83">AZX_LOG_TRACE</a>(a...)&#160;&#160;&#160;azx_log_formatted(<a class="el" href="group__log_conf.html#ggae9fa7be40e4fcae6093707def57f82a5adc5cc122c3a06700e09e4c6d1cc17497">AZX_LOG_LEVEL_TRACE</a>, __FUNCTION__, __FILE__, __LINE__, a)</td></tr>
-<tr class="separator:gaa85ac7254570a307564019c5dfb98d83"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Application configuration settings conveniently located here. </p>
-<p><a class="el" href="app__cfg_8h.html" title="Application configuration settings conveniently located here.">app_cfg.h</a></p>
-<dl class="section note"><dt>Note</dt><dd>Dependencies: m2mb_types.h <a class="el" href="azx__log_8h.html" title="Logging utilities to print on available output channels.">azx_log.h</a></dd></dl>
-<dl class="section author"><dt>Author</dt><dd></dd></dl>
-</div><h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="a4af7b5c67a5df4ffbcafe9a91a4677bc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4af7b5c67a5df4ffbcafe9a91a4677bc">&#9670;&nbsp;</a></span>AZX_LOG_INIT</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define AZX_LOG_INIT</td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">do</span> {\</div>
-<div class="line">  AZX_LOG_CFG_T cfg =\</div>
-<div class="line">  {\</div>
-<div class="line">    <span class="comment">/*.log_level*/</span>   <a class="code" href="app__cfg_8h.html#a0b87e0d3bf5853bcbb0b66a7c48fdc05">LOG_LEVEL</a>,\</div>
-<div class="line">    <span class="comment">/*.log_channel*/</span> LOG_CHANNEL,\</div>
-<div class="line">    <span class="comment">/*.log_colours*/</span> <a class="code" href="app__cfg_8h.html#a490faa4d74e7d551583e681f9b8c2dfe">LOG_WITH_COLOUR</a>\</div>
-<div class="line">  };\</div>
-<div class="line">  azx_log_init(&amp;cfg);\</div>
-<div class="line">} <span class="keywordflow">while</span>(0)</div>
-</div><!-- fragment -->
-<p>Call this at your AZ entry point to easily configure logging. </p>
-
-</div>
-</div>
-<a id="a0b87e0d3bf5853bcbb0b66a7c48fdc05"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0b87e0d3bf5853bcbb0b66a7c48fdc05">&#9670;&nbsp;</a></span>LOG_LEVEL</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define LOG_LEVEL&#160;&#160;&#160;<a class="el" href="group__log_conf.html#ggae9fa7be40e4fcae6093707def57f82a5aa77afa2490f92d58d965e30ce97c8048">AZX_LOG_LEVEL_DEBUG</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>How detailed should the logs be. See <a class="el" href="group__log_conf.html#gae9fa7be40e4fcae6093707def57f82a5">AZX_LOG_LEVEL_E</a> </p>
-
-</div>
-</div>
-<a id="a490faa4d74e7d551583e681f9b8c2dfe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a490faa4d74e7d551583e681f9b8c2dfe">&#9670;&nbsp;</a></span>LOG_WITH_COLOUR</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define LOG_WITH_COLOUR&#160;&#160;&#160;0</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Set to 1 to add ANSI colours to the logs </p>
-
-</div>
-</div>
-</div><!-- contents -->
+<dl class="section version"><dt>Version</dt><dd>1.0.0 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>10/02/2019</dd></dl>
+<p>This file contains macros that a programmer can alter to easily modify the behaviour of the application an <b>compile</b> time. </p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aapp__cfg_8h_html_a0b87e0d3bf5853bcbb0b66a7c48fdc05"><div class="ttname"><a href="app__cfg_8h.html#a0b87e0d3bf5853bcbb0b66a7c48fdc05">LOG_LEVEL</a></div><div class="ttdeci">#define LOG_LEVEL</div><div class="ttdef"><b>Definition:</b> app_cfg.h:33</div></div>
-<div class="ttc" id="aapp__cfg_8h_html_a490faa4d74e7d551583e681f9b8c2dfe"><div class="ttname"><a href="app__cfg_8h.html#a490faa4d74e7d551583e681f9b8c2dfe">LOG_WITH_COLOUR</a></div><div class="ttdeci">#define LOG_WITH_COLOUR</div><div class="ttdef"><b>Definition:</b> app_cfg.h:35</div></div>
 <!-- HTML footer for doxygen 1.8.15-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

@@ -1,0 +1,1 @@
+Sample application showing how to check if USB cable is plugged in or not. Debug prints on AUX UART

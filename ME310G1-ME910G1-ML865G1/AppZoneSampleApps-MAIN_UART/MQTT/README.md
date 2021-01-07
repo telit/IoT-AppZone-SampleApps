@@ -1,5 +1,5 @@
 
-###MQTT Client
+### MQTT Client
 
 Sample application showcasing MQTT client functionalities (with SSL). Debug prints on **MAIN UART**
 

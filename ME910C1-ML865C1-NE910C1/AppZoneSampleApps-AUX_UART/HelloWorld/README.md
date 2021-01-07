@@ -1,5 +1,5 @@
 
-###Hello World
+### Hello World
 
 The application prints "Hello World!" over selected output every two seconds. Debug prints on **AUX UART**, <ins>using AZX log example functions</ins>
 

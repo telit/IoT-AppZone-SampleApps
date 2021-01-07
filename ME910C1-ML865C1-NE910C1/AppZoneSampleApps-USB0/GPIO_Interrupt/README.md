@@ -1,5 +1,5 @@
 
-###GPIO interrupt example 
+### GPIO interrupt example 
 
 Sample application showing how to use GPIOs and interrupts. Debug prints on **USB0**
 

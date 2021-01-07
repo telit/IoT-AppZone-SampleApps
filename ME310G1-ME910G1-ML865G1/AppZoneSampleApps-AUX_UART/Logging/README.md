@@ -1,5 +1,5 @@
 
-###Logging Demo
+### Logging Demo
 
 Sample application showing how to print on one of the available output interfaces. Debug prints on **AUX UART**
 

@@ -1,5 +1,5 @@
 
-###FTP
+### FTP
 
 Sample application showcasing FTP client demo with AZX FTP. Debug prints on **AUX UART**
 

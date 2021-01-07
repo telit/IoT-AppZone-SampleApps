@@ -67,10 +67,10 @@ static M2MB_OS_EV_HANDLE net_pdp_evHandle = NULL;
 M2MB_PDP_HANDLE pdpHandle;
 M2MB_SOCKET_BSD_SOCKET sock_client = M2MB_SOCKET_BSD_INVALID_SOCKET;
 
-INT8 main_uart_fd = -1;
+INT32 main_uart_fd = -1;
 
-INT8 uart_task_id = -1;
-INT8 socket_recv_id = -1;
+INT32 uart_task_id = -1;
+INT32 socket_recv_id = -1;
 
 
 CHAR inBuf[1024];

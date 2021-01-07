@@ -1,1 +1,1 @@
-Sample application showcasing TLS/SSL with client certificates usage with M2MB API. Debug prints on MAIN UART
+Sample application showcasing LWM2M client usage with M2MB API. Debug prints on MAIN UART

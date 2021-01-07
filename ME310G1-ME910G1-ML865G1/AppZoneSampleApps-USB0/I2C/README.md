@@ -1,5 +1,5 @@
 
-###I2C example 
+### I2C example 
 
 Sample application showing how to communicate with an I2C slave device. Debug prints on **USB0**
 

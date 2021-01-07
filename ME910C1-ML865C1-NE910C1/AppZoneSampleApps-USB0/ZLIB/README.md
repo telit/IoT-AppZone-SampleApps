@@ -1,5 +1,5 @@
 
-###ZLIB example 
+### ZLIB example 
 
 Sample application showing how to compress/uncompress with ZLIB. Debug prints on **USB0**
 

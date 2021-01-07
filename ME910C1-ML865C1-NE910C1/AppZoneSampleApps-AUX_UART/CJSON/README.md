@@ -1,5 +1,5 @@
 
-###CJSON example: 
+### CJSON example: 
 
 Sample application showcasing how to manage JSON objects. Debug prints on **AUX UART**
 

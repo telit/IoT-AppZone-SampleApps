@@ -25,8 +25,6 @@
 #include "azx_utils.h"
 #include "azx_tasks.h"
 
-#include "app_cfg.h"
-
 #include "ftp_test.h"
 
 #include "azx_ftp.h"
