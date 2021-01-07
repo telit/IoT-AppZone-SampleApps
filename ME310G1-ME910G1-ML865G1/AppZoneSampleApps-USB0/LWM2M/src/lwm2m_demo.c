@@ -11,7 +11,7 @@
   @details
 
   @version 
-    1.0.0
+    1.0.1
   @note
 
 
@@ -44,7 +44,6 @@
 #include "azx_utils.h"
 #include "azx_tasks.h"
 
-#include "app_cfg.h"
 
 #include "lwm2m_demo.h"
 

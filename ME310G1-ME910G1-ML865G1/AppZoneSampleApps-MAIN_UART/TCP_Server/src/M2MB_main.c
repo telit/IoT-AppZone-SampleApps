@@ -13,7 +13,7 @@
   @description
     Sample application showcasing TCP listening socket demo with M2MB API. Debug prints on MAIN UART
   @version 
-    1.0.2
+    1.0.3
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()

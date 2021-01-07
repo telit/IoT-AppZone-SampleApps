@@ -20,7 +20,6 @@
 #include "azx_log.h"
 #include "azx_utils.h"
 
-#include "app_cfg.h"
 
 
 /* Macro =============================================================================*/

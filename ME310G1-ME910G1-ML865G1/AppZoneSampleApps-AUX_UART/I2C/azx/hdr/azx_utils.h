@@ -5,8 +5,8 @@
 #define HDR_M2M_UTILS_H_
 /**
  * @file azx_utils.h
- * @version 1.0.1
- * @dependencies azx_log
+ * @version 1.0.2
+ * @dependencies core/azx_log
  * @author Ioannis Demetriou
  * @author Sorin Basca
  * @date 10/02/2019

@@ -13,7 +13,7 @@
   @description
     Sample application showing how to manage class methods as function pointers. Debug prints on MAIN_UART
   @version 
-    1.0.0
+    1.0.1
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()

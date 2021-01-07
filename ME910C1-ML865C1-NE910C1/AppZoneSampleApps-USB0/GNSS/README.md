@@ -1,5 +1,5 @@
 
-###GNSS example 
+### GNSS example 
 
 Sample application showing how to use GNSS functionality. Debug prints on **USB0**
 

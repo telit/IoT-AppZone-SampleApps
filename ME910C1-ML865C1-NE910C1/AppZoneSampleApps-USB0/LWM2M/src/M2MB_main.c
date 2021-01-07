@@ -11,9 +11,9 @@
   @details
   
   @description
-    Sample application showcasing TLS/SSL with client certificates usage with M2MB API. Debug prints on USB0
+    Sample application showcasing LWM2M client usage with M2MB API. Debug prints on USB0
   @version 
-    1.0.0
+    1.0.1
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()

@@ -11,7 +11,7 @@
   @details
 
   @version
-    1.0.1
+    1.0.2
   @note
 
 
@@ -40,8 +40,6 @@
 #include "azx_log.h"
 #include "azx_utils.h"
 #include "azx_tasks.h"
-
-#include "app_cfg.h"
 
 #include "mqtt_demo.h"
 

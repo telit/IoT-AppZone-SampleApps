@@ -1,5 +1,5 @@
 
-###Uart To Server
+### Uart To Server
 
 Sample application showcasing how to send data from main UART to a connected TCP server. Debug messages are printed on AUX UART port.
 

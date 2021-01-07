@@ -4,9 +4,9 @@
 
 
 
-Package Version: **1.0.13-G1**
+Package Version: **1.0.14-G1**
 
-Minimum Firmware Version: **37.00.XX1**
+Minimum Firmware Version: **37.00.XX2**
 
 
 ## Features
@@ -21,7 +21,7 @@ This package goal is to provide sample source code for common activities kicksta
 
 To manually deploy the Sample application on the devices perform the following steps:
 
-1. Have **37.00.XX1** FW version flashed (`AT#SWPKGV` will give you the FW version)
+1. Have **37.00.XX2** FW version flashed (`AT#SWPKGV` will give you the FW version)
 
 1. Copy _m2mapz.bin_ to _/mod/_ 
 	```
@@ -124,6 +124,105 @@ in the samples package, go in the HelloWorld folder (e.g. `AppZoneSampleApps-MAI
 *Applications that provide usage examples for various functionalities, log output on Auxiliary UART*
 
 
+### ATI (AT Instance)
+
+Sample application showing how to use AT Instance functionality (sending AT commands from code). The example supports both sync and async (using a callback) modes. Debug prints on **AUX UART**
+
+
+**Features**
+
+
+- How to open an AT interface from the application
+- How to send AT commands and receive responses on the AT interface
+
+
+**Application workflow, sync mode**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+- Init AT0 (first AT instance)
+- Send AT+CGMR command
+- Print response.
+- Release AT0
+
+**`at_sync.c`**
+
+- Init ati functionality and take AT0
+- Send AT+CGMR command, then read response after 2 seconds, then return it
+- Deinit ati, releasing AT0
+
+![](pictures/samples/ati_sync_bordered.png)
+
+
+**Application workflow, async mode**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+- Init AT0 (first AT instance)
+- Send AT+CGMR command
+- Print response.
+- Release AT0
+
+**`at_async.c`**
+
+- Init ati functionality and take AT0, register AT events callback
+- Send AT+CGMR command, wait for response semaphore (released in callback), then read it and return it
+- Deinit ati, releasing AT0
+
+![](pictures/samples/ati_async_bordered.png)
+
+---------------------
+
+
+
+### App Manager
+
+Sample application showing how to manage AppZone apps from m2mb code. Debug prints on **AUX UART**
+
+
+**Features**
+
+
+- How to get how many configured apps are available
+- How to get the handle to manage the running app (change start delay, enable/disable)
+- How to create the handle for a new binary app, enable it and set its parameters
+- How to start the new app without rebooting the device, then stop it after a while.
+
+#### Prerequisites
+
+This app will try to manage another app called "second.bin", which already exists in the module filesystem and can be anything (e.g. another sample app as GPIO toggle).
+the app must be built using the flag ROM_START=<address> in the Makefile to set a different starting address than the main app (by default, 0x40000000). For example, 0x41000000.
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+- get a non existing app handle and verify it is NULL
+- get the current app handle, then get the start delay **set in the INI file (so persistent)**
+- change the current app delay value **in the INI file**
+- verify that the change has been stored
+- get current app state
+- create an handle for a second application binary. 
+- add it to the INI file
+- set its execution flag to 0
+- get the delay time and the state from INI file for the new app
+- get the current set address for the new app
+- set the app delay **in RAM, INI will not be affected**.
+- start the new app without reboot, using the right set delay
+- wait some time, then get the app state and the used RAM amount
+- wait 10 seconds, then stop the second app.
+- set its execution flag to 1 so it will run at next boot.
+
+![](pictures/samples/appManager_bordered.png)
+
+---------------------
+
+
+
 ### App update OTA via FTP
 
 Sample application showcasing Application OTA over FTP with AZX FTP. Debug prints on **AUX UART**
@@ -183,59 +282,6 @@ AT#M2MWRITE="/mod/ota_config.txt",<filesize>
 
 
 
-### ATI (AT Instance)
-
-Sample application showing how to use AT Instance functionality (sending AT commands from code). The example supports both sync and async (using a callback) modes. Debug prints on **AUX UART**
-
-
-**Features**
-
-
-- How to open an AT interface from the application
-- How to send AT commands and receive responses on the AT interface
-
-
-**Application workflow, sync mode**
-
-**`M2MB_main.c`**
-
-- Open USB/UART/UART_AUX
-- Init AT0 (first AT instance)
-- Send AT+CGMR command
-- Print response.
-- Release AT0
-
-**`at_sync.c`**
-
-- Init ati functionality and take AT0
-- Send AT+CGMR command, then read response after 2 seconds, then return it
-- Deinit ati, releasing AT0
-
-![](pictures/samples/ati_sync_bordered.png)
-
-
-**Application workflow, async mode**
-
-**`M2MB_main.c`**
-
-- Open USB/UART/UART_AUX
-- Init AT0 (first AT instance)
-- Send AT+CGMR command
-- Print response.
-- Release AT0
-
-**`at_async.c`**
-
-- Init ati functionality and take AT0, register AT events callback
-- Send AT+CGMR command, wait for response semaphore (released in callback), then read it and return it
-- Deinit ati, releasing AT0
-
-![](pictures/samples/ati_async_bordered.png)
-
----------------------
-
-
-
 ### CJSON example: 
 
 Sample application showcasing how to manage JSON objects. Debug prints on **AUX UART**
@@ -264,6 +310,113 @@ Sample application showcasing how to manage JSON objects. Debug prints on **AUX 
 ![](pictures/samples/cjson_bordered.png)
 
 ---------------------
+
+
+
+### Crypto Elliptic Curve Cryptography (ECC) example 
+
+Sample application showcasing how to manage Elliptic Curve Cryptography functionalities. Debug prints on **AUX UART**
+
+
+**Features**
+
+
+- How to initialize ECC contexts A (Alice) and B (Bob). Alice is emulating a remote host, from which a public key is known.
+- How to generate keypairs for contexts and export public keys
+- how to export keyblobs from a context (a keyblob is encrypted with hw specific keys, and can only be used on the module where it was created)
+- How to save a keyblob in secured TrustZone. 
+- How to reload a keyblob from the TrustZone into an initialized context
+- How to sign a message with ECDSA from context B (Bob) and verify it from another context A (Alice) with the signature and public key of Bob.
+- How to make Bob and Alice derive a shared session keys using each other's public key.
+- How to make Bob and Alice create an AES context with the newly created shared keys, encode data and decode it on the other side
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Create Bob ECC context, create a keypair and export it in a keyblob
+- Open a file in secured Trust Zone, then store the keyblob in it.
+- Destroy Bob ECC context
+- Recreate Bob ECC context, open the file from Trust Zone and read the keyblob. 
+- Import the keyblob in Bob context.
+- Export Bob public key
+- Create Alice ECC context, to simulate an external host. Generate a keypair and export the public key.
+- Sign a message with Bob context, generating a signature.
+- Use Alice to verify the signed message using Bob's signature and public key
+- Derive a shared key for Bob, using Alice's public key
+- Create an AES context for Bob
+- Import the shared key into the AES context
+- Encrypt a message using Bob's AES context.
+
+- Derive a shared key for Alice, using Bob's public key
+- Create an AES context for Alice
+- Import the shared key into the AES context
+- Decrypt the message using Alice's AES context.
+- Check the decrypted message and the original one match
+- Clear all resources
+
+![](pictures/samples/crypto_ecc_bordered.png)
+
+---------------------
+
+
+
+### EEPROM 24AA256
+
+Sample application showing how to communicate with a MicroChip 24AA256T I2C EEPROM chip using azx eeprom utility APIs. Debug prints on **AUX UART**
+
+
+**Features**
+
+
+- Initialize the logs on the output channel
+- configure the EEPROM utility, setting the slave address and the memory parameters (page size, memory size)
+- Write single bytes on a random address
+- Read written bytes as a page
+- Write data using pages
+- Read the new data using pages
+- Read again using sequential reading
+- Read a single byte from a specific address
+- Read next byte using read from current address
+- Erase the EEPROM
+- Deinit EEPROM utility
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- call azx_eeprom_init() to set the utility parameters (SDA and SCL pins, page and memory sizes)
+- call azx_eeprom_writeByte() to store a single byte with value '5' at the address 0x0213
+- call azx_eeprom_writeByte() to store a single byte with value '6' at the address 0x0214
+- call azx_eeprom_readPages() from address 0x0213 to retrieve the 2 bytes from the EEPROM
+- call azx_eeprom_writePages to write 1024 bytes from a buffer, starting from address 0x00
+- call azx_eeprom_readPages() again, to read 256 bytes from address 0x00
+- call azx_eeprom_readSequentially() to read 256 bytes from 0x00 by without pages (less overhead on I2C protocol)
+- call azx_eeprom_readByte() to get a single byte from address 0x00
+- call azx_eeprom_readByteFromCurrentAddress() to get a byte from next address (0x01)
+- call azx_eeprom_eraseAll() to completely erase the EEPROM memory (this writes 0xFF in each byte)
+- call azx_eeprom_readPages from address 0x0213 to get 2 bytes and verify the values have been written to 0xFF
+- call azx_eeprom_deinit to close the eeprom handler and the I2C channel
+
+![](pictures/samples/eeprom_AA256_bordered.png)
+
+---------------------
+
+
+
+### Easy AT example 
+
+Sample application showcasing Easy AT functionalities. Debug prints on **AUX UART**
+
+
+**Features**
+
+
+- Shows how to register custom commands
+
+
 
 
 
@@ -321,44 +474,6 @@ Sample application showcasing how to setup and use multiple events to create a b
 - At second timer expiration, set the second event bit and verify that the code flow went through after the event (implementing a barrier).
 
 ![](pictures/samples/events_barrier_bordered.png)
-
----------------------
-
-
-
-### File System example 
-
-Sample application showcasing M2MB File system API usage. Debug prints on **AUX UART**
-
-
-**Features**
-
-
-- How to open a file in write mode and write data in it
-- How to reopen the file in read mode and read data from it
-
-
-**Application workflow**
-
-**`M2MB_main.c`**
-
-- Open USB/UART/UART_AUX
-
-- Print welcome message
-
-- Open file in write mode
-
-- Write data in file
-
-- Close file
-
-- Reopen file in read mode
-
-- Read data from file and print it
-
-- Close file and delete it
-
-![](pictures/samples/file_system_bordered.png)
 
 ---------------------
 
@@ -466,6 +581,44 @@ Sample application showcasing FTP client demo with AZX FTP. Debug prints on **AU
 
 
 
+### File System example 
+
+Sample application showcasing M2MB File system API usage. Debug prints on **AUX UART**
+
+
+**Features**
+
+
+- How to open a file in write mode and write data in it
+- How to reopen the file in read mode and read data from it
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Open file in write mode
+
+- Write data in file
+
+- Close file
+
+- Reopen file in read mode
+
+- Read data from file and print it
+
+- Close file and delete it
+
+![](pictures/samples/file_system_bordered.png)
+
+---------------------
+
+
+
 ### GNSS example 
 
 Sample application showing how to use GNSS functionality. Debug prints on **AUX UART**
@@ -519,31 +672,6 @@ Sample application showing how to use GPIOs and interrupts. Debug prints on **AU
 - An interrupt is generated on *GPIO 3*
 
 ![](pictures/samples/gpio_interrupt_bordered.png)
-
----------------------
-
-
-
-### Hello World
-
-The application prints "Hello World!" over selected output every two seconds. Debug prints on **AUX UART**, <ins>using AZX log example functions</ins>
-
-
-**Features**
-
-
-- How to open an output channel using AZX LOG sample functions
-- How to print logging information on the channel using AZX LOG sample functions
-
-
-**Application workflow**
-
-**`M2MB_main.c`**
-
-- Open USB/UART/UART_AUX
-- Print "Hello World!" every 2 seconds in a while loop
-
-![](pictures/samples/hello_world_bordered.png)
 
 ---------------------
 
@@ -636,6 +764,31 @@ The sample application shows how to use HW Timers M2MB API. Debug prints on **AU
 
 
 
+### Hello World
+
+The application prints "Hello World!" over selected output every two seconds. Debug prints on **AUX UART**, <ins>using AZX log example functions</ins>
+
+
+**Features**
+
+
+- How to open an output channel using AZX LOG sample functions
+- How to print logging information on the channel using AZX LOG sample functions
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+- Print "Hello World!" every 2 seconds in a while loop
+
+![](pictures/samples/hello_world_bordered.png)
+
+---------------------
+
+
+
 ### I2C example 
 
 Sample application showing how to communicate with an I2C slave device. Debug prints on **AUX UART**
@@ -666,17 +819,17 @@ Sample application showing how to communicate with an I2C slave device. Debug pr
 
 
 
-### Logging Demo
+### I2C Combined
 
-Sample application showing how to print on one of the available output interfaces. Debug prints on **AUX UART**
+Sample application showing how to communicate with an I2C slave device with I2C raw mode. Debug prints on **AUX UART**
 
 
 **Features**
 
 
-- How to open a logging channel
-- How to set a logging level 
-- How to use different logging macros
+- How to open a communication channel with an I2C slave device
+- How to send and receive data to/from the slave device using raw mode API
+
 
 
 **Application workflow**
@@ -684,12 +837,13 @@ Sample application showing how to print on one of the available output interface
 **`M2MB_main.c`**
 
 - Open USB/UART/UART_AUX
+- Open I2C bus, setting SDA an SCL pins as 2 and 3 respectively
+- Set registers to configure accelerometer
+-Read in a loop the 6 registers carrying the 3 axes values and show the g value for each of them
 
-- Print welcome message
 
-- Print a message with every log level
 
-![](pictures/samples/logging_bordered.png)
+![](pictures/samples/i2c_combined_bordered.png)
 
 ---------------------
 
@@ -697,7 +851,7 @@ Sample application showing how to print on one of the available output interface
 
 ### LWM2M
 
-Sample application showcasing TLS/SSL with client certificates usage with M2MB API. Debug prints on **AUX UART**
+Sample application showcasing LWM2M client usage with M2MB API. Debug prints on **AUX UART**
 
 
 **Features**
@@ -824,6 +978,64 @@ For example, executing the two Exec Resources at the bottom of the list, the app
 Writing a string resource (id /35000/0/11 ), the application will notify the change
 
 ![](pictures/samples/lwm2m_4_write_bordered.png)
+
+---------------------
+
+
+
+### Logging Demo
+
+Sample application showing how to print on one of the available output interfaces. Debug prints on **AUX UART**
+
+
+**Features**
+
+
+- How to open a logging channel
+- How to set a logging level 
+- How to use different logging macros
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Print a message with every log level
+
+![](pictures/samples/logging_bordered.png)
+
+---------------------
+
+
+
+### MD5 example 
+
+Sample application showing how to compute MD5 hashes using m2mb crypto. Debug prints on **AUX UART**
+
+
+**Features**
+
+- Compute MD5 hash of a file
+- Compute MD5 hash of a string
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+- Create a temporary file with the expected content
+- Compute MD5 hash of the provided text file
+- Compare the hash with the expected one
+- Compute MD5 hash of a string
+- Compare the hash with the expected one
+- Delete test file
+
+![](pictures/samples/md5_bordered.png)
 
 ---------------------
 
@@ -1037,6 +1249,52 @@ The sample application shows how to use SW Timers M2MB API. Debug prints on **AU
 
 
 
+### Secure MicroService 
+
+Sample application showcasing how to manage secure microservice functionalities. Debug prints on **AUX UART**
+
+
+**Features**
+
+
+- Write data in Secure Data Area (SDA), non protected
+- Read the written data and compare with the original buffer
+- Write a cripty key in Secure Data Area (SDA), non protected
+- Perform a rotate of the written key data
+- Perform MD5 sum of written data from TZ file
+- Compare computed digest with expected one
+- Write data in trust zone as a trusted object (it will not be possible to read it again but only use its content for crypto operations)
+- Try to read the trusted object and verify it fails
+- Rotate trusted item and verify retrieving the content fails
+- compute MD5 sum of trusted item and compare with the expected one
+- Try to pass data from a trusted item to a non trusted item using untrusted TZ buffers, and verify it fails
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Write a buffer in a SDA item using `m2mb_secure_ms_write`
+- Read the same item using `m2mb_secure_ms_read`
+- Write a buffer containing some cripty key in a SDA item using `m2mb_secure_ms_write`
+- Rotate the content of the key item
+- Read it with `m2mb_secure_ms_read`
+- Load the key content using `m2mb_secure_ms_crypto_alloc` and `m2mb_secure_crypto_add_item` in a SECURE_MS buffer
+- Compute MD digest with `m2mb_secure_ms_crypto_md`
+- Write a buffer containing some cripty key in a SDA item using `m2mb_secure_ms_write` but with **TRUSTED** option in `m2mb_secure_ms_open`
+- Verify that `m2mb_secure_ms_read` on the trusted item fails
+- Verify that `m2mb_secure_ms_crypto_rotate` fails for the trusted item
+- Verify the MD5 digest
+- Try to copy the trusted item data in a SECURE_MS buffer with `m2mb_secure_ms_crypto_alloc` and `m2mb_secure_crypto_add_item`, then load it in an untrusted object with `m2mb_secure_ms_crypto_write`, and verify it fails.
+
+
+
+![](pictures/samples/secure_ms_bordered.png)
+
+---------------------
+
+
+
 ### TCP IP 
 
 Sample application showcasing TCP echo demo with M2MB API. Debug prints on **AUX UART**
@@ -1079,6 +1337,53 @@ Sample application showcasing TCP echo demo with M2MB API. Debug prints on **AUX
 - Disable PDP context
 
 ![](pictures/samples/tcp_ip_bordered.png)
+
+---------------------
+
+
+
+### TCP Socket status
+
+Sample application showcasing how to check a TPC connected socket current status. Debug prints on **AUX UART**
+
+
+**Features**
+
+
+- How to check module registration and activate PDP context
+- How to open a TCP client socket 
+- How to check if the TCP socket is still valid
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Create a task to manage socket and start it
+
+
+
+**`m2m_tcp_test.c`**
+
+- Initialize Network structure and check registration
+
+- Initialize PDP structure and start PDP context
+
+- Create socket and link it to the PDP context id
+
+- Connect to the server
+
+- Check in a loop the current socket status using the adv_select function with a 2 seconds timeout
+
+- Close socket when the remote host closes it
+
+- Disable PDP context
+
+
+![](pictures/samples/tcp_status_bordered.png)
 
 ---------------------
 
@@ -1240,6 +1545,38 @@ Sample application showcasing UDP echo demo with M2MB API. Debug prints on **AUX
 
 
 
+### USB Cable Check 
+
+Sample application showing how to check if USB cable is plugged in or not. Debug prints on **AUX UART**
+
+
+**Features**
+
+
+- How to open an USB channel and configure it with a callback function
+- How to manage USB cable events in the callback function
+
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open UART/UART_AUX for debug
+- open usb channel and set the callback
+- Print greeting message
+- Print current usb status
+
+**`USB_Cb`**
+
+- if the event is a connection/disconnection, show the current status
+
+![](pictures/samples/usb_cable_check_bordered.png)
+
+---------------------
+
+
+
 ### ZLIB example 
 
 Sample application showing how to compress/uncompress with ZLIB. Debug prints on **AUX UART**
@@ -1272,248 +1609,25 @@ AT#M2MWRITE="/mod/test.gz",138
 
 
 
-## BASIC 
-*Basic applications showing simple operations with minimum code overhead*
+## MISC 
+*Applications that provide usage examples for various functionalities, without prints*
 
 
-### Basic Hello World (Aux UART)
+### GPIO toggle example 
 
-The application prints "Hello World!" on Auxiliary UART every 2 seconds using
-
-
-**Features**
-
-
-- How to open Auxiliary UART as an output channel
-- How to print messages out of the channel
-
-
-**Application workflow**
-
-**`M2MB_main.c`**
-
-- Open Auxiliary UART with **`m2mb_uart_open`** function
-- write a welcome message using **`m2mb_uart_write`**
-- write "Hello World!" every 2 seconds in a while loop, using **`m2mb_uart_write`**
-
-![](pictures/samples/hello_world_basic_bordered.png)
-
----------------------
-
-
-
-### Basic Hello World (Main UART)
-
-The application prints "Hello World!" on Main UART every 2 seconds using
+Sample application showcasing GPIO usage with M2MB API
 
 
 **Features**
 
 
-- How to open Main UART as an output channel
-- How to print messages out of the channel
+- How to open a gpio in output mode and change its status
 
-
-**Application workflow**
-
-**`M2MB_main.c`**
-
-- Open Main UART with **`m2mb_uart_open`** function
-- write a welcome message using **`m2mb_uart_write`**
-- write "Hello World!" every 2 seconds in a while loop, using **`m2mb_uart_write`**
-
-![](pictures/samples/hello_world_basic_bordered.png)
-
----------------------
-
-
-
-### Basic Hello World (USB0)
-
-The application prints "Hello World!" on USB 0 every 2 seconds using
-
-
-**Features**
-
-
-- How to open USB 0 as an output channel
-- How to print messages out of the channel
-
-
-**Application workflow**
-
-**`M2MB_main.c`**
-
-- Open USB 0 with **`m2mb_usb_open`** function
-- write a welcome message using **`m2mb_usb_write`**
-- write "Hello World!" every 2 seconds in a while loop, using **`m2mb_usb_write`**
-
-![](pictures/samples/hello_world_basic_bordered.png)
-
----------------------
-
-
-
-### Basic Task 
-
-The application shows how to create and manage tasks with m2mb APIs. Debug prints on MAIN UART (can be changed in M2MB_Main function)
-
-
-**Features**
-
-
-- How to create a new task using m2mb APIs
-- How to start the task and send messages to it
-- how to destroy the task
-
-**Application workflow**
-
-**`M2MB_main.c`**
-
-- Open UART
-- Print welcome message
-- Configure and create message queue for task
-- Configure and create task
-- Send 2 messages to the task queue
-
-**`task_entry_function`**
-
-- Receive messages from the task queue in a loop
-- Print the message data when one arrives
-
-![](pictures/samples/basic_task_bordered.png)
-
----------------------
-
-
-
-## C++ 
-*Applications that provide usage examples with C++*
-
-
-### Logging C++ 
-
-Sample application showcasing how to create a C++ OO code, providing a logging class (equivalent to the one in Logging demo)
-
-
-**Features**
-
-
-- how to define a class object
-- how to instantiate and call the class from a C++ main
-- how to configure makefile flags to build the application
-
-
-**Application workflow**
-
-**`M2MB_main.c`**
-
-- Call C++ main function
-
-**`main.cpp`**
-
-- Create a Logger class instance and set it to USB/UART/UART_AUX
-- Print one message for every log level
-
-![](pictures/samples/cpp_logging_bordered.png)
-
----------------------
-
-
-
-### C++  method to function pointer
-
-Sample application showing how to manage class methods as function pointers. Debug prints on MAIN_UART
-
-
-**Features**
-
-
-- how to define a class object with a generic method with the same prototype as a m2mb callback function (in this case, a hw timer callback)
-- how to use a single static function in the class workspace to call multiple class instances method by using "this" as argument in the timer creation
-- how to configure the static function to convert the input parameter with a static cast and call the input class instance method
-
-
-**Application workflow**
-
-**`M2MB_main.c`**
-
-- Call C++ main function
-
-**`main.cpp`**
-
-- Create two HwTimer class instance with different timeouts
-- Start both timers.
-- Each will expire at a different time, and both m2mb timers will call the static function, which will run the appropriate class instance method as callback.
-
-
-![](pictures/samples/cpp_method_bordered.png)
-
----------------------
 
 
 
 ## MAIN UART 
-*Applications that provide usage examples for various functionalities, log output on Main UART*
-
-
-### App update OTA via FTP
-
-Sample application showcasing Application OTA over FTP with AZX FTP. Debug prints on **MAIN UART**
-
-
-**Features**
-
-
-- How to check module registration and activate PDP context
-- How to connect to a FTP server 
-- How to download an application binary and update the local version
-
-The app uses a predefined set of parameters. To load custom parameters, upload the `ota_config.txt` file (provided in project's `/src` folder) in module's `/mod` folder, for example with 
-
-```
-AT#M2MWRITE="/mod/ota_config.txt",<filesize>
-
-```
-
-
-**Application workflow**
-
-**`M2MB_main.c`**
-
-- Open USB/UART/UART_AUX
-
-- Print welcome message
-
-- Create a task to manage app OTA and start it
-
-
-**`ftp_utils.c`**
-
-- Set parameters to default
-- Try to load parameters from `ota_config.txt` file
-- Initialize Network structure and check registration
-
-- Initialize PDP structure and start PDP context
-
-- Initialize FTP client
-- Connect to FTP server and log in
-- Get new App binary file size on remote server
-- Download the file in `/mod` folder, with the provided name
-- Close FTP connection
-- Disable PDP context
-- Update applications configuration in **app_utils.c**
-
-**`app_utils.c`**
-
-- Set new application as default
-- Delete old app binary
-- Restart module
-
-![](pictures/samples/app_ftp_ota_bordered.png)
-
----------------------
-
+*Applications that provide usage examples for various functionalities, log output on MAIN UART*
 
 
 ### ATI (AT Instance)
@@ -1603,6 +1717,111 @@ USB1 debug log:
 
 
 
+### App Manager
+
+Sample application showing how to manage AppZone apps from m2mb code. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- How to get how many configured apps are available
+- How to get the handle to manage the running app (change start delay, enable/disable)
+- How to create the handle for a new binary app, enable it and set its parameters
+- How to start the new app without rebooting the device, then stop it after a while.
+
+#### Prerequisites
+
+This app will try to manage another app called "second.bin", which already exists in the module filesystem and can be anything (e.g. another sample app as GPIO toggle).
+the app must be built using the flag ROM_START=<address> in the Makefile to set a different starting address than the main app (by default, 0x40000000). For example, 0x41000000.
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+- get a non existing app handle and verify it is NULL
+- get the current app handle, then get the start delay **set in the INI file (so persistent)**
+- change the current app delay value **in the INI file**
+- verify that the change has been stored
+- get current app state
+- create an handle for a second application binary. 
+- add it to the INI file
+- set its execution flag to 0
+- get the delay time and the state from INI file for the new app
+- get the current set address for the new app
+- set the app delay **in RAM, INI will not be affected**.
+- start the new app without reboot, using the right set delay
+- wait some time, then get the app state and the used RAM amount
+- wait 10 seconds, then stop the second app.
+- set its execution flag to 1 so it will run at next boot.
+
+![](pictures/samples/appManager_bordered.png)
+
+---------------------
+
+
+
+### App update OTA via FTP
+
+Sample application showcasing Application OTA over FTP with AZX FTP. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- How to check module registration and activate PDP context
+- How to connect to a FTP server 
+- How to download an application binary and update the local version
+
+The app uses a predefined set of parameters. To load custom parameters, upload the `ota_config.txt` file (provided in project's `/src` folder) in module's `/mod` folder, for example with 
+
+```
+AT#M2MWRITE="/mod/ota_config.txt",<filesize>
+
+```
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Create a task to manage app OTA and start it
+
+
+**`ftp_utils.c`**
+
+- Set parameters to default
+- Try to load parameters from `ota_config.txt` file
+- Initialize Network structure and check registration
+
+- Initialize PDP structure and start PDP context
+
+- Initialize FTP client
+- Connect to FTP server and log in
+- Get new App binary file size on remote server
+- Download the file in `/mod` folder, with the provided name
+- Close FTP connection
+- Disable PDP context
+- Update applications configuration in **app_utils.c**
+
+**`app_utils.c`**
+
+- Set new application as default
+- Delete old app binary
+- Restart module
+
+![](pictures/samples/app_ftp_ota_bordered.png)
+
+---------------------
+
+
+
 ### CJSON example: 
 
 Sample application showcasing how to manage JSON objects. Debug prints on **MAIN UART**
@@ -1631,6 +1850,113 @@ Sample application showcasing how to manage JSON objects. Debug prints on **MAIN
 ![](pictures/samples/cjson_bordered.png)
 
 ---------------------
+
+
+
+### Crypto Elliptic Curve Cryptography (ECC) example 
+
+Sample application showcasing how to manage Elliptic Curve Cryptography functionalities. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- How to initialize ECC contexts A (Alice) and B (Bob). Alice is emulating a remote host, from which a public key is known.
+- How to generate keypairs for contexts and export public keys
+- how to export keyblobs from a context (a keyblob is encrypted with hw specific keys, and can only be used on the module where it was created)
+- How to save a keyblob in secured TrustZone. 
+- How to reload a keyblob from the TrustZone into an initialized context
+- How to sign a message with ECDSA from context B (Bob) and verify it from another context A (Alice) with the signature and public key of Bob.
+- How to make Bob and Alice derive a shared session keys using each other's public key.
+- How to make Bob and Alice create an AES context with the newly created shared keys, encode data and decode it on the other side
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Create Bob ECC context, create a keypair and export it in a keyblob
+- Open a file in secured Trust Zone, then store the keyblob in it.
+- Destroy Bob ECC context
+- Recreate Bob ECC context, open the file from Trust Zone and read the keyblob. 
+- Import the keyblob in Bob context.
+- Export Bob public key
+- Create Alice ECC context, to simulate an external host. Generate a keypair and export the public key.
+- Sign a message with Bob context, generating a signature.
+- Use Alice to verify the signed message using Bob's signature and public key
+- Derive a shared key for Bob, using Alice's public key
+- Create an AES context for Bob
+- Import the shared key into the AES context
+- Encrypt a message using Bob's AES context.
+
+- Derive a shared key for Alice, using Bob's public key
+- Create an AES context for Alice
+- Import the shared key into the AES context
+- Decrypt the message using Alice's AES context.
+- Check the decrypted message and the original one match
+- Clear all resources
+
+![](pictures/samples/crypto_ecc_bordered.png)
+
+---------------------
+
+
+
+### EEPROM 24AA256
+
+Sample application showing how to communicate with a MicroChip 24AA256T I2C EEPROM chip using azx eeprom utility APIs. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- Initialize the logs on the output channel
+- configure the EEPROM utility, setting the slave address and the memory parameters (page size, memory size)
+- Write single bytes on a random address
+- Read written bytes as a page
+- Write data using pages
+- Read the new data using pages
+- Read again using sequential reading
+- Read a single byte from a specific address
+- Read next byte using read from current address
+- Erase the EEPROM
+- Deinit EEPROM utility
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- call azx_eeprom_init() to set the utility parameters (SDA and SCL pins, page and memory sizes)
+- call azx_eeprom_writeByte() to store a single byte with value '5' at the address 0x0213
+- call azx_eeprom_writeByte() to store a single byte with value '6' at the address 0x0214
+- call azx_eeprom_readPages() from address 0x0213 to retrieve the 2 bytes from the EEPROM
+- call azx_eeprom_writePages to write 1024 bytes from a buffer, starting from address 0x00
+- call azx_eeprom_readPages() again, to read 256 bytes from address 0x00
+- call azx_eeprom_readSequentially() to read 256 bytes from 0x00 by without pages (less overhead on I2C protocol)
+- call azx_eeprom_readByte() to get a single byte from address 0x00
+- call azx_eeprom_readByteFromCurrentAddress() to get a byte from next address (0x01)
+- call azx_eeprom_eraseAll() to completely erase the EEPROM memory (this writes 0xFF in each byte)
+- call azx_eeprom_readPages from address 0x0213 to get 2 bytes and verify the values have been written to 0xFF
+- call azx_eeprom_deinit to close the eeprom handler and the I2C channel
+
+![](pictures/samples/eeprom_AA256_bordered.png)
+
+---------------------
+
+
+
+### Easy AT example 
+
+Sample application showcasing Easy AT functionalities. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- Shows how to register custom commands
+
+
 
 
 
@@ -1688,44 +2014,6 @@ Sample application showcasing how to setup and use multiple events to create a b
 - At second timer expiration, set the second event bit and verify that the code flow went through after the event (implementing a barrier).
 
 ![](pictures/samples/events_barrier_bordered.png)
-
----------------------
-
-
-
-### File System example 
-
-Sample application showcasing M2MB File system API usage. Debug prints on **MAIN UART**
-
-
-**Features**
-
-
-- How to open a file in write mode and write data in it
-- How to reopen the file in read mode and read data from it
-
-
-**Application workflow**
-
-**`M2MB_main.c`**
-
-- Open USB/UART/UART_AUX
-
-- Print welcome message
-
-- Open file in write mode
-
-- Write data in file
-
-- Close file
-
-- Reopen file in read mode
-
-- Read data from file and print it
-
-- Close file and delete it
-
-![](pictures/samples/file_system_bordered.png)
 
 ---------------------
 
@@ -1833,6 +2121,44 @@ Sample application showcasing FTP client demo with AZX FTP. Debug prints on **MA
 
 
 
+### File System example 
+
+Sample application showcasing M2MB File system API usage. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- How to open a file in write mode and write data in it
+- How to reopen the file in read mode and read data from it
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Open file in write mode
+
+- Write data in file
+
+- Close file
+
+- Reopen file in read mode
+
+- Read data from file and print it
+
+- Close file and delete it
+
+![](pictures/samples/file_system_bordered.png)
+
+---------------------
+
+
+
 ### GNSS example 
 
 Sample application showing how to use GNSS functionality. Debug prints on **MAIN UART**
@@ -1886,31 +2212,6 @@ Sample application showing how to use GPIOs and interrupts. Debug prints on **MA
 - An interrupt is generated on *GPIO 3*
 
 ![](pictures/samples/gpio_interrupt_bordered.png)
-
----------------------
-
-
-
-### Hello World
-
-The application prints "Hello World!" over selected output every two seconds. Debug prints on **MAIN UART**, <ins>using AZX log example functions</ins>
-
-
-**Features**
-
-
-- How to open an output channel using AZX LOG sample functions
-- How to print logging information on the channel using AZX LOG sample functions
-
-
-**Application workflow**
-
-**`M2MB_main.c`**
-
-- Open USB/UART/UART_AUX
-- Print "Hello World!" every 2 seconds in a while loop
-
-![](pictures/samples/hello_world_bordered.png)
 
 ---------------------
 
@@ -2003,6 +2304,31 @@ The sample application shows how to use HW Timers M2MB API. Debug prints on **MA
 
 
 
+### Hello World
+
+The application prints "Hello World!" over selected output every two seconds. Debug prints on **MAIN UART**, <ins>using AZX log example functions</ins>
+
+
+**Features**
+
+
+- How to open an output channel using AZX LOG sample functions
+- How to print logging information on the channel using AZX LOG sample functions
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+- Print "Hello World!" every 2 seconds in a while loop
+
+![](pictures/samples/hello_world_bordered.png)
+
+---------------------
+
+
+
 ### I2C example 
 
 Sample application showing how to communicate with an I2C slave device. Debug prints on **MAIN UART**
@@ -2033,17 +2359,17 @@ Sample application showing how to communicate with an I2C slave device. Debug pr
 
 
 
-### Logging Demo
+### I2C Combined
 
-Sample application showing how to print on one of the available output interfaces. Debug prints on **MAIN UART**
+Sample application showing how to communicate with an I2C slave device with I2C raw mode. Debug prints on **MAIN UART**
 
 
 **Features**
 
 
-- How to open a logging channel
-- How to set a logging level 
-- How to use different logging macros
+- How to open a communication channel with an I2C slave device
+- How to send and receive data to/from the slave device using raw mode API
+
 
 
 **Application workflow**
@@ -2051,12 +2377,13 @@ Sample application showing how to print on one of the available output interface
 **`M2MB_main.c`**
 
 - Open USB/UART/UART_AUX
+- Open I2C bus, setting SDA an SCL pins as 2 and 3 respectively
+- Set registers to configure accelerometer
+-Read in a loop the 6 registers carrying the 3 axes values and show the g value for each of them
 
-- Print welcome message
 
-- Print a message with every log level
 
-![](pictures/samples/logging_bordered.png)
+![](pictures/samples/i2c_combined_bordered.png)
 
 ---------------------
 
@@ -2064,7 +2391,7 @@ Sample application showing how to print on one of the available output interface
 
 ### LWM2M
 
-Sample application showcasing TLS/SSL with client certificates usage with M2MB API. Debug prints on **MAIN UART**
+Sample application showcasing LWM2M client usage with M2MB API. Debug prints on **MAIN UART**
 
 
 **Features**
@@ -2191,6 +2518,64 @@ For example, executing the two Exec Resources at the bottom of the list, the app
 Writing a string resource (id /35000/0/11 ), the application will notify the change
 
 ![](pictures/samples/lwm2m_4_write_bordered.png)
+
+---------------------
+
+
+
+### Logging Demo
+
+Sample application showing how to print on one of the available output interfaces. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- How to open a logging channel
+- How to set a logging level 
+- How to use different logging macros
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Print a message with every log level
+
+![](pictures/samples/logging_bordered.png)
+
+---------------------
+
+
+
+### MD5 example 
+
+Sample application showing how to compute MD5 hashes using m2mb crypto. Debug prints on **MAIN UART**
+
+
+**Features**
+
+- Compute MD5 hash of a file
+- Compute MD5 hash of a string
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+- Create a temporary file with the expected content
+- Compute MD5 hash of the provided text file
+- Compare the hash with the expected one
+- Compute MD5 hash of a string
+- Compare the hash with the expected one
+- Delete test file
+
+![](pictures/samples/md5_bordered.png)
 
 ---------------------
 
@@ -2462,6 +2847,52 @@ The sample application shows how to use SW Timers M2MB API. Debug prints on **MA
 
 
 
+### Secure MicroService 
+
+Sample application showcasing how to manage secure microservice functionalities. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- Write data in Secure Data Area (SDA), non protected
+- Read the written data and compare with the original buffer
+- Write a cripty key in Secure Data Area (SDA), non protected
+- Perform a rotate of the written key data
+- Perform MD5 sum of written data from TZ file
+- Compare computed digest with expected one
+- Write data in trust zone as a trusted object (it will not be possible to read it again but only use its content for crypto operations)
+- Try to read the trusted object and verify it fails
+- Rotate trusted item and verify retrieving the content fails
+- compute MD5 sum of trusted item and compare with the expected one
+- Try to pass data from a trusted item to a non trusted item using untrusted TZ buffers, and verify it fails
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Write a buffer in a SDA item using `m2mb_secure_ms_write`
+- Read the same item using `m2mb_secure_ms_read`
+- Write a buffer containing some cripty key in a SDA item using `m2mb_secure_ms_write`
+- Rotate the content of the key item
+- Read it with `m2mb_secure_ms_read`
+- Load the key content using `m2mb_secure_ms_crypto_alloc` and `m2mb_secure_crypto_add_item` in a SECURE_MS buffer
+- Compute MD digest with `m2mb_secure_ms_crypto_md`
+- Write a buffer containing some cripty key in a SDA item using `m2mb_secure_ms_write` but with **TRUSTED** option in `m2mb_secure_ms_open`
+- Verify that `m2mb_secure_ms_read` on the trusted item fails
+- Verify that `m2mb_secure_ms_crypto_rotate` fails for the trusted item
+- Verify the MD5 digest
+- Try to copy the trusted item data in a SECURE_MS buffer with `m2mb_secure_ms_crypto_alloc` and `m2mb_secure_crypto_add_item`, then load it in an untrusted object with `m2mb_secure_ms_crypto_write`, and verify it fails.
+
+
+
+![](pictures/samples/secure_ms_bordered.png)
+
+---------------------
+
+
+
 ### TCP IP 
 
 Sample application showcasing TCP echo demo with M2MB API. Debug prints on **MAIN UART**
@@ -2504,6 +2935,53 @@ Sample application showcasing TCP echo demo with M2MB API. Debug prints on **MAI
 - Disable PDP context
 
 ![](pictures/samples/tcp_ip_bordered.png)
+
+---------------------
+
+
+
+### TCP Socket status
+
+Sample application showcasing how to check a TPC connected socket current status. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- How to check module registration and activate PDP context
+- How to open a TCP client socket 
+- How to check if the TCP socket is still valid
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Create a task to manage socket and start it
+
+
+
+**`m2m_tcp_test.c`**
+
+- Initialize Network structure and check registration
+
+- Initialize PDP structure and start PDP context
+
+- Create socket and link it to the PDP context id
+
+- Connect to the server
+
+- Check in a loop the current socket status using the adv_select function with a 2 seconds timeout
+
+- Close socket when the remote host closes it
+
+- Disable PDP context
+
+
+![](pictures/samples/tcp_status_bordered.png)
 
 ---------------------
 
@@ -2701,6 +3179,38 @@ Sample application showcasing UDP echo demo with M2MB API. Debug prints on **MAI
 
 
 
+### USB Cable Check 
+
+Sample application showing how to check if USB cable is plugged in or not. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- How to open an USB channel and configure it with a callback function
+- How to manage USB cable events in the callback function
+
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open UART/UART_AUX for debug
+- open usb channel and set the callback
+- Print greeting message
+- Print current usb status
+
+**`USB_Cb`**
+
+- if the event is a connection/disconnection, show the current status
+
+![](pictures/samples/usb_cable_check_bordered.png)
+
+---------------------
+
+
+
 ### ZLIB example 
 
 Sample application showing how to compress/uncompress with ZLIB. Debug prints on **MAIN UART**
@@ -2733,25 +3243,348 @@ AT#M2MWRITE="/mod/test.gz",138
 
 
 
-## MISC 
-*Applications that provide usage examples for various functionalities, without prints*
+### Little fs2 
 
-
-### GPIO toggle example 
-
-Sample application showcasing GPIO usage with M2MB API
+Sample application showing how use lfs2 porting with RAM disk and SPI data flash. Debug prints on **MAIN UART**
 
 
 **Features**
 
 
-- How to open a gpio in output mode and change its status
+- How to create and manage Ram Disk
+- How to manage file-system in Ram disk partition
+- How to create and manage SPI Flash memory partition
+- How to manage file-system in SPI Flash memory partition
 
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Init logging system
+- Call Ram Disk tests
+- Call Flash memory tests
+
+**`ram_utils_usage.c`**
+
+- Initialize Ram Disk
+- Format and Mount partition
+- List files 
+- Files creation and write content
+- List files 
+- Read files 
+- Unmount and Release resources
+
+
+**`spi_utils_usage.c`**
+- Initialize SPI Flash chip
+- Initialize SPI Flash Disk
+- Format and Mount partition
+- List files 
+- Files creation and write content
+- List files 
+- Read files 
+- Delete files
+- Directories creation and deletion
+- Unmount and Release resources
+
+**Notes:**
+For SPI Flash a JSC memory is used with chip select pin connected to module GPIO2 pin.
+For better performances, a 33kOhm pull-down resistor on SPI clock is suggested.
+Please refer to SPI_echo sample app for SPI connection details.
+
+![](pictures/samples/lfs2_ramdisk_bordered.png)
+![](pictures/samples/lfs2_spiflash_01_bordered.png)
+![](pictures/samples/lfs2_spiflash_02_bordered.png)
+![](pictures/samples/lfs2_spiflash_03_bordered.png)
+
+
+
+---------------------
+
+
+
+## C++ 
+*Applications that provide usage examples with C++*
+
+
+### Logging C++ 
+
+Sample application showcasing how to create a C++ OO code, providing a logging class (equivalent to the one in Logging demo)
+
+
+**Features**
+
+
+- how to define a class object
+- how to instantiate and call the class from a C++ main
+- how to configure makefile flags to build the application
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Call C++ main function
+
+**`main.cpp`**
+
+- Create a Logger class instance and set it to USB/UART/UART_AUX
+- Print one message for every log level
+
+![](pictures/samples/cpp_logging_bordered.png)
+
+---------------------
+
+
+
+### C++  method to function pointer
+
+Sample application showing how to manage class methods as function pointers. Debug prints on MAIN_UART
+
+
+**Features**
+
+
+- how to define a class object with a generic method with the same prototype as a m2mb callback function (in this case, a hw timer callback)
+- how to use a single static function in the class workspace to call multiple class instances method by using "this" as argument in the timer creation
+- how to configure the static function to convert the input parameter with a static cast and call the input class instance method
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Call C++ main function
+
+**`main.cpp`**
+
+- Create two HwTimer class instance with different timeouts
+- Start both timers.
+- Each will expire at a different time, and both m2mb timers will call the static function, which will run the appropriate class instance method as callback.
+
+
+![](pictures/samples/cpp_method_bordered.png)
+
+---------------------
+
+
+
+## BASIC 
+*Basic applications showing simple operations with minimum code overhead*
+
+
+### Basic Hello World (Aux UART)
+
+The application prints "Hello World!" on Auxiliary UART every 2 seconds using
+
+
+**Features**
+
+
+- How to open Auxiliary UART as an output channel
+- How to print messages out of the channel
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open Auxiliary UART with **`m2mb_uart_open`** function
+- write a welcome message using **`m2mb_uart_write`**
+- write "Hello World!" every 2 seconds in a while loop, using **`m2mb_uart_write`**
+
+![](pictures/samples/hello_world_basic_bordered.png)
+
+---------------------
+
+
+
+### Basic Hello World (Main UART)
+
+The application prints "Hello World!" on Main UART every 2 seconds using
+
+
+**Features**
+
+
+- How to open Main UART as an output channel
+- How to print messages out of the channel
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open Main UART with **`m2mb_uart_open`** function
+- write a welcome message using **`m2mb_uart_write`**
+- write "Hello World!" every 2 seconds in a while loop, using **`m2mb_uart_write`**
+
+![](pictures/samples/hello_world_basic_bordered.png)
+
+---------------------
+
+
+
+### Basic Hello World (USB0)
+
+The application prints "Hello World!" on USB 0 every 2 seconds using
+
+
+**Features**
+
+
+- How to open USB 0 as an output channel
+- How to print messages out of the channel
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB 0 with **`m2mb_usb_open`** function
+- write a welcome message using **`m2mb_usb_write`**
+- write "Hello World!" every 2 seconds in a while loop, using **`m2mb_usb_write`**
+
+![](pictures/samples/hello_world_basic_bordered.png)
+
+---------------------
+
+
+
+### Basic Task 
+
+The application shows how to create and manage tasks with m2mb APIs. Debug prints on MAIN UART (can be changed in M2MB_Main function)
+
+
+**Features**
+
+
+- How to create a new task using m2mb APIs
+- How to start the task and send messages to it
+- how to destroy the task
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open UART
+- Print welcome message
+- Configure and create message queue for task
+- Configure and create task
+- Send 2 messages to the task queue
+
+**`task_entry_function`**
+
+- Receive messages from the task queue in a loop
+- Print the message data when one arrives
+
+![](pictures/samples/basic_task_bordered.png)
+
+---------------------
 
 
 
 ## USB0 
 *Applications that provide usage examples for various functionalities, log output on USB0*
+
+
+### ATI (AT Instance)
+
+Sample application showing how to use AT Instance functionality (sending AT commands from code). The example supports both sync and async (using a callback) modes. Debug prints on **USB0**
+
+
+**Features**
+
+
+- How to open an AT interface from the application
+- How to send AT commands and receive responses on the AT interface
+
+
+**Application workflow, sync mode**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+- Init AT0 (first AT instance)
+- Send AT+CGMR command
+- Print response.
+- Release AT0
+
+**`at_sync.c`**
+
+- Init ati functionality and take AT0
+- Send AT+CGMR command, then read response after 2 seconds, then return it
+- Deinit ati, releasing AT0
+
+![](pictures/samples/ati_sync_bordered.png)
+
+
+**Application workflow, async mode**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+- Init AT0 (first AT instance)
+- Send AT+CGMR command
+- Print response.
+- Release AT0
+
+**`at_async.c`**
+
+- Init ati functionality and take AT0, register AT events callback
+- Send AT+CGMR command, wait for response semaphore (released in callback), then read it and return it
+- Deinit ati, releasing AT0
+
+![](pictures/samples/ati_async_bordered.png)
+
+---------------------
+
+
+
+### App Manager
+
+Sample application showing how to manage AppZone apps from m2mb code. Debug prints on **USB0**
+
+
+**Features**
+
+
+- How to get how many configured apps are available
+- How to get the handle to manage the running app (change start delay, enable/disable)
+- How to create the handle for a new binary app, enable it and set its parameters
+- How to start the new app without rebooting the device, then stop it after a while.
+
+#### Prerequisites
+
+This app will try to manage another app called "second.bin", which already exists in the module filesystem and can be anything (e.g. another sample app as GPIO toggle).
+the app must be built using the flag ROM_START=<address> in the Makefile to set a different starting address than the main app (by default, 0x40000000). For example, 0x41000000.
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+- get a non existing app handle and verify it is NULL
+- get the current app handle, then get the start delay **set in the INI file (so persistent)**
+- change the current app delay value **in the INI file**
+- verify that the change has been stored
+- get current app state
+- create an handle for a second application binary. 
+- add it to the INI file
+- set its execution flag to 0
+- get the delay time and the state from INI file for the new app
+- get the current set address for the new app
+- set the app delay **in RAM, INI will not be affected**.
+- start the new app without reboot, using the right set delay
+- wait some time, then get the app state and the used RAM amount
+- wait 10 seconds, then stop the second app.
+- set its execution flag to 1 so it will run at next boot.
+
+![](pictures/samples/appManager_bordered.png)
+
+---------------------
+
 
 
 ### App update OTA via FTP
@@ -2813,59 +3646,6 @@ AT#M2MWRITE="/mod/ota_config.txt",<filesize>
 
 
 
-### ATI (AT Instance)
-
-Sample application showing how to use AT Instance functionality (sending AT commands from code). The example supports both sync and async (using a callback) modes. Debug prints on **USB0**
-
-
-**Features**
-
-
-- How to open an AT interface from the application
-- How to send AT commands and receive responses on the AT interface
-
-
-**Application workflow, sync mode**
-
-**`M2MB_main.c`**
-
-- Open USB/UART/UART_AUX
-- Init AT0 (first AT instance)
-- Send AT+CGMR command
-- Print response.
-- Release AT0
-
-**`at_sync.c`**
-
-- Init ati functionality and take AT0
-- Send AT+CGMR command, then read response after 2 seconds, then return it
-- Deinit ati, releasing AT0
-
-![](pictures/samples/ati_sync_bordered.png)
-
-
-**Application workflow, async mode**
-
-**`M2MB_main.c`**
-
-- Open USB/UART/UART_AUX
-- Init AT0 (first AT instance)
-- Send AT+CGMR command
-- Print response.
-- Release AT0
-
-**`at_async.c`**
-
-- Init ati functionality and take AT0, register AT events callback
-- Send AT+CGMR command, wait for response semaphore (released in callback), then read it and return it
-- Deinit ati, releasing AT0
-
-![](pictures/samples/ati_async_bordered.png)
-
----------------------
-
-
-
 ### CJSON example: 
 
 Sample application showcasing how to manage JSON objects. Debug prints on **USB0**
@@ -2894,6 +3674,113 @@ Sample application showcasing how to manage JSON objects. Debug prints on **USB0
 ![](pictures/samples/cjson_bordered.png)
 
 ---------------------
+
+
+
+### Crypto Elliptic Curve Cryptography (ECC) example 
+
+Sample application showcasing how to manage Elliptic Curve Cryptography functionalities. Debug prints on **USB0**
+
+
+**Features**
+
+
+- How to initialize ECC contexts A (Alice) and B (Bob). Alice is emulating a remote host, from which a public key is known.
+- How to generate keypairs for contexts and export public keys
+- how to export keyblobs from a context (a keyblob is encrypted with hw specific keys, and can only be used on the module where it was created)
+- How to save a keyblob in secured TrustZone. 
+- How to reload a keyblob from the TrustZone into an initialized context
+- How to sign a message with ECDSA from context B (Bob) and verify it from another context A (Alice) with the signature and public key of Bob.
+- How to make Bob and Alice derive a shared session keys using each other's public key.
+- How to make Bob and Alice create an AES context with the newly created shared keys, encode data and decode it on the other side
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Create Bob ECC context, create a keypair and export it in a keyblob
+- Open a file in secured Trust Zone, then store the keyblob in it.
+- Destroy Bob ECC context
+- Recreate Bob ECC context, open the file from Trust Zone and read the keyblob. 
+- Import the keyblob in Bob context.
+- Export Bob public key
+- Create Alice ECC context, to simulate an external host. Generate a keypair and export the public key.
+- Sign a message with Bob context, generating a signature.
+- Use Alice to verify the signed message using Bob's signature and public key
+- Derive a shared key for Bob, using Alice's public key
+- Create an AES context for Bob
+- Import the shared key into the AES context
+- Encrypt a message using Bob's AES context.
+
+- Derive a shared key for Alice, using Bob's public key
+- Create an AES context for Alice
+- Import the shared key into the AES context
+- Decrypt the message using Alice's AES context.
+- Check the decrypted message and the original one match
+- Clear all resources
+
+![](pictures/samples/crypto_ecc_bordered.png)
+
+---------------------
+
+
+
+### EEPROM 24AA256
+
+Sample application showing how to communicate with a MicroChip 24AA256T I2C EEPROM chip using azx eeprom utility APIs. Debug prints on **USB0**
+
+
+**Features**
+
+
+- Initialize the logs on the output channel
+- configure the EEPROM utility, setting the slave address and the memory parameters (page size, memory size)
+- Write single bytes on a random address
+- Read written bytes as a page
+- Write data using pages
+- Read the new data using pages
+- Read again using sequential reading
+- Read a single byte from a specific address
+- Read next byte using read from current address
+- Erase the EEPROM
+- Deinit EEPROM utility
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- call azx_eeprom_init() to set the utility parameters (SDA and SCL pins, page and memory sizes)
+- call azx_eeprom_writeByte() to store a single byte with value '5' at the address 0x0213
+- call azx_eeprom_writeByte() to store a single byte with value '6' at the address 0x0214
+- call azx_eeprom_readPages() from address 0x0213 to retrieve the 2 bytes from the EEPROM
+- call azx_eeprom_writePages to write 1024 bytes from a buffer, starting from address 0x00
+- call azx_eeprom_readPages() again, to read 256 bytes from address 0x00
+- call azx_eeprom_readSequentially() to read 256 bytes from 0x00 by without pages (less overhead on I2C protocol)
+- call azx_eeprom_readByte() to get a single byte from address 0x00
+- call azx_eeprom_readByteFromCurrentAddress() to get a byte from next address (0x01)
+- call azx_eeprom_eraseAll() to completely erase the EEPROM memory (this writes 0xFF in each byte)
+- call azx_eeprom_readPages from address 0x0213 to get 2 bytes and verify the values have been written to 0xFF
+- call azx_eeprom_deinit to close the eeprom handler and the I2C channel
+
+![](pictures/samples/eeprom_AA256_bordered.png)
+
+---------------------
+
+
+
+### Easy AT example 
+
+Sample application showcasing Easy AT functionalities. Debug prints on **USB0**
+
+
+**Features**
+
+
+- Shows how to register custom commands
+
+
 
 
 
@@ -2951,44 +3838,6 @@ Sample application showcasing how to setup and use multiple events to create a b
 - At second timer expiration, set the second event bit and verify that the code flow went through after the event (implementing a barrier).
 
 ![](pictures/samples/events_barrier_bordered.png)
-
----------------------
-
-
-
-### File System example 
-
-Sample application showcasing M2MB File system API usage. Debug prints on **USB0**
-
-
-**Features**
-
-
-- How to open a file in write mode and write data in it
-- How to reopen the file in read mode and read data from it
-
-
-**Application workflow**
-
-**`M2MB_main.c`**
-
-- Open USB/UART/UART_AUX
-
-- Print welcome message
-
-- Open file in write mode
-
-- Write data in file
-
-- Close file
-
-- Reopen file in read mode
-
-- Read data from file and print it
-
-- Close file and delete it
-
-![](pictures/samples/file_system_bordered.png)
 
 ---------------------
 
@@ -3096,6 +3945,44 @@ Sample application showcasing FTP client demo with AZX FTP. Debug prints on **US
 
 
 
+### File System example 
+
+Sample application showcasing M2MB File system API usage. Debug prints on **USB0**
+
+
+**Features**
+
+
+- How to open a file in write mode and write data in it
+- How to reopen the file in read mode and read data from it
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Open file in write mode
+
+- Write data in file
+
+- Close file
+
+- Reopen file in read mode
+
+- Read data from file and print it
+
+- Close file and delete it
+
+![](pictures/samples/file_system_bordered.png)
+
+---------------------
+
+
+
 ### GNSS example 
 
 Sample application showing how to use GNSS functionality. Debug prints on **USB0**
@@ -3149,31 +4036,6 @@ Sample application showing how to use GPIOs and interrupts. Debug prints on **US
 - An interrupt is generated on *GPIO 3*
 
 ![](pictures/samples/gpio_interrupt_bordered.png)
-
----------------------
-
-
-
-### Hello World
-
-The application prints "Hello World!" over selected output every two seconds. Debug prints on **USB0**, <ins>using AZX log example functions</ins>
-
-
-**Features**
-
-
-- How to open an output channel using AZX LOG sample functions
-- How to print logging information on the channel using AZX LOG sample functions
-
-
-**Application workflow**
-
-**`M2MB_main.c`**
-
-- Open USB/UART/UART_AUX
-- Print "Hello World!" every 2 seconds in a while loop
-
-![](pictures/samples/hello_world_bordered.png)
 
 ---------------------
 
@@ -3266,6 +4128,31 @@ The sample application shows how to use HW Timers M2MB API. Debug prints on **US
 
 
 
+### Hello World
+
+The application prints "Hello World!" over selected output every two seconds. Debug prints on **USB0**, <ins>using AZX log example functions</ins>
+
+
+**Features**
+
+
+- How to open an output channel using AZX LOG sample functions
+- How to print logging information on the channel using AZX LOG sample functions
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+- Print "Hello World!" every 2 seconds in a while loop
+
+![](pictures/samples/hello_world_bordered.png)
+
+---------------------
+
+
+
 ### I2C example 
 
 Sample application showing how to communicate with an I2C slave device. Debug prints on **USB0**
@@ -3296,17 +4183,17 @@ Sample application showing how to communicate with an I2C slave device. Debug pr
 
 
 
-### Logging Demo
+### I2C Combined
 
-Sample application showing how to print on one of the available output interfaces. Debug prints on **USB0**
+Sample application showing how to communicate with an I2C slave device with I2C raw mode. Debug prints on **USB0**
 
 
 **Features**
 
 
-- How to open a logging channel
-- How to set a logging level 
-- How to use different logging macros
+- How to open a communication channel with an I2C slave device
+- How to send and receive data to/from the slave device using raw mode API
+
 
 
 **Application workflow**
@@ -3314,12 +4201,13 @@ Sample application showing how to print on one of the available output interface
 **`M2MB_main.c`**
 
 - Open USB/UART/UART_AUX
+- Open I2C bus, setting SDA an SCL pins as 2 and 3 respectively
+- Set registers to configure accelerometer
+-Read in a loop the 6 registers carrying the 3 axes values and show the g value for each of them
 
-- Print welcome message
 
-- Print a message with every log level
 
-![](pictures/samples/logging_bordered.png)
+![](pictures/samples/i2c_combined_bordered.png)
 
 ---------------------
 
@@ -3327,7 +4215,7 @@ Sample application showing how to print on one of the available output interface
 
 ### LWM2M
 
-Sample application showcasing TLS/SSL with client certificates usage with M2MB API. Debug prints on **USB0**
+Sample application showcasing LWM2M client usage with M2MB API. Debug prints on **USB0**
 
 
 **Features**
@@ -3454,6 +4342,64 @@ For example, executing the two Exec Resources at the bottom of the list, the app
 Writing a string resource (id /35000/0/11 ), the application will notify the change
 
 ![](pictures/samples/lwm2m_4_write_bordered.png)
+
+---------------------
+
+
+
+### Logging Demo
+
+Sample application showing how to print on one of the available output interfaces. Debug prints on **USB0**
+
+
+**Features**
+
+
+- How to open a logging channel
+- How to set a logging level 
+- How to use different logging macros
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Print a message with every log level
+
+![](pictures/samples/logging_bordered.png)
+
+---------------------
+
+
+
+### MD5 example 
+
+Sample application showing how to compute MD5 hashes using m2mb crypto. Debug prints on **USB0**
+
+
+**Features**
+
+- Compute MD5 hash of a file
+- Compute MD5 hash of a string
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+- Create a temporary file with the expected content
+- Compute MD5 hash of the provided text file
+- Compare the hash with the expected one
+- Compute MD5 hash of a string
+- Compare the hash with the expected one
+- Delete test file
+
+![](pictures/samples/md5_bordered.png)
 
 ---------------------
 
@@ -3725,6 +4671,52 @@ The sample application shows how to use SW Timers M2MB API. Debug prints on **US
 
 
 
+### Secure MicroService 
+
+Sample application showcasing how to manage secure microservice functionalities. Debug prints on **USB0**
+
+
+**Features**
+
+
+- Write data in Secure Data Area (SDA), non protected
+- Read the written data and compare with the original buffer
+- Write a cripty key in Secure Data Area (SDA), non protected
+- Perform a rotate of the written key data
+- Perform MD5 sum of written data from TZ file
+- Compare computed digest with expected one
+- Write data in trust zone as a trusted object (it will not be possible to read it again but only use its content for crypto operations)
+- Try to read the trusted object and verify it fails
+- Rotate trusted item and verify retrieving the content fails
+- compute MD5 sum of trusted item and compare with the expected one
+- Try to pass data from a trusted item to a non trusted item using untrusted TZ buffers, and verify it fails
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Write a buffer in a SDA item using `m2mb_secure_ms_write`
+- Read the same item using `m2mb_secure_ms_read`
+- Write a buffer containing some cripty key in a SDA item using `m2mb_secure_ms_write`
+- Rotate the content of the key item
+- Read it with `m2mb_secure_ms_read`
+- Load the key content using `m2mb_secure_ms_crypto_alloc` and `m2mb_secure_crypto_add_item` in a SECURE_MS buffer
+- Compute MD digest with `m2mb_secure_ms_crypto_md`
+- Write a buffer containing some cripty key in a SDA item using `m2mb_secure_ms_write` but with **TRUSTED** option in `m2mb_secure_ms_open`
+- Verify that `m2mb_secure_ms_read` on the trusted item fails
+- Verify that `m2mb_secure_ms_crypto_rotate` fails for the trusted item
+- Verify the MD5 digest
+- Try to copy the trusted item data in a SECURE_MS buffer with `m2mb_secure_ms_crypto_alloc` and `m2mb_secure_crypto_add_item`, then load it in an untrusted object with `m2mb_secure_ms_crypto_write`, and verify it fails.
+
+
+
+![](pictures/samples/secure_ms_bordered.png)
+
+---------------------
+
+
+
 ### TCP IP 
 
 Sample application showcasing TCP echo demo with M2MB API. Debug prints on **USB0**
@@ -3767,6 +4759,53 @@ Sample application showcasing TCP echo demo with M2MB API. Debug prints on **USB
 - Disable PDP context
 
 ![](pictures/samples/tcp_ip_bordered.png)
+
+---------------------
+
+
+
+### TCP Socket status
+
+Sample application showcasing how to check a TPC connected socket current status. Debug prints on **USB0**
+
+
+**Features**
+
+
+- How to check module registration and activate PDP context
+- How to open a TCP client socket 
+- How to check if the TCP socket is still valid
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Create a task to manage socket and start it
+
+
+
+**`m2m_tcp_test.c`**
+
+- Initialize Network structure and check registration
+
+- Initialize PDP structure and start PDP context
+
+- Create socket and link it to the PDP context id
+
+- Connect to the server
+
+- Check in a loop the current socket status using the adv_select function with a 2 seconds timeout
+
+- Close socket when the remote host closes it
+
+- Disable PDP context
+
+
+![](pictures/samples/tcp_status_bordered.png)
 
 ---------------------
 
@@ -3955,6 +4994,66 @@ AT#M2MWRITE="/mod/test.gz",138
 - Test the decompression of a .gz file (test.gz), expected to be in `/mod` folder, into its content `test.txt`. The file must be uploaded by the user (see steps above).
 
 ![](pictures/samples/zlib_bordered.png)
+
+---------------------
+
+
+
+### Little fs2 
+
+Sample application showing how use lfs2 porting with RAM disk and SPI data flash. Debug prints on **USB0**
+
+
+**Features**
+
+
+- How to create and manage Ram Disk
+- How to manage file-system in Ram disk partition
+- How to create and manage SPI Flash memory partition
+- How to manage file-system in SPI Flash memory partition
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Init logging system
+- Call Ram Disk tests
+- Call Flash memory tests
+
+**`ram_utils_usage.c`**
+
+- Initialize Ram Disk
+- Format and Mount partition
+- List files 
+- Files creation and write content
+- List files 
+- Read files 
+- Unmount and Release resources
+
+
+**`spi_utils_usage.c`**
+- Initialize SPI Flash chip
+- Initialize SPI Flash Disk
+- Format and Mount partition
+- List files 
+- Files creation and write content
+- List files 
+- Read files 
+- Delete files
+- Directories creation and deletion
+- Unmount and Release resources
+
+**Notes:**
+For SPI Flash a JSC memory is used with chip select pin connected to module GPIO2 pin.
+For better performances, a 33kOhm pull-down resistor on SPI clock is suggested.
+Please refer to SPI_echo sample app for SPI connection details.
+
+![](pictures/samples/lfs2_ramdisk_bordered.png)
+![](pictures/samples/lfs2_spiflash_01_bordered.png)
+![](pictures/samples/lfs2_spiflash_02_bordered.png)
+![](pictures/samples/lfs2_spiflash_03_bordered.png)
+
+
 
 ---------------------
 

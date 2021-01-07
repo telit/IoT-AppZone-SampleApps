@@ -1,5 +1,5 @@
 
-###Events
+### Events
 
 Sample application showcasing events setup and usage. Debug prints on **AUX UART**
 

@@ -1,5 +1,5 @@
 
-###TCP IP 
+### TCP IP 
 
 Sample application showcasing TCP echo demo with M2MB API. Debug prints on **AUX UART**
 

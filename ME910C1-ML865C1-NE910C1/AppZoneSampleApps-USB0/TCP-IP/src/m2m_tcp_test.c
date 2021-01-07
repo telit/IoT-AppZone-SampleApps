@@ -11,7 +11,7 @@
   @details
 
   @version 
-    1.0.1
+    1.0.3
 
   @note
 
@@ -39,8 +39,6 @@
 #include "azx_log.h"
 #include "azx_utils.h"
 #include "azx_tasks.h"
-
-#include "app_cfg.h"
 
 #include "m2m_tcp_test.h"
 

@@ -1,5 +1,5 @@
 
-###Logging C++ 
+### Logging C++ 
 
 Sample application showcasing how to create a C++ OO code, providing a logging class (equivalent to the one in Logging demo)
 

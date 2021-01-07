@@ -1,5 +1,5 @@
 
-###HW Timer (Hardware Timer)
+### HW Timer (Hardware Timer)
 
 The sample application shows how to use HW Timers M2MB API. Debug prints on **USB0**
 

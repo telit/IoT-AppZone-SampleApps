@@ -134,7 +134,6 @@ int readConfigFromFile(void)
 
   INT32 fd = -1;
   INT32 fs_res;
-  //UINT32 fs_res;
   CHAR recv[512];
 
   UINT16  ftp_port;
@@ -160,7 +159,10 @@ int readConfigFromFile(void)
   {
     memset(recv, 0, sizeof(recv));
     fs_res = m2mb_fs_read(fd, recv, sizeof(recv));
-
+    if(-1 == fs_res)
+    {
+      AZX_LOG_ERROR("cannot open config file!\r\n");
+    }
     AZX_LOG_TRACE("Received %d bytes from file: \r\n<%.*s> \r\n", fs_res, fs_res, recv);
     azx_sleep_ms(200);
 

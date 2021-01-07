@@ -1,5 +1,5 @@
 
-###File System example 
+### File System example 
 
 Sample application showcasing M2MB File system API usage. Debug prints on **USB0**
 

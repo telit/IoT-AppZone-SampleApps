@@ -1,5 +1,5 @@
 
-###UDP client
+### UDP client
 
 Sample application showcasing UDP echo demo with M2MB API. Debug prints on **AUX UART**
 

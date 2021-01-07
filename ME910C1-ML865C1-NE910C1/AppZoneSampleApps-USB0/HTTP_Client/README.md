@@ -1,5 +1,5 @@
 
-###HTTP Client
+### HTTP Client
 
 Sample application showing how to use HTTPs client functionalities. Debug prints on **USB0**
 

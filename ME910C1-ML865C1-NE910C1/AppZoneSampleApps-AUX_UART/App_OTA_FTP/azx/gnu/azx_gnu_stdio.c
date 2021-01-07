@@ -58,25 +58,27 @@ int azx_gnu_fprintf(void *f, const char *format, ...)
 	vsprintf(buf, format, arg);
 	va_end(arg);
 
-	int ret;
+	int chars_written = 0;
 
 #if 1
 	if (stdout == f)
 	{
-		ret = AZX_LOG_TRACE(buf);
+    AZX_LOG_INFO(buf);
+		chars_written = strlen(buf);
 	}
 	else if (stderr == f)
 	{
-		//ret = AZX_LOG_ERROR(buf); //LOG_ERROR is not really useful because it refers to this line in this file
-		ret = AZX_LOG_TRACE(buf);
+		//chars_written = AZX_LOG_ERROR(buf); //LOG_ERROR is not really useful because it refers to this line in this file
+    AZX_LOG_INFO(buf);
+		chars_written = strlen(buf);
 	}
 	else
 	{
-		ret = (int) m2mb_fs_fwrite(buf,sizeof(CHAR), strlen(buf), ((M2MB_FILE_T*)f));
+		chars_written = (int) m2mb_fs_fwrite(buf,sizeof(CHAR), strlen(buf), ((M2MB_FILE_T*)f));
 	}
 #endif
 	free(buf);
-	return ret;
+	return chars_written;
 }
 
 

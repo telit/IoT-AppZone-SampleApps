@@ -1,5 +1,5 @@
 
-###ATI (AT Instance)
+### ATI (AT Instance)
 
 Sample application showing how to use AT Instance functionality (sending AT commands from code). The example supports both sync and async (using a callback) modes. Debug prints on **MAIN UART**
 

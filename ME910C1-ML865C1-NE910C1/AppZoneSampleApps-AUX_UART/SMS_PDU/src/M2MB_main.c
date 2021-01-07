@@ -14,7 +14,7 @@
     Sample application showcasing how to create and decode PDUs to be used with m2mb_sms_* API set. A SIM card and antenna must be present. Debug prints on AUX UART
 
   @version 
-    1.0.2
+    1.0.3
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
