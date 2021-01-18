@@ -5,7 +5,7 @@
 #define HDR_AZX_LOG_H_
 /**
  * @file azx_log.h
- * @version 1.0.6
+ * @version 1.0.7
  * @dependencies 
  * @author Fabio Pintus
  * @author Ioannis Demetriou

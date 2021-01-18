@@ -11,7 +11,7 @@
   @details
   
   @version 
-    1.0.0
+    1.0.1
   @note
   
 
@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
+#include <stdbool.h>
 
 #include "m2mb_types.h"
 

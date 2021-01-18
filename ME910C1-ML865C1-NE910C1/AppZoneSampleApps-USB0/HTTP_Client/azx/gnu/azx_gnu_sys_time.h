@@ -46,6 +46,12 @@
 
 /**   @} */
 
+struct timezone {
+  int tz_minuteswest;
+  int tz_dsttime;
+};
+
+
 /* Function prototypes ====================================================================*/
 
 int m2m_gettimeofday(struct timeval *tv, struct timezone *tz);

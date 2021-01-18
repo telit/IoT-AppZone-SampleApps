@@ -1,0 +1,1 @@
+The application prints "Hello World!" on Main UART every 2 seconds using
