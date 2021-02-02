@@ -15,7 +15,7 @@ LOGS_COLOUR = 0
 
 ## ---- do not touch below this line
 
-SW_VER = 1.0.14
+SW_VER = 1.1.1
 
 CLEAN_BEFORE_BUILD = clean
 

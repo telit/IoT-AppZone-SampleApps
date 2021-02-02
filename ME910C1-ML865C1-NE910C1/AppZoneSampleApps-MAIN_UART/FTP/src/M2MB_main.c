@@ -13,7 +13,7 @@
   @description
     Sample application showcasing FTP client demo with AZX FTP. Debug prints on MAIN UART
   @version 
-    1.0.3
+    1.0.4
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()

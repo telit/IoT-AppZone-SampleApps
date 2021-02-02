@@ -11,7 +11,7 @@
   @details
 
   @version
-    1.0.2
+    1.0.3
   @note
 
 
@@ -51,6 +51,7 @@
 
 
 /* SSL */
+/*Note: A possible root path for certificates could be LOCALPATH define in app_cfg.h file */
 #define CACERTFILE        ""   /* Root CA file path in module filesystem (if needed) */
 #define CLIENTCERTFILE    ""   /* Client certificate file path in module filesystem (if needed) */
 #define CLIENTKEYFILE     ""   /* Client private key file path in module filesystem (if needed) */

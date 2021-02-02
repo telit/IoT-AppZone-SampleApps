@@ -29,7 +29,7 @@
 
 #include "azx_ftp.h"
 
-
+#include "app_cfg.h" /*FOR LOCALPATH define*/
 
 /* Macro =============================================================================*/
 #define FTP_ADDR "ftp.telit.com"
@@ -44,6 +44,8 @@
 #define REMOTE_FOLDER "/samples"
 /*Remote path of file on FTP server to be downloaded as a local file*/
 #define DLFILE "pattern_big.txt"
+
+/*Local path where the file will be downloaded is defined in app_cfg.h LOCALPATH variable*/
 
 /*Remote path of file on FTP server to be downloaded in a buffer*/
 #define DLTOBUF_FILE "pattern.txt"
@@ -484,7 +486,7 @@ INT32 msgFTPTask(INT32 type, INT32 param1, INT32 param2)
       cb_opts.bytesXferred = 8*1024;  /* Call the callback function every 8 kBytes data exchange */
 
       local.type = AZX_FTP_XFER_FILE; /* Define the local recipient as file */
-      local.payload.fileInfo.path = (char*) "/mod/_" DLFILE; /* Define the local file path */
+      local.payload.fileInfo.path = (char*) LOCALPATH "/_" DLFILE; /* Define the local file path */
 
       azx_ftp_setCallback(&cb_opts,ftp_client);
 
@@ -521,7 +523,7 @@ INT32 msgFTPTask(INT32 type, INT32 param1, INT32 param2)
       azx_ftp_clearCallback(ftp_client);
 
 
-      loc_file.fnm = (CHAR*) "/mod/_"DLFILE;
+      loc_file.fnm = (CHAR*) LOCALPATH "/_" DLFILE;
       loc_file.fsz = 0;
 
 
@@ -566,7 +568,7 @@ INT32 msgFTPTask(INT32 type, INT32 param1, INT32 param2)
 
     }
 
-    m2mb_fs_unlink("/mod/_"DLFILE);
+    m2mb_fs_unlink(LOCALPATH "/_" DLFILE);
 
     /* =======================
      *

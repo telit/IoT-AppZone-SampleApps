@@ -175,12 +175,12 @@ static UINT32 get_uptime(void);
 static const char* get_file_title(const CHAR* path);
 static char* get_current_task_name(CHAR *name);
 static BOOLEAN check_file_size(const CHAR* filename, UINT32 max_size_kb);
-static void flush_log_to_file();
+static void flush_log_to_file(void);
 static void file_log_or_cache(const CHAR* buffer);
 static const CHAR* get_next_log_filename(const CHAR* filename,
     UINT32 circular_chunks, UINT32 max_size_kb);
 static BOOLEAN rotate_log_files(const CHAR* filename, UINT32 circular_chunks);
-static const char* get_date_time();
+static const char* get_date_time(void);
 
 /* Static functions ==========================================================*/
 

@@ -15,7 +15,7 @@ LOGS_COLOUR = 0
 
 ## ---- do not touch below this line
 
-SW_VER = 1.0.14
+SW_VER = 1.1.1
 
 CLEAN_BEFORE_BUILD = clean
 
@@ -48,11 +48,17 @@ endif
 
 
 ifneq (,$(findstring GCC,$(TOOLCHAIN)))
-  CPPFLAGS+= -std=c++11 
-  LDFLAGS=
-  CFLAGS+=-std=c++11 
-  OBJS=
-  LDDFLAGS+= -lstdc++ -lc -lm -lnosys -lgcc
-else
+    CPPFLAGS+= -std=c++11 
+    LDFLAGS=
+    OBJS=
+    LDDFLAGS+= -lstdc++ -lc -lm -lnosys -lgcc
+endif
+
+ifneq (,$(findstring GNUEABI,$(TOOLCHAIN)))
+    CXXFLAGS+= -std=c++11 
+    LDFLAGS+= -lstdc++ -lc -lm
+endif
+
+ifneq (,$(findstring RVCT,$(TOOLCHAIN)))
   CPPFLAGS+= --cpp11
 endif

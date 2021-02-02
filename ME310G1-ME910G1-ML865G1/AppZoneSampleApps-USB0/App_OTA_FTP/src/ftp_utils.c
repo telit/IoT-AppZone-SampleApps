@@ -26,7 +26,7 @@
 #include "azx_utils.h"
 #include "azx_tasks.h"
 
-#include "app_cfg.h"
+#include "app_cfg.h" /*FOR LOCALPATH define*/
 
 #include "ftp_utils.h"
 #include "app_utils.h"
@@ -54,9 +54,9 @@
 
 
 
-#define CONFIG_FILE "/mod/ota_config.txt"
+#define CONFIG_FILE  LOCALPATH "/ota_config.txt"
 
-/*define a the current version app name in the /mod folder*/
+/*define a the current version app name in the applications folder*/
 #define CURRENT_APP_LOCAL_NAME "m2mapz.bin"
 
 /*define a custom name for the final local file (it might be the same as NEW_APP_FILE_NAME)*/
@@ -607,7 +607,7 @@ INT32 msgFTPTask(INT32 type, INT32 param1, INT32 param2)
       cb_opts.bytesXferred = 4096;  /* Call the callback function every 4kBytes data exchange */
 
       local.type = AZX_FTP_XFER_FILE; /* Define the local recipient as file */
-      sprintf(localFilePath, "/mod/%s", gLocalDestinationAppName);
+      sprintf(localFilePath, LOCALPATH "/%s", gLocalDestinationAppName);
       local.payload.fileInfo.path = localFilePath; /* Define the local file path */
 
       azx_ftp_setCallback(&cb_opts,ftp_client);

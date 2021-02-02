@@ -19,7 +19,7 @@
 #define EXPAND_AND_QUOTE(str) QUOTE(str)
 /** @endcond*/
 
-
-
+/*Local basepath for samples that need local files usage*/
+#define LOCALPATH "/mod"
 
 #endif /* HDR_APP_CFG_H_ */

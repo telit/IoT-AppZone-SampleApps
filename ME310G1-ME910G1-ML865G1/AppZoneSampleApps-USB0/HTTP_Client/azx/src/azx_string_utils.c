@@ -18,6 +18,10 @@
   #define ULONG_LONG_MAX ULLONG_MAX
 #endif
 
+#ifndef ULONG_LONG_MAX
+  #define ULONG_LONG_MAX ULLONG_MAX
+#endif
+
 /* Local typedefs ============================================================*/
 /* Local statics =============================================================*/
 /* Local function prototypes =================================================*/

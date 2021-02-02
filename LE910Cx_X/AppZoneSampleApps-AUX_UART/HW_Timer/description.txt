@@ -1,0 +1,1 @@
+The sample application shows how to use HW Timers M2MB API. Debug prints on AUX UART
