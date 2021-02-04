@@ -14,7 +14,7 @@
     Sample application showcasing how to send data from main UART to a connected TCP server. Debug messages are printed on AUX UART port.
 
   @version 
-    1.0.1
+    1.0.2
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -548,7 +548,7 @@ void M2MB_main( int argc, char **argv )
 
   /*SET output channel */
 /*Set log configuration */
-  log_cfg.log_channel = LOG_CHANNEL; /* Defined in app_cfg.h */
+  log_cfg.log_channel = AZX_LOG_TO_AUX_UART;
   log_cfg.log_level = AZX_LOG_LEVEL_DEBUG; /*Enable debug messages*/
   log_cfg.log_colours = 0; /*Set to 1 to use coloured logs (not all terminals are compatible)*/
 

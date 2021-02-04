@@ -1,0 +1,1 @@
+Sample application showcasing how to check a TPC connected socket current status. Debug prints on MAIN UART

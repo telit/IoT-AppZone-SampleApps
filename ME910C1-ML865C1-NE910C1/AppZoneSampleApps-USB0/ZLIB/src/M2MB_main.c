@@ -13,7 +13,7 @@
   @description
     Sample application showing how to compress/uncompress with ZLIB. Debug prints on USB0
   @version
-    1.0.1
+    1.0.2
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -253,8 +253,8 @@ void M2MB_main(int argc, char **argv)
 
 	//gunzip variables
 	int ret;
-	char inname[] = "./mod/test.gz";
-	char outname[] = "./mod/test.txt";
+	char inname[] = LOCALPATH "/test.gz";
+	char outname[] = LOCALPATH "/test.txt";
 
 	//Starting TEST_COMPR_UNCOMPR
 	AZX_LOG_INFO("\r\n");

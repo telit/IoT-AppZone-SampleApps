@@ -15,6 +15,12 @@
 #include "inflate.h"
 #include "inffast.h"
 
+#if defined(__GNUC__) && __GNUC__ >= 7 || defined(__clang__) && __clang_major__ >= 12
+ #define FALL_THROUGH __attribute__ ((fallthrough))
+#else
+ #define FALL_THROUGH ((void)0) /* fall through */
+#endif /* __GNUC__ >= 7 */
+
 /* function prototypes */
 local void fixedtables OF((struct inflate_state FAR *state));
 
@@ -473,7 +479,8 @@ int ZEXPORT inflateBack(z_streamp strm,
             }
             Tracev((stderr, "inflate:       codes ok\n"));
             state->mode = LEN;
-
+            /* fall through */
+            FALL_THROUGH;
         case LEN:
             /* use inflate_fast() if we have enough input and output */
             if (have >= 6 && left >= 258) {

@@ -244,7 +244,7 @@ struct M2MB_SOCKET_BSD_HOSTENT *azx_gnu_gethostbyname( const char *name );
     <C code example>
   @endcode
 */
-int azx_gnu_gethostbyname( char *name, struct M2MB_SOCKET_BSD_HOSTENT *he,
+int azx_gnu_gethostbyname_r( char *name, struct M2MB_SOCKET_BSD_HOSTENT *he,
                            CHAR *buf, SIZE_T buflen, struct M2MB_SOCKET_BSD_HOSTENT **result,
                            int *h_errnop );
 

@@ -1,0 +1,3 @@
+@brief Utility code to simplify parse/encode binary PDU to be used with `m2mb_sms_*` APIs
+@version 1.0.0
+@dependencies 

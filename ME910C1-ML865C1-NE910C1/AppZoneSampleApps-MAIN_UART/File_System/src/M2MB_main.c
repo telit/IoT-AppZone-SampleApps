@@ -13,7 +13,7 @@
   @description
     Sample application showcasing M2MB File system API usage. Debug prints on MAIN UART
   @version 
-    1.0.1
+    1.0.2
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -41,7 +41,7 @@
 /* Local statics ================================================================================*/
 
 static char file_buffer[] = "Hello from file";
-static char file_name[] = "/my_text_file.txt";
+static char file_name[] = LOCALPATH "/my_text_file.txt";
 
 /* Local function prototypes ====================================================================*/
 /* Static functions =============================================================================*/

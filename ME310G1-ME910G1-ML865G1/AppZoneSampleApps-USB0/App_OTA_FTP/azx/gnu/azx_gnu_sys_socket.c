@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "m2mb_types.h"
 #include "m2mb_socket.h"
@@ -113,7 +114,7 @@ struct M2MB_SOCKET_BSD_HOSTENT *azx_gnu_gethostbyname(const char *name)
 	}
 }
 
-int azx_gnu_gethostbyname(char *name, struct M2MB_SOCKET_BSD_HOSTENT *he, CHAR *buf, SIZE_T buflen,
+int azx_gnu_gethostbyname_r(char *name, struct M2MB_SOCKET_BSD_HOSTENT *he, CHAR *buf, SIZE_T buflen,
 	    			struct M2MB_SOCKET_BSD_HOSTENT **result, int *h_errnop)
 {
 
@@ -146,7 +147,7 @@ int azx_gnu_socket_bsd_socket_global_cid( INT32 domain, INT32 type, INT32 protoc
 int azx_gnu_select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, const struct timeval *timeout)
 {
 	int retvalue = 0;
-	M2MB_SOCKET_BSD_TIMEVAL m2m_tv;
+	struct M2MB_SOCKET_BSD_TIMEVAL m2m_tv;
 	m2m_tv.m_tv_sec = timeout->tv_sec;
 	m2m_tv.m_tv_usec = timeout->tv_usec;
 

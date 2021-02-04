@@ -4,7 +4,7 @@
 
 
 
-Package Version: **1.0.14-G1**
+Package Version: **1.1.2-G1**
 
 Minimum Firmware Version: **37.00.XX2**
 
@@ -1500,8 +1500,8 @@ Sample application showcasing TLS/SSL with client certificates usage with M2MB A
 
 - Disable PDP context
 
- 
-The application requires the certificates to be stored in `/test_ssl_certs/` folder. It can be created with `AT#M2MMKDIR=/test_ssl_certs`
+
+The application requires the certificates to be stored in `/mod/ssl_certs/` folder. It can be created with `AT#M2MMKDIR=/mod/ssl_certs`
 
 
 ![](pictures/samples/tcp_ssl_client_bordered.png)
@@ -3098,8 +3098,8 @@ Sample application showcasing TLS/SSL with client certificates usage with M2MB A
 
 - Disable PDP context
 
- 
-The application requires the certificates to be stored in `/test_ssl_certs/` folder. It can be created with `AT#M2MMKDIR=/test_ssl_certs`
+
+The application requires the certificates to be stored in `/mod/ssl_certs/` folder. It can be created with `AT#M2MMKDIR=/mod/ssl_certs`
 
 
 ![](pictures/samples/tcp_ssl_client_bordered.png)
@@ -4922,8 +4922,8 @@ Sample application showcasing TLS/SSL with client certificates usage with M2MB A
 
 - Disable PDP context
 
- 
-The application requires the certificates to be stored in `/test_ssl_certs/` folder. It can be created with `AT#M2MMKDIR=/test_ssl_certs`
+
+The application requires the certificates to be stored in `/mod/ssl_certs/` folder. It can be created with `AT#M2MMKDIR=/mod/ssl_certs`
 
 
 ![](pictures/samples/tcp_ssl_client_bordered.png)

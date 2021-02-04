@@ -23,7 +23,7 @@
 /*===========================================================================*/
 /**
  * @file azx_ftp.h
- * @version 1.0.1
+ * @version 1.0.2
  * @dependencies
  *
  * @note
@@ -137,7 +137,6 @@
 /** \cond PRIVATE */
 /*FabioPi*/
 #define AZX_FTP_TMP_BUFSIZ           1024
-const char AZX_FTP_DEFAULT_PNUM[] = "ftp";
 #define AZX_FTP_DEFAULT_PORTNUM 21
 #define AZX_FTP_REST_CMD_SIZE        32
 /****/

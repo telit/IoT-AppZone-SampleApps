@@ -11,7 +11,7 @@
   @details
   
   @version 
-    1.0.0
+    1.0.2
   @note
   
 
@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
+#include <stdbool.h>
 
 #include "m2mb_types.h"
 
@@ -47,6 +48,8 @@
 
 #include "fota.h"
 
+#include "app_cfg.h" /*FOR LOCALPATH define*/
+
 /* Macro =============================================================================*/
 #define APN  "internet.wind.biz"
 #define PDP_CTX (UINT8)3
@@ -58,7 +61,7 @@
 #define server_password "password"
 
 #define FILE_URI "file/remote/path/delta.bin"
-#define SESSION_FILE "/mod/ota_done"
+#define SESSION_FILE  LOCALPATH "/ota_done"
 
 /* Global variables =============================================================================*/
 M2MB_FOTA_HANDLE fota_handle;

@@ -11,7 +11,7 @@
   @details
   
   @version 
-    1.1.1
+    1.1.2
   @note
   
 
@@ -47,6 +47,7 @@
 
 #include "ssl_test.h"
 
+#include "app_cfg.h" /*FOR LOCALPATH define*/
 
 /* Local defines ================================================================================*/
 
@@ -58,7 +59,7 @@
 #if HTTP_443 //https with server authentication only
   #define SERVER_PORT 443 //https
   #define SERVER "modules.telit.com"
-  #define CA_CERT_PATH "/test_ssl_certs/modulesCA.crt"
+  #define CA_CERT_PATH LOCALPATH "/ssl_certs/modulesCA.crt"
   #define CLIENT_CERT_PATH ""
   #define CLIENT_KEY_PATH ""
   CHAR  queryBuf[] = "GET / HTTP/1.1\r\nHost: modules.telit.com\r\n\r\n";;
@@ -66,14 +67,14 @@
 #else //https with client cert
   #define WRONG_CLIENT_TEST 0  //test with wrong certificates to verify the secure socket on the server
   #define SERVER "modules.telit.com"
-  #define CA_CERT_PATH "/test_ssl_certs/modulesCA.crt"
+  #define CA_CERT_PATH LOCALPATH "/ssl_certs/modulesCA.crt"
 
 #if WRONG_CLIENT_TEST
-  #define CLIENT_CERT_PATH "/test_ssl_certs/wrong_Client.crt"
-  #define CLIENT_KEY_PATH "/test_ssl_certs/wrong_Client_pkcs1.key"
+  #define CLIENT_CERT_PATH LOCALPATH "/ssl_certs/wrong_Client.crt"
+  #define CLIENT_KEY_PATH LOCALPATH "/ssl_certs/wrong_Client_pkcs1.key"
 #else
-  #define CLIENT_CERT_PATH "/test_ssl_certs/modulesClient.crt"
-  #define CLIENT_KEY_PATH "/test_ssl_certs/modulesClient_pkcs1.key"  //Only RSA Private keys are supported
+  #define CLIENT_CERT_PATH LOCALPATH "/ssl_certs/modulesClient.crt"
+  #define CLIENT_KEY_PATH LOCALPATH "/ssl_certs/modulesClient_pkcs1.key"  //Only RSA Private keys are supported
 #endif
 
   #define SERVER_PORT 20443 //echo client+server
