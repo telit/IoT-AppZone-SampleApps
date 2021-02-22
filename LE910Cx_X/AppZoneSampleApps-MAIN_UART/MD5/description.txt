@@ -1,0 +1,1 @@
+Sample application showing how to compute MD5 hashes using m2mb crypto. Debug prints on MAIN UART

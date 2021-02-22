@@ -1,0 +1,1 @@
+Sample application showing how use lfs2 porting with RAM disk and SPI data flash. Debug prints on MAIN UART

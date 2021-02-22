@@ -11,6 +11,8 @@ Each module family has its own subfolder, containing all the sample apps availab
 
   - [ME910C1-ML865C1-NE910C1](ME910C1-ML865C1-NE910C1): Samples supported from 30.00.xx9 firmware version
   - [ME310G1-ME910G1-ML865G1](ME310G1-ME910G1-ML865G1): Samples supported from 37.00.xx2 firmware version
+  - [LE910Cx_X](LE910Cx_X): Samples supported from 25.30.xx1 firmware version
+  - [LE910Cx_L](LE910Cx_L): Samples supported from 25.20.xx8-B30 firmware version
 
 
 ## Usage

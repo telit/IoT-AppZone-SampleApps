@@ -14,7 +14,7 @@
     Sample application showcasing how to create and decode PDUs to be used with m2mb_sms_* API set. A SIM card and antenna must be present. Debug prints on MAIN UART
 
   @version 
-    1.0.3
+    1.0.4
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -165,8 +165,9 @@ void M2MB_main( int argc, char **argv )
     AZX_LOG_ERROR("M2MB_SMS_INCOMING_IND MEMORY FULL indication failed\r\n");
   }
 
+  memory = M2MB_SMS_STORAGE_SM;
 
-retVal = m2mb_sms_set_storage(h_sms_handle, memory);
+  retVal = m2mb_sms_set_storage(h_sms_handle, memory);
   if ( retVal != M2MB_RESULT_SUCCESS )
   {
     AZX_LOG_ERROR( "Set storage to %d failed!\r\n", memory);
@@ -240,5 +241,13 @@ retVal = m2mb_sms_set_storage(h_sms_handle, memory);
     AZX_LOG_ERROR("SMS not sent! - unexpected value %d returned\r\n", osRes);
   }
 
+#ifdef LE910CXL
+  /* On Linux based LE910CX Linux, the end fo M2MB_main causes the return of the application. 
+  Add a loop to allow reception of messages*/
+  while(1)
+  {
+    azx_sleep_ms(1000);
+  }
+#endif
 }
 

@@ -13,7 +13,7 @@
   @description
     Sample application showing how to compute MD5 hashes using m2mb crypto. Debug prints on AUX UART
   @version 
-    1.0.1
+    1.0.2
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -33,12 +33,12 @@
 #include "m2mb_fs_posix.h"
 
 #include "azx_log.h"
-#include "app_cfg.h"
+#include "app_cfg.h" /*FOR LOCALPATH define*/
 
 #include "md5_utils.h"
 
 /* Local defines ================================================================================*/
-#define FILE "/mod/file.txt"
+#define FILE LOCALPATH "/file.txt"
 
 #define DATA_STRING "the quick brown fox jumped over the lazy dog."
 #define RIGHT_MD5_HASH "bb0fa6eff92c305f166803b6938dd33a"

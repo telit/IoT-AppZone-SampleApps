@@ -672,7 +672,7 @@ int SPI_demo(void)
   gpio_MAGN_CS_fd = M2M_open_gpio_output(ST_LIS3MDL_CS_PIN);
   gpio_GYRO_CS_fd = M2M_open_gpio_output(ST_L3G4200D_CS_PIN);
 
-  if (gpio_MAGN_CS_fd < 0 || gpio_GYRO_CS_fd < 0)
+  if (gpio_MAGN_CS_fd == -1 || gpio_GYRO_CS_fd == -1)
   {
     AZX_LOG_ERROR("cannot set GPIO descriptors!\r\n");
     return -1;

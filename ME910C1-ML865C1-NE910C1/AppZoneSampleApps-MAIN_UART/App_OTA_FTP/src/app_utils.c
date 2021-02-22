@@ -20,7 +20,7 @@
 #include "azx_log.h"
 #include "azx_utils.h"
 
-
+#include "app_cfg.h" /*FOR LOCALPATH define*/
 
 /* Macro =============================================================================*/
 #define AT_INSTANCE 2
@@ -77,7 +77,7 @@ INT32 update_app(const CHAR* new_app, const CHAR* old_app)
           if ((old_app != NULL) && (strcmp (old_app, "") != 0) )
           {
             memset(filePath,0, sizeof(filePath));
-            sprintf(filePath, "/mod/%s", old_app);
+            sprintf(filePath, LOCALPATH "/%s", old_app);
             AZX_LOG_DEBUG("Deleting old application %s\r\n", filePath);
             m2mb_fs_unlink(filePath);
           }

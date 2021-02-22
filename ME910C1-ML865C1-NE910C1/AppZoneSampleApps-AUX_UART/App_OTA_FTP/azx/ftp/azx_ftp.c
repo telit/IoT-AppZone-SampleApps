@@ -24,14 +24,13 @@
 #define AZX
 #endif
 
-/* Include files =============================================================*/
+#if defined(__GNUC__) && __GNUC__ >= 7 || defined(__clang__) && __clang_major__ >= 12
+ #define FALL_THROUGH __attribute__ ((fallthrough))
+#else
+ #define FALL_THROUGH ((void)0) /* fall through */
+#endif /* __GNUC__ >= 7 */
 
-#if defined(__unix__) || defined(__VMS)
-#include <unistd.h>
-#endif
-#if defined(_WIN32)
-#include <windows.h>
-#endif
+/* Include files =============================================================*/
 
 #if defined(AZX)
 #include "m2mb_types.h"
@@ -64,6 +63,12 @@
 #include "azx_gnu_string.h"
 
 #else //defined(AZX)
+#if defined(__unix__) || defined(__VMS)
+#include <unistd.h>
+#endif
+#if defined(_WIN32)
+#include <windows.h>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -72,26 +77,27 @@
 #include <errno.h>
 #include <ctype.h>
 
-#if defined(__unix__)
-#include <sys/time.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h>
-#include <arpa/inet.h>
-#elif defined(VMS)
-#include <types.h>
-#include <socket.h>
-#include <in.h>
-#include <netdb.h>
-#include <inet.h>
-#elif defined(_WIN32)
-#include <winsock.h>
-#endif
-#if defined(__APPLE__)
-#undef _REENTRANT
-#endif
-
+#if !defined(AZX)
+  #if defined(__unix__)
+  #include <sys/time.h>
+  #include <sys/types.h>
+  #include <sys/socket.h>
+  #include <netinet/in.h>
+  #include <netdb.h>
+  #include <arpa/inet.h>
+  #elif defined(VMS)
+  #include <types.h>
+  #include <socket.h>
+  #include <in.h>
+  #include <netdb.h>
+  #include <inet.h>
+  #elif defined(_WIN32)
+  #include <winsock.h>
+  #endif
+  #if defined(__APPLE__)
+  #undef _REENTRANT
+  #endif
+#endif //!defined(AZX)
 
 
 
@@ -157,9 +163,9 @@ struct AZX_FTP_NET_BUF_TAG {
 AZX_FTP_OPTIONS_T ftp_opts;
 
 
-
-
 /* Local statics =============================================================*/
+const char AZX_FTP_DEFAULT_PNUM[] = "ftp";
+
 /* Local function prototypes =================================================*/
 #if defined(AZX)
 static CHAR *azx_ftp_strdup( const CHAR *s );
@@ -186,7 +192,7 @@ static INT32 FtpXferBuffer( AZX_FTP_BUFFER_T *localinfo, AZX_FTP_FILE_INFO_T *re
 
 /* Static functions ==========================================================*/
 
-#if defined(__unix__) || defined(VMS)
+#if !defined(AZX) &&( defined(__unix__) || defined(VMS))
 int net_read(int fd, CHAR *buf, size_t len)
 {
   while ( 1 )
@@ -1527,7 +1533,7 @@ AZX_FTP_GLOBALDEF INT32 azx_ftp_clearCallback(AZX_FTP_NET_BUF_T *nControl)
  *
  * returns 1 if successful, 0 on error
  */
-AZX_FTP_GLOBALDEF INT32 azx_ftp_options(INT32 opt, long val, AZX_FTP_NET_BUF_T *nControl)
+AZX_FTP_GLOBALDEF INT32 azx_ftp_options(INT32 opt, INT32 val, AZX_FTP_NET_BUF_T *nControl)
 {
   INT32 v,rv=0;
   switch (opt)
@@ -1660,7 +1666,8 @@ AZX_FTP_GLOBALDEF INT32 azx_ftp_close(AZX_FTP_NET_BUF_T *nData)
     {
       writeline(NULL, 0, nData);
     }
-    /*fallback*/
+    /* fall through */
+    FALL_THROUGH;
   case AZX_FTP_READ:
     if (nData->buf)
     {

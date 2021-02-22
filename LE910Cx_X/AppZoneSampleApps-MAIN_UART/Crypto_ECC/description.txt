@@ -1,0 +1,1 @@
+Sample application showcasing how to manage Elliptic Curve Cryptography functionalities. Debug prints on MAIN UART
