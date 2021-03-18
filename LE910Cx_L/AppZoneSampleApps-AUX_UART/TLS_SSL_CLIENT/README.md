@@ -52,10 +52,27 @@ Sample application showcasing TLS/SSL with client certificates usage with M2MB A
 - Disable PDP context
 
 
-The application requires the certificates to be stored in `/data/azc/mod/ssl_certs/` folder. It can be created with `AT#M2MMKDIR=/data/azc/mod/ssl_certs`
+The application requires the certificates to be stored in `/data/azc/mod/ssl_certs/` folder. It can be created with 
 
+`AT#M2MMKDIR=/data/azc/mod/ssl_certs`
+
+Certificates can then be loaded with
+
+`AT#M2MWRITE="/data/azc/mod/ssl_certs/data/azc/modulesCA.crt",1740`
+
+and providing the file content in RAW mode (for example using the "Transfer Data" button in Telit AT Controller)
+
+For client certificates (if required), the commands will be
+
+```
+AT#M2MWRITE="/data/azc/mod/ssl_certs/data/azc/modulesClient.crt",1651
+AT#M2MWRITE="/data/azc/mod/ssl_certs/data/azc/modulesClient_pkcs1.key",1679
+```
+
+PLEASE NOTE: always verify the file sizes to be used in the commands above as they might change
 
 ![](../../pictures/samples/tcp_ssl_client_bordered.png)
+![](../../pictures/samples/tcp_ssl_client_2_bordered.png)
 
 ---------------------
 

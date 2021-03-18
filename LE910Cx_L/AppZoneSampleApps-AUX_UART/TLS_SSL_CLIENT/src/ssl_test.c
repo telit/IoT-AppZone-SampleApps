@@ -11,7 +11,7 @@
   @details
   
   @version 
-    1.1.2
+    1.1.3
   @note
   
 
@@ -109,7 +109,7 @@ UINT8 CLIENT_CERT_BUF[2048];
 UINT8 CLIENT_KEY_BUF[2048];
 
 
-CHAR  respBuf[1024];
+CHAR  respBuf[2048];
 
 /* Local function prototypes ====================================================================*/
 /* Static functions =============================================================================*/
@@ -607,20 +607,48 @@ INT32 msgHTTPSTask(INT32 type, INT32 param1, INT32 param2)
     {
       AZX_LOG_DEBUG("pending bytes: %i\r\n", pending);
     }
-
-    AZX_LOG_DEBUG("trying to receive bytes..\r\n");
-    memset(respBuf,0, sizeof(respBuf));
-    len = m2mb_ssl_read( sslConnHndl, respBuf, pending );
-
-    if( len > 0 )
+    if(pending >0)
     {
-       AZX_LOG_DEBUG("Server response: (%d)<%s>\r\n", len, respBuf );
-    }
-    else
-    {
-       AZX_LOG_DEBUG("Server response no data: (%d) \r\n", len );
-    }
+      AZX_LOG_DEBUG("trying to receive %d bytes..\r\n", pending);
+      memset(respBuf,0, sizeof(respBuf));
+      len = m2mb_ssl_read( sslConnHndl, respBuf, pending );
 
+      if( len > 0 )
+      {
+        AZX_LOG_DEBUG("Server response: (%d)<%s>\r\n", len, respBuf );
+      }
+      else
+      {
+        AZX_LOG_DEBUG("Server response no data: (%d) \r\n", len );
+      }
+
+      ret = get_pending_bytes( sock_client, &pending );
+      if( 0 != ret)
+      {
+        AZX_LOG_ERROR("cannot retrieve the pending bytes...ret: %d; errno: %d\r\n", ret, m2mb_socket_errno());
+        task_status = APPLICATION_EXIT;
+        break;
+      }
+      else
+      {
+        AZX_LOG_DEBUG("pending bytes: %i\r\n", pending);
+      }
+      if(pending >0)
+      {
+        AZX_LOG_DEBUG("trying to receive remaining %d bytes..\r\n", pending);
+        memset(respBuf,0, sizeof(respBuf));
+        len = m2mb_ssl_read( sslConnHndl, respBuf, pending );
+
+        if( len > 0 )
+        {
+          AZX_LOG_DEBUG("Server response: (%d)<%s>\r\n", len, respBuf );
+        }
+        else
+        {
+          AZX_LOG_DEBUG("Server response no data: (%d) \r\n", len );
+        }
+      }
+    }
     m2mb_ssl_shutdown( sslConnHndl );
     m2mb_socket_bsd_close( sock_client );
     task_status = APPLICATION_EXIT;

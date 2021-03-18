@@ -5,7 +5,7 @@
 #define HDR_AZX_LOG_H_
 /**
  * @file azx_log.h
- * @version 1.0.7
+ * @version 1.0.8
  * @dependencies 
  * @author Fabio Pintus
  * @author Ioannis Demetriou
@@ -268,11 +268,11 @@ void azx_log_flush_to_file(void);
 /* Set to 1 below to get coloured logs*/
 #define AZX_LOG_INIT() do {\
   AZX_LOG_CFG_T cfg =\
-	{\
-		.log_level=AZX_LOG_LEVEL,\
-		.log_channel=LOG_CHANNEL,\
-		.log_colours=_LOG_COLOURS,\
-	};\
+  {\
+    /*.log_level*/   AZX_LOG_LEVEL,\
+    /*.log_channel*/ LOG_CHANNEL,\
+    /*.log_colours*/ _LOG_COLOURS\
+  };\
   azx_log_init(&cfg);\
 } while(0)
 
