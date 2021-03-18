@@ -15,7 +15,7 @@ LOGS_COLOUR = 0
 
 ## ---- do not touch below this line
 
-SW_VER = 1.1.2
+SW_VER = 1.1.3
 
 CLEAN_BEFORE_BUILD = clean
 
@@ -33,12 +33,12 @@ CPPFLAGS += -DAZX_LOG_ENABLE_COLOURS=$(LOGS_COLOUR)
 endif
 
 
-
-
 # Disable the missing-field-initializers as GCC sometimes complains about
 # legitimate struct initialization
 # (https://stackoverflow.com/questions/1538943/why-is-the-compiler-throwing-this-warning-missing-initializer-isnt-the-stru)
-ifneq (,\$(findstring GCC,\$(TOOLCHAIN)))
+
+
+ifneq (,$(filter $(TOOLCHAIN),GCC GCC_LINUX GNUEABI))
   CPPFLAGS += -Wall -Werror -Wextra -Wunreachable-code -Wno-missing-field-initializers -Wno-format
 else
   CPPFLAGS += --diag_suppress=111,177,1293
