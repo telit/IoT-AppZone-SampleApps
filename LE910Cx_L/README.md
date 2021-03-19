@@ -4,7 +4,7 @@
 
 
 
-Package Version: **1.1.3-CxL**
+Package Version: **1.1.4-CxL**
 
 Minimum Firmware Version: **25.20.XX8**
 
@@ -116,6 +116,19 @@ in the samples package, go in the HelloWorld folder (e.g. `AppZoneSampleApps-MAI
 
 
 
+## Main contents
+
+[AUX UART](#aux-uart)
+
+[MAIN UART](#main-uart)
+
+[USB0](#usb0)
+
+[BASIC](#basic)
+
+[MISC](#misc)
+
+[Installing beta version libraries Plug-in](#installing-beta-version-libraries-plug-in)
 
 
 # Applications 
@@ -728,6 +741,50 @@ Sample application showcasing how to create and decode PDUs to be used with m2mb
 - When SMS PDU response is received, decode it and print information about it, plus the message content
 
 ![](pictures/samples/sms_pdu_bordered.png)
+
+---------------------
+
+
+
+### SMS_atCmd example 
+
+Sample application showcasing how to receive an SMS containing an AT command, process the AT command and send its answer to sender (configurable in sms_config.txt). A SIM card and antenna must be present. Debug prints on **AUX UART**
+
+
+**Features**
+
+
+- How to receive an SMS with an AT command as text inside
+- How to send AT command to parser and read the answer
+- How to send the AT command answer back to sender via SMS
+
+Optional configuration file to be put in `/data/azc/mod` folder, copy `sms_config.txt` file into your module running the following AT command: 
+
+```
+AT#M2MWRITE="/data/azc/mod/sms_config.txt",138
+>>> here receive the prompt; then type or send the file, sized 138 bytes
+```
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+- Print welcome message
+- Init SMS functionality
+- Read configuration file sms_config.txt (send SMS with AT command answer back, delte SMS received)
+- Init AT command parser
+- Create a task to handle SMS parsing and AT command sending
+- Wait for an incoming SMS
+
+
+**`callbacks.c`**
+
+**`msgSMSparse()`**
+
+- When SMS has been received, content is decoded and printed. If there is an AT command inside, command is executed and answer printed and sent back to sender as an SMS (depending on sms_config.txt setting)
+
+![](pictures/samples/sms_atCmd_bordered.png)
 
 ---------------------
 
@@ -1733,6 +1790,50 @@ Sample application showcasing how to create and decode PDUs to be used with m2mb
 - When SMS PDU response is received, decode it and print information about it, plus the message content
 
 ![](pictures/samples/sms_pdu_bordered.png)
+
+---------------------
+
+
+
+### SMS_atCmd example 
+
+Sample application showcasing how to receive an SMS containing an AT command, process the AT command and send its answer to sender (configurable in sms_config.txt). A SIM card and antenna must be present. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- How to receive an SMS with an AT command as text inside
+- How to send AT command to parser and read the answer
+- How to send the AT command answer back to sender via SMS
+
+Optional configuration file to be put in `/data/azc/mod` folder, copy `sms_config.txt` file into your module running the following AT command: 
+
+```
+AT#M2MWRITE="/data/azc/mod/sms_config.txt",138
+>>> here receive the prompt; then type or send the file, sized 138 bytes
+```
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+- Print welcome message
+- Init SMS functionality
+- Read configuration file sms_config.txt (send SMS with AT command answer back, delte SMS received)
+- Init AT command parser
+- Create a task to handle SMS parsing and AT command sending
+- Wait for an incoming SMS
+
+
+**`callbacks.c`**
+
+**`msgSMSparse()`**
+
+- When SMS has been received, content is decoded and printed. If there is an AT command inside, command is executed and answer printed and sent back to sender as an SMS (depending on sms_config.txt setting)
+
+![](pictures/samples/sms_atCmd_bordered.png)
 
 ---------------------
 
@@ -2834,6 +2935,50 @@ Sample application showcasing how to create and decode PDUs to be used with m2mb
 - When SMS PDU response is received, decode it and print information about it, plus the message content
 
 ![](pictures/samples/sms_pdu_bordered.png)
+
+---------------------
+
+
+
+### SMS_atCmd example 
+
+Sample application showcasing how to receive an SMS containing an AT command, process the AT command and send its answer to sender (configurable in sms_config.txt). A SIM card and antenna must be present. Debug prints on **USB0**
+
+
+**Features**
+
+
+- How to receive an SMS with an AT command as text inside
+- How to send AT command to parser and read the answer
+- How to send the AT command answer back to sender via SMS
+
+Optional configuration file to be put in `/data/azc/mod` folder, copy `sms_config.txt` file into your module running the following AT command: 
+
+```
+AT#M2MWRITE="/data/azc/mod/sms_config.txt",138
+>>> here receive the prompt; then type or send the file, sized 138 bytes
+```
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+- Print welcome message
+- Init SMS functionality
+- Read configuration file sms_config.txt (send SMS with AT command answer back, delte SMS received)
+- Init AT command parser
+- Create a task to handle SMS parsing and AT command sending
+- Wait for an incoming SMS
+
+
+**`callbacks.c`**
+
+**`msgSMSparse()`**
+
+- When SMS has been received, content is decoded and printed. If there is an AT command inside, command is executed and answer printed and sent back to sender as an SMS (depending on sms_config.txt setting)
+
+![](pictures/samples/sms_atCmd_bordered.png)
 
 ---------------------
 
