@@ -20,7 +20,9 @@
       ]
     },
     "LE910Cx-L": {
-      "firmwares": []
+      "firmwares": [
+        "25.20.xx9"
+      ]
     },
     "LE910Cx-X": {
       "firmwares": [

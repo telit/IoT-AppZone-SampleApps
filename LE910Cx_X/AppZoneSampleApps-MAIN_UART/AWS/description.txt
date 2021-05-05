@@ -1,0 +1,1 @@
+Sample application showcasing AWS Iot Core MQTT communication. Debug prints on MAIN UART

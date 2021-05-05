@@ -1,0 +1,1 @@
+Sample application prints some Module/SIM information as IMEI, fw version, IMSI and so on; it prints also some information about registration. Debug prints on USB0

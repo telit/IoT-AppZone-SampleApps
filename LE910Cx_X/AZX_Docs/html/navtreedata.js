@@ -24,15 +24,39 @@ var NAVTREE =
 [
   [ "AZX (AppZone eXtensions) documentation", "index.html", [
     [ "AZX sample modules documentation", "index.html", null ],
+    [ "Modules", "modules.html", "modules" ],
+    [ "Data Structures", "annotated.html", [
+      [ "Data Structures", "annotated.html", "annotated_dup" ],
+      [ "Data Structure Index", "classes.html", null ],
+      [ "Data Fields", "functions.html", [
+        [ "All", "functions.html", null ],
+        [ "Variables", "functions_vars.html", null ]
+      ] ]
+    ] ],
     [ "Files", "files.html", [
-      [ "File List", "files.html", "files_dup" ]
-    ] ]
+      [ "File List", "files.html", "files_dup" ],
+      [ "Globals", "globals.html", [
+        [ "All", "globals.html", "globals_dup" ],
+        [ "Functions", "globals_func.html", null ],
+        [ "Variables", "globals_vars.html", null ],
+        [ "Typedefs", "globals_type.html", null ],
+        [ "Enumerations", "globals_enum.html", null ],
+        [ "Enumerator", "globals_eval.html", null ],
+        [ "Macros", "globals_defs.html", null ]
+      ] ]
+    ] ],
+    [ "Examples", "examples.html", "examples" ]
   ] ]
 ];
 
 var NAVTREEINDEX =
 [
-"app__cfg_8h.html"
+"annotated.html",
+"azx__lfs__utils_8h.html#a110109540a1594564983f0d0d5e1ea27",
+"azx_base64_example_8c-example.html",
+"group__http_conf.html#gga30623080daf9875d7ef4a53282de1ac0aefe5566487896abaadb1fccd36cf7dc2",
+"group__zlib_usage.html#ga64032ae1f54a0988849ea0c6b53c440c",
+"struct_a_z_x___s_p_i___f_l_a_s_h___e_c_c_l_a_y_o_u_t.html#a16bddd27ac6808d2e7e826532ddf3432"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
