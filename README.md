@@ -67,3 +67,4 @@ For further info, please go on Telit's cellular modules product webpage https://
 
 AppZone development resources are available at the link https://www.telit.com/developer-zone/iot-app-zone/iot-app-zone-developer-resources/
 
+Updated
