@@ -10,9 +10,9 @@ This repository contains Telit IoT AppZone C sample apps, which help users quick
 Each module family has its own subfolder, containing all the sample apps available for that family. Please Refer to the subfolders README.md for further details
 
   - [ME910C1-ML865C1-NE910C1](ME910C1-ML865C1-NE910C1): Samples supported from 30.00.xx9 firmware version
-  - [ME310G1-ME910G1-ML865G1](ME310G1-ME910G1-ML865G1): Samples supported from 37.00.xx2 firmware version
-  - [LE910Cx_X](LE910Cx_X): Samples supported from 25.30.xx1 firmware version
-  - [LE910Cx_L](LE910Cx_L): Samples supported from 25.20.xx8-B30 firmware version
+  - [ME310G1-ME910G1-ML865G1](ME310G1-ME910G1-ML865G1): Samples supported from 37.00.xx3 firmware version
+  - [LE910Cx_X](LE910Cx_X): Samples supported from 25.30.xx2 firmware version
+  - [LE910Cx_L](LE910Cx_L): Samples supported from 25.21.xx0 firmware version
 
 
 ## Usage
