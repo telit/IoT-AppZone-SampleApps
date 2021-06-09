@@ -61,7 +61,7 @@ Description:
 *******************************************************************************/
 INT32 setGPIO( INT32 fd, AZX_SPI_FLASH_GPIO_VALUE_E value )
 {
-	if(fd < 0)
+	if(fd == -1)
 	{
 		return -1;
 	}
@@ -293,7 +293,7 @@ AZX_SPI_FLASH_CODE_RESULT_E azx_spi_flash_spi_initialization(JSC_int32 *spi_fd)
 
 		cfg.spi_mode = M2MB_SPI_MODE_0; //clock idle LOW, data driven on falling edge and sampled on rising edge
 		cfg.cs_polarity = M2MB_SPI_CS_ACTIVE_LOW;
-		cfg.cs_mode = M2MB_SPI_CS_KEEP_ASSERTED; //M2MB_SPI_CS_DEASSERT;
+		cfg.cs_mode = M2MB_SPI_CS_DEASSERT;
 		cfg.endianness = M2MB_SPI_NATIVE; //M2MB_SPI_LITTLE_ENDIAN; //M2MB_SPI_BIG_ENDIAN;
 		cfg.callback_fn = NULL;
 		cfg.callback_ctxt = NULL; //(void *)userdata; //NULL;;
@@ -362,7 +362,7 @@ AZX_SPI_FLASH_CODE_RESULT_E azx_spi_flash_gpio_initialization(const JSC_uint8 CS
 	INT32 ret;
 
 	g_fd = openGpioOutput(CS_GPIO_pin);
-	if (g_fd < 0)
+	if (g_fd == -1)
 	{
 		AZX_LOG_CRITICAL("Cannot set GPIO descriptors!\r\n");
 		return AZX_SPI_FLASH_CODE_GPIO_INIT_FAIL;

@@ -1,1 +1,0 @@
-Sample application showing how to use GNSS functionality. Debug prints on AUX UART

@@ -24,6 +24,26 @@
 #define HDR_AZX_GNU_SYS_TYPES_H_
 
 /* Global defines ================================================================================*/
+  #ifndef _BSDTYPES_DEFINED
+  /* also defined in mingw/gmon.h and in w32api/winsock[2].h */
+  #ifndef __u_char_defined
+  typedef unsigned char u_char;
+  #define __u_char_defined
+  #endif
+  #ifndef __u_short_defined
+  typedef unsigned short  u_short;
+  #define __u_short_defined
+  #endif
+  #ifndef __u_int_defined
+  typedef unsigned int  u_int;
+  #define __u_int_defined
+  #endif
+  #ifndef __u_long_defined
+  typedef unsigned long u_long;
+  #define __u_long_defined
+  #endif
+  #define _BSDTYPES_DEFINED
+  #endif
 
 	#undef	fd_set
 	#define	fd_set		M2MB_SOCKET_BSD_FD_SET_T

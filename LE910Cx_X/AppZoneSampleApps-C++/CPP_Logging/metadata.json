@@ -20,20 +20,23 @@
     "MXXXXG1": {
       "firmwares": [
         "37.00.xx1",
-        "37.00.xx2"
+        "37.00.xx2",
+        "37.00.xx3"
       ]
     },
     "LE910Cx-L": {
-      "firmwares": []
+      "firmwares": [
+      ]
     },
     "LE910Cx-X": {
       "firmwares": [
-        "25.30.xx1"
+        "25.30.xx1",
+        "25.30.xx2"
       ]
     }
   },
   "groups": [
-    "C++"
+    {"name": "C++", "limitations": []}
   ],
   "platform": "GCC",
   "license": "MIT",

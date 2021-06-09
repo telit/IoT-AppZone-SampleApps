@@ -23,7 +23,7 @@
 /*===========================================================================*/
 /**
  * @file azx_ftp.h
- * @version 1.0.2
+ * @version 1.0.3
  * @dependencies
  *
  * @note
@@ -61,7 +61,7 @@
 #if defined(__unix__) || defined(VMS) || defined(AZX)
 #define AZX_FTP_GLOBALDEF
 #define AZX_FTP_GLOBALREF extern
-#elif defined(_WIN32)
+#elif defined(_WIN32) && ! defined(__MINGW32__)
 #if defined BUILDING_LIBRARY
 #define AZX_FTP_GLOBALDEF __declspec(dllexport)
 #define AZX_FTP_GLOBALREF __declspec(dllexport)

@@ -11,7 +11,7 @@
   @details
   
   @version 
-    1.1.3
+    1.1.4
   @note
   
 
@@ -663,10 +663,17 @@ INT32 msgHTTPSTask(INT32 type, INT32 param1, INT32 param2)
 
 
   m2mb_ssl_delete_config( sslConfigHndl );
-  if(SSL_AUTH_MODE == M2MB_SSL_SERVER_AUTH)
+    
+  if(SSL_AUTH_MODE == M2MB_SSL_SERVER_AUTH || SSL_AUTH_MODE == M2MB_SSL_SERVER_CLIENT_AUTH)
   {
     m2mb_ssl_cert_delete( M2MB_SSL_CACERT, (CHAR*) "CAListTest" );
   }
+  
+  if(SSL_AUTH_MODE == M2MB_SSL_SERVER_CLIENT_AUTH)
+  {
+    m2mb_ssl_cert_delete( M2MB_SSL_CERT, (CHAR*) "ClientCertTest" );
+  }
+  
   m2mb_ssl_delete_ctxt( sslCtxtHndl );
 
   ret = m2mb_pdp_deactivate(pdpHandle, PDP_CTX);

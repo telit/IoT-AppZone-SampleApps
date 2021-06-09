@@ -21,6 +21,9 @@ Sample application showing how to communicate over SPI with m2mb API. Debug prin
 
 - Send data on MOSI and read the same in MISO
 
+**Notes:**
+
+For LE910Cx (both Linux and ThreadX based devices), `AT#SPIEN=1` command must be sent once before running the app
 
 ![](../../pictures/samples/spi_echo_bordered.png)
 

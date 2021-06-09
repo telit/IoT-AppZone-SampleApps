@@ -44,9 +44,12 @@ Sample application showing how use lfs2 porting with RAM disk and SPI data flash
 - Unmount and Release resources
 
 **Notes:**
+
 For SPI Flash a JSC memory is used with chip select pin connected to module GPIO2 pin.
 For better performances, a 33kOhm pull-down resistor on SPI clock is suggested.
 Please refer to SPI_echo sample app for SPI connection details.
+
+For LE910Cx (both Linux and ThreadX based devices), `AT#SPIEN=1` command must be sent once before running the app
 
 ![](../../pictures/samples/lfs2_ramdisk_bordered.png)
 ![](../../pictures/samples/lfs2_spiflash_01_bordered.png)

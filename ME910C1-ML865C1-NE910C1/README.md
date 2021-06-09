@@ -4,7 +4,7 @@
 
 
 
-Package Version: **1.1.4-C1**
+Package Version: **1.1.6-C1**
 
 Minimum Firmware Version: **30.00.XX9**
 
@@ -187,6 +187,133 @@ Sample application showing how to use AT Instance functionality (sending AT comm
 - Deinit ati, releasing AT0
 
 ![](pictures/samples/ati_async_bordered.png)
+
+---------------------
+
+
+
+### AWS demo
+
+Sample application showcasing AWS Iot Core MQTT communication. Debug prints on **AUX UART**
+
+
+**Features**
+
+
+- How to check module registration and enable PDP context
+- How to load certificates into device SSL session storage
+- How to configure MQTT client parameters
+- How to connect to AWS server with SSL and exchange data over a topic
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Create a task to manage MQTT client and start it
+
+
+**`aws_demo.c`**
+
+- Initialize Network structure and check registration
+
+- Initialize PDP structure and start PDP context
+
+- Init MQTT client
+
+- Configure it with all parameters (Client ID, PDP context ID, keepalive timeout...)
+
+- Initialize the TLS parameters (TLS1.2) andh auth mode (server+client auth in the example)
+
+- Create SSL context
+
+- Read certificates files and store them
+
+- Connect MQTT client to broker
+- Subscribe to topic
+- Publish 10 messages with increasing counter
+- Print received message in mqtt_topc_cb function
+- Disconnect MQTT client and deinit it 
+
+- Disable PDP context
+
+
+### How to get started with AWS IoT
+
+- Go to [AWS console](https://aws.amazon.com/console/) and create an account if one is not available yet.
+- Go to **`IoT Core`** section
+- Go to **`Secure`** > **`Policies`** section
+- Create a new policy, which describes what the device will be allowed to do (e.g. subscribe, publish)
+- Give it a name, then configure it using the configuration below (it is possible to copy/paste by clicking on **`Add statements`** section, then **`Advanced mode`** ) :
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+  {
+    "Action": [
+      "iot:Publish",
+      "iot:Subscribe",
+      "iot:Connect",
+      "iot:Receive"
+    ],
+    "Effect": "Allow",
+    "Resource": [
+      "*"
+    ]
+  }
+  ]
+}
+```
+
+- Click on create to complete the policy creation.
+- Go to **`Manage`** section
+- Press **`Create`**, then **`Create a single thing`**
+- Give the new thing a name, then click on `Next`
+- Select **`One-click certificate creation (recommended)`** by clicking on **`Create certificate`**
+- Once presented with the **`Certificate created`** page, download all certificates and keys
+- Click on the **`Activate`** button to enable the certificate authentication of the newly created device
+- Click on **`Attach a policy`** and select the policy created in a previous step
+
+For further information, please refer to the full [AWS IoT documentation](https://docs.aws.amazon.com/iot/latest/developerguide/iot-console-signin.html)
+
+### Application setup
+
+- Set **`CLIENTCERTFILE`** and **`CLIENTKEYFILE`** defines in **`aws_demo.c file`** in order to match the certificate and key created in the previous section.
+- Set **`AWS_BROKER_ADDRESS`** to the correct AWS URL. It can be retrieved from AWS IoT **`Manage`** > **`Things`** > **`Interact`** in the HTTPS **`Rest API Endpoint`** URL. 
+- Set **`CLIENT_ID`** to the desired Client ID for your AWS device
+- (Optional) if required, change **`CACERTFILE`** to match the one to be used.
+
+### Device setup
+
+The application requires the certificates (provided in sample app **`certs`** subfolder ) to be stored in **`/mod/ssl_certs/`** folder. It can be created with 
+
+`AT#M2MMKDIR=/mod/ssl_certs`
+
+Certificates can then be loaded with
+
+`AT#M2MWRITE="/mod/ssl_certs/preload_CACert_01.crt",1468`
+`AT#M2MWRITE="/mod/ssl_certs/Amazon-IoT.crt",1646`
+
+providing the file content in RAW mode (for example using the "Transfer Data" button in Telit AT Controller)
+
+For client certificates, the commands will be
+
+```
+AT#M2MWRITE="/mod/ssl_certs/xxxxx.crt",yyyy
+AT#M2MWRITE="/mod/ssl_certs/xxxxx.key",zzzz
+```
+
+PLEASE NOTE: always verify the file sizes to be used in the commands above as they might change
+
+![](pictures/samples/aws_bordered.png)
+
+Data received from a subscriber:
+
+![](pictures/samples/aws2_bordered.png)
 
 ---------------------
 
@@ -381,6 +508,15 @@ Sample application showcasing how to manage Elliptic Curve Cryptography function
 
 Sample application showing how to communicate with a MicroChip 24AA256T I2C EEPROM chip using azx eeprom utility APIs. Debug prints on **AUX UART**
 
+**Setup**
+
+This demo application requires that:
+- A0, A1, and A2 pins (1,2,3 chip pins) are connected to ground (pin 4) for device address 0xA0
+- Pin 7 (WP) is connected to ground
+- Pin 6 (SCL) is connected to module GPIO 3
+- Pin 5 (SDA) is connected to module GPIO 2
+- Pin 4 is connected to one of the ground pins of the module
+- Pin 8 is connected to 1v8 supply (e.g. VPWRMON pin on the module)
 
 **Features**
 
@@ -692,6 +828,37 @@ Sample application showing how to use GPIOs and interrupts. Debug prints on **AU
 
 
 
+### General_INFO example 
+
+Sample application prints some Module/SIM information as IMEI, fw version, IMSI and so on; it prints also some information about registration. Debug prints on **AUX UART**
+
+
+**Features**
+
+
+- How to print some Module information as IMEI, FW version etc
+- How to print some SIM information as IMSI, ICCID
+- How to get and print some informatio about Module registration as Netowrk Operator, AcT, RSSI, etc
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+- Print welcome message
+- Init NET functionality
+- Init INFO functionality
+- Get and print Module and SIM info
+- Wait form module to register to network
+- Get and print registration INFO
+
+![](pictures/samples/general_INFO_bordered.png)
+
+---------------------
+
+
+
 ### HTTP Client
 
 Sample application showing how to use HTTPs client functionalities. Debug prints on **AUX UART**
@@ -704,6 +871,7 @@ Sample application showing how to use HTTPs client functionalities. Debug prints
 - How to initialize the http client, set the debug hook function and the data callback to manage incoming data
 - How to perform GET, HEAD or POST operations
 
+NOTE: the sample app has an optional dependency on azx_base64.h if basic authentication is required (refer to `HTTP_BASIC_AUTH_GET` define in `M2MB_main.c` for further details)
 
 **Application workflow**
 
@@ -1187,6 +1355,45 @@ Sample application showing mutex usage, with ownership and prioritization usage.
 ![](pictures/samples/mutex_3_bordered.png)
 
 ![](pictures/samples/mutex_4_bordered.png)
+
+---------------------
+
+
+
+### NTP example 
+
+The application connects to an NTP server, gets current date and time and updates module's internal clock. Debug prints on **AUX UART**
+
+
+**Features**
+
+
+- How to get current date and time from an NTP server
+- How to set current date and time on module
+
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+- Print welcome message
+- Send message to ntpTask
+
+**`ntp_task.c`**
+
+*NTP_task()*
+- Waits module registration
+- When module is registered, initializes ntp setting CID, server url and timeout
+- When PDP context is correctly opened, a query to NTP server is done to get current date and time
+- On SET_MODULE_RTC message type reception, module RTC is set with date time value got from NTP server.
+
+*m2mb_ntp_ind_callback()*
+- As soon as M2MB_NTP_VALID_TIME event is received, current date and time is printend and a message (with SET_MODULE_RTC type) is sent to NTP_task
+
+
+![](pictures/samples/NTP_bordered.png)
 
 ---------------------
 
@@ -1793,6 +2000,133 @@ USB1 debug log:
 
 
 
+### AWS demo
+
+Sample application showcasing AWS Iot Core MQTT communication. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- How to check module registration and enable PDP context
+- How to load certificates into device SSL session storage
+- How to configure MQTT client parameters
+- How to connect to AWS server with SSL and exchange data over a topic
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Create a task to manage MQTT client and start it
+
+
+**`aws_demo.c`**
+
+- Initialize Network structure and check registration
+
+- Initialize PDP structure and start PDP context
+
+- Init MQTT client
+
+- Configure it with all parameters (Client ID, PDP context ID, keepalive timeout...)
+
+- Initialize the TLS parameters (TLS1.2) andh auth mode (server+client auth in the example)
+
+- Create SSL context
+
+- Read certificates files and store them
+
+- Connect MQTT client to broker
+- Subscribe to topic
+- Publish 10 messages with increasing counter
+- Print received message in mqtt_topc_cb function
+- Disconnect MQTT client and deinit it 
+
+- Disable PDP context
+
+
+### How to get started with AWS IoT
+
+- Go to [AWS console](https://aws.amazon.com/console/) and create an account if one is not available yet.
+- Go to **`IoT Core`** section
+- Go to **`Secure`** > **`Policies`** section
+- Create a new policy, which describes what the device will be allowed to do (e.g. subscribe, publish)
+- Give it a name, then configure it using the configuration below (it is possible to copy/paste by clicking on **`Add statements`** section, then **`Advanced mode`** ) :
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+  {
+    "Action": [
+      "iot:Publish",
+      "iot:Subscribe",
+      "iot:Connect",
+      "iot:Receive"
+    ],
+    "Effect": "Allow",
+    "Resource": [
+      "*"
+    ]
+  }
+  ]
+}
+```
+
+- Click on create to complete the policy creation.
+- Go to **`Manage`** section
+- Press **`Create`**, then **`Create a single thing`**
+- Give the new thing a name, then click on `Next`
+- Select **`One-click certificate creation (recommended)`** by clicking on **`Create certificate`**
+- Once presented with the **`Certificate created`** page, download all certificates and keys
+- Click on the **`Activate`** button to enable the certificate authentication of the newly created device
+- Click on **`Attach a policy`** and select the policy created in a previous step
+
+For further information, please refer to the full [AWS IoT documentation](https://docs.aws.amazon.com/iot/latest/developerguide/iot-console-signin.html)
+
+### Application setup
+
+- Set **`CLIENTCERTFILE`** and **`CLIENTKEYFILE`** defines in **`aws_demo.c file`** in order to match the certificate and key created in the previous section.
+- Set **`AWS_BROKER_ADDRESS`** to the correct AWS URL. It can be retrieved from AWS IoT **`Manage`** > **`Things`** > **`Interact`** in the HTTPS **`Rest API Endpoint`** URL. 
+- Set **`CLIENT_ID`** to the desired Client ID for your AWS device
+- (Optional) if required, change **`CACERTFILE`** to match the one to be used.
+
+### Device setup
+
+The application requires the certificates (provided in sample app **`certs`** subfolder ) to be stored in **`/mod/ssl_certs/`** folder. It can be created with 
+
+`AT#M2MMKDIR=/mod/ssl_certs`
+
+Certificates can then be loaded with
+
+`AT#M2MWRITE="/mod/ssl_certs/preload_CACert_01.crt",1468`
+`AT#M2MWRITE="/mod/ssl_certs/Amazon-IoT.crt",1646`
+
+providing the file content in RAW mode (for example using the "Transfer Data" button in Telit AT Controller)
+
+For client certificates, the commands will be
+
+```
+AT#M2MWRITE="/mod/ssl_certs/xxxxx.crt",yyyy
+AT#M2MWRITE="/mod/ssl_certs/xxxxx.key",zzzz
+```
+
+PLEASE NOTE: always verify the file sizes to be used in the commands above as they might change
+
+![](pictures/samples/aws_bordered.png)
+
+Data received from a subscriber:
+
+![](pictures/samples/aws2_bordered.png)
+
+---------------------
+
+
+
 ### App Manager
 
 Sample application showing how to manage AppZone apps from m2mb code. Debug prints on **MAIN UART**
@@ -1982,6 +2316,15 @@ Sample application showcasing how to manage Elliptic Curve Cryptography function
 
 Sample application showing how to communicate with a MicroChip 24AA256T I2C EEPROM chip using azx eeprom utility APIs. Debug prints on **MAIN UART**
 
+**Setup**
+
+This demo application requires that:
+- A0, A1, and A2 pins (1,2,3 chip pins) are connected to ground (pin 4) for device address 0xA0
+- Pin 7 (WP) is connected to ground
+- Pin 6 (SCL) is connected to module GPIO 3
+- Pin 5 (SDA) is connected to module GPIO 2
+- Pin 4 is connected to one of the ground pins of the module
+- Pin 8 is connected to 1v8 supply (e.g. VPWRMON pin on the module)
 
 **Features**
 
@@ -2293,6 +2636,37 @@ Sample application showing how to use GPIOs and interrupts. Debug prints on **MA
 
 
 
+### General_INFO example 
+
+Sample application prints some Module/SIM information as IMEI, fw version, IMSI and so on; it prints also some information about registration. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- How to print some Module information as IMEI, FW version etc
+- How to print some SIM information as IMSI, ICCID
+- How to get and print some informatio about Module registration as Netowrk Operator, AcT, RSSI, etc
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+- Print welcome message
+- Init NET functionality
+- Init INFO functionality
+- Get and print Module and SIM info
+- Wait form module to register to network
+- Get and print registration INFO
+
+![](pictures/samples/general_INFO_bordered.png)
+
+---------------------
+
+
+
 ### HTTP Client
 
 Sample application showing how to use HTTPs client functionalities. Debug prints on **MAIN UART**
@@ -2305,6 +2679,7 @@ Sample application showing how to use HTTPs client functionalities. Debug prints
 - How to initialize the http client, set the debug hook function and the data callback to manage incoming data
 - How to perform GET, HEAD or POST operations
 
+NOTE: the sample app has an optional dependency on azx_base64.h if basic authentication is required (refer to `HTTP_BASIC_AUTH_GET` define in `M2MB_main.c` for further details)
 
 **Application workflow**
 
@@ -2793,6 +3168,45 @@ Sample application showing mutex usage, with ownership and prioritization usage.
 
 
 
+### NTP example 
+
+The application connects to an NTP server, gets current date and time and updates module's internal clock. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- How to get current date and time from an NTP server
+- How to set current date and time on module
+
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+- Print welcome message
+- Send message to ntpTask
+
+**`ntp_task.c`**
+
+*NTP_task()*
+- Waits module registration
+- When module is registered, initializes ntp setting CID, server url and timeout
+- When PDP context is correctly opened, a query to NTP server is done to get current date and time
+- On SET_MODULE_RTC message type reception, module RTC is set with date time value got from NTP server.
+
+*m2mb_ntp_ind_callback()*
+- As soon as M2MB_NTP_VALID_TIME event is received, current date and time is printend and a message (with SET_MODULE_RTC type) is sent to NTP_task
+
+
+![](pictures/samples/NTP_bordered.png)
+
+---------------------
+
+
+
 ### SMS PDU
 
 Sample application showcasing how to create and decode PDUs to be used with m2mb_sms_* API set. A SIM card and antenna must be present. Debug prints on **MAIN UART**
@@ -2889,6 +3303,9 @@ Sample application showing how to communicate over SPI with m2mb API. Debug prin
 
 - Send data on MOSI and read the same in MISO
 
+**Notes:**
+
+For LE910Cx (both Linux and ThreadX based devices), `AT#SPIEN=1` command must be sent once before running the app
 
 ![](pictures/samples/spi_echo_bordered.png)
 
@@ -2913,11 +3330,15 @@ Sample application showing SPI usage, configuring two ST devices: a magnetometer
 
 - Open USB/UART/UART_AUX
 - Open SPI bus, set parameters
-- Configure `GPIO 3` and `GPIO 4` as output, set them high (idle)
+- Configure `GPIO 2` and `GPIO 3` as output, set them high (idle)
 - Set registers to configure magnetometer
 - Read in a loop \(10 iterations\) the registers carrying the 3 axes values and show the gauss value for each of them. A metal object is put close to the sensor to change the read values.
 - Set registers to configure gyroscope
 - Read in a loop \(10 iterations\) the registers carrying the 3 axes values and show the degrees per second value for each of them. The board is rotated to change the read values.
+
+**Notes:**
+
+For LE910Cx (both Linux and ThreadX based devices), `AT#SPIEN=1` command must be sent once before running the app
 
 ![](pictures/samples/spi_sensors_bordered.png)
 
@@ -3262,7 +3683,7 @@ Sample application showcasing how to send data from main UART to a connected TCP
 
 **`M2MB_main.c`**
 
-- Open UART for data and UART_AUX for debug
+- Open UART for data and USB1 for debug
 - Init socket, activate PDP context and connect to server
 - Init UART, set its callback function, create tasks to handle input from UART and response from server (optional)
 - Send a confirmation on UART
@@ -3273,7 +3694,7 @@ Main UART:
 
 ![](pictures/samples/uart_to_server_main_bordered.png)
 
-Debug log on AUX UART:
+Debug log on USB1:
 
 ![](pictures/samples/uart_to_server_aux_bordered.png)
 
@@ -3425,9 +3846,12 @@ Sample application showing how use lfs2 porting with RAM disk and SPI data flash
 - Unmount and Release resources
 
 **Notes:**
+
 For SPI Flash a JSC memory is used with chip select pin connected to module GPIO2 pin.
 For better performances, a 33kOhm pull-down resistor on SPI clock is suggested.
 Please refer to SPI_echo sample app for SPI connection details.
+
+For LE910Cx (both Linux and ThreadX based devices), `AT#SPIEN=1` command must be sent once before running the app
 
 ![](pictures/samples/lfs2_ramdisk_bordered.png)
 ![](pictures/samples/lfs2_spiflash_01_bordered.png)
@@ -3678,6 +4102,133 @@ Sample application showing how to use AT Instance functionality (sending AT comm
 
 
 
+### AWS demo
+
+Sample application showcasing AWS Iot Core MQTT communication. Debug prints on **USB0**
+
+
+**Features**
+
+
+- How to check module registration and enable PDP context
+- How to load certificates into device SSL session storage
+- How to configure MQTT client parameters
+- How to connect to AWS server with SSL and exchange data over a topic
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Create a task to manage MQTT client and start it
+
+
+**`aws_demo.c`**
+
+- Initialize Network structure and check registration
+
+- Initialize PDP structure and start PDP context
+
+- Init MQTT client
+
+- Configure it with all parameters (Client ID, PDP context ID, keepalive timeout...)
+
+- Initialize the TLS parameters (TLS1.2) andh auth mode (server+client auth in the example)
+
+- Create SSL context
+
+- Read certificates files and store them
+
+- Connect MQTT client to broker
+- Subscribe to topic
+- Publish 10 messages with increasing counter
+- Print received message in mqtt_topc_cb function
+- Disconnect MQTT client and deinit it 
+
+- Disable PDP context
+
+
+### How to get started with AWS IoT
+
+- Go to [AWS console](https://aws.amazon.com/console/) and create an account if one is not available yet.
+- Go to **`IoT Core`** section
+- Go to **`Secure`** > **`Policies`** section
+- Create a new policy, which describes what the device will be allowed to do (e.g. subscribe, publish)
+- Give it a name, then configure it using the configuration below (it is possible to copy/paste by clicking on **`Add statements`** section, then **`Advanced mode`** ) :
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+  {
+    "Action": [
+      "iot:Publish",
+      "iot:Subscribe",
+      "iot:Connect",
+      "iot:Receive"
+    ],
+    "Effect": "Allow",
+    "Resource": [
+      "*"
+    ]
+  }
+  ]
+}
+```
+
+- Click on create to complete the policy creation.
+- Go to **`Manage`** section
+- Press **`Create`**, then **`Create a single thing`**
+- Give the new thing a name, then click on `Next`
+- Select **`One-click certificate creation (recommended)`** by clicking on **`Create certificate`**
+- Once presented with the **`Certificate created`** page, download all certificates and keys
+- Click on the **`Activate`** button to enable the certificate authentication of the newly created device
+- Click on **`Attach a policy`** and select the policy created in a previous step
+
+For further information, please refer to the full [AWS IoT documentation](https://docs.aws.amazon.com/iot/latest/developerguide/iot-console-signin.html)
+
+### Application setup
+
+- Set **`CLIENTCERTFILE`** and **`CLIENTKEYFILE`** defines in **`aws_demo.c file`** in order to match the certificate and key created in the previous section.
+- Set **`AWS_BROKER_ADDRESS`** to the correct AWS URL. It can be retrieved from AWS IoT **`Manage`** > **`Things`** > **`Interact`** in the HTTPS **`Rest API Endpoint`** URL. 
+- Set **`CLIENT_ID`** to the desired Client ID for your AWS device
+- (Optional) if required, change **`CACERTFILE`** to match the one to be used.
+
+### Device setup
+
+The application requires the certificates (provided in sample app **`certs`** subfolder ) to be stored in **`/mod/ssl_certs/`** folder. It can be created with 
+
+`AT#M2MMKDIR=/mod/ssl_certs`
+
+Certificates can then be loaded with
+
+`AT#M2MWRITE="/mod/ssl_certs/preload_CACert_01.crt",1468`
+`AT#M2MWRITE="/mod/ssl_certs/Amazon-IoT.crt",1646`
+
+providing the file content in RAW mode (for example using the "Transfer Data" button in Telit AT Controller)
+
+For client certificates, the commands will be
+
+```
+AT#M2MWRITE="/mod/ssl_certs/xxxxx.crt",yyyy
+AT#M2MWRITE="/mod/ssl_certs/xxxxx.key",zzzz
+```
+
+PLEASE NOTE: always verify the file sizes to be used in the commands above as they might change
+
+![](pictures/samples/aws_bordered.png)
+
+Data received from a subscriber:
+
+![](pictures/samples/aws2_bordered.png)
+
+---------------------
+
+
+
 ### App Manager
 
 Sample application showing how to manage AppZone apps from m2mb code. Debug prints on **USB0**
@@ -3867,6 +4418,15 @@ Sample application showcasing how to manage Elliptic Curve Cryptography function
 
 Sample application showing how to communicate with a MicroChip 24AA256T I2C EEPROM chip using azx eeprom utility APIs. Debug prints on **USB0**
 
+**Setup**
+
+This demo application requires that:
+- A0, A1, and A2 pins (1,2,3 chip pins) are connected to ground (pin 4) for device address 0xA0
+- Pin 7 (WP) is connected to ground
+- Pin 6 (SCL) is connected to module GPIO 3
+- Pin 5 (SDA) is connected to module GPIO 2
+- Pin 4 is connected to one of the ground pins of the module
+- Pin 8 is connected to 1v8 supply (e.g. VPWRMON pin on the module)
 
 **Features**
 
@@ -4178,6 +4738,37 @@ Sample application showing how to use GPIOs and interrupts. Debug prints on **US
 
 
 
+### General_INFO example 
+
+Sample application prints some Module/SIM information as IMEI, fw version, IMSI and so on; it prints also some information about registration. Debug prints on **USB0**
+
+
+**Features**
+
+
+- How to print some Module information as IMEI, FW version etc
+- How to print some SIM information as IMSI, ICCID
+- How to get and print some informatio about Module registration as Netowrk Operator, AcT, RSSI, etc
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+- Print welcome message
+- Init NET functionality
+- Init INFO functionality
+- Get and print Module and SIM info
+- Wait form module to register to network
+- Get and print registration INFO
+
+![](pictures/samples/general_INFO_bordered.png)
+
+---------------------
+
+
+
 ### HTTP Client
 
 Sample application showing how to use HTTPs client functionalities. Debug prints on **USB0**
@@ -4190,6 +4781,7 @@ Sample application showing how to use HTTPs client functionalities. Debug prints
 - How to initialize the http client, set the debug hook function and the data callback to manage incoming data
 - How to perform GET, HEAD or POST operations
 
+NOTE: the sample app has an optional dependency on azx_base64.h if basic authentication is required (refer to `HTTP_BASIC_AUTH_GET` define in `M2MB_main.c` for further details)
 
 **Application workflow**
 
@@ -4678,6 +5270,45 @@ Sample application showing mutex usage, with ownership and prioritization usage.
 
 
 
+### NTP example 
+
+The application connects to an NTP server, gets current date and time and updates module's internal clock. Debug prints on **USB0**
+
+
+**Features**
+
+
+- How to get current date and time from an NTP server
+- How to set current date and time on module
+
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+- Print welcome message
+- Send message to ntpTask
+
+**`ntp_task.c`**
+
+*NTP_task()*
+- Waits module registration
+- When module is registered, initializes ntp setting CID, server url and timeout
+- When PDP context is correctly opened, a query to NTP server is done to get current date and time
+- On SET_MODULE_RTC message type reception, module RTC is set with date time value got from NTP server.
+
+*m2mb_ntp_ind_callback()*
+- As soon as M2MB_NTP_VALID_TIME event is received, current date and time is printend and a message (with SET_MODULE_RTC type) is sent to NTP_task
+
+
+![](pictures/samples/NTP_bordered.png)
+
+---------------------
+
+
+
 ### SMS PDU
 
 Sample application showcasing how to create and decode PDUs to be used with m2mb_sms_* API set. A SIM card and antenna must be present. Debug prints on **USB0**
@@ -4774,6 +5405,9 @@ Sample application showing how to communicate over SPI with m2mb API. Debug prin
 
 - Send data on MOSI and read the same in MISO
 
+**Notes:**
+
+For LE910Cx (both Linux and ThreadX based devices), `AT#SPIEN=1` command must be sent once before running the app
 
 ![](pictures/samples/spi_echo_bordered.png)
 
@@ -4798,11 +5432,15 @@ Sample application showing SPI usage, configuring two ST devices: a magnetometer
 
 - Open USB/UART/UART_AUX
 - Open SPI bus, set parameters
-- Configure `GPIO 3` and `GPIO 4` as output, set them high (idle)
+- Configure `GPIO 2` and `GPIO 3` as output, set them high (idle)
 - Set registers to configure magnetometer
 - Read in a loop \(10 iterations\) the registers carrying the 3 axes values and show the gauss value for each of them. A metal object is put close to the sensor to change the read values.
 - Set registers to configure gyroscope
 - Read in a loop \(10 iterations\) the registers carrying the 3 axes values and show the degrees per second value for each of them. The board is rotated to change the read values.
+
+**Notes:**
+
+For LE910Cx (both Linux and ThreadX based devices), `AT#SPIEN=1` command must be sent once before running the app
 
 ![](pictures/samples/spi_sensors_bordered.png)
 
@@ -5242,9 +5880,12 @@ Sample application showing how use lfs2 porting with RAM disk and SPI data flash
 - Unmount and Release resources
 
 **Notes:**
+
 For SPI Flash a JSC memory is used with chip select pin connected to module GPIO2 pin.
 For better performances, a 33kOhm pull-down resistor on SPI clock is suggested.
 Please refer to SPI_echo sample app for SPI connection details.
+
+For LE910Cx (both Linux and ThreadX based devices), `AT#SPIEN=1` command must be sent once before running the app
 
 ![](pictures/samples/lfs2_ramdisk_bordered.png)
 ![](pictures/samples/lfs2_spiflash_01_bordered.png)

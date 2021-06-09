@@ -7,7 +7,7 @@
 
 /**
   @file azx_https.h
-  @version 1.0.1
+  @version 1.1.0
   @dependencies azx_string_utils gnu azx_base64
 
   @brief HTTPs client
@@ -195,6 +195,28 @@ typedef struct
 typedef INT32( *AZX_HTTPS_USER_CB )( void *, UINT32, INT8 * );
 
 
+/*!
+  @brief
+    User base 64 encoder function prototype
+
+  @details
+    This is the function signature (user must define one and pass it to the https_init if basic 
+    authentication is required
+
+  @param[out] output
+       allocated buffer that will contain the encoded credentials string
+  @param[in] input
+       Input credentials
+  @param[in] inputLen
+       the length in bytes of the input buffer
+    
+  <b>Refer to</b>
+  azx_https_get() 
+
+  @ingroup httpConf
+*/
+/*-----------------------------------------------------------------------------------------------*/
+typedef void (*user_base64_encode)( UINT8 *out, const UINT8 *in, int inlen );
 
 /*!
   @struct azx_httpCallbackOptions
@@ -248,7 +270,7 @@ typedef struct
   BOOLEAN        header_end;             /**< \internal */
   BOOLEAN        body_start;             /**< \internal */
   azx_httpCallbackOptions http_cb;    /**< \internal */
-
+  user_base64_encode user_b64encode;  /**< \internal */
   long       r_len;                   /**< \internal */
   long    r_size;                     /**< \internal */
   char      *w_buf;                   /**< \internal */

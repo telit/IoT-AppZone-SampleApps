@@ -14,7 +14,7 @@
     Sample application showcasing how to send data from main UART to a connected TCP server. Debug messages are printed on AUX UART port.
 
   @version 
-    1.0.2
+    1.0.3
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -395,8 +395,8 @@ INT32 socket_init(void)
       }
     }
 
-    /*Wait for network registration event to occur (released in NetCallback function) */
-    m2mb_os_ev_get(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_GET_ANY_AND_CLEAR, &curEvBits, M2MB_OS_WAIT_FOREVER);
+    /*Wait for pdp activation event to occur (released in PDPCallback function) */
+    m2mb_os_ev_get(net_pdp_evHandle, EV_PDP_BIT, M2MB_OS_EV_GET_ANY_AND_CLEAR, &curEvBits, M2MB_OS_WAIT_FOREVER);
 
     AZX_LOG_DEBUG("Creating Socket...\r\n");
 
@@ -548,7 +548,7 @@ void M2MB_main( int argc, char **argv )
 
   /*SET output channel */
 /*Set log configuration */
-  log_cfg.log_channel = AZX_LOG_TO_AUX_UART;
+  log_cfg.log_channel = AZX_LOG_TO_USB1;
   log_cfg.log_level = AZX_LOG_LEVEL_DEBUG; /*Enable debug messages*/
   log_cfg.log_colours = 0; /*Set to 1 to use coloured logs (not all terminals are compatible)*/
 

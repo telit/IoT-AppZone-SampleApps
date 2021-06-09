@@ -7,7 +7,7 @@
   "keywords": [
     "IoT AppZone",
     "SMS",
-	"AT"
+    "AT"
   ],
   "availability": {
     "MXXXXC1": {
@@ -21,24 +21,28 @@
     "MXXXXG1": {
       "firmwares": [
         "37.00.xx1",
-        "37.00.xx2"
+        "37.00.xx2",
+        "37.00.xx3"
       ]
     },
     "LE910Cx-L": {
       "firmwares": [
-        "25.20.xx8"
+        "25.20.xx8",
+        "25.20.xx9",
+        "25.21.xx0"
       ]
     },
     "LE910Cx-X": {
       "firmwares": [
-        "25.30.xx1"
+        "25.30.xx1",
+        "25.30.xx2"
       ]
     }
   },
   "groups": [
-    "MAIN_UART",
-    "AUX_UART",
-    "USB0"
+    {"name": "MAIN_UART", "limitations": []},
+    {"name": "AUX_UART", "limitations": ["LE910Cx-L"]},
+    {"name": "USB0", "limitations": []}
   ],
   "platform": "GCC",
   "license": "MIT",

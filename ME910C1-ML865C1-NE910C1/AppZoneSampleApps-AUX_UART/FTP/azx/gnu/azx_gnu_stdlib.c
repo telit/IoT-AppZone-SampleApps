@@ -52,7 +52,16 @@ void *azx_gnu_malloc(size_t size)
 
 void *azx_gnu_calloc(size_t nitems, size_t size)
 {
+#ifdef APP_NAME /*Emulator*/
+  void* p = m2mb_os_calloc(nitems * size);
+  if(p)
+  {
+    memset(p, 0, nitems * size);
+  }
+  return p;
+#else
 	return m2mb_os_calloc(nitems * size);
+#endif
 }
 
 void azx_gnu_free(void *ptr)

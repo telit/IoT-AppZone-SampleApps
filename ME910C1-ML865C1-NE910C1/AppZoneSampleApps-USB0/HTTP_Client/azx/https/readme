@@ -1,3 +1,3 @@
 @brief Library to provide HTTPS client functionalities
 @version 1.0.1
-@dependencies core/azx_string_utils core/azx_base64 libraries/gnu
+@dependencies core/azx_string_utils libraries/gnu

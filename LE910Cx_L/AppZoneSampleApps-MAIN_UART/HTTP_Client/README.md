@@ -11,6 +11,7 @@ Sample application showing how to use HTTPs client functionalities. Debug prints
 - How to initialize the http client, set the debug hook function and the data callback to manage incoming data
 - How to perform GET, HEAD or POST operations
 
+NOTE: the sample app has an optional dependency on azx_base64.h if basic authentication is required (refer to `HTTP_BASIC_AUTH_GET` define in `M2MB_main.c` for further details)
 
 **Application workflow**
 

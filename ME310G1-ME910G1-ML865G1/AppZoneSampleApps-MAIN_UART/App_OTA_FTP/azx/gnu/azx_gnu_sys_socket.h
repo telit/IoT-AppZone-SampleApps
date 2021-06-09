@@ -185,6 +185,7 @@ struct sockaddr_storage
 /**   Wrappers    **/
 
 /*-----------------------------------------------------------------------------------------------*/
+#ifndef __MINGW32__
 /**
   @brief
     get network host entry
@@ -209,7 +210,7 @@ struct sockaddr_storage
   @endcode
 */
 struct M2MB_SOCKET_BSD_HOSTENT *azx_gnu_gethostbyname( const char *name );
-
+#endif
 /*-----------------------------------------------------------------------------------------------*/
 /**
   @brief

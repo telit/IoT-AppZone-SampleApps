@@ -13,7 +13,7 @@
   @description
     Sample application showing how to communicate over SPI with m2mb API. Debug prints on MAIN UART
   @version 
-    1.0.1
+    1.0.2
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -103,7 +103,7 @@ void M2MB_main( int argc, char **argv )
   
   cfg.spi_mode = M2MB_SPI_MODE_0; //clock idle LOW, data driven on falling edge and sampled on rising edge
   cfg.cs_polarity = M2MB_SPI_CS_ACTIVE_LOW;
-  cfg.cs_mode = M2MB_SPI_CS_KEEP_ASSERTED; //M2MB_SPI_CS_DEASSERT;
+  cfg.cs_mode = M2MB_SPI_CS_DEASSERT;
   cfg.endianness = M2MB_SPI_NATIVE; //M2MB_SPI_LITTLE_ENDIAN; //M2MB_SPI_BIG_ENDIAN;
   cfg.callback_fn = NULL;
   cfg.callback_ctxt = NULL; 

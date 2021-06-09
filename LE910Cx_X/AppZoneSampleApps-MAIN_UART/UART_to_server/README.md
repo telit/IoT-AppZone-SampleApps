@@ -16,7 +16,7 @@ Sample application showcasing how to send data from main UART to a connected TCP
 
 **`M2MB_main.c`**
 
-- Open UART for data and UART_AUX for debug
+- Open UART for data and USB1 for debug
 - Init socket, activate PDP context and connect to server
 - Init UART, set its callback function, create tasks to handle input from UART and response from server (optional)
 - Send a confirmation on UART
@@ -27,7 +27,7 @@ Main UART:
 
 ![](../../pictures/samples/uart_to_server_main_bordered.png)
 
-Debug log on AUX UART:
+Debug log on USB1:
 
 ![](../../pictures/samples/uart_to_server_aux_bordered.png)
 

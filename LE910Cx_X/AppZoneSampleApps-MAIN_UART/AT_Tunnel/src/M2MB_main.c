@@ -13,7 +13,7 @@
   @description
     Sample application showcasing how to perform an AT tunnel from Main UART to an AT instance. Debug prints on **USB1**.
   @version 
-    1.0.1
+    1.0.2
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -114,11 +114,14 @@ static INT32 msgUARTTask(INT32 type, INT32 param1, INT32 param2)
     }
 
     AZX_LOG_DEBUG("Received: <%.*s>\r\n", rsp_len, inBuf);
-    written = m2mb_uart_write( main_uart_fd, inBuf, (SIZE_T)rsp_len);
-    if(written == -1)
+    if(rsp_len > 0)
     {
-      AZX_LOG_ERROR("failed writing in uart!\r\n");
-      return -1;
+      written = m2mb_uart_write( main_uart_fd, inBuf, (SIZE_T)rsp_len);
+      if(written == -1)
+      {
+        AZX_LOG_ERROR("failed writing in uart!\r\n");
+        return -1;
+      }
     }
     break;
 
