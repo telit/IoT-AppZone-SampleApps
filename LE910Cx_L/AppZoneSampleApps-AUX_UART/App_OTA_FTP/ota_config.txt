@@ -1,8 +1,0 @@
-internet,#APN
-ftp.telit.com,#FTP SERVER URL
-21,#FTP SERVER PORT
-user,#FTP USERNAME
-pass,#FTP PASSWORD
-/m2mapz.bin,#NEW APP REMOTE FULL URI 
-mylocalapp.bin,#NEW APP LOCAL NAME
-m2mapz-orig.bin,#ORIGINAL APP LOCAL NAME

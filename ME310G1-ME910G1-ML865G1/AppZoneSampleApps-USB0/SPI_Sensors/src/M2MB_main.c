@@ -13,7 +13,7 @@
   @description
     Sample application showing SPI usage, configuring two ST devices: a magnetometer \(ST LIS3MDL\) and a gyroscope \(ST L3G4200D\). The application will read values from both devices using GPIO4 and 3 \(respectively\) as magnetometer CS and gyro CS. Debug prints on USB0
   @version 
-    1.0.1
+    1.0.2
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -56,7 +56,7 @@
 #define ST_MS_BIT 1<<6 //multiple send
 
 //ST Magnetometer defines
-#define ST_LIS3MDL_CS_PIN 4  //gpio 4
+#define ST_LIS3MDL_CS_PIN 2  //gpio 2
 #define ST_LIS3MDL_WHOAMI 0x0F
 
 #define ST_LIS3MDL_OUT_X_L 0x28
@@ -98,7 +98,8 @@
   TX_AUX/MOSI        | PL303/1         | SDI
   RX_AUX/MISO         | PL303/2         | SDO
   SPI_CLK            | PL303/3         | SCK
-  GPIO3              | PL302/3         | CS
+  GPIO2              | PL302/2         | CS for Magnetometer
+  GPIO3              | PL302/3         | CS for Gyroscope
   GND                | PL303/10        | BLACK
   V3.8               | PL101/9         | RED
   #####################################################################
@@ -135,20 +136,21 @@ INT32 M2M_open_gpio_output(int pin)
     ret = m2mb_gpio_ioctl( gpio_fd, M2MB_GPIO_IOCTL_SET_DIR, M2MB_GPIO_MODE_OUTPUT );
     if ( ret == -1 )
     {
-
+      AZX_LOG_CRITICAL("cannot set as output\r\n");
       return -1;
     }
+
+    ret = m2mb_gpio_ioctl( gpio_fd, M2MB_GPIO_IOCTL_SET_DRIVE, M2MB_GPIO_LOW_DRIVE );
+     if ( ret == -1 )
+     {
+       AZX_LOG_CRITICAL("cannot set medium drive\r\n");
+       return -1;
+     }
 
     ret = m2mb_gpio_ioctl( gpio_fd, M2MB_GPIO_IOCTL_SET_PULL, M2MB_GPIO_PULL_UP );
     if ( ret == -1 )
     {
-
-      return -1;
-    }
-
-    ret = m2mb_gpio_ioctl( gpio_fd, M2MB_GPIO_IOCTL_SET_DRIVE, M2MB_GPIO_MEDIUM_DRIVE );
-    if ( ret == -1 )
-    {
+      AZX_LOG_CRITICAL("cannot set pullup\r\n");
       return -1;
     }
 
@@ -156,7 +158,7 @@ INT32 M2M_open_gpio_output(int pin)
   }
   else
   {
-
+    AZX_LOG_CRITICAL("cannot open path\r\n");
     return -1;
   }
 
@@ -165,8 +167,9 @@ INT32 M2M_open_gpio_output(int pin)
 
 int M2M_gpio_set(INT32 fd, int value)
 {
-  if(fd < 0)
+  if(fd == -1)
   {
+    AZX_LOG_ERROR("fd invalid\r\n");
     return -1;
   }
   return m2mb_gpio_write( fd, (M2MB_GPIO_VALUE_E) value );
@@ -656,7 +659,7 @@ int SPI_demo(void)
 
   cfg.spi_mode = M2MB_SPI_MODE_0; //clock idle LOW, data driven on falling edge and sampled on rising edge
   cfg.cs_polarity = M2MB_SPI_CS_ACTIVE_LOW;
-  cfg.cs_mode = M2MB_SPI_CS_KEEP_ASSERTED; //M2MB_SPI_CS_DEASSERT;
+  cfg.cs_mode = M2MB_SPI_CS_DEASSERT;
   cfg.endianness = M2MB_SPI_NATIVE; //M2MB_SPI_LITTLE_ENDIAN; //M2MB_SPI_BIG_ENDIAN;
   cfg.callback_fn = NULL;
   cfg.callback_ctxt = (void *)userdata; //NULL;

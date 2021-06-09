@@ -1,3 +1,0 @@
-@brief Porting of cJSON library
-@version 1.0.1
-@dependencies core/azx_log 

@@ -1,1 +1,0 @@
-The application prints "Hello World!" on Auxiliary UART every 2 seconds using

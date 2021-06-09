@@ -11,7 +11,7 @@
   @details
 
   @version 
-    1.0.3
+    1.0.4
 
   @note
 
@@ -44,7 +44,6 @@
 
 
 /* Local defines ================================================================================*/
-#define IP_SERVER "213.82.124.164"
 #define MY_SERVER_LISTEN_PORT 	(UINT16)6500
 
 #define APN	    "ibox.tim.it"

@@ -1,0 +1,78 @@
+var azx__spi__flash__hw__external_8h =
+[
+    [ "AZX_SPI_FLASH_SPI_SLAVE", "struct_a_z_x___s_p_i___f_l_a_s_h___s_p_i___s_l_a_v_e.html", "struct_a_z_x___s_p_i___f_l_a_s_h___s_p_i___s_l_a_v_e" ],
+    [ "AZX_SPI_FLASH_DESCRIPTOR", "struct_a_z_x___s_p_i___f_l_a_s_h___d_e_s_c_r_i_p_t_o_r.html", "struct_a_z_x___s_p_i___f_l_a_s_h___d_e_s_c_r_i_p_t_o_r" ],
+    [ "__CS1467G__", "azx__spi__flash__hw__external_8h.html#a2f01c4e0ddfb139e7d2370ed22246086", null ],
+    [ "SPI_FLASH_JS28P1GQSCAHG_CS_GPIO", "azx__spi__flash__hw__external_8h.html#ae0ed8056d1818f56f370214da2204d8e", null ],
+    [ "SPI_OPM_RX_DUAL", "azx__spi__flash__hw__external_8h.html#aaf0e0ddbda5e076eb92c1bcf2a955a83", null ],
+    [ "SPI_OPM_RX_QUAD", "azx__spi__flash__hw__external_8h.html#a30ebabd8032d7ed8178d4f4fc675801f", null ],
+    [ "SPI_OPM_RX_SING", "azx__spi__flash__hw__external_8h.html#a31e89ab2d83c013ebccd0acdeab761bc", null ],
+    [ "SPI_OPM_TX_QUAD", "azx__spi__flash__hw__external_8h.html#a924fd752855ddeae4dbda7c41814b06c", null ],
+    [ "SPI_OPM_TX_SING", "azx__spi__flash__hw__external_8h.html#a537e2ae35a55fa47e6c2c4aebf3f6f02", null ],
+    [ "SPI_XFER_BEGIN", "azx__spi__flash__hw__external_8h.html#aef07b3b113087d735c9229f6c381c60a", null ],
+    [ "SPI_XFER_DUAL", "azx__spi__flash__hw__external_8h.html#a7e4e3c62a3f048003df93efd7c5f269a", null ],
+    [ "SPI_XFER_END", "azx__spi__flash__hw__external_8h.html#aa344d49e0031dafdc610dc211a8db8eb", null ],
+    [ "SPI_XFER_QUAD", "azx__spi__flash__hw__external_8h.html#a754dcc8ec65ea7fb615ebbc0f990243e", null ],
+    [ "AZX_SPI_FLASH_CODE_RESULT_E", "azx__spi__flash__hw__external_8h.html#a8b37f6597f46f59b8a4e1412a64da631", null ],
+    [ "SPI_FLASH_CODE_RESULT_E", "azx__spi__flash__hw__external_8h.html#a8443fcf9d673c50e9135db31781c708e", null ],
+    [ "AZX_SPI_FLASH_CODE_RESULT", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0", [
+      [ "AZX_SPI_FLASH_CODE_PASS", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0a55503797a75232b6ea0fda0a5c0add0b", null ],
+      [ "AZX_SPI_FLASH_CODE_FAIL", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0aba5b1f0b516ac8d24cea603d09d83910", null ],
+      [ "AZX_SPI_FLASH_CODE_FLASH_SIZE_OVERFLOW", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0a1ea1323553ace521e7db564a00855267", null ],
+      [ "AZX_SPI_FLASH_CODE_WRONG_ADDRESS", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0a5718ca92bf02e8a0ee7cccfa478460f8", null ],
+      [ "AZX_SPI_FLASH_CODE_DIFFERENT_PAGES", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0a97b56e7d579ccbb9ae1c1f0405ae53da", null ],
+      [ "AZX_SPI_FLASH_CODE_WRITE_PROTECTED", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0ade635da0cd9e14bfb705472c704d9bed", null ],
+      [ "AZX_SPI_FLASH_CODE_UNLOCKED_BLOCK", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0a7f47815a4f99bae7080402a946a63cda", null ],
+      [ "AZX_SPI_FLASH_CODE_LOCKED_BLOCK", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0a6231b38182f30f4af643ba5c9aacebb5", null ],
+      [ "AZX_SPI_FLASH_CODE_LOCK_DOWN", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0aef95ad68ce707b0b57300c1684d20696", null ],
+      [ "AZX_SPI_FLASH_CODE_CACHE_READ_NOT_POSSIBLE", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0a225189ac11629e89cd4363548176c6b8", null ],
+      [ "AZX_SPI_FLASH_CODE_OPERATION_NOT_ALLOWED", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0a0e311d48f5cbe947bea808c208e4d410", null ],
+      [ "AZX_SPI_FLASH_CODE_INVALID_ARGUMENT", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0af3879835d576e8deaa3e16b2fd3bdad5", null ],
+      [ "AZX_SPI_FLASH_CODE_TIMEDOUT", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0a2985a0cccbc076b75c04764814c5d2aa", null ],
+      [ "AZX_SPI_FLASH_CODE_MALLOC_FAIL", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0ab06860a3b4f0088cd1a2e6f494433682", null ],
+      [ "AZX_SPI_FLASH_CODE_INVALID_COMMAND", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0ad3a7a832da77ab4ee282bd89830055c0", null ],
+      [ "AZX_SPI_FLASH_CODE_SPI_WRITE_FAIL", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0a5103b437ae9be7c764ba3af5b9fd404c", null ],
+      [ "AZX_SPI_FLASH_CODE_SPI_READ_FAIL", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0ad3e95ae151b1ef07b99b86e81703d852", null ],
+      [ "AZX_SPI_FLASH_CODE_EIO", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0a8e8e8deabf2bde1ff9ab8b8e5241c2d4", null ],
+      [ "AZX_SPI_FLASH_CODE_ENOMEM", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0a8c3c01b5d50cd90681c7b69b2aa7744e", null ],
+      [ "AZX_SPI_FLASH_CODE_ENODEV", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0a943f1a23f6ddd95f146baa0301b783ad", null ],
+      [ "AZX_SPI_FLASH_CODE_EINVAL", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0a7cbe15d94cda9af0fe9387a99283e683", null ],
+      [ "AZX_SPI_FLASH_CODE_EBADMSG", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0a10b8be8e4fec11ae45e9995a47b50aca", null ],
+      [ "AZX_SPI_FLASH_CODE_ETIMEDOT", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0aac2bc849926a9e9cc6f289b8ed18acc4", null ],
+      [ "AZX_SPI_FLASH_CODE_EUCLEAN", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0a341b627c40e1866e3af07bc92d69878f", null ],
+      [ "AZX_SPI_FLASH_CODE_ENOTSUPP", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0af3400daf9a766ee75b210177d8b861f2", null ],
+      [ "AZX_SPI_FLASH_CODE_SPI_INIT_FAIL", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0aef416d06618ae6037aa6a18536d6a190", null ],
+      [ "AZX_SPI_FLASH_CODE_GPIO_INIT_FAIL", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0a1c32f465e43eb8412fd26851fe6e51ec", null ],
+      [ "AZX_SPI_FLASH_CODE_INVALID_MEMORY_MODEL", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0ac3394591e65c66665027c55a8be85ba7", null ],
+      [ "AZX_SPI_FLASH_CODE_NOT_INITIALIZED", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0a8b5c85e550298eb0e1e6c593481c444d", null ],
+      [ "AZX_SPI_FLASH_CODE_RESET_FAIL", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0a8ba3bbb0597ac8afc4a24c963a82584c", null ],
+      [ "AZX_SPI_FLASH_CODE_ECC_FAIL", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0afebc34a027d1fdcbef98c103122d2431", null ],
+      [ "AZX_SPI_FLASH_CODE_QUAD_FAIL", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0a72c288c9477ff3cf377e6424f92c111b", null ],
+      [ "AZX_SPI_FLASH_CODE_FREE_FAIL", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0ad41d160b0f3857a236109a74af6b4a2b", null ],
+      [ "AZX_SPI_FLASH_CODE_BAD_UID", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0a03c84d5dcb4ac88c5be9f5bcab87fed1", null ],
+      [ "AZX_SPI_FLASH_CODE_PARAMETER", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0a3885cd092bbd12a3856b567e480ad30f", null ],
+      [ "AZX_SPI_FLASH_CODE_ONFI", "azx__spi__flash__hw__external_8h.html#ac90d9642eb8941dc8bf5900c889168d0a701c914a58fb1c21a91375ba3d19fef4", null ]
+    ] ],
+    [ "AZX_SPI_FLASH_GPIO_VALUE_E", "azx__spi__flash__hw__external_8h.html#aed69b1b2bb3cdc4a03d3416545b2be0c", [
+      [ "LOW_VALUE", "azx__spi__flash__hw__external_8h.html#aed69b1b2bb3cdc4a03d3416545b2be0ca17aa21e3d314621b5040b6732f7a02e8", null ],
+      [ "HIGH_VALUE", "azx__spi__flash__hw__external_8h.html#aed69b1b2bb3cdc4a03d3416545b2be0ca231d7fdbca0a646b9206e4c8cb5f9619", null ]
+    ] ],
+    [ "AZX_SPI_FLASH_LOG_HOOK_LEVELS_E", "azx__spi__flash__hw__external_8h.html#a970c1d509d2d3328b7f92d094eb31638", [
+      [ "AZX_SPI_FLASH_LOG_LEVEL_NONE", "azx__spi__flash__hw__external_8h.html#a970c1d509d2d3328b7f92d094eb31638afafed77006d842f30bdf6fc64b136267", null ],
+      [ "AZX_SPI_FLASH_LOG_LEVEL_ERROR", "azx__spi__flash__hw__external_8h.html#a970c1d509d2d3328b7f92d094eb31638a5a1af7a33326bf86acc4aeb0c4f629a0", null ],
+      [ "AZX_SPI_FLASH_LOG_LEVEL_INFO", "azx__spi__flash__hw__external_8h.html#a970c1d509d2d3328b7f92d094eb31638af8ddf1501237dfb358f6f258f03f5ab8", null ],
+      [ "AZX_SPI_FLASH_LOG_LEVEL_DEBUG", "azx__spi__flash__hw__external_8h.html#a970c1d509d2d3328b7f92d094eb31638a25a723b5a93417bce7b79733debb36cc", null ]
+    ] ],
+    [ "SPI_FLASH_CODE_RESULT", "azx__spi__flash__hw__external_8h.html#a86bd3d46e237918358c2167c21aff08b", [
+      [ "SPI_FLASH_CODE_PASS", "azx__spi__flash__hw__external_8h.html#a86bd3d46e237918358c2167c21aff08bad70101357ea6060c859c686f69f19ff4", null ],
+      [ "SPI_FLASH_CODE_FAIL", "azx__spi__flash__hw__external_8h.html#a86bd3d46e237918358c2167c21aff08ba5dabb6cbc1f2cf77adf09b1d03275d8f", null ],
+      [ "SPI_FLASH_CODE_MALLOC_FAIL", "azx__spi__flash__hw__external_8h.html#a86bd3d46e237918358c2167c21aff08ba003937c107a83de367f4deb73d9c57e9", null ]
+    ] ],
+    [ "SPI_FLASH_LOG_HOOK_LEVELS_E", "azx__spi__flash__hw__external_8h.html#acf571d297920367214835922a78fb95c", [
+      [ "SPI_FLASH_LOG_LEVEL_NONE", "azx__spi__flash__hw__external_8h.html#acf571d297920367214835922a78fb95ca79cc6b877eb49f5c4d6beb9d8fa168f1", null ],
+      [ "SPI_FLASH_LOG_LEVEL_ERROR", "azx__spi__flash__hw__external_8h.html#acf571d297920367214835922a78fb95ca8c155cf062b070fd6eda798bf5427ed5", null ],
+      [ "SPI_FLASH_LOG_LEVEL_INFO", "azx__spi__flash__hw__external_8h.html#acf571d297920367214835922a78fb95caa01f15376a15963e900258cd4f2efb67", null ],
+      [ "SPI_FLASH_LOG_LEVEL_DEBUG", "azx__spi__flash__hw__external_8h.html#acf571d297920367214835922a78fb95ca6d5d2421d04142dcc435bb95e5f95a5a", null ]
+    ] ],
+    [ "SPI_FLASH_logFormatted", "azx__spi__flash__hw__external_8h.html#a36d39e4288b3fc5239e8810adde0e24d", null ]
+];

@@ -16,14 +16,16 @@
 #include "m2mb_os.h"
 #include "m2mb_socket.h"
 #include "m2mb_ssl.h"
+#include "m2mb_fs_posix.h"
 
 
 #include "azx_log.h"
+#include "azx_gnu_sys_time.h"
+#include "azx_gnu_sys_types.h"
 #include "azx_gnu_sys_socket.h"
 #include "m2mb_fs_posix.h"
 
 #include "azx_string_utils.h"
-#include "azx_base64.h"
 
 #include "azx_https.h"
 
@@ -238,9 +240,18 @@ static int https_init( AZX_HTTP_INFO *hi, char *url )
 
   if( strlen( auth_credentials ) )
   {
-    azx_base64Encoder( ( unsigned char * )hi->url.auth_credentials,
+    if (hi->user_b64encode != NULL)
+    {
+      hi->user_b64encode( ( unsigned char * )hi->url.auth_credentials,
                        ( const unsigned char * )auth_credentials, strlen( auth_credentials ) );
-    AZX_HTTP_LOG(AZX_HTTP_LOG_DEBUG, "\nCredentials (B64): %s\n\r",hi->url.auth_credentials);
+      AZX_HTTP_LOG(AZX_HTTP_LOG_DEBUG, "\nCredentials (B64): %s\n\r",hi->url.auth_credentials);
+    }
+    else
+    {
+      https_close( hi );
+      return -1;
+    }
+    
   }
 
   AZX_HTTP_LOG(AZX_HTTP_LOG_INFO, "Connecting to %s:%d/%s\n\r", hi->url.host, hi->url.port, hi->url.path );

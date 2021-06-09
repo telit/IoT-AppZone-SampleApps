@@ -1,1 +1,0 @@
-Sample application showcasing Easy AT functionalities. Debug prints on AUX UART

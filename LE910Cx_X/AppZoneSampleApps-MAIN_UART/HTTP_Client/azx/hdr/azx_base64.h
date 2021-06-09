@@ -1,16 +1,13 @@
-/*Copyright (C) 2020 Telit Communications S.p.A. Italy - All Rights Reserved.*/
-/*    See LICENSE file in the project root for full license information.     */
-
-
 /**
   @file
     azx_base64.h
-  @version 1.0.0
+  @version 1.1.0
   @dependencies 
 
   @brief Base64 utilities
   @details
-    Porting of base64 de/encoder
+    Porting of base64 de/encoder from https://sources.debian.org/src/fetchmail/6.4.16-1/base64.c
+    refer to COPYING-base64 file in this folder for attributions
 
   @note
     Dependencies:
@@ -30,26 +27,7 @@
 #define HDR_AZX_BASE64_H_
 
 /* Global declarations =======================================================*/
-/** @cond PRIVATE */
-// Base 64 Related
-#define AZX_DECODE64(c)  (isascii(c) ? base64val[c] : AZX_B64_BAD)
-#define AZX_B64_BAD     -1
 
-static const char base64digits[] =
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-
-static const signed char base64val[] =
-{
-  AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD,
-  AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD,
-  AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, 62, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, 63,
-  52, 53, 54, 55,  56, 57, 58, 59,  60, 61, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD,
-  AZX_B64_BAD,  0,  1,  2,   3,  4,  5,  6,   7,  8,  9, 10,  11, 12, 13, 14,
-  15, 16, 17, 18,  19, 20, 21, 22,  23, 24, 25, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD,
-  AZX_B64_BAD, 26, 27, 28,  29, 30, 31, 32,  33, 34, 35, 36,  37, 38, 39, 40,
-  41, 42, 43, 44,  45, 46, 47, 48,  49, 50, 51, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD, AZX_B64_BAD
-};
-/** @endcond */
 
 
 /* Global typedefs ===========================================================*/

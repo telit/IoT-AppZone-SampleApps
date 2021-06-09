@@ -14,7 +14,7 @@
     Sample application showcasing how to receive an SMS containing an AT command, process the AT command and send its answer to sender (configurable in sms_config.txt). A SIM card and antenna must be present. Debug prints on MAIN UART
 
   @version 
-    1.0.2
+    1.0.3
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -271,5 +271,13 @@ void M2MB_main( int argc, char **argv )
    //waiting for an incoming SMS
 	AZX_LOG_INFO("Please send an SMS with a configuration as (\"ATCMD: <atcmd>\")...\r\n");
 
+#ifdef LE910CXL
+  /* On Linux based LE910CX Linux, the end fo M2MB_main causes the return of the application. 
+  Add a loop to allow reception of messages*/
+  while(1)
+  {
+    azx_sleep_ms(1000);
+  }
+#endif
 }
 

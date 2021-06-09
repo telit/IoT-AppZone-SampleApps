@@ -1,3 +1,0 @@
-@brief gnu abstraction layer utility in azx style
-@version 0.0.2
-@dependencies core/azx_log 

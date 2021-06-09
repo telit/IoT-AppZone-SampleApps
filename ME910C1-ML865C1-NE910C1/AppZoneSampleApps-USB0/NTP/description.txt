@@ -1,0 +1,1 @@
+The application connects to an NTP server, gets current date and time and updates module's internal clock. Debug prints on USB0

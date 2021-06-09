@@ -13,7 +13,7 @@
   @description
     Sample application showing how to use HTTPs client functionalities. Debug prints on MAIN UART
   @version 
-    1.0.0
+    1.1.0
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -52,6 +52,7 @@
 #include "app_cfg.h"
 
 #include "azx_https.h"
+#include "azx_base64.h" //for azx_base64encoder
 
 #define APN "internet"
 #define CID (UINT8)3
@@ -375,6 +376,7 @@ INT32 httpTaskCB(INT32 type, INT32 param1, INT32 param2)
 
 #if HTTP_BASIC_AUTH_GET
   hi.request.auth_type = azx_AuthSchemaBasic;
+  hi.user_b64encode = azx_base64Encoder;
   ret = azx_http_get(&hi,"http://guest:guest@jigsaw.w3.org/HTTP/Basic/");         //BASIC AUTH
 #endif
   AZX_LOG_INFO("\r\nDone.\r\n");

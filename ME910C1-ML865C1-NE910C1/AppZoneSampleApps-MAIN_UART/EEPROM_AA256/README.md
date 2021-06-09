@@ -3,6 +3,15 @@
 
 Sample application showing how to communicate with a MicroChip 24AA256T I2C EEPROM chip using azx eeprom utility APIs. Debug prints on **MAIN UART**
 
+**Setup**
+
+This demo application requires that:
+- A0, A1, and A2 pins (1,2,3 chip pins) are connected to ground (pin 4) for device address 0xA0
+- Pin 7 (WP) is connected to ground
+- Pin 6 (SCL) is connected to module GPIO 3
+- Pin 5 (SDA) is connected to module GPIO 2
+- Pin 4 is connected to one of the ground pins of the module
+- Pin 8 is connected to 1v8 supply (e.g. VPWRMON pin on the module)
 
 **Features**
 
