@@ -81,7 +81,7 @@
 #define PUB_MESSAGE "Hello from M2MB MQTT!"
 
 /* PDP configuration */
-#define APN      "ibox.tim.it"
+#define APN      "web.omnitel.it"
 
 #define PDP_CTX   3
 

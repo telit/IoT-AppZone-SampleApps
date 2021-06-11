@@ -54,7 +54,7 @@
 #include "azx_https.h"
 #include "azx_base64.h" //for azx_base64encoder
 
-#define APN "internet"
+#define APN "web.omnitel.it"
 #define CID (UINT8)3
 
 

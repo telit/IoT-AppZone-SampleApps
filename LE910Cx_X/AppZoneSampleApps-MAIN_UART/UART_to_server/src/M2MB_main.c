@@ -50,7 +50,7 @@
 
 /* Local defines ================================================================================*/
 
-#define APN          "internetm2m.air.com"
+#define APN          "web.omnitel.it"
 #define SERVER       "modules.telit.com"
 #define SERVER_PORT  10510
 

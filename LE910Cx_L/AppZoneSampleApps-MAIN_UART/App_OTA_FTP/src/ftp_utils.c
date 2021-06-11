@@ -36,7 +36,7 @@
 
 
 /* Macro =============================================================================*/
-#define APN     "internet"
+#define APN     "web.omnitel.it"
 #define PDP_CTX (UINT8)3
 
 #define FTP_ADDR "server"

@@ -13,7 +13,7 @@
   @description
     Sample application showcasing FOTA usage with M2MB API. Debug prints on MAIN UART
   @version 
-    1.0.4
+    1.0.5
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()

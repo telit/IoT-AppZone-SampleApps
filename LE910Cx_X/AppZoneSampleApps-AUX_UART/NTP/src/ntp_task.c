@@ -41,7 +41,7 @@
 #include "app_cfg.h"
 
 /* Local defines ================================================================================*/
-#define APN      "operator_apn"
+#define APN      "web.omnitel.it"
 #define PDP_CTX 3
 
 #define EV_NET_BIT         (UINT32)0x1    /*0x0000000000000001*/

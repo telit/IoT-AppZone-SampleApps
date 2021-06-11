@@ -47,7 +47,7 @@
 #define SERVER "modules.telit.com"
 #define SERVER_PORT 10510
 
-#define APN      "internetm2m.air.com"
+#define APN      "web.omnitel.it"
 #define PDP_CTX   (UINT8)3
 
 
