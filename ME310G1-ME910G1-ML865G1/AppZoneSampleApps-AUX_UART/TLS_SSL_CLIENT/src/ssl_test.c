@@ -83,7 +83,7 @@
 #endif
 
 
-#define APN      "internetm2m.air.com"
+#define APN      "web.omnitel.it"
 
 #define PDP_CTX   (UINT8)3
 

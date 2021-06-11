@@ -46,7 +46,7 @@
 /* Local defines ================================================================================*/
 #define MY_SERVER_LISTEN_PORT 	(UINT16)6500
 
-#define APN	    "ibox.tim.it"
+#define APN	    "web.omnitel.it"
 #define PDP_CTX 	(UINT8)3
 
 

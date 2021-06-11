@@ -11,7 +11,7 @@
   @details
   
   @version 
-    1.0.2
+    1.0.3
   @note
   
 
@@ -51,14 +51,14 @@
 #include "app_cfg.h" /*FOR LOCALPATH define*/
 
 /* Macro =============================================================================*/
-#define APN  "internet.wind.biz"
+#define APN  "web.omnitel.it"
 #define PDP_CTX (UINT8)3
 
-#define FTP_SERVER "x.x.x.x"
-#define FTP_SERVER_PORT 21
+#define FTP_ADDR "x.x.x.x"
+#define FTP_PORT AZX_FTP_DEFAULT_PORTNUM
 
-#define server_user "user"
-#define server_password "password"
+#define FTP_USER "user"
+#define FTP_PASS "password"
 
 #define FILE_URI "file/remote/path/delta.bin"
 #define SESSION_FILE  LOCALPATH "/ota_done"
@@ -66,12 +66,13 @@
 /* Global variables =============================================================================*/
 M2MB_FOTA_HANDLE fota_handle;
 
-M2MB_PDP_HANDLE pdpHandle;
+M2MB_PDP_HANDLE pdpHandle = NULL;
 M2MB_FOTA_FTP_CFG_T fotaDwFtp;
 
 extern INT32 fota_task_id;
 extern INT32 main_task_id;
 
+static M2MB_OS_EV_HANDLE net_pdp_evHandle = NULL;
 
 
 /* Global functions =============================================================================*/
@@ -124,11 +125,11 @@ void NetCallback(M2MB_NET_HANDLE h, M2MB_NET_IND_E net_event, UINT16 resp_size, 
 
     case M2MB_NET_GET_REG_STATUS_INFO_RESP:
       stat_info = (M2MB_NET_REG_STATUS_T*)resp_struct;
-      //PrintToUart("GET NET status resp is STAT: %d, RAT: %d, SRVDOMAIN: %d, AREA CODE: 0x%X, CELL ID: 0x%X\r\n", stat_info->stat, stat_info->rat, stat_info->srvDomain, stat_info->areaCode, stat_info->cellID);
-      if  (stat_info->stat == 1)
+      //AZX_LOG_DEBUG("GET NET status resp is STAT: %d, RAT: %d, SRVDOMAIN: %d, AREA CODE: 0x%X, CELL ID: 0x%X\r\n", stat_info->stat, stat_info->rat, stat_info->srvDomain, stat_info->areaCode, stat_info->cellID);
+      if  (stat_info->stat == 1 || stat_info->stat == 5)
       {
-        AZX_LOG_DEBUG("Module is registered to cell 0x%X!\r\n", stat_info->cellID);
-        azx_tasks_sendMessageToTask(main_task_id,REGISTERED,0,0);
+        AZX_LOG_DEBUG("Module is registered to network\r\n");
+        m2mb_os_ev_set(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_SET);
       }
       break;
 
@@ -157,7 +158,7 @@ void PdpCallback(M2MB_PDP_HANDLE h, M2MB_PDP_IND_E pdp_event, UINT8 cid, void *u
       break;
 
     case M2MB_PDP_DOWN:
-      AZX_LOG_TRACE ("Context deactivated\r\n");
+      AZX_LOG_TRACE ("Context deactivate\r\n");
       break;
     default:
       AZX_LOG_DEBUG("unexpected pdp_event: %d\r\n", pdp_event);
@@ -215,7 +216,11 @@ INT32 fotaTask(INT32 type, INT32 param1, INT32 param2)
       else
       {
         AZX_LOG_TRACE("m2mb_fota_init PASS\r\n");
+#ifndef LE910CXL
         azx_tasks_sendMessageToTask(fota_task_id,RESET,0,0);
+#else
+        azx_tasks_sendMessageToTask(main_task_id, INIT,0,0);
+#endif
       }
       break;
 
@@ -262,9 +267,9 @@ INT32 fotaTask(INT32 type, INT32 param1, INT32 param2)
       //FTP
       fotaDwFtp.socketCfg.cid = PDP_CTX;
       fotaDwFtp.socketCfg.cid_active = false;
-      sprintf( fotaDwFtp.sessionCfg.URI, "%s/%s", FTP_SERVER, FILE_URI );
-      sprintf( fotaDwFtp.sessionCfg.user, "%s", server_user );
-      sprintf( fotaDwFtp.sessionCfg.psw, "%s", server_password );
+      sprintf( fotaDwFtp.sessionCfg.URI, "%s/%s", FTP_ADDR, FILE_URI );
+      sprintf( fotaDwFtp.sessionCfg.user, "%s", FTP_USER );
+      sprintf( fotaDwFtp.sessionCfg.psw, "%s", FTP_PASS );
       fotaDwFtp.sessionCfg.passiveMode = true;
       fotaDwFtp.sessionCfg.timeout = 5000;  //hundreds of ms [100-5000]
       fotaDwFtp.sessionCfg.IPPignoring = 0; //0 ip ignoring not enabled, 1 otherwise
@@ -361,19 +366,32 @@ INT32 mainTask(INT32 type, INT32 param1, INT32 param2)
   M2MB_NET_HANDLE h;
   
   int ret;
-  
-  CHAR apn[32], apnUser[16], apnPwd[16];
 
   void *myUserdata = NULL;
+
+  M2MB_OS_RESULT_E        osRes;
+  M2MB_OS_EV_ATTR_HANDLE  evAttrHandle;
+  UINT32                  curEvBits;
+
   switch (type)
   {
     case INIT:
-      AZX_LOG_DEBUG("Case INIT\r\n");
-      azx_tasks_sendMessageToTask( main_task_id, WAIT_FOR_REGISTRATION, 0, 0 );
-      break;
+      AZX_LOG_DEBUG("INIT\r\n");
+      /* Init events handler */
+      osRes  = m2mb_os_ev_setAttrItem( &evAttrHandle, CMDS_ARGS(M2MB_OS_EV_SEL_CMD_CREATE_ATTR, NULL, M2MB_OS_EV_SEL_CMD_NAME, "net_pdp_ev"));
+      osRes = m2mb_os_ev_init( &net_pdp_evHandle, &evAttrHandle );
 
-    case WAIT_FOR_REGISTRATION:
-      AZX_LOG_DEBUG("Case WAIT_FOR_REGISTRATION\r\n");
+      if ( osRes != M2MB_OS_SUCCESS )
+      {
+        m2mb_os_ev_setAttrItem( &evAttrHandle, M2MB_OS_EV_SEL_CMD_DEL_ATTR, NULL );
+        AZX_LOG_CRITICAL("m2mb_os_ev_init failed!\r\n");
+        return -1;
+      }
+      else
+      {
+        AZX_LOG_DEBUG("m2mb_os_ev_init success\r\n");
+      }
+
       retVal = m2mb_net_init(&h, NetCallback, myUserdata);
       if ( retVal == M2MB_RESULT_SUCCESS )
       {
@@ -381,7 +399,7 @@ INT32 mainTask(INT32 type, INT32 param1, INT32 param2)
       }
       else
       {
-        AZX_LOG_ERROR( "m2mb_net_init not returned M2MB_RESULT_SUCCESS\r\n" );
+        AZX_LOG_ERROR( "m2mb_net_init did not return M2MB_RESULT_SUCCESS\r\n" );
       }
 
       AZX_LOG_DEBUG("Waiting for registration...\r\n");
@@ -391,57 +409,53 @@ INT32 mainTask(INT32 type, INT32 param1, INT32 param2)
       {
         AZX_LOG_ERROR( "m2mb_net_get_reg_status_info did not return M2MB_RESULT_SUCCESS\r\n" );
       }
-      break;
 
-    case REGISTERED:
-      AZX_LOG_DEBUG("REGISTERED\r\n");
-      azx_tasks_sendMessageToTask( main_task_id, LAUNCH_DEMO, 0, 0 );
-      break;
+      /*Wait for network registration event to occur (released in NetCallback function) */
+      m2mb_os_ev_get(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_GET_ANY_AND_CLEAR, &curEvBits, M2MB_OS_WAIT_FOREVER);
 
-    case LAUNCH_DEMO:
-      AZX_LOG_DEBUG("Pdp context activation\r\n");
+
+
+      AZX_LOG_DEBUG("Pdp context initialization\r\n");
       retVal = m2mb_pdp_init(&pdpHandle, PdpCallback, myUserdata);
       if ( retVal == M2MB_RESULT_SUCCESS )
       {
-        AZX_LOG_DEBUG( "m2mb_pdp_init returned M2MB_RESULT_SUCCESS\r\n");
+        AZX_LOG_TRACE( "m2mb_pdp_init returned M2MB_RESULT_SUCCESS\r\n");
       }
       else
       {
-        AZX_LOG_DEBUG( "m2mb_pdp_init did not return M2MB_RESULT_SUCCESS\r\n" );
+        AZX_LOG_ERROR( "m2mb_pdp_init did not return M2MB_RESULT_SUCCESS\r\n" );
       }
 
       azx_sleep_ms(2000);
-      
-      memset( apn, 0x00, sizeof(apn));
-      memset( apnUser, 0x00, sizeof(apnUser) );
-      memset( apnPwd, 0x00, sizeof(apnPwd) );
 
-      strcat( apn, APN );
-
-      AZX_LOG_DEBUG("Activate PDP with APN %s....\r\n", apn);
-      retVal = m2mb_pdp_activate(pdpHandle, PDP_CTX, apn, apnUser, apnPwd, M2MB_PDP_IPV4); 
+      AZX_LOG_DEBUG("Activate PDP with APN %s on cid %d....\r\n", APN, PDP_CTX);
+      retVal = m2mb_pdp_activate(pdpHandle, PDP_CTX, (CHAR *) APN, (CHAR *) NULL, (CHAR *) NULL, M2MB_PDP_IPV4);
       if ( retVal != M2MB_RESULT_SUCCESS )
       {
-        AZX_LOG_ERROR("cannot activate pdp context.\r\n");
+        AZX_LOG_ERROR("Cannot activate pdp context.\r\n");
       }
       break;
 
     case APPLICATION_EXIT:
-      ret = m2mb_pdp_deactivate(pdpHandle, PDP_CTX);
-      if(ret != M2MB_RESULT_SUCCESS)
+      if(pdpHandle)
       {
-        AZX_LOG_ERROR("CANNOT DEACTIVATE PDP\r\n");
-        return -1;
+        ret = m2mb_pdp_deactivate(pdpHandle, PDP_CTX);
+        if(ret != M2MB_RESULT_SUCCESS)
+        {
+          AZX_LOG_ERROR("CANNOT DEACTIVATE PDP\r\n");
+          return -1;
+        }
+        else
+        {
+          AZX_LOG_DEBUG("m2mb_pdp_deactivate returned success \r\n");
+        }
       }
-      else
-      {
-        AZX_LOG_DEBUG("m2mb_pdp_deactivate returned success \r\n");
-      }
+
       AZX_LOG_DEBUG("Application complete.\r\n");
       break;
 
     default:
-      AZX_LOG_DEBUG( "Type not expected in Task1_Proc\r\n" );
+      AZX_LOG_DEBUG( "Type not expected in main_task\r\n" );
       break;
   }
 
