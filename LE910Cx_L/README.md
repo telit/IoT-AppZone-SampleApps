@@ -4,7 +4,7 @@
 
 
 
-Package Version: **1.1.7-CxL**
+Package Version: **1.1.8-CxL**
 
 Minimum Firmware Version: **25.21.XX0**
 
