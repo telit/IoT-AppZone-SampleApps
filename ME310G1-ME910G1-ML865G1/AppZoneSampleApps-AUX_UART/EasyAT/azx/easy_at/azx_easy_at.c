@@ -953,7 +953,7 @@ INT32 azx_easy_at_strToL( CHAR *str, INT32 *output )
     return -1;
   }
 
-  if( endptr == ( CHAR * ) str )
+  if( ( *endptr != '\0') || (  endptr == ( CHAR * ) str ))
   {
     /*no digits found*/
     return -2;
@@ -1012,7 +1012,7 @@ INT32 azx_easy_at_strToUL( CHAR *str, UINT32 *output )
     return -1;
   }
 
-  if( endptr == ( CHAR * ) str )
+  if( ( *endptr != '\0') || (  endptr == ( CHAR * ) str ))
   {
     /*no digits found*/
     return -2;
@@ -1071,7 +1071,7 @@ INT32 azx_easy_at_strToULL( CHAR *str, UINT64 *output )
     return -1;
   }
 
-  if( endptr == ( CHAR * ) str )
+  if( ( *endptr != '\0') || ( endptr == ( CHAR * ) str ))
   {
     /*no digits found*/
     return -2;
@@ -1129,7 +1129,7 @@ INT32 azx_easy_at_strToULHex( CHAR *str, UINT32 *output )
     return -1;
   }
 
-  if( endptr == ( CHAR * ) str )
+  if( ( *endptr != '\0') || (  endptr == ( CHAR * ) str ))
   {
     /*no digits found*/
     return -2;
@@ -1182,19 +1182,19 @@ INT8 azx_easy_at_strToUS( CHAR *str, UINT8 *output )
 
   tmp = strtoul( str, &endptr, 10 );
 
-  if( ( errno == ERANGE && ( tmp == ULONG_MAX ) ) || ( errno != 0 && tmp == 0 ) )
+  if( ( tmp >= UCHAR_MAX ) || ( errno != 0 && tmp == 0 ) )
   {
     /*Out of range parameter*/
     return -1;
   }
 
-  if( endptr == ( CHAR * ) str )
+  if( ( *endptr != '\0') || (  endptr == ( CHAR * ) str ))
   {
     /*no digits found*/
     return -2;
   }
 
-  *output = tmp;
+  *output = (UINT8) tmp;
   return 0;
 }
 

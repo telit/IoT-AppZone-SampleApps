@@ -13,7 +13,7 @@
   @description
     The file contains NTP task that handles NTP query and module internal clock setting
   @version
-    1.0.1
+    1.0.2
   @note
 
   @author
@@ -133,15 +133,17 @@ struct tm *curDate;
 			AZX_LOG_TRACE("Received UNIX timestamp: %u\r\n", current_time);
 			m2mb_os_ev_set(net_pdp_evHandle, EV_NTP_BIT, M2MB_OS_EV_SET);
 			curDate = localtime(&current_time);
-			AZX_LOG_INFO("\r\nCurrent time is: %s %d-%02d-%02d, %02d:%02d:%02d\r\n",
-					Weekdays[curDate->tm_wday],
-							curDate->tm_year + 1900,
-							curDate->tm_mon+1,
-							curDate->tm_mday,
-					        curDate->tm_hour,
-					        curDate->tm_min,
-					        curDate->tm_sec);
-
+      if(curDate)
+      {
+        AZX_LOG_INFO("\r\nCurrent time is: %s %d-%02d-%02d, %02d:%02d:%02d\r\n",
+            Weekdays[curDate->tm_wday],
+                curDate->tm_year + 1900,
+                curDate->tm_mon+1,
+                curDate->tm_mday,
+                    curDate->tm_hour,
+                    curDate->tm_min,
+                    curDate->tm_sec);
+      }
 			/*set module RTC */
 			azx_tasks_sendMessageToTask(ntpTask, SET_MODULE_RTC, (INT32)current_time, 0 );
 

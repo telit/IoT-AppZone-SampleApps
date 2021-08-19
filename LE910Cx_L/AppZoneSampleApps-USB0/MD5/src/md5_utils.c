@@ -76,8 +76,9 @@ CHAR *md5_hashToString(UINT8 *hash, CHAR *out)
  * This function checks if the input hash is equal to the input string
  *
  *
- * @param[in] hash    Pointer to the hash binary buffer
- * @param[in] string  Pointer to the string containing the hash
+ * @param[in] hash      Pointer to the hash binary buffer
+ * @param[in] hash_size Size in bytes of hash buffer (it should be MD5_DIGEST_LENGTH )
+ * @param[in] string    Pointer to the string containing the hash
  *
  * @return 1 if hashes are the same
  * @return 0 if they are different
@@ -85,16 +86,23 @@ CHAR *md5_hashToString(UINT8 *hash, CHAR *out)
  *
  * @see md5_computeSum md5_computeFromFile
  */
-INT32 md5_compareHashWithString(UINT8 *hash, CHAR *string)
+INT32 md5_compareHashWithString(UINT8 *hash, UINT16 hash_size, CHAR *string)
 {
   int i;
   const int str_len = strlen(string);
-
-  unsigned int byte = 0;
+  if(str_len > (hash_size * 2) )
+  {
+    return 0;
+  }
+  UINT8 byte = 0;
 
   for (i = 0; i < (str_len / 2); i++)
   {
-    sscanf((string + 2*i), "%02x", &byte);
+    if(1 != sscanf((string + 2 * i), "%02hhx", &byte))
+    {
+      return 0;
+    }
+
     if (byte != hash[i])
     {
       return 0;
@@ -170,7 +178,7 @@ INT32 md5_isMD5(CHAR *md5string)
 
   for(i = 0; i < 32; i++)
   {
-    if(!isxdigit(md5string[i]))
+    if(!isxdigit((unsigned char) md5string[i]))
     {
       return -3;
     }
@@ -253,19 +261,18 @@ INT32 md5_computeFromFile(const CHAR *input_filename, UINT8 *md5_sum)
               m2mb_crypto_md_update(MD5, (const UINT8 *)data, datalen);
             }while (datalen != 0);
 
-            if (ret > -1)
+
+            if (0 != m2mb_fs_fclose(file_handle))
             {
-              if (0 != m2mb_fs_fclose(file_handle))
-              {
-                ret = -7;
-              }
-              else
-              {
-                m2mb_crypto_md_final(MD5, (UINT8 *) md5_digest);
-                memcpy(md5_sum, md5_digest, MD5_DIGEST_LENGTH);
-                ret = 0; /* SUCCESS */
-              }
+              ret = -7;
             }
+            else
+            {
+              m2mb_crypto_md_final(MD5, (UINT8 *) md5_digest);
+              memcpy(md5_sum, md5_digest, MD5_DIGEST_LENGTH);
+              /* SUCCESS */
+            }
+
           }
         }
       }

@@ -1,3 +1,6 @@
+1.0.2
+azx_pdu_convertZeroPaddedHexIntoByte arrays initialization and casting
+-----------
 1.0.1
 azx_pdu_convertZeroPaddedHexIntoByte returns the converted length
 -----------

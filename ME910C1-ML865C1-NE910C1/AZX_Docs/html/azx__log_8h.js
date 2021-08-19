@@ -14,6 +14,7 @@ var azx__log_8h =
       [ "AZX_LOG_USB_CABLE_UNPLUGGED", "group__log_usage.html#ggabe77e5a2f7b57b5029c6f7cdfa7e3dd0ab2beedfe225418d618c1d2e12410b72b", null ],
       [ "AZX_LOG_NO_USB_INSTANCE_AVAILABLE", "group__log_usage.html#ggabe77e5a2f7b57b5029c6f7cdfa7e3dd0ab7e169017c26c73457fe21f879b299f0", null ],
       [ "AZX_LOG_CANNOT_OPEN_USB_CHANNEL", "group__log_usage.html#ggabe77e5a2f7b57b5029c6f7cdfa7e3dd0aadebfaa08c22d4ad0729e98b50ce880c", null ],
+      [ "AZX_LOG_UNEXPECTED_CHANNEL", "group__log_usage.html#ggabe77e5a2f7b57b5029c6f7cdfa7e3dd0a90e600d320bbca44c2c869025835b1c7", null ],
       [ "AZX_LOG_MAX_ERROR_LEN", "group__log_usage.html#ggabe77e5a2f7b57b5029c6f7cdfa7e3dd0a19881bc82e9c47a02c88b541c58a04c8", null ]
     ] ],
     [ "AZX_LOG_HANDLE_E", "group__log_conf.html#ga03b618927cb5d884386832ab76781760", [

@@ -14,7 +14,7 @@
     The application prints "Hello World!" on Main UART every 2 seconds using 
     m2mb_uart_* apis
   @version 
-    1.0.1
+    1.0.2
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -56,14 +56,14 @@ INT32 out_ch_fd = -1;
 **************************************************************************************************/
 void M2MB_main( int argc, char **argv )
 {
-	
-	(void)argc;
-	(void)argv;
+  
+  (void)argc;
+  (void)argv;
   char out_buffer[512];
   int counter = 0;
   
   
-	m2mb_os_taskSleep( M2MB_OS_MS2TICKS(5000) );
+  m2mb_os_taskSleep( M2MB_OS_MS2TICKS(5000) );
 
   /* Main UART is tty0 */
   out_ch_fd = m2mb_uart_open( "/dev/tty0", 0 );
@@ -74,23 +74,24 @@ void M2MB_main( int argc, char **argv )
   m2mb_uart_write(out_ch_fd, (char*) out_buffer, strlen(out_buffer));
 
 
-	while (1)
-	{
-		counter++;
-		if ( counter > 999999 )
-		{
+  while (1)
+  {
+    counter++;
+    if ( counter > 999999 )
+    {
         memset(out_buffer,0,sizeof(out_buffer));
         sprintf(out_buffer, "\r\n Counter zeroed " );
         m2mb_uart_write(out_ch_fd, (char*) out_buffer, strlen(out_buffer));
         counter = 0;
-		}
+        break;
+    }
 
     memset(out_buffer,0,sizeof(out_buffer));
     sprintf(out_buffer, "\r\n Hello world 2.0 [ %06d ] ", counter );
     m2mb_uart_write(out_ch_fd, (char*) out_buffer, strlen(out_buffer));
     m2mb_os_taskSleep( M2MB_OS_MS2TICKS(2000) );
 
-	}
+  }
 
   m2mb_uart_close(out_ch_fd);
 }

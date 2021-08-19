@@ -5,7 +5,7 @@
 #define HDR_AZX_LOG_H_
 /**
  * @file azx_log.h
- * @version 1.0.8
+ * @version 1.0.9
  * @dependencies 
  * @author Fabio Pintus
  * @author Ioannis Demetriou
@@ -60,6 +60,7 @@ typedef enum
   AZX_LOG_USB_CABLE_UNPLUGGED,       /**<USB cable is not plugged when trying to print on USB*/
   AZX_LOG_NO_USB_INSTANCE_AVAILABLE, /**<No more USB instances are available*/
   AZX_LOG_CANNOT_OPEN_USB_CHANNEL,   /**<Cannot open the specified USB channel*/
+  AZX_LOG_UNEXPECTED_CHANNEL,        /**<Cannot open the specified channel, out of range*/
 
   AZX_LOG_MAX_ERROR_LEN
 } AZX_LOG_ERRORS_E;

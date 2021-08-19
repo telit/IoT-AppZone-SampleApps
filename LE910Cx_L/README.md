@@ -4,7 +4,7 @@
 
 
 
-Package Version: **1.1.8-CxL**
+Package Version: **1.1.9-CxL**
 
 Minimum Firmware Version: **25.21.XX0**
 
@@ -1002,6 +1002,69 @@ Sample application showing how to communicate with an I2C slave device. Debug pr
 
 
 
+### Little FileSystem 2 
+
+Sample application showing how use lfs2 porting with RAM disk and SPI data flash. Debug prints on **USB0**
+
+
+**Features**
+
+
+- How to create and manage Ram Disk
+- How to manage file-system in Ram disk partition
+- How to create and manage SPI Flash memory partition
+- How to manage file-system in SPI Flash memory partition
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Init logging system
+- Call Ram Disk tests
+- Call Flash memory tests
+
+**`ram_utils_usage.c`**
+
+- Initialize Ram Disk
+- Format and Mount partition
+- List files 
+- Files creation and write content
+- List files 
+- Read files 
+- Unmount and Release resources
+
+
+**`spi_utils_usage.c`**
+- Initialize SPI Flash chip
+- Initialize SPI Flash Disk
+- Format and Mount partition
+- List files 
+- Files creation and write content
+- List files 
+- Read files 
+- Delete files
+- Directories creation and deletion
+- Unmount and Release resources
+
+**Notes:**
+
+For SPI Flash a JSC memory is used with chip select pin connected to module GPIO2 pin.
+For better performances, a 33kOhm pull-down resistor on SPI clock is suggested.
+Please refer to SPI_echo sample app for SPI connection details.
+
+For LE910Cx (both Linux and ThreadX based devices), `AT#SPIEN=1` command must be sent once before running the app
+
+![](pictures/samples/lfs2_ramdisk_bordered.png)
+![](pictures/samples/lfs2_spiflash_01_bordered.png)
+![](pictures/samples/lfs2_spiflash_02_bordered.png)
+![](pictures/samples/lfs2_spiflash_03_bordered.png)
+
+
+
+---------------------
+
+
+
 ### Logging Demo
 
 Sample application showing how to print on one of the available output interfaces. Debug prints on **USB0**
@@ -1672,69 +1735,6 @@ AT#M2MWRITE="/data/azc/mod/test.gz",138
 - Test the decompression of a .gz file (test.gz), expected to be in `/data/azc/mod` folder, into its content `test.txt`. The file must be uploaded by the user (see steps above).
 
 ![](pictures/samples/zlib_bordered.png)
-
----------------------
-
-
-
-### Little fs2 
-
-Sample application showing how use lfs2 porting with RAM disk and SPI data flash. Debug prints on **USB0**
-
-
-**Features**
-
-
-- How to create and manage Ram Disk
-- How to manage file-system in Ram disk partition
-- How to create and manage SPI Flash memory partition
-- How to manage file-system in SPI Flash memory partition
-
-**Application workflow**
-
-**`M2MB_main.c`**
-
-- Init logging system
-- Call Ram Disk tests
-- Call Flash memory tests
-
-**`ram_utils_usage.c`**
-
-- Initialize Ram Disk
-- Format and Mount partition
-- List files 
-- Files creation and write content
-- List files 
-- Read files 
-- Unmount and Release resources
-
-
-**`spi_utils_usage.c`**
-- Initialize SPI Flash chip
-- Initialize SPI Flash Disk
-- Format and Mount partition
-- List files 
-- Files creation and write content
-- List files 
-- Read files 
-- Delete files
-- Directories creation and deletion
-- Unmount and Release resources
-
-**Notes:**
-
-For SPI Flash a JSC memory is used with chip select pin connected to module GPIO2 pin.
-For better performances, a 33kOhm pull-down resistor on SPI clock is suggested.
-Please refer to SPI_echo sample app for SPI connection details.
-
-For LE910Cx (both Linux and ThreadX based devices), `AT#SPIEN=1` command must be sent once before running the app
-
-![](pictures/samples/lfs2_ramdisk_bordered.png)
-![](pictures/samples/lfs2_spiflash_01_bordered.png)
-![](pictures/samples/lfs2_spiflash_02_bordered.png)
-![](pictures/samples/lfs2_spiflash_03_bordered.png)
-
-
 
 ---------------------
 
@@ -2539,6 +2539,69 @@ Sample application showing how to communicate with an I2C slave device. Debug pr
 
 
 
+### Little FileSystem 2 
+
+Sample application showing how use lfs2 porting with RAM disk and SPI data flash. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- How to create and manage Ram Disk
+- How to manage file-system in Ram disk partition
+- How to create and manage SPI Flash memory partition
+- How to manage file-system in SPI Flash memory partition
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Init logging system
+- Call Ram Disk tests
+- Call Flash memory tests
+
+**`ram_utils_usage.c`**
+
+- Initialize Ram Disk
+- Format and Mount partition
+- List files 
+- Files creation and write content
+- List files 
+- Read files 
+- Unmount and Release resources
+
+
+**`spi_utils_usage.c`**
+- Initialize SPI Flash chip
+- Initialize SPI Flash Disk
+- Format and Mount partition
+- List files 
+- Files creation and write content
+- List files 
+- Read files 
+- Delete files
+- Directories creation and deletion
+- Unmount and Release resources
+
+**Notes:**
+
+For SPI Flash a JSC memory is used with chip select pin connected to module GPIO2 pin.
+For better performances, a 33kOhm pull-down resistor on SPI clock is suggested.
+Please refer to SPI_echo sample app for SPI connection details.
+
+For LE910Cx (both Linux and ThreadX based devices), `AT#SPIEN=1` command must be sent once before running the app
+
+![](pictures/samples/lfs2_ramdisk_bordered.png)
+![](pictures/samples/lfs2_spiflash_01_bordered.png)
+![](pictures/samples/lfs2_spiflash_02_bordered.png)
+![](pictures/samples/lfs2_spiflash_03_bordered.png)
+
+
+
+---------------------
+
+
+
 ### Logging Demo
 
 Sample application showing how to print on one of the available output interfaces. Debug prints on **MAIN UART**
@@ -3277,69 +3340,6 @@ AT#M2MWRITE="/data/azc/mod/test.gz",138
 - Test the decompression of a .gz file (test.gz), expected to be in `/data/azc/mod` folder, into its content `test.txt`. The file must be uploaded by the user (see steps above).
 
 ![](pictures/samples/zlib_bordered.png)
-
----------------------
-
-
-
-### Little fs2 
-
-Sample application showing how use lfs2 porting with RAM disk and SPI data flash. Debug prints on **MAIN UART**
-
-
-**Features**
-
-
-- How to create and manage Ram Disk
-- How to manage file-system in Ram disk partition
-- How to create and manage SPI Flash memory partition
-- How to manage file-system in SPI Flash memory partition
-
-**Application workflow**
-
-**`M2MB_main.c`**
-
-- Init logging system
-- Call Ram Disk tests
-- Call Flash memory tests
-
-**`ram_utils_usage.c`**
-
-- Initialize Ram Disk
-- Format and Mount partition
-- List files 
-- Files creation and write content
-- List files 
-- Read files 
-- Unmount and Release resources
-
-
-**`spi_utils_usage.c`**
-- Initialize SPI Flash chip
-- Initialize SPI Flash Disk
-- Format and Mount partition
-- List files 
-- Files creation and write content
-- List files 
-- Read files 
-- Delete files
-- Directories creation and deletion
-- Unmount and Release resources
-
-**Notes:**
-
-For SPI Flash a JSC memory is used with chip select pin connected to module GPIO2 pin.
-For better performances, a 33kOhm pull-down resistor on SPI clock is suggested.
-Please refer to SPI_echo sample app for SPI connection details.
-
-For LE910Cx (both Linux and ThreadX based devices), `AT#SPIEN=1` command must be sent once before running the app
-
-![](pictures/samples/lfs2_ramdisk_bordered.png)
-![](pictures/samples/lfs2_spiflash_01_bordered.png)
-![](pictures/samples/lfs2_spiflash_02_bordered.png)
-![](pictures/samples/lfs2_spiflash_03_bordered.png)
-
-
 
 ---------------------
 

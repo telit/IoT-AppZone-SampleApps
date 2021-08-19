@@ -49,7 +49,7 @@ INT32 azx_str_to_l( char *str, INT32 *output )
     return -1;
   }
 
-  if( endptr == ( char * ) str )
+  if( ( *endptr != '\0' ) || ( endptr == ( char * ) str ) )
   {
     /*no digits found*/
     return -2;
@@ -79,7 +79,7 @@ INT32 azx_str_to_ul( char *str, UINT32 *output )
     return -1;
   }
 
-  if( endptr == ( char * ) str )
+  if( ( *endptr != '\0') || ( endptr == ( char * ) str ))
   {
     /*no digits found*/
     return -2;
@@ -109,7 +109,7 @@ INT32 azx_str_to_ull( char *str, UINT64 *output )
     return -1;
   }
 
-  if( endptr == ( char * ) str )
+  if( ( *endptr != '\0' ) || ( endptr == ( char * ) str ))
   {
     /*no digits found*/
     return -2;
@@ -139,7 +139,7 @@ INT32 azx_str_to_ul_hex( char *str, UINT32 *output )
     return -1;
   }
 
-  if( endptr == ( char * ) str )
+  if( ( *endptr != '\0') || ( endptr == ( char * ) str ))
   {
     /*no digits found*/
     return -2;
@@ -151,7 +151,7 @@ INT32 azx_str_to_ul_hex( char *str, UINT32 *output )
 
 INT8 azx_str_to_uc( char *str, UINT8 *output )
 {
-  char *endptr;
+  char *endptr = NULL;
   UINT32 tmp;
   errno = 0;
 
@@ -163,13 +163,13 @@ INT8 azx_str_to_uc( char *str, UINT8 *output )
 
   tmp = strtoul( str, &endptr, 10 );
 
-  if( ( errno == ERANGE && ( tmp == UCHAR_MAX ) ) || ( errno != 0 && tmp == 0 ) )
+  if( ( tmp >= UCHAR_MAX ) || ( errno != 0 && tmp == 0 ) )
   {
     /*Out of range parameter*/
     return -1;
   }
 
-  if( endptr == ( char * ) str )
+  if( ( *endptr != '\0') || ( endptr == ( char * ) str ))
   {
     /*no digits found*/
     return -2;
@@ -181,7 +181,7 @@ INT8 azx_str_to_uc( char *str, UINT8 *output )
 
 INT8 azx_str_to_d( char *str, FLOAT64 *output )
 {
-  char *endptr;
+  char *endptr = NULL;
   FLOAT64 tmp;
   errno = 0;
 
@@ -199,7 +199,7 @@ INT8 azx_str_to_d( char *str, FLOAT64 *output )
     return -1;
   }
 
-  if( endptr == ( char * ) str )
+  if( ( *endptr != '\0') || ( endptr == ( char * ) str ) )
   {
     /*no digits found*/
     return -2;
@@ -211,7 +211,7 @@ INT8 azx_str_to_d( char *str, FLOAT64 *output )
 
 INT8 azx_str_to_f( char *str, FLOAT32 *output )
 {
-  char *endptr;
+  char *endptr = NULL;
   FLOAT32 tmp;
   errno = 0;
 
@@ -229,7 +229,7 @@ INT8 azx_str_to_f( char *str, FLOAT32 *output )
     return -1;
   }
 
-  if( endptr == ( char * ) str )
+  if( ( *endptr != '\0') || (endptr == ( char * ) str ) )
   {
     /*no digits found*/
     return -2;
@@ -281,14 +281,17 @@ UINT8 azx_str_rem_ch( char *str, char chr )
 UINT8 azx_str_l_trim( char *str )
 {
   char *p = str;
-
+  int i;
   while( *p && *p == ' ' )
   {
     p++;
   }
 
   int f_lenght = strlen( p );
-  strncpy( str, p, f_lenght );
+  for(i = 0; i < f_lenght; i++)
+  {
+  	str[i] = p[i];
+  }
   str[f_lenght] = 0;
   return 0;
 }

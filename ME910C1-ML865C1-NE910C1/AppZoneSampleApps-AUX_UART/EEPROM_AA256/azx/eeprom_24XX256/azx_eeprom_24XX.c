@@ -68,10 +68,7 @@ INT32 azx_eeprom_deinit(AZX_EEPROM_T *pEeprom)
     return -1;
   }
 
-  if(0 != EEPROM_I2C_deinit(&pEeprom->i2c_handle))
-  {
-    return -1;
-  }
+  EEPROM_I2C_deinit(&pEeprom->i2c_handle);
 
   pEeprom->mem_size = 0;
   pEeprom->page_size = 0;

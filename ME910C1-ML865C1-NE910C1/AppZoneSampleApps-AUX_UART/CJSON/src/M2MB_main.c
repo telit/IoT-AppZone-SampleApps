@@ -15,7 +15,7 @@
     Sample application showcasing how to manage JSON objects. Debug prints on AUX UART
     
  @version
-     1.0.1
+     1.0.3
 
  @notes
      Start of Appzone: Entry point
@@ -82,17 +82,18 @@ void M2MB_main(int argc, char **argv)
   AZX_LOG_CFG_T log_cfg;
 
   AZX_CJSON_T * root;
+  AZX_CJSON_T * item;
   AZX_CJSON_T * nono;
   char * name;
   AZX_CJSON_T * format;
   char * typen;
-  int volume;
-  int depth;
-  double percent;
-  double tide;
-  int calm;
+  int volume = 0;
+  int depth = 0;
+  double percent = 0.0;
+  double tide =  0.0;
+  int calm = 0;
   AZX_CJSON_T *life;
-  char animals[200];
+  char animals[200] = {0};
   AZX_CJSON_T *rootn, *cmd1, *cmd2, *params1, *params2;
 
   //dalay before application starting
@@ -124,8 +125,16 @@ void M2MB_main(int argc, char **argv)
   {
     AZX_LOG_INFO("inexistent key not found\r\n");
   }
-
-  name = azx_cjson_getObjectItem(root, "name")->valuestring;
+  
+  
+  item = azx_cjson_getObjectItem(root, "name");
+  if(!item)
+  {
+    AZX_LOG_ERROR("failed getting item\r\n");
+    return;
+  }
+  
+  name = item->valuestring;
   if (!name)
   {
     AZX_LOG_ERROR("failed getting name\r\n");
@@ -141,18 +150,35 @@ void M2MB_main(int argc, char **argv)
   }
   AZX_LOG_INFO("format found %s\r\n", format->valuestring);
 
-  typen = azx_cjson_getObjectItem(format, "type")->valuestring;
+  item = azx_cjson_getObjectItem(format, "type");
+  if(!item)
+  {
+    AZX_LOG_ERROR("failed getting type\r\n");
+    return;
+  }
+  
+  typen = item->valuestring;
   if (!typen)
   {
     AZX_LOG_ERROR("failed getting type\r\n");
     return;
   }
 
-  volume = azx_cjson_getObjectItem(format, "volume")->valueint;
-  depth = azx_cjson_getObjectItem(format, "depth")->valueint;
-  percent = azx_cjson_getObjectItem(format, "volume_percent")->valuedouble;
-  tide = azx_cjson_getObjectItem(format, "tide")->valuedouble;
-  calm = azx_cjson_getObjectItem(format, "calm")->valueint;
+  item = azx_cjson_getObjectItem(format, "volume");
+  volume = (item)? item->valueint : 0;
+  
+  item = azx_cjson_getObjectItem(format, "depth");
+  depth = (item)? item->valueint : 0;
+  
+  item = azx_cjson_getObjectItem(format, "volume_percent");
+  percent = (item)? item->valuedouble : 0.0;
+  
+  item = azx_cjson_getObjectItem(format, "tide");
+  tide = (item)? item->valuedouble : 0.0;
+  
+  item = azx_cjson_getObjectItem(format, "calm");
+  calm = (item)? item->valueint : 0;
+  
   life = azx_cjson_getObjectItem(format, "life");
 
 
@@ -162,8 +188,12 @@ void M2MB_main(int argc, char **argv)
     int i;
     for (i = 0; i < azx_cjson_getArraySize(life); i++)
     {
-      strcat(animals, azx_cjson_getArrayItem(life, i)->valuestring);
-      strcat(animals, ", ");
+      item = azx_cjson_getArrayItem(life, i);
+      if(item)
+      {
+        strcat(animals, item->valuestring);
+        strcat(animals, ", ");
+      }
     }
     animals[strlen(animals) - 2] = 0;
   }

@@ -13,7 +13,7 @@
   @description
     Sample application showing how to compress/uncompress with ZLIB. Debug prints on AUX UART
   @version
-    1.0.2
+    1.0.3
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -128,9 +128,9 @@ int test_uncompress(char* source_S, char* dest_S)
     unsigned char in[CHUNK];
 
     int errnum = -1;
-    unsigned int avail_in = 0;
+    int avail_in = 0;
 
-	char mode_s = 'r';
+	char mode_s[] = "r";
     gzFile source;
 
     /* check valid name files */
@@ -143,7 +143,7 @@ int test_uncompress(char* source_S, char* dest_S)
 
     /* open source files */
 
-    source = gzopen OF((source_S, &mode_s));
+    source = gzopen OF((source_S, &mode_s[0]));
     if (source == NULL)
     {
     	AZX_LOG_ERROR("gun cannot open %s\n", source_S);
@@ -161,30 +161,29 @@ int test_uncompress(char* source_S, char* dest_S)
 
     do
     {
-        memset(in, 0, CHUNK);
-    	avail_in = gzread(source, in, CHUNK);
-    	//AZX_LOG_INFO("%s", in); //prints uncompressed data read
+      memset(in, 0, CHUNK);
+      avail_in = gzread(source, in, CHUNK);
+      //AZX_LOG_INFO("%s", in); //prints uncompressed data read
 
-    	gzerror(source, &errnum);
-        if (errnum)
-        {
-        	gzclearerr(source);
-			AZX_LOG_ERROR("Error: %d\n", errnum);
-			break;
-        }
+      gzerror(source, &errnum);
+      if (errnum)
+      {
+       	gzclearerr(source);
+        AZX_LOG_ERROR("Error: %d\n", errnum);
+        break;
+      }
+      
+      if (avail_in <= 0)
+      {
+       	break;
+      }
 
-        if ( (unsigned int) m2mb_fs_write(outfile, in, avail_in) != avail_in)
-        {
-        	AZX_LOG_ERROR("Error writing data!");
-        	break;
-        }
-
-        if (avail_in == 0)
-        {
-        	break;
-        }
-
-    } while (!errnum);
+      if (m2mb_fs_write(outfile, in, (SIZE_T) avail_in) != avail_in)
+      {
+        AZX_LOG_ERROR("Error writing data!");
+        break;
+      }
+  } while (!errnum);
 	AZX_LOG_INFO("\n");
 
 	azx_sleep_ms(2000); //waiting writing session

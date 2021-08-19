@@ -15,7 +15,7 @@
   @description
     Sample application showcasing how to create a C++ OO code, providing a logging class (equivalent to the one in Logging demo)
   @version 
-    1.0.1
+    1.0.2
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()

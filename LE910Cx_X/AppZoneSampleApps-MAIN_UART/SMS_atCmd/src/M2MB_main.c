@@ -14,7 +14,7 @@
     Sample application showcasing how to receive an SMS containing an AT command, process the AT command and send its answer to sender (configurable in sms_config.txt). A SIM card and antenna must be present. Debug prints on MAIN UART
 
   @version 
-    1.0.3
+    1.0.4
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()

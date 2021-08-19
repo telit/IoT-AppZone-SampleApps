@@ -22,7 +22,7 @@ void azx_sleep_ms(UINT32 ms)
 const CHAR* azx_hex_dump(const void* data, UINT32 len)
 {
   static CHAR buff[AZX_UTILS_HEX_DUMP_BUFFER_SIZE];
-  UINT32 i = 0;
+  UINT32 i;
 
   memset(buff, 0, AZX_UTILS_HEX_DUMP_BUFFER_SIZE);
   if (data == NULL)
