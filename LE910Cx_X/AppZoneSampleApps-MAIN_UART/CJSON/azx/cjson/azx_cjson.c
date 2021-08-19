@@ -34,7 +34,7 @@
      JSON objects manipulation implementation
 
  @version
-     1.0.0
+     1.0.1
 
  @notes
      Porting on m2mb of the AZX_CJSON_T library.
@@ -74,7 +74,7 @@ static int cJSON_strcasecmp(const char *s1, const char *s2)
     return (s1 == s2) ? 0 : 1;
   if (!s2)
     return 1;
-  for (; tolower(*s1) == tolower(*s2); ++s1, ++s2)
+  for (; tolower(*(const unsigned char *)s1) == tolower(*(const unsigned char *)s2); ++s1, ++s2)
     if (*s1 == 0)
       return 0;
   return tolower(*(const unsigned char *) s1)
@@ -220,8 +220,10 @@ static char* ensure(printbuffer *p, int needed)
     p->length = 0, p->buffer = 0;
     return 0;
   }
-  if (newbuffer)
+  else
+  {
     memcpy(newbuffer, p->buffer, p->length);
+  }
   cJSON_free(p->buffer);
   p->length = newsize;
   p->buffer = newbuffer;
@@ -351,7 +353,7 @@ static const char *parse_string(AZX_CJSON_T *item, const char *str,
   item->valuestring = out; /* assign here so out will be deleted during azx_cjson_delete() later */
   item->type = AZX_CJSON_STRING;
 
-  ptr = str + 1;
+
   ptr2 = out;
   while (ptr < end_ptr)
   {
@@ -895,17 +897,20 @@ static char *print_array(AZX_CJSON_T *item, int depth, int fmt, printbuffer *p)
     *ptr = 0;
     for (i = 0; i < numentries; i++)
     {
-      tmplen = strlen(entries[i]);
-      memcpy(ptr, entries[i], tmplen);
-      ptr += tmplen;
-      if (i != numentries - 1)
+      if (entries[i])
       {
-        *ptr++ = ',';
-        if (fmt)
-          *ptr++ = ' ';
-        *ptr = 0;
+        tmplen = strlen(entries[i]);
+        memcpy(ptr, entries[i], tmplen);
+        ptr += tmplen;
+        if (i != numentries - 1)
+        {
+          *ptr++ = ',';
+          if (fmt)
+            *ptr++ = ' ';
+          *ptr = 0;
+        }
+        cJSON_free(entries[i]);
       }
-      cJSON_free(entries[i]);
     }
     cJSON_free(entries);
     *ptr++ = ']';
@@ -981,7 +986,7 @@ static char *print_object(AZX_CJSON_T *item, int depth, int fmt, printbuffer *p)
 {
   char **entries = 0, **names = 0;
   char *out = 0, *ptr, *ret, *str;
-  int len = 7, i = 0, j;
+  int len = 7, i, j;
   AZX_CJSON_T *child = item->child;
   int numentries = 0, fail = 0;
   size_t tmplen = 0;
@@ -1009,6 +1014,7 @@ static char *print_object(AZX_CJSON_T *item, int depth, int fmt, printbuffer *p)
     *ptr++ = 0;
     return out;
   }
+  
   if (p)
   {
     /* Compose the output: */
@@ -1073,6 +1079,7 @@ static char *print_object(AZX_CJSON_T *item, int depth, int fmt, printbuffer *p)
     out = (p->buffer) + i;
   } else
   {
+    i = 0;
     /* Allocate space for the names and the objects */
     entries = (char**) cJSON_malloc(numentries * sizeof(char*));
     if (!entries)
@@ -1212,9 +1219,13 @@ static AZX_CJSON_T *create_reference(AZX_CJSON_T *item)
 /* Add item to array/object. */
 void azx_cjson_addItemToArray(AZX_CJSON_T *array, AZX_CJSON_T *item)
 {
-  AZX_CJSON_T *c = array->child;
-  if (!item)
+  if (!item || !array)
+  {
     return;
+ 
+ }  
+  AZX_CJSON_T *c = array->child;
+  
   if (!c)
   {
     array->child = item;
@@ -1228,7 +1239,7 @@ void azx_cjson_addItemToArray(AZX_CJSON_T *array, AZX_CJSON_T *item)
 void azx_cjson_addItemToObject(AZX_CJSON_T *object, const char *string,
     AZX_CJSON_T *item)
 {
-  if (!item)
+  if (!item || !object)
     return;
   if (item->string)
     cJSON_free(item->string);

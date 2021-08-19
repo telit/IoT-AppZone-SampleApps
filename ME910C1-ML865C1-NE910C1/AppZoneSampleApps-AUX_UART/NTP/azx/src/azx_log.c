@@ -420,7 +420,7 @@ void azx_log_init(AZX_LOG_CFG_T *cfg)
 
 INT32 azx_log_deinit(void)
 {
-  INT32 rc;
+  INT32 rc = AZX_LOG_NOT_INIT;
   if ( ! log_cfg.isInit)
   {
     return AZX_LOG_NOT_INIT;
@@ -453,7 +453,7 @@ INT32 azx_log_deinit(void)
     }
     break;
   default:
-    //TODO return some error
+    rc = AZX_LOG_UNEXPECTED_CHANNEL;
     break;
   }
   log_cfg.ch_fd = -1;
@@ -493,7 +493,7 @@ AZX_LOG_LEVEL_E azx_log_getLevel(void)
 /*----------------------------------------------------------------------------*/
 static INT32 log_base_function(const char *msg)
 {
-  INT32 result;
+  INT32 result = 0;
 
 
   if ( ! log_cfg.isInit)

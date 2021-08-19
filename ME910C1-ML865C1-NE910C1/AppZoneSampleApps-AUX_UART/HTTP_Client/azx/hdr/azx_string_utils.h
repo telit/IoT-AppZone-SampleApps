@@ -7,7 +7,7 @@
 /**
   @file
     azx_string_utils.h
-  @version 1.0.1
+  @version 1.0.2
   @dependencies 
 
   @brief String related utilities

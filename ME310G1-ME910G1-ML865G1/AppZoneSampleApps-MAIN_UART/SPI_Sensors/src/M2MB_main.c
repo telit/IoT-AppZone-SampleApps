@@ -13,7 +13,7 @@
   @description
     Sample application showing SPI usage, configuring two ST devices: a magnetometer \(ST LIS3MDL\) and a gyroscope \(ST L3G4200D\). The application will read values from both devices using GPIO4 and 3 \(respectively\) as magnetometer CS and gyro CS. Debug prints on MAIN UART
   @version 
-    1.0.2
+    1.0.3
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -127,7 +127,7 @@ INT32 M2M_open_gpio_output(int pin)
   char path[16];
 
   memset(path, 0, sizeof(path));
-  sprintf(path, "/dev/GPIO%d", pin);
+  snprintf(path, sizeof(path), "/dev/GPIO%d", pin);
 
   gpio_fd = m2mb_gpio_open( path, 0 );
   if( gpio_fd != -1 )

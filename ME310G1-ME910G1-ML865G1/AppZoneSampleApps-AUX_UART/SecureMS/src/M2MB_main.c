@@ -13,7 +13,7 @@
   @description
     Sample application showcasing how to manage secure microservice functionalities. Debug prints on AUX UART
   @version 
-    1.0.0
+    1.0.1
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -158,7 +158,7 @@ INT32 read_normal(UINT16 id, UINT8 *data, UINT32 *datalen)
 
   INT32 res;
   M2MB_SECURE_MS_HANDLE secure_ms_Handle;
-  UINT32 to_read = *datalen;
+  UINT32 to_read;
   UINT32 act_len;
 
   //AZX_LOG_DEBUG("Opening file id %d to read %u bytes\r\n", id, to_read);
@@ -181,7 +181,7 @@ INT32 read_normal(UINT16 id, UINT8 *data, UINT32 *datalen)
     }
 
     /*Align value to 16 bytes*/
-    to_read = M2MB_ALIGN( act_len, 16 );
+    to_read = M2MB_ALIGN( to_read, 16 );
     res = m2mb_secure_ms_read( secure_ms_Handle, to_read, data, &act_len );
     if( res == M2MB_RESULT_SUCCESS )
     {
@@ -209,7 +209,7 @@ INT32 read_trusted(UINT16 id, UINT8 *data, UINT32 *datalen)
 
   INT32 res;
   M2MB_SECURE_MS_HANDLE secure_ms_Handle;
-  UINT32 to_read = *datalen;
+  UINT32 to_read ;
   UINT32 act_len;
 
   //AZX_LOG_DEBUG("Opening file id %d to read %u bytes\r\n", id, to_read);
@@ -231,7 +231,7 @@ INT32 read_trusted(UINT16 id, UINT8 *data, UINT32 *datalen)
     }
 
     /*Align value to 16 bytes*/
-    to_read = M2MB_ALIGN( act_len, 16 );
+    to_read = M2MB_ALIGN( to_read, 16 );
     res = m2mb_secure_ms_read( secure_ms_Handle, to_read, data, &act_len );
     if( res == M2MB_RESULT_SUCCESS )
     {
@@ -258,10 +258,10 @@ INT32 read_trusted(UINT16 id, UINT8 *data, UINT32 *datalen)
 
 INT32 read_rotate( UINT16 id, UINT8 *data, UINT32 *datalen)
 {
-
+  (void)datalen;
   INT32 res;
   M2MB_SECURE_MS_HANDLE secure_ms_Handle;
-  UINT32 to_read = *datalen;
+  UINT32 to_read;
   UINT32 act_len;
   M2MB_SECURE_MS_BUFFER bfr;
 

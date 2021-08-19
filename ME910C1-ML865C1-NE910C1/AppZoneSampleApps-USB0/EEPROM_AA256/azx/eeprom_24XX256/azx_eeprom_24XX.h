@@ -20,7 +20,7 @@
 
   Refer to https://ww1.microchip.com/downloads/en/DeviceDoc/24AA256-24LC256-24FC256-Data-Sheet-20001203W.pdf for further details
 
-  @version 1.0.0
+  @version 1.0.1
   @dependencies azx_log
 
   @note

@@ -7,7 +7,7 @@
 
 /**
   @file azx_https.h
-  @version 1.1.0
+  @version 1.1.1
   @dependencies azx_string_utils gnu azx_base64
 
   @brief HTTPs client

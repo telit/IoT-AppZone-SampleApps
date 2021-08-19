@@ -14,7 +14,7 @@
     Sample application showcasing how to send data from main UART to a connected TCP server. Debug messages are printed on AUX UART port.
 
   @version 
-    1.0.3
+    1.0.4
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -311,7 +311,7 @@ INT32 socket_init(void)
 
   char ip_addr[64];
   int ret;
-  int task_status;
+  int task_status = 0;
 
   CHAR apn[32], apnUser[16], apnPwd[16];
 

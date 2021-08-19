@@ -118,8 +118,15 @@ static char *mystrtok(char **m, char *s, char c);
 static char *mystrtok(char **m, char *s, char c)
 {
   char *p = s?s:*m;
-  if( !*p )
+  if( !p )
+  {
     return 0;
+  }
+  
+  if( !*p )
+  {
+    return 0;
+  }
   *m = strchr(p,c);
   if( *m )
     *(*m)++=0;
@@ -138,7 +145,7 @@ int readConfigFromFile(void)
 
   UINT16  ftp_port;
 
-  char *p;
+  char *p = NULL;
 
   char *_APN = NULL;
   char *_FTP_URL = NULL;
@@ -205,30 +212,39 @@ int readConfigFromFile(void)
     _CURRENT_APP_NAME = mystrtok(&p, NULL,',');
     mystrtok(&p, NULL,'\n'); //strip description
 
-    strcpy(gAPN, _APN);
-    strcpy(gFTP_Address, _FTP_URL);
-
-    ftp_port = atoi(_FTP_PORT);
-    if (ftp_port != AZX_FTP_DEFAULT_PORTNUM)
+    if( !_APN || !_FTP_URL || ! _FTP_PORT || !_FTP_USER || !_FTP_PASS || !_NEW_APP_REMOTE_URI || !_NEW_APP_LOCAL_NAME || !_CURRENT_APP_NAME)
     {
-      snprintf(gFTP_Address + strlen(gFTP_Address), sizeof(gFTP_Address) - strlen(gFTP_Address),":%u", ftp_port);
+      AZX_LOG_CRITICAL("Cannot extract parameters from file!!\r\n");
+      return -1;
     }
-    strcpy(gFTP_UserName, _FTP_USER);
-    strcpy(gFTP_PassWord, _FTP_PASS);
-    strcpy(gRemoteFileURI, _NEW_APP_REMOTE_URI);
-    strcpy(gLocalDestinationAppName, _NEW_APP_LOCAL_NAME);
-    strcpy(gLocalOriginalAppName, _CURRENT_APP_NAME);
+    else
+    {
+
+      strcpy(gAPN, _APN);
+      strcpy(gFTP_Address, _FTP_URL);
+
+      ftp_port = atoi(_FTP_PORT);
+      if (ftp_port != AZX_FTP_DEFAULT_PORTNUM)
+      {
+        snprintf(gFTP_Address + strlen(gFTP_Address), sizeof(gFTP_Address) - strlen(gFTP_Address),":%u", ftp_port);
+      }
+      strcpy(gFTP_UserName, _FTP_USER);
+      strcpy(gFTP_PassWord, _FTP_PASS);
+      strcpy(gRemoteFileURI, _NEW_APP_REMOTE_URI);
+      strcpy(gLocalDestinationAppName, _NEW_APP_LOCAL_NAME);
+      strcpy(gLocalOriginalAppName, _CURRENT_APP_NAME);
 
 
-    AZX_LOG_INFO("Set APN to: <<%s>>\r\n", gAPN);
-    AZX_LOG_INFO("Set FTP URL to: <<%s>>\r\n", gFTP_Address);
-    AZX_LOG_INFO("Set FTP PORT to: %u\r\n", ftp_port);
-    AZX_LOG_INFO("Set FTP USER to: <<%s>>\r\n", gFTP_UserName);
-    AZX_LOG_INFO("Set FTP PASS to: <<%s>>\r\n", gFTP_PassWord);
-    AZX_LOG_INFO("Set FTP FILE URI to: <<%s>>\r\n", gRemoteFileURI);
-    AZX_LOG_INFO("Set LOCAL FINAL APP NAME to: <<%s>>\r\n", gLocalDestinationAppName);
-    AZX_LOG_INFO("Set LOCAL ORIGINAL APP NAME to: <<%s>>\r\n", gLocalOriginalAppName);
-    return 1;
+      AZX_LOG_INFO("Set APN to: <<%s>>\r\n", gAPN);
+      AZX_LOG_INFO("Set FTP URL to: <<%s>>\r\n", gFTP_Address);
+      AZX_LOG_INFO("Set FTP PORT to: %u\r\n", ftp_port);
+      AZX_LOG_INFO("Set FTP USER to: <<%s>>\r\n", gFTP_UserName);
+      AZX_LOG_INFO("Set FTP PASS to: <<%s>>\r\n", gFTP_PassWord);
+      AZX_LOG_INFO("Set FTP FILE URI to: <<%s>>\r\n", gRemoteFileURI);
+      AZX_LOG_INFO("Set LOCAL FINAL APP NAME to: <<%s>>\r\n", gLocalDestinationAppName);
+      AZX_LOG_INFO("Set LOCAL ORIGINAL APP NAME to: <<%s>>\r\n", gLocalOriginalAppName);
+      return 1;
+    }
   }
   else
   {
@@ -348,7 +364,6 @@ static INT32 ftp_debug_hk(AZX_FTP_DEBUG_HOOK_LEVELS_E level, const CHAR *functio
     break;
     break;
   case AZX_FTP_DEBUG_HOOK_INFO:
-    offset = 0;
     break;
   case AZX_FTP_DEBUG_HOOK_DEBUG:
     offset = sprintf(buf, "%5u.%03u %6s - %15s:%-4d - %32s - ",
@@ -358,14 +373,13 @@ static INT32 ftp_debug_hk(AZX_FTP_DEBUG_HOOK_LEVELS_E level, const CHAR *functio
         function);
     break;
   default:
-    offset = 0;
     break;
   }
   va_start(arg, fmt);
   vsnprintf(buf + offset, bufSize-offset, fmt, arg);
   va_end(arg);
 
-  return AZX_LOG_INFO(buf);
+  return AZX_LOG_INFO("%s", buf);
 }
 
 static void NetCallback(M2MB_NET_HANDLE h, M2MB_NET_IND_E net_event, UINT16 resp_size, void *resp_struct, void *myUserdata)

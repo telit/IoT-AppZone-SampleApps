@@ -108,7 +108,7 @@ int readConfigFromFile(void)
   CHAR recv[512];
   CHAR tmp[50];
 
-  char *p;
+  char *p = NULL;
   const char sep[3]="\r\n";
 
   AZX_LOG_DEBUG("Reading parameters from file\r\n");
@@ -140,16 +140,34 @@ int readConfigFromFile(void)
     	if(strstr(p, "SEND_ANSWER_SMS") != NULL)
     	{
     		// sendAnswerSms = atoi(p[0]);
-    		strncpy(tmp, p, strchr(p,',') - p);
-    		sendAnswerSms = atoi(tmp);
-    		AZX_LOG_DEBUG("sendAnswerSms: <<%d>>\r\n", sendAnswerSms);
+        char * pComma = strchr(p,',');
+        if(pComma)
+        {
+          strncpy(tmp, p, pComma - p);
+          tmp[pComma - p] = '\0';
+          sendAnswerSms = !!atoi(tmp); /*force 0-1 value*/
+          AZX_LOG_DEBUG("sendAnswerSms: <<%d>>\r\n", sendAnswerSms);
+        }
+        else
+        {
+          AZX_LOG_ERROR("cannot parse file\r\n");
+        }
     	}
     	if(strstr(p, "DELETE_SMS") != NULL)
     	{
     		//deleteSMS = atoi(p[0]);
-    		strncpy(tmp, p, strchr(p,',') - p);
-    		deleteSMS = atoi(tmp);
-    		AZX_LOG_DEBUG("deleteSMS: <<%d>>\r\n", deleteSMS);
+        char * pComma = strchr(p,',');
+        if(pComma)
+        {
+          strncpy(tmp, p, pComma - p);
+          tmp[pComma - p] = '\0';
+          deleteSMS = !!atoi(tmp); /*force 0-1 value*/
+          AZX_LOG_DEBUG("deleteSMS: <<%d>>\r\n", deleteSMS);
+        }
+        else
+        {
+          AZX_LOG_ERROR("cannot parse file\r\n");
+        }
     	}
     	p = strtok(NULL,sep);
     }

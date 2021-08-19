@@ -119,19 +119,21 @@ static char *auth_schemaTo_string( AZX_HTTP_AUTH_SCHEMA auth_schema )
       return ( char * )"NOT VALID";
   }
 }
+#define MIN(i,j) (((i) < (j)) ? (i) : (j))
 
 static int strtoken( char *src, char *field_title, char *field_value )
 {
   char *p_end_line, *p_split;
   char current_line[256] = {0};
-
+  int len = 0;
   if( ( p_end_line = strstr( src, "\r\n" ) ) == NULL )
   {
     return 1;
   }
-
-  strncpy( current_line, src, p_end_line - src );
-
+  len = MIN( (UINT32)(p_end_line - src), (UINT32)(sizeof(current_line) - 2 ) );
+  strncpy( current_line, src, len );
+  current_line[len] = '\0';
+  
   if( ( p_split = strstr( current_line, ":" ) ) == NULL )
   {
     strcpy( field_title, current_line );
@@ -310,7 +312,12 @@ static int https_header( AZX_HTTP_INFO *hi, char *header )
 
         if( ( pt2 = strstr( pt1, " " ) ) != NULL )
         {
-          strncpy( t1, pt1, pt2 - pt1 );
+          int i;
+          
+          for (i = 0; i < (pt2 - pt1); i++)
+          {
+            t1[i] = pt1[i];
+          }
           t1[pt2 - pt1] = 0;
           azx_str_l_trim( pt1 );
           azx_str_r_trim( pt1 );
@@ -918,7 +925,10 @@ static int readCertFile( char *certFilePath, UINT8 **certBuf, SIZE_T *st_size )
   struct M2MB_STAT st;
   INT32 fd = -1;
   SIZE_T fs_res;
-  m2mb_fs_stat( certFilePath, &st );
+  if(-1 == m2mb_fs_stat( certFilePath, &st ))
+  {
+    return  -1;
+  }
   *certBuf = ( UINT8 * ) m2mb_os_malloc( ( sizeof( UINT8 ) * ( st.st_size ) ) );
 
   if( !*certBuf )

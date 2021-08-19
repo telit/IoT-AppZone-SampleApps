@@ -129,7 +129,7 @@ UINT32 Logger::Uptime(void)
 /*-----------------------------------------------------------------------------------------------*/
 INT32 Logger::out(const CHAR* message)
 {
-  INT32 result;
+  INT32 result = -1;
 
   if ( ! isInit)
   {
@@ -325,7 +325,6 @@ Logger::Logger(M2M_LOG_LEVEL_E level, M2M_LOG_HANDLE_E channel)
   int_channel = channel;
   CSSemHandle = NULL;
 
-  colouredLogs = false;
   isInit = true;
 }
 

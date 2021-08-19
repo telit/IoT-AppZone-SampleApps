@@ -13,7 +13,7 @@
   @description
     Sample application showing how to use HTTPs client functionalities. Debug prints on USB0
   @version 
-    1.1.0
+    1.1.1
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -188,7 +188,6 @@ static int http_debug_hk(AZX_HTTP_LOG_HOOK_LEVELS_E level, const char *function,
     );
     break;
   case AZX_HTTP_LOG_INFO:
-    offset = 0;
     break;
   case AZX_HTTP_LOG_DEBUG:
     offset = sprintf(buf, "%5u.%03u %6s %32s:%-4d - ",
@@ -206,7 +205,7 @@ static int http_debug_hk(AZX_HTTP_LOG_HOOK_LEVELS_E level, const char *function,
   vsnprintf(buf + offset, bufSize-offset, fmt, arg);
   va_end(arg);
 
-  return AZX_LOG_INFO(buf);
+  return AZX_LOG_INFO("%s", buf);
 
 }
 
@@ -315,7 +314,7 @@ INT32 httpTaskCB(INT32 type, INT32 param1, INT32 param2)
   (void) param2;
 
   int ret;
-  AZX_HTTP_OPTIONS opts;
+  AZX_HTTP_OPTIONS opts = {0};
 
   azx_sleep_ms(1000);
 

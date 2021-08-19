@@ -16,7 +16,7 @@
       m2mb_types.h
       m2mb_atp.h
 
-  @version 1.0.0
+  @version 1.0.1
   @dependencies azx_log azx_utils
 
   @author

@@ -11,7 +11,7 @@
   @details
 
   @version
-    1.0.1
+    1.0.2
   @note
 
 
@@ -568,17 +568,34 @@ void NetCallback( M2MB_NET_HANDLE h, M2MB_NET_IND_E net_event, UINT16 resp_size,
         M2MB_NET_GET_SIGNAL_INFO_RESP_T *resp = (M2MB_NET_GET_SIGNAL_INFO_RESP_T*)resp_struct;
         AZX_LOG_TRACE("GET Signal Info resp is %d, %d\r\n", resp->rat, resp->rssi);
         gRSSI = resp->rssi;
-        if( ((resp->sigInfo != NULL) && (resp->rat == M2MB_NET_RAT_UTRAN)) || ((resp->rat >= M2MB_NET_RAT_UTRAN_wHSDPA) && (resp->rat <= M2MB_NET_RAT_UTRAN_wHSDPAandHSUPA)))
+        if(resp->sigInfo != NULL)
         {
-          M2MB_NET_SIGNAL_INFO_UTRAN_T *tmpSigInfo = (M2MB_NET_SIGNAL_INFO_UTRAN_T*)(resp->sigInfo);
-          AZX_LOG_TRACE("GET Signal Info resp is %d\r\n", tmpSigInfo->ecio);
-          gRSSI = tmpSigInfo->ecio;
-        }
-        else if((resp->sigInfo != NULL) && (resp->rat == M2MB_NET_RAT_EUTRAN))
-        {
-          M2MB_NET_SIGNAL_INFO_EUTRAN_T *tmpSigInfo = (M2MB_NET_SIGNAL_INFO_EUTRAN_T*)(resp->sigInfo);
-          AZX_LOG_TRACE("GET Signal Info resp is %d, %d, %d\r\n", tmpSigInfo->rsrq, tmpSigInfo->rsrp, tmpSigInfo->snr);
-          gRSSI = tmpSigInfo->rsrp;
+          if( (resp->rat == M2MB_NET_RAT_UTRAN) || ((resp->rat >= M2MB_NET_RAT_UTRAN_wHSDPA) && (resp->rat <= M2MB_NET_RAT_UTRAN_wHSDPAandHSUPA)) )
+          {
+            M2MB_NET_SIGNAL_INFO_UTRAN_T *tmpSigInfo = (M2MB_NET_SIGNAL_INFO_UTRAN_T*)(resp->sigInfo);
+            if(tmpSigInfo)
+            {
+              AZX_LOG_TRACE("GET Signal Info resp is %d\r\n", tmpSigInfo->ecio);
+              gRSSI = tmpSigInfo->ecio;
+            }
+            else
+            {
+              AZX_LOG_WARN("Cannot get Signal Info\r\n");
+            }
+          }
+          else if (resp->rat == M2MB_NET_RAT_EUTRAN)
+          {
+            M2MB_NET_SIGNAL_INFO_EUTRAN_T *tmpSigInfo = (M2MB_NET_SIGNAL_INFO_EUTRAN_T*)(resp->sigInfo);
+            if(tmpSigInfo)
+            {
+              AZX_LOG_TRACE("GET Signal Info resp is %d, %d, %d\r\n", tmpSigInfo->rsrq, tmpSigInfo->rsrp, tmpSigInfo->snr);
+              gRSSI = tmpSigInfo->rsrp;
+            }
+            else
+            {
+              AZX_LOG_WARN("Cannot get Signal Info\r\n");
+            }
+          }
         }
         m2mb_os_ev_set( net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_SET );
       }
@@ -634,15 +651,15 @@ INT32 AWS_Task( INT32 type, INT32 param1, INT32 param2 )
   M2MB_MQTT_TOPIC_T topics[1] = {0};
 #endif
   int ret;
-  int task_status;
+  int task_status = 0;
   void *myUserdata = NULL;
   
   int msgId = 1;
 
   char pub_topic[64] = {0};
   
-  M2MB_SSL_CONFIG_HANDLE sslConfigHndl;
-  M2MB_SSL_CTXT_HANDLE sslCtxtHndl;
+  M2MB_SSL_CONFIG_HANDLE sslConfigHndl = NULL;
+  M2MB_SSL_CTXT_HANDLE sslCtxtHndl = NULL;
 
   do
   {

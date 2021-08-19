@@ -11,7 +11,7 @@
   @details
 
   @version 
-    1.0.1
+    1.0.2
   @note
 
 
@@ -382,7 +382,7 @@ static INT32 lwm2m_taskCB( INT32 event, INT32 i_uri, INT32 param2)
         AZX_LOG_INFO("\r\nOpaque data in {%u/%u/%u/%u} resource was updated to new content:\r\n",
             uri.obj, uri.objInst, uri.resource, uri.resourceInst);
 
-        for (i=0; i<(int)sizeof(data_buffer);i++)
+        for (i=0; i < (int)(sizeof(data_buffer) / sizeof(data_buffer[0])); i++)
         {
           AZX_LOG_INFO("%02X ", data_buffer[i]);
         }
@@ -704,14 +704,16 @@ static void convertUnixTimeToRTC_TIME(time_t t, M2MB_RTC_TIME_T *p_rtc_time, INT
 
   memset(p_rtc_time,0,sizeof(M2MB_RTC_TIME_T));
   _utctime = gmtime((const time_t *)&t);
-
-  p_rtc_time->year  = _utctime->tm_year + 1900;
-  p_rtc_time->mon   = _utctime->tm_mon + 1;
-  p_rtc_time->day   = _utctime->tm_mday;
-  p_rtc_time->hour  = _utctime->tm_hour;
-  p_rtc_time->min   = _utctime->tm_min;
-  p_rtc_time->sec   = _utctime->tm_sec;
-  p_rtc_time->tz    = tz;
+  if(_utctime)
+  {
+    p_rtc_time->year  = _utctime->tm_year + 1900;
+    p_rtc_time->mon   = _utctime->tm_mon + 1;
+    p_rtc_time->day   = _utctime->tm_mday;
+    p_rtc_time->hour  = _utctime->tm_hour;
+    p_rtc_time->min   = _utctime->tm_min;
+    p_rtc_time->sec   = _utctime->tm_sec;
+    p_rtc_time->tz    = tz;
+  }
 }
 
 
@@ -949,7 +951,7 @@ UINT8 oneedge_init( void)
   if(0 != check_xml_file(OBJECT_XML_NAME))
   {
     AZX_LOG_CRITICAL("%s file is not present in XML folder!\r\n", OBJECT_XML_NAME);
-    return -1;
+    return 1;
   }
 
 
@@ -976,7 +978,7 @@ UINT8 oneedge_init( void)
   {
     AZX_LOG_ERROR( "m2mb_lwm2m_init returned error %d\r\n", retVal );
     m2mb_os_ev_deinit( eventsHandleLwm2m );
-    return -1;
+    return 1;
   }
 
   retVal = m2mb_lwm2m_write( lwm2mHandle, &_obj_telit_service_uri, &service_enable, sizeof( INT32 ) );
@@ -987,7 +989,7 @@ UINT8 oneedge_init( void)
     m2mb_os_ev_deinit( eventsHandleLwm2m );
 
     m2mb_lwm2m_deinit( lwm2mHandle );
-    return -1;
+    return 1;
   }
 
   lwm2m_taskID = azx_tasks_createTask((char*) "LWM2M_TASK", AZX_TASKS_STACK_M, 4, AZX_TASKS_MBOX_S, lwm2m_taskCB);
@@ -999,7 +1001,7 @@ UINT8 oneedge_init( void)
     m2mb_os_ev_deinit( eventsHandleLwm2m );
 
     m2mb_lwm2m_deinit( lwm2mHandle );
-    return -1;
+    return 1;
   }
 
   pars.apnclass = CTX_ID; /*CID*/
@@ -1014,7 +1016,7 @@ UINT8 oneedge_init( void)
     AZX_LOG_ERROR( "m2mb_lwm2m_enable returned error %d\r\n", retVal );
     m2mb_os_ev_deinit( eventsHandleLwm2m );
     m2mb_lwm2m_deinit( lwm2mHandle );
-    return -1;
+    return 1;
   }
   if(M2MB_OS_SUCCESS != m2mb_os_ev_get(
       eventsHandleLwm2m,
@@ -1055,7 +1057,7 @@ UINT8 oneedge_init( void)
       AZX_LOG_ERROR( "m2mb_lwm2m_newinst returned error %d\r\n", retVal );
       m2mb_os_ev_deinit( eventsHandleLwm2m );
       m2mb_lwm2m_deinit( lwm2mHandle );
-      return -1;
+      return 1;
     }
   }
 
@@ -1129,8 +1131,8 @@ INT32 msgLWM2MTask(INT32 type, INT32 param1, INT32 param2)
 
   M2MB_LWM2M_OBJ_URI_T resource_uri;
 
-  M2MB_NET_HANDLE netHandle;
-  INT32 ret;
+  M2MB_NET_HANDLE netHandle = NULL;
+  INT32 ret = 0;
 
   int task_status = type;
 

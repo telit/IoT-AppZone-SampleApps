@@ -13,7 +13,7 @@
   @description
     Sample application showing how to compute MD5 hashes using m2mb crypto. Debug prints on USB0
   @version 
-    1.0.2
+    1.0.3
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -99,8 +99,8 @@ void M2MB_main( int argc, char **argv )
   (void)argc;
   (void)argv;
 
-  UINT8 computedHash[16];
-  char hashString[33];
+  UINT8 computedHash[16] = {0};
+  char hashString[33] = {0};
   INT32 res;
 
   /*SET output channel */
@@ -123,7 +123,7 @@ void M2MB_main( int argc, char **argv )
       md5_hashToString(computedHash, hashString),
       RIGHT_MD5_HASH);
 
-  if (md5_compareHashWithString(computedHash, (CHAR *) RIGHT_MD5_HASH))
+  if (md5_compareHashWithString(computedHash, sizeof(computedHash), (CHAR *) RIGHT_MD5_HASH))
   {
     AZX_LOG_INFO("Hashes are the same!\r\n");
   }
@@ -146,7 +146,7 @@ void M2MB_main( int argc, char **argv )
       "Expected hash: %s\r\n",
       md5_hashToString(computedHash, hashString),
       RIGHT_MD5_HASH);
-  if (md5_compareHashWithString(computedHash, (CHAR *) RIGHT_MD5_HASH))
+  if (md5_compareHashWithString(computedHash, sizeof(computedHash), (CHAR *) RIGHT_MD5_HASH))
   {
     AZX_LOG_INFO("Hashes are the same!\r\n");
   }

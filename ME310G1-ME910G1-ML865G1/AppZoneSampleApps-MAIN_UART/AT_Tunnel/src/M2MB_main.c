@@ -248,7 +248,10 @@ static int init_uart(void)
      else
      {
        AZX_LOG_ERROR( "at_cmd_async_init() returned failure value\r\n" );
-       m2mb_uart_close(main_uart_fd);
+       if(m2mb_uart_close(main_uart_fd) == -1)
+       {
+         AZX_LOG_ERROR( "m2mb_uart_close() failure\r\n" );
+       }
        return -1;
      }
     m2mb_uart_write(main_uart_fd, "Starting AT tunnel demo app. Waiting for AT commands...\r\n", strlen("Starting AT tunnel demo app. Waiting for AT commands...\r\n"));
@@ -292,8 +295,10 @@ void M2MB_main( int argc, char **argv )
   AZX_LOG_INFO("Starting AT tunnel demo app. This is v%s built on %s %s.\r\n",
         VERSION, __DATE__, __TIME__);
 
-  init_uart();
-  
+  if (init_uart())
+  {
+    return;
+  }
   
   m2mb_os_taskSleep( M2MB_OS_MS2TICKS(300000) ); /*wait 5 minutes*/
   

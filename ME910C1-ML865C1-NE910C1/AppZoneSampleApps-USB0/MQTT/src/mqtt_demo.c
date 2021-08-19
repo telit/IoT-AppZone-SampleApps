@@ -11,7 +11,7 @@
   @details
 
   @version
-    1.0.3
+    1.0.4
   @note
 
 
@@ -439,16 +439,16 @@ INT32 MQTT_Task( INT32 type, INT32 param1, INT32 param2 )
   M2MB_OS_RESULT_E        osRes;
   M2MB_OS_EV_ATTR_HANDLE  evAttrHandle;
   UINT32                  curEvBits;
-  M2MB_NET_HANDLE h;
+  M2MB_NET_HANDLE h = NULL;
   M2MB_MQTT_RESPONSE_E result = M2MB_MQTT_SUCCESS;
   M2MB_MQTT_TOPIC_T topics[2] = {0};
   int ret;
-  int task_status;
+  int task_status = 0;
   void *myUserdata = NULL;
   int msgId = 1;
 
-  M2MB_SSL_CONFIG_HANDLE sslConfigHndl;
-  M2MB_SSL_CTXT_HANDLE sslCtxtHndl;
+  M2MB_SSL_CONFIG_HANDLE sslConfigHndl = NULL;
+  M2MB_SSL_CTXT_HANDLE sslCtxtHndl = NULL;
 
   do
   {

@@ -13,7 +13,7 @@
   @description
     Sample application showing how to communicate with an I2C slave device with I2C raw mode. Debug prints on USB0
   @version 
-    1.0.0
+    1.0.1
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -129,7 +129,7 @@ INT32 read_only_I2C(INT32 fd, UINT8 *in_buf, UINT8 bytesToRead)
   M2MB_I2C_CFG_T i2c_data = {0};
 
   M2MB_I2C_RDWR_IOCTL_DATA rdrw_data = {0};
-  M2MB_I2C_MSG msgs[2] = {0}; /* one message for write, one for read */
+  M2MB_I2C_MSG msgs[2]; /* one message for write, one for read */
 
   /* Retrieve current channel config */
   i2c_res = m2mb_i2c_ioctl(fd, M2MB_I2C_IOCTL_GET_CFG, (void *)&i2c_data);
@@ -193,7 +193,7 @@ INT32 readI2CData(INT32 fd, UINT8 regAddr, UINT8 *in_buf, UINT8 bytesToRead)
   M2MB_I2C_CFG_T i2c_data = {0};
 
   M2MB_I2C_RDWR_IOCTL_DATA rdrw_data = {0};
-  M2MB_I2C_MSG msgs[2] = {0}; /* one message for write, one for read */
+  M2MB_I2C_MSG msgs[2]; /* one message for write, one for read */
 
   /* Retrieve current channel config */
   i2c_res = m2mb_i2c_ioctl(fd, M2MB_I2C_IOCTL_GET_CFG, (void *)&i2c_data);
@@ -266,7 +266,7 @@ INT32 configI2CRegister(INT32 fd, UINT8 regAddr, const char* regName, UINT8 byte
   M2MB_I2C_CFG_T i2c_data = {0};
 
   M2MB_I2C_RDWR_IOCTL_DATA rdrw_data = {0};
-  M2MB_I2C_MSG msgs[2] = {0};
+  M2MB_I2C_MSG msgs[2];
 
   /* Retrieve current channel config */
   i2c_res = m2mb_i2c_ioctl(fd, M2MB_I2C_IOCTL_GET_CFG, (void *)&i2c_data);
@@ -291,6 +291,9 @@ INT32 configI2CRegister(INT32 fd, UINT8 regAddr, const char* regName, UINT8 byte
   msgs[0].len   = 2;          /* How many bytes to be written: register + data*/
   msgs[0].buf   = i2cbuf_wr;  /* Assign write buffer to message struct [0]*/
 
+  msgs[1].buf = NULL;
+  msgs[1].flags = 0;
+  msgs[1].len = 0;
 
 
   /* Set i2c data struct rw parameters messages pointer to msgs */
@@ -309,7 +312,7 @@ INT32 configI2CRegister(INT32 fd, UINT8 regAddr, const char* regName, UINT8 byte
 
 
   /*Check if register current value is the expected*/
-  i2c_res = readI2CData(fd, regAddr, i2cbuf_rd, 1);
+  readI2CData(fd, regAddr, i2cbuf_rd, 1);
 
   if (i2cbuf_rd[0] == byteToWrite)
   {

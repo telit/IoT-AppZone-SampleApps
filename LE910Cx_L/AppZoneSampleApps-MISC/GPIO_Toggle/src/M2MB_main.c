@@ -13,7 +13,7 @@
   @description
     Sample application showcasing GPIO usage with M2MB API
   @version 
-    1.0.1
+    1.0.2
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -73,8 +73,8 @@ void M2MB_main( int argc, char **argv )
     if ( ret == -1 )
       return;
 
-    ret = m2mb_gpio_ioctl( gpio_fd, M2MB_GPIO_IOCTL_SET_PULL, M2MB_GPIO_PULL_UP );
-    ret = m2mb_gpio_ioctl( gpio_fd, M2MB_GPIO_IOCTL_SET_DRIVE, M2MB_GPIO_MEDIUM_DRIVE );
+    m2mb_gpio_ioctl( gpio_fd, M2MB_GPIO_IOCTL_SET_PULL, M2MB_GPIO_PULL_UP );
+    m2mb_gpio_ioctl( gpio_fd, M2MB_GPIO_IOCTL_SET_DRIVE, M2MB_GPIO_MEDIUM_DRIVE );
   }
   else
   {

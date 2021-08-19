@@ -180,7 +180,6 @@ static INT32 ftp_debug_hk(AZX_FTP_DEBUG_HOOK_LEVELS_E level, const CHAR *functio
     break;
     break;
   case AZX_FTP_DEBUG_HOOK_INFO:
-    offset = 0;
     break;
   case AZX_FTP_DEBUG_HOOK_DEBUG:
     offset = sprintf(buf, "%5u.%03u %6s - %15s:%-4d - %32s - ",
@@ -190,14 +189,13 @@ static INT32 ftp_debug_hk(AZX_FTP_DEBUG_HOOK_LEVELS_E level, const CHAR *functio
         function);
     break;
   default:
-    offset = 0;
     break;
   }
   va_start(arg, fmt);
   vsnprintf(buf + offset, bufSize-offset, fmt, arg);
   va_end(arg);
 
-  return AZX_LOG_INFO(buf);
+  return AZX_LOG_INFO("%s", buf);
 }
 
 static void NetCallback(M2MB_NET_HANDLE h, M2MB_NET_IND_E net_event, UINT16 resp_size, void *resp_struct, void *myUserdata)
@@ -599,7 +597,24 @@ INT32 msgFTPTask(INT32 type, INT32 param1, INT32 param2)
         task_status = APPLICATION_EXIT;
         break;
       }
-
+      {
+        M2MB_OS_RESULT_E OSres;
+        MEM_W bytes_available;
+        OSres = m2mb_os_memInfo( M2MB_OS_MEMINFO_BYTES_AVAILABLE, &bytes_available );
+        if ( OSres != M2MB_OS_SUCCESS )
+        {
+          AZX_LOG_ERROR("Memory Information bytes available error %d\r\n", OSres);
+          task_status = APPLICATION_EXIT;
+          break;
+        }
+        
+        if( (file_size + 1)  >= bytes_available)
+        {
+          AZX_LOG_ERROR("File size cannot be handled! Not enough RAM for buffer\r\n", OSres);
+          task_status = APPLICATION_EXIT;
+          break;
+        }
+      }
       azx_ftp_clearCallback(ftp_client);
 
       cb_opts.cbFunc = log_progress;
@@ -608,7 +623,7 @@ INT32 msgFTPTask(INT32 type, INT32 param1, INT32 param2)
       cb_opts.bytesXferred = 1024;
 
       local.type = AZX_FTP_XFER_BUFF;                                        /* Define the local recipient as buffer */
-      local.payload.buffInfo.buffer = (CHAR*) m2mb_os_malloc(file_size + 2); /* Set the local buffer reference that will hold the data */
+      local.payload.buffInfo.buffer = (CHAR*) m2mb_os_malloc(file_size + 1); /* Set the local buffer reference that will hold the data */
       local.payload.buffInfo.bufferSize = file_size + 1;                     /* Set the local buffer size */
 
       local.payload.buffInfo.buf_cb = buf_data_cb; /* The data callback to be executed. Set as NULL if not required */
@@ -620,7 +635,7 @@ INT32 msgFTPTask(INT32 type, INT32 param1, INT32 param2)
         break;
       }
 
-      memset(local.payload.buffInfo.buffer, 0, local.payload.buffInfo.bufferSize + 2);
+      memset(local.payload.buffInfo.buffer, 0, local.payload.buffInfo.bufferSize); /*file_size + 2*/
 
       azx_ftp_setCallback(&cb_opts, ftp_client);
 
@@ -640,7 +655,7 @@ INT32 msgFTPTask(INT32 type, INT32 param1, INT32 param2)
           i +=toprint;
         }
         AZX_LOG_INFO(">>>\r\n");
-
+        m2mb_os_free(local.payload.buffInfo.buffer);
       }
       else
       {
@@ -649,8 +664,6 @@ INT32 msgFTPTask(INT32 type, INT32 param1, INT32 param2)
         m2mb_os_free(local.payload.buffInfo.buffer);
         break;
       }
-      m2mb_os_free(local.payload.buffInfo.buffer);
-      break;
     }
 
     AZX_LOG_INFO("\r\nFTP quit...\r\n");

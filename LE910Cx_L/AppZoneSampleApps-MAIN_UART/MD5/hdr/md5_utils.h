@@ -32,7 +32,7 @@ INT32 md5_isMD5(CHAR *md5string);
 
 INT32 md5_compareHashes(UINT8 *hash_a, UINT8 *hash_b);
 
-INT32 md5_compareHashWithString(UINT8 *hash, CHAR *string);
+INT32 md5_compareHashWithString(UINT8 *hash, UINT16 hash_size, CHAR *string);
 
 INT32 md5_computeFromFile(const CHAR *input_filename, UINT8 *md5_sum);
 
