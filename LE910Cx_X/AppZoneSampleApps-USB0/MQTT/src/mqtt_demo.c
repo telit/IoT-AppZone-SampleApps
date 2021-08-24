@@ -11,7 +11,7 @@
   @details
 
   @version
-    1.0.4
+    1.0.5
   @note
 
 
@@ -441,7 +441,7 @@ INT32 MQTT_Task( INT32 type, INT32 param1, INT32 param2 )
   UINT32                  curEvBits;
   M2MB_NET_HANDLE h = NULL;
   M2MB_MQTT_RESPONSE_E result = M2MB_MQTT_SUCCESS;
-  M2MB_MQTT_TOPIC_T topics[2] = {0};
+  M2MB_MQTT_TOPIC_T topics[2] = {{0}};
   int ret;
   int task_status = 0;
   void *myUserdata = NULL;
