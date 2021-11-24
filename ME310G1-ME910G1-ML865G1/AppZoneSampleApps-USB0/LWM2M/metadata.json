@@ -6,7 +6,8 @@
   "homepage": "https://www.telit.com/",
   "keywords": [
     "IoT AppZone",
-    "LwM2M"
+    "LwM2M",
+    "OneEdge"
   ],
   "availability": {
     "MXXXXC1": {
