@@ -14,7 +14,7 @@
     Sample application showcasing how to receive an SMS containing an AT command, process the AT command and send its answer to sender (configurable in sms_config.txt). A SIM card and antenna must be present. Debug prints on AUX UART
 
   @version 
-    1.0.4
+    1.0.5
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -44,7 +44,6 @@
 
 #include "app_cfg.h"
 
-#include "ul_gsm_pdu.h"
 #include "azx_pduEnc.h"
 #include "azx_pduDec.h"
 

@@ -11,7 +11,7 @@
   @details
 
   @version
-    1.0.5
+    1.0.6
   @note
 
 
@@ -141,9 +141,8 @@ static void CleanSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SSL_C
     return;
   }
 
-  if ((ssl_auth_mode ==   M2MB_SSL_SERVER_AUTH) || (ssl_auth_mode ==   M2MB_SSL_SERVER_CLIENT_AUTH))
+  if(ssl_auth_mode >= M2MB_SSL_SERVER_AUTH)
   {
-
     /* clean everything */
     res = m2mb_ssl_cert_delete( M2MB_SSL_CACERT, (CHAR*)SSL_CERT_CA_NAME );
     if(res==0)
@@ -155,6 +154,20 @@ static void CleanSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SSL_C
       AZX_LOG_ERROR("m2mb_ssl_cert_delete failed with code %d\r\n",res);
     }
   }
+  
+  if(ssl_auth_mode >= M2MB_SSL_SERVER_CLIENT_AUTH)
+  {
+    res = m2mb_ssl_cert_delete( M2MB_SSL_CERT, (CHAR*)SSL_CLIENT_NAME );
+    if(res==0)
+    {
+      AZX_LOG_TRACE("m2mb_ssl_cert_delete PASS\r\n");
+    }
+    else
+    {
+      AZX_LOG_ERROR("m2mb_ssl_cert_delete failed with code %d\r\n",res);
+    }
+  }
+  
   res = m2mb_ssl_delete_config(*p_hSSLConfig);
   if(res==0)
   {
@@ -265,18 +278,20 @@ static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SS
     if (0 != m2mb_ssl_cert_store( M2MB_SSL_CACERT,SSL_info,(CHAR*) SSL_CERT_CA_NAME ))
     {
       AZX_LOG_ERROR("m2mb_ssl_cert_store FAILED\r\n" );
-      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, ssl_auth_mode);
+      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_NO_AUTH);
+      return -1;
     }
 
     if (0 != m2mb_ssl_cert_load( *p_hSSLCtx,M2MB_SSL_CACERT,(CHAR*) SSL_CERT_CA_NAME ))
     {
       AZX_LOG_ERROR("m2mb_ssl_cert_load FAILED\r\n" );
-      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, ssl_auth_mode);
+      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_AUTH);
+      return -1;
     }
 
   }
 
-  if (ssl_auth_mode ==   M2MB_SSL_SERVER_CLIENT_AUTH)
+  if (ssl_auth_mode == M2MB_SSL_SERVER_CLIENT_AUTH)
   {
     AZX_LOG_DEBUG("server + client authentication is chosen \r\n");
     AZX_LOG_DEBUG("ca cert file %s \r\n",CLIENTCERTFILE);
@@ -284,14 +299,14 @@ static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SS
     if (0 ==m2mb_fs_stat(CLIENTCERTFILE, &st))
     {
       AZX_LOG_DEBUG("file size: %u\r\n",  st.st_size);
-
     }
 
     fd = m2mb_fs_open(CLIENTCERTFILE, M2MB_O_RDONLY);   /*open in read only mode*/
     if (fd == -1 )
     {
       AZX_LOG_DEBUG("Cannot open file %s \r\n",CLIENTCERTFILE);
-      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, ssl_auth_mode);
+      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_AUTH);
+      return -1;
     }
 
     AZX_LOG_DEBUG("Reading content from file. Size: %u\r\n", st.st_size);
@@ -301,7 +316,8 @@ static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SS
     {
       AZX_LOG_DEBUG("Failed reading buffer into file.\r\n");
       m2mb_fs_close(fd);
-      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, ssl_auth_mode);
+      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_AUTH);
+      return -1;
     }
 
     AZX_LOG_DEBUG("Buffer successfully received from file. %d bytes were loaded.\r\n", res);
@@ -329,7 +345,8 @@ static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SS
     if (fd == -1 )
     {
       AZX_LOG_DEBUG("Cannot open file %s \r\n",CLIENTKEYFILE);
-      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, ssl_auth_mode);
+      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_AUTH);
+      return -1;
     }
 
     AZX_LOG_DEBUG("Reading content from file. Size: %u\r\n", st.st_size);
@@ -339,7 +356,8 @@ static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SS
     {
       AZX_LOG_DEBUG("Failed reading buffer into file.\r\n");
       m2mb_fs_close(fd);
-      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, ssl_auth_mode);
+      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_AUTH);
+      return -1;
     }
     else
     {
@@ -356,13 +374,15 @@ static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SS
     if (0 != m2mb_ssl_cert_store( M2MB_SSL_CERT,SSL_info,(CHAR*) SSL_CLIENT_NAME ))
     {
       AZX_LOG_ERROR("m2mb_ssl_cert_store FAILED\r\n" );
-      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, ssl_auth_mode);
+      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_AUTH);
+      return -1;
     }
 
     if (0 != m2mb_ssl_cert_load( *p_hSSLCtx,M2MB_SSL_CERT,(CHAR*) SSL_CLIENT_NAME ))
     {
       AZX_LOG_ERROR("m2mb_ssl_cert_load FAILED\r\n" );
-      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, ssl_auth_mode);
+      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_CLIENT_AUTH);
+      return -1;
     }
   }
 
@@ -543,7 +563,11 @@ INT32 MQTT_Task( INT32 type, INT32 param1, INT32 param2 )
         break;
       }
     }
-
+    else
+    {
+      AZX_LOG_ERROR("PrepareSSLEnvironment() failed!\r\n");
+      break;
+    }
 
 
     /* Init events handler */

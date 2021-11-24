@@ -14,7 +14,7 @@
     Sample application showcasing how to create and decode PDUs to be used with m2mb_sms_* API set. A SIM card and antenna must be present. Debug prints on MAIN UART
 
   @version 
-    1.0.4
+    1.0.5
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -42,7 +42,7 @@
 
 #include "app_cfg.h"
 
-#include "ul_gsm_pdu.h"
+
 #include "azx_pduEnc.h"
 #include "azx_pduDec.h"
 
@@ -52,7 +52,7 @@
 
 /* Local defines ================================================================================*/
 
-#define SMS_PDU_MAX_SIZE 400
+
 
 #define SENDER_NUMBER "+391234567890"   //remember to store the phone number in international format
 
@@ -240,6 +240,10 @@ void M2MB_main( int argc, char **argv )
   {
     AZX_LOG_ERROR("SMS not sent! - unexpected value %d returned\r\n", osRes);
   }
+
+  //App waiting for incoming SMSs
+  AZX_LOG_INFO( "Waiting for an incoming SMS...\r\n" );
+
 
 #ifdef LE910CXL
   /* On Linux based LE910CX Linux, the end fo M2MB_main causes the return of the application. 

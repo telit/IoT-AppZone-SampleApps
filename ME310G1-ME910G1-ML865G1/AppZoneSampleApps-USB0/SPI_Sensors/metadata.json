@@ -16,14 +16,16 @@
         "30.00.xx6",
         "30.00.xx7",
         "30.00.xx8",
-        "30.00.xx9"
+        "30.00.xx9",
+        "30.01.xx0.0"
       ]
     },
     "MXXXXG1": {
       "firmwares": [
         "37.00.xx1",
         "37.00.xx2",
-        "37.00.xx3"
+        "37.00.xx3",
+        "37.00.xx4.1"
       ]
     },
     "LE910Cx-L": {
@@ -39,8 +41,14 @@
     }
   },
   "groups": [
-    {"name": "MAIN_UART", "limitations": []},
-    {"name": "USB0", "limitations": []}
+    {
+      "name": "MAIN_UART",
+      "limitations": []
+    },
+    {
+      "name": "USB0",
+      "limitations": []
+    }
   ],
   "platform": "GCC",
   "license": "MIT",
