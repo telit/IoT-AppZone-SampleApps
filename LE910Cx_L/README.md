@@ -1,18 +1,18 @@
 
 
-# AppZone m2mb Sample Apps 
+# AppZone m2mb Sample Apps
 
 
 
-Package Version: **1.1.10-CxL**
+Package Version: **1.1.12-CxL**
 
-Minimum Firmware Version: **25.21.XX0**
+Minimum Firmware Version: **25.21.000.3**
 
 
 ## Features
 
 This package goal is to provide sample source code for common activities kickstart.
- 
+
 
 # Quick start
 
@@ -21,9 +21,9 @@ This package goal is to provide sample source code for common activities kicksta
 
 To manually deploy the Sample application on the devices perform the following steps:
 
-1. Have **25.21.XX0** FW version flashed (`AT#SWPKGV` will give you the FW version)
+1. Have **25.21.000.3** FW version flashed (`AT#SWPKGV` will give you the FW version)
 
-1. Copy _m2mapz.bin_ to _/data/azc/mod/_ 
+1. Copy _m2mapz.bin_ to _/data/azc/mod/_
 	```
 	AT#M2MWRITE="/data/azc/mod/m2mapz.bin",<size>,1
 	```
@@ -70,7 +70,7 @@ Telit appreciates feedback from the users of our information.
     AT#M2MDEL="/data/azc/mod/m2mapz.bin"
     AT#M2MDEL="/data/azc/mod/appcfg.ini"
     ```
-      
+
 * Application project does not compile
 	+ Right click on project name
 	+ Select Properties
@@ -129,7 +129,7 @@ in the samples package, go in the HelloWorld folder (e.g. `AppZoneSampleApps-MAI
 [Installing beta version libraries Plug-in](#installing-beta-version-libraries-plug-in)
 
 
-# Applications 
+# Applications
 
 ## MISC 
 *Applications that provide usage examples for various functionalities, without prints*
@@ -726,16 +726,22 @@ Sample application showing how to use GNSS functionality. Debug prints on **MAIN
 - How to enable GNSS receiver on module
 - How to collect location information from receiver
 
+**Note:** on MEx10G1 product family both M2MB_GNSS_SERVICE_NMEA_REPORT and M2MB_GNSS_SERVICE_POSITION_REPORT services are available, while on ME910C1 product family only M2MB_GNSS_SERVICE_POSITION_REPORT is available 
 
 **Application workflow**
 
 **`M2MB_main.c`**
 
 - Open USB/UART/UART_AUX
-- Init gnss, enable position report and start it.
-- When a fix is available, a message will be printed by the GNSS callback function
+- Print a welcome message
+- Create GNSS task and send a message to it
 
-![](pictures/samples/gnss_bordered.png)
+**`gps_task.c`**
+- Init Info feature and get module type
+- Init gnss, enable position/NMEA report and start it.
+- When a fix or a NMEA sentence is available, a message will be printed by the GNSS callback function
+
+![](pictures/samples/GNSS_output_bordered.png)
 
 ---------------------
 
@@ -1200,6 +1206,35 @@ The application connects to an NTP server, gets current date and time and update
 
 
 ![](pictures/samples/NTP_bordered.png)
+
+---------------------
+
+
+
+### RTC example 
+
+Sample application that shows RTC apis functionalities: how to get/set moudle system time and timestamp. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- How to read module timestamp 
+- How to read module system time
+- How to set new system time
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Init log azx and print a welcome message
+- Init net functionality and wait for module registration
+- Init RTC functionality and get module time in timestamp format (seconds from the epoch)
+- Get moudle system time in date/time format
+- Add 1 hour to timestamp, convert it to system time and set it to module
+
+![](pictures/samples/RTC_output_bordered.png)
 
 ---------------------
 
@@ -1721,6 +1756,39 @@ Sample application showing how to check if USB cable is plugged in or not. Debug
 
 
 
+### Basic USB read/write example 
+
+Sample application that shows how to use the basic read/write USB apis. Synchronous or asynchronous mode is available setting SYNC to 1 or 0. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- Read and write on USB (synchoronous mode)
+- Read and write on USB (asynchronous mode)
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB port (USB0)
+- Set rx and tx timeouts
+- **SYNC**
+   - read until some data are availableon USB
+   - as soon as some data are available on USB read them and write on USB data received
+
+- **ASYNC**
+  - set the USB callback
+  - write some data on USB and wait for data to be read
+  - as soon as some data are available on USB M2MB_USB_RX_EVENT is generated and handled by callback. Data are read and printed on serial com port.
+   
+![](pictures/samples/USB_TxRxBasic_bordered.png)
+
+---------------------
+
+
+
 ### ZLIB example 
 
 Sample application showing how to compress/uncompress with ZLIB. Debug prints on **MAIN UART**
@@ -1837,6 +1905,54 @@ The application shows how to create and manage tasks with m2mb APIs. Debug print
 - Print the message data when one arrives
 
 ![](pictures/samples/basic_task_bordered.png)
+
+---------------------
+
+
+
+### UART USB tunnel example 
+
+Sample application that opens a tunnel between main UART and USB0 port.
+
+
+**Features**
+
+
+- Opens `Main UART` port with a callback function
+- Opens `USB0` port with a callback function
+- Creates a simple task to manage data exchange between ports
+
+
+**Application workflow**
+
+**`M2MB_main function`**
+
+- Create `Main UART` handle and configure its parameters
+- Create `USB0` handle and configure its parameters
+- Create the data management task
+- Write **`READY`** on both ports when the tunneling is ready
+
+**`USB_Cb`**
+
+- When data are received on the `USB0` port, retrieve the available amount and send the value to the data management task with the proper command
+
+**`UART_Cb`**
+
+- When data are received on the `Main UART` port, retrieve the available amount and send the value to the data management task with the proper command
+
+
+**`dataTask_Cb`**
+
+- if command is `TASK_UART_READ_AND_USB_WRITE`, read the requested amount from the `Main UART` port and write it on `USB0`
+- if command is `TASK_USB_READ_AND_UART_WRITE`, read the requested amount from the `USB0` port and write it on `Main UART`
+
+
+UART output received from USB0 (in RED, the user input data from UART )
+![](pictures/samples/uart_usb_tunnel_uart_bordered.png)
+
+
+USB0 output received from UART (in RED, the user input data from USB0 )
+![](pictures/samples/uart_usb_tunnel_usb_bordered.png)
 
 ---------------------
 
@@ -2386,16 +2502,22 @@ Sample application showing how to use GNSS functionality. Debug prints on **USB0
 - How to enable GNSS receiver on module
 - How to collect location information from receiver
 
+**Note:** on MEx10G1 product family both M2MB_GNSS_SERVICE_NMEA_REPORT and M2MB_GNSS_SERVICE_POSITION_REPORT services are available, while on ME910C1 product family only M2MB_GNSS_SERVICE_POSITION_REPORT is available 
 
 **Application workflow**
 
 **`M2MB_main.c`**
 
 - Open USB/UART/UART_AUX
-- Init gnss, enable position report and start it.
-- When a fix is available, a message will be printed by the GNSS callback function
+- Print a welcome message
+- Create GNSS task and send a message to it
 
-![](pictures/samples/gnss_bordered.png)
+**`gps_task.c`**
+- Init Info feature and get module type
+- Init gnss, enable position/NMEA report and start it.
+- When a fix or a NMEA sentence is available, a message will be printed by the GNSS callback function
+
+![](pictures/samples/GNSS_output_bordered.png)
 
 ---------------------
 
@@ -2860,6 +2982,35 @@ The application connects to an NTP server, gets current date and time and update
 
 
 ![](pictures/samples/NTP_bordered.png)
+
+---------------------
+
+
+
+### RTC example 
+
+Sample application that shows RTC apis functionalities: how to get/set moudle system time and timestamp. Debug prints on **USB0**
+
+
+**Features**
+
+
+- How to read module timestamp 
+- How to read module system time
+- How to set new system time
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Init log azx and print a welcome message
+- Init net functionality and wait for module registration
+- Init RTC functionality and get module time in timestamp format (seconds from the epoch)
+- Get moudle system time in date/time format
+- Add 1 hour to timestamp, convert it to system time and set it to module
+
+![](pictures/samples/RTC_output_bordered.png)
 
 ---------------------
 

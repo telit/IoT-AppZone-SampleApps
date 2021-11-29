@@ -11,7 +11,7 @@
   @details
 
   @version
-    1.0.2
+    1.0.3
   @note
 
 
@@ -157,26 +157,31 @@ static void CleanSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SSL_C
   }
 
   /* clean everything */
-  res = m2mb_ssl_cert_delete( M2MB_SSL_CACERT, (CHAR*)SSL_CERT_CA_NAME );
-  if(res==0)
-  {
-    AZX_LOG_TRACE("m2mb_ssl_cert_delete PASS\r\n");
-  }
-  else
-  {
-    AZX_LOG_ERROR("m2mb_ssl_cert_delete failed with code %d\r\n",res);
-  }
 
-  res = m2mb_ssl_cert_delete( M2MB_SSL_CERT, (CHAR*)SSL_CLIENT_NAME );
-  if(res==0)
+  if(ssl_auth_mode >= M2MB_SSL_SERVER_AUTH)
   {
-    AZX_LOG_TRACE("m2mb_ssl_cert_delete PASS\r\n");
+    res = m2mb_ssl_cert_delete( M2MB_SSL_CACERT, (CHAR*)SSL_CERT_CA_NAME );
+    if(res==0)
+    {
+      AZX_LOG_TRACE("m2mb_ssl_cert_delete PASS\r\n");
+    }
+    else
+    {
+      AZX_LOG_ERROR("m2mb_ssl_cert_delete failed with code %d\r\n",res);
+    }
   }
-  else
+  if(ssl_auth_mode >= M2MB_SSL_SERVER_CLIENT_AUTH)
   {
-    AZX_LOG_ERROR("m2mb_ssl_cert_delete failed with code %d\r\n",res);
+    res = m2mb_ssl_cert_delete( M2MB_SSL_CERT, (CHAR*)SSL_CLIENT_NAME );
+    if(res==0)
+    {
+      AZX_LOG_TRACE("m2mb_ssl_cert_delete PASS\r\n");
+    }
+    else
+    {
+      AZX_LOG_ERROR("m2mb_ssl_cert_delete failed with code %d\r\n",res);
+    }
   }
-
   res = m2mb_ssl_delete_config(*p_hSSLConfig);
   if(res==0)
   {
@@ -253,28 +258,28 @@ static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SS
   }
 
 #if HOSTMISMATCH_ENABLE
-    ret = m2mb_ssl_config( *p_hSSLConfig, M2MB_SSL_NAME_CHECK, (void*)AWS_BROKER_ADDRESS );
-    if(ret != 0)
-    {
-      AZX_LOG_ERROR("m2mb_ssl_config failed\r\n");
-    }
-    else
-    {
-      AZX_LOG_DEBUG("m2mb_ssl_config NAME CHECK succeeded\r\n");
-    }
+  ret = m2mb_ssl_config( *p_hSSLConfig, M2MB_SSL_NAME_CHECK, (void*)AWS_BROKER_ADDRESS );
+  if(ret != 0)
+  {
+    AZX_LOG_ERROR("m2mb_ssl_config failed\r\n");
+  }
+  else
+  {
+    AZX_LOG_DEBUG("m2mb_ssl_config NAME CHECK succeeded\r\n");
+  }
 
 #endif
 
 #if SNI_ENABLE
-    res = m2mb_ssl_config( *p_hSSLConfig, M2MB_SSL_NAME_SNI, (void*)AWS_BROKER_ADDRESS );
-    if(res != 0)
-    {
-      AZX_LOG_ERROR("m2mb_ssl_config SNI failed\r\n");
-    }
-    else
-    {
-      AZX_LOG_DEBUG("m2mb_ssl_config SNI succeeded\r\n");
-    }
+  res = m2mb_ssl_config( *p_hSSLConfig, M2MB_SSL_NAME_SNI, (void*)AWS_BROKER_ADDRESS );
+  if(res != 0)
+  {
+    AZX_LOG_ERROR("m2mb_ssl_config SNI failed\r\n");
+  }
+  else
+  {
+    AZX_LOG_DEBUG("m2mb_ssl_config SNI succeeded\r\n");
+  }
 #endif
 
   {
@@ -357,18 +362,20 @@ static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SS
     if (0 != m2mb_ssl_cert_store( M2MB_SSL_CACERT,SSL_info,(CHAR*) SSL_CERT_CA_NAME ))
     {
       AZX_LOG_ERROR("m2mb_ssl_cert_store FAILED\r\n" );
-      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, ssl_auth_mode);
+      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_NO_AUTH);
+      return -1;
     }
 
     if (0 != m2mb_ssl_cert_load( *p_hSSLCtx, M2MB_SSL_CACERT,(CHAR*) SSL_CERT_CA_NAME ))
     {
       AZX_LOG_ERROR("m2mb_ssl_cert_load FAILED\r\n" );
-      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, ssl_auth_mode);
+      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_AUTH);
+      return -1;
     }
   }
 
   {
-    AZX_LOG_DEBUG("Client certificate file %s \r\n",CLIENTCERTFILE);
+    AZX_LOG_DEBUG("Client certificate file %s \r\n", CLIENTCERTFILE);
 
     if (0 ==m2mb_fs_stat(CLIENTCERTFILE, &st))
     {
@@ -379,7 +386,8 @@ static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SS
     if (fd == -1 )
     {
       AZX_LOG_ERROR("Cannot open file %s \r\n",CLIENTCERTFILE);
-      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, ssl_auth_mode);
+      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_AUTH);
+      return -1;
     }
 
     AZX_LOG_TRACE("Reading content from file. Size: %u\r\n", st.st_size);
@@ -389,7 +397,8 @@ static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SS
     {
       AZX_LOG_ERROR("Failed reading buffer into file.\r\n");
       m2mb_fs_close(fd);
-      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, ssl_auth_mode);
+      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_AUTH);
+      return -1;
     }
 
     AZX_LOG_DEBUG("Buffer successfully received from file. %d bytes were loaded.\r\n", res);
@@ -416,7 +425,8 @@ static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SS
     if (fd == -1 )
     {
       AZX_LOG_ERROR("Cannot open file %s \r\n",CLIENTKEYFILE);
-      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, ssl_auth_mode);
+      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_AUTH);
+      return -1;
     }
 
     AZX_LOG_TRACE("Reading content from file. Size: %u\r\n", st.st_size);
@@ -426,7 +436,8 @@ static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SS
     {
       AZX_LOG_ERROR("Failed reading buffer into file.\r\n");
       m2mb_fs_close(fd);
-      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, ssl_auth_mode);
+      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_AUTH);
+      return -1;
     }
     else
     {
@@ -443,13 +454,15 @@ static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SS
     if (0 != m2mb_ssl_cert_store( M2MB_SSL_CERT,SSL_info,(CHAR*) SSL_CLIENT_NAME ))
     {
       AZX_LOG_ERROR("m2mb_ssl_cert_store FAILED\r\n" );
-      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, ssl_auth_mode);
+      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_AUTH);
+      return -1;
     }
 
     if (0 != m2mb_ssl_cert_load( *p_hSSLCtx,M2MB_SSL_CERT,(CHAR*) SSL_CLIENT_NAME ))
     {
       AZX_LOG_ERROR("m2mb_ssl_cert_load FAILED\r\n" );
-      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, ssl_auth_mode);
+      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_CLIENT_AUTH);
+      return -1;
     }
   }
 
@@ -753,6 +766,11 @@ INT32 AWS_Task( INT32 type, INT32 param1, INT32 param2 )
         AZX_LOG_ERROR("m2mb_mqtt_conf() - configuring M2MB_MQTT_SECURE_OPT failed!\r\n");
         break;
       }
+    }
+    else
+    {
+      AZX_LOG_ERROR("PrepareSSLEnvironment() failed!\r\n");
+      break;
     }
 
 

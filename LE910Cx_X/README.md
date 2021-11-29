@@ -1,18 +1,18 @@
 
 
-# AppZone m2mb Sample Apps 
+# AppZone m2mb Sample Apps
 
 
 
-Package Version: **1.1.10-CxX**
+Package Version: **1.1.12-CxX**
 
-Minimum Firmware Version: **25.30.XX2**
+Minimum Firmware Version: **25.30.222.3**
 
 
 ## Features
 
 This package goal is to provide sample source code for common activities kickstart.
- 
+
 
 # Quick start
 
@@ -21,9 +21,9 @@ This package goal is to provide sample source code for common activities kicksta
 
 To manually deploy the Sample application on the devices perform the following steps:
 
-1. Have **25.30.XX2** FW version flashed (`AT#SWPKGV` will give you the FW version)
+1. Have **25.30.222.3** FW version flashed (`AT#SWPKGV` will give you the FW version)
 
-1. Copy _m2mapz.bin_ to _/mod/_ 
+1. Copy _m2mapz.bin_ to _/mod/_
 	```
 	AT#M2MWRITE="/mod/m2mapz.bin",<size>,1
 	```
@@ -70,7 +70,7 @@ Telit appreciates feedback from the users of our information.
     AT#M2MDEL="/mod/m2mapz.bin"
     AT#M2MDEL="/mod/appcfg.ini"
     ```
-      
+
 * Application project does not compile
 	+ Right click on project name
 	+ Select Properties
@@ -133,7 +133,7 @@ in the samples package, go in the HelloWorld folder (e.g. `AppZoneSampleApps-MAI
 [Installing beta version libraries Plug-in](#installing-beta-version-libraries-plug-in)
 
 
-# Applications 
+# Applications
 
 ## AUX UART 
 *Applications that provide usage examples for various functionalities, log output on Auxiliary UART*
@@ -781,16 +781,22 @@ Sample application showing how to use GNSS functionality. Debug prints on **AUX 
 - How to enable GNSS receiver on module
 - How to collect location information from receiver
 
+**Note:** on MEx10G1 product family both M2MB_GNSS_SERVICE_NMEA_REPORT and M2MB_GNSS_SERVICE_POSITION_REPORT services are available, while on ME910C1 product family only M2MB_GNSS_SERVICE_POSITION_REPORT is available 
 
 **Application workflow**
 
 **`M2MB_main.c`**
 
 - Open USB/UART/UART_AUX
-- Init gnss, enable position report and start it.
-- When a fix is available, a message will be printed by the GNSS callback function
+- Print a welcome message
+- Create GNSS task and send a message to it
 
-![](pictures/samples/gnss_bordered.png)
+**`gps_task.c`**
+- Init Info feature and get module type
+- Init gnss, enable position/NMEA report and start it.
+- When a fix or a NMEA sentence is available, a message will be printed by the GNSS callback function
+
+![](pictures/samples/GNSS_output_bordered.png)
 
 ---------------------
 
@@ -1054,6 +1060,16 @@ Sample application showcasing LWM2M client usage with M2MB API. Debug prints on 
 
 - Manage write, read and monitoring resources changed from the portal
 
+**Requirements**
+
+This application expects the user to configure the PDP context ID 1 with the proper APN.
+it can be done with the following AT command:
+
+`AT+CGDCONT=1,"IPV4V6","<user apn>"`
+
+Depending on the Mobiler Network Operator and Access Technology, the APN might be automatically set by the network itself. In this case, nothing must be done by the user.
+
+
 **Application workflow**
 
 **`M2MB_main.c`**
@@ -1067,8 +1083,6 @@ Sample application showcasing LWM2M client usage with M2MB API. Debug prints on 
 
 **`msgLWM2MTask`**
 - Check registration status
-
-- Configure APN to the correct one for CID 1
 
 - Initialize LWM2M client, 
 
@@ -1084,7 +1098,9 @@ Sample application showcasing LWM2M client usage with M2MB API. Debug prints on 
   
   - Wait for client to register to Portal
   
-  - Send integer and string values
+  - Performs all operations (set, read, get, write) on the related resources
+
+  - Performs a set with notify ack enabled
   
   - Wait for events from server
 
@@ -1093,6 +1109,15 @@ Sample application showcasing LWM2M client usage with M2MB API. Debug prints on 
 
 - Manage events arriving from client \(operations completion status and unsolicited events\)
 - Run lwm2m_taskCB when a monitored resource changes, to manage the action to be done
+
+#### Device Profile upload
+
+**LWM2M resources demo** device profile must be imported to have a real-time update of resources values on the LWM2M browser. 
+
+To do so, import the file `lwm2m_resources_demo.json` on section `Developer` > `Device profiles` of OneEdge IoT portal:
+
+![](pictures/samples/lwm2m_device_profile_bordered.png)
+
 
 #### Custom Object configuration
 
@@ -1119,10 +1144,10 @@ Copy the xml file content and paste it in the new Object form
 
 
 
-Also, the application requires the XML file `/xml/object_35000.xml` (provided with the sample files) to be stored in module's `/XML/` folder. 
+Also, the application requires the XML file `/xml/object_32010.xml` (provided with the sample files) to be stored in module's `/XML/` folder. 
 It can be done with 
 
-`AT#M2MWRITE=/XML/object_35000.xml,<size_in_bytes>`
+`AT#M2MWRITE=/XML/object_32010.xml,<size_in_bytes>`
 
 To load the XML file in the module, Telit AT Controller (TATC) can be used. Once the command above is issued, press the load content button:
 
@@ -1143,7 +1168,14 @@ The file is successfully loaded on the module
 
 ![](pictures/samples/lwm2m_1_bordered.png)
 
-![](pictures/samples/lwm2m_2_bordered.png)
+
+![](pictures/samples/lwm2m_2_1_bordered.png)
+![](pictures/samples/lwm2m_2_2_bordered.png)
+![](pictures/samples/lwm2m_2_3_bordered.png)
+![](pictures/samples/lwm2m_2_4_bordered.png)
+![](pictures/samples/lwm2m_2_5_bordered.png)
+![](pictures/samples/lwm2m_2_6_bordered.png)
+![](pictures/samples/lwm2m_2_7_bordered.png)
 
 
 After the Demo completes the initialization, it is possible to access the object resources from the Portal Object Browser
@@ -1158,7 +1190,7 @@ For example, executing the two Exec Resources at the bottom of the list, the app
 
 ![](pictures/samples/lwm2m_3_exec_bordered.png)
 
-Writing a string resource (id /35000/0/11 ), the application will notify the change
+Writing a string resource (id /32010/0/11 ), the application will notify the change
 
 ![](pictures/samples/lwm2m_4_write_bordered.png)
 
@@ -1394,6 +1426,35 @@ The application connects to an NTP server, gets current date and time and update
 
 
 ![](pictures/samples/NTP_bordered.png)
+
+---------------------
+
+
+
+### RTC example 
+
+Sample application that shows RTC apis functionalities: how to get/set moudle system time and timestamp. Debug prints on **AUX UART**
+
+
+**Features**
+
+
+- How to read module timestamp 
+- How to read module system time
+- How to set new system time
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Init log azx and print a welcome message
+- Init net functionality and wait for module registration
+- Init RTC functionality and get module time in timestamp format (seconds from the epoch)
+- Get moudle system time in date/time format
+- Add 1 hour to timestamp, convert it to system time and set it to module
+
+![](pictures/samples/RTC_output_bordered.png)
 
 ---------------------
 
@@ -2589,16 +2650,22 @@ Sample application showing how to use GNSS functionality. Debug prints on **MAIN
 - How to enable GNSS receiver on module
 - How to collect location information from receiver
 
+**Note:** on MEx10G1 product family both M2MB_GNSS_SERVICE_NMEA_REPORT and M2MB_GNSS_SERVICE_POSITION_REPORT services are available, while on ME910C1 product family only M2MB_GNSS_SERVICE_POSITION_REPORT is available 
 
 **Application workflow**
 
 **`M2MB_main.c`**
 
 - Open USB/UART/UART_AUX
-- Init gnss, enable position report and start it.
-- When a fix is available, a message will be printed by the GNSS callback function
+- Print a welcome message
+- Create GNSS task and send a message to it
 
-![](pictures/samples/gnss_bordered.png)
+**`gps_task.c`**
+- Init Info feature and get module type
+- Init gnss, enable position/NMEA report and start it.
+- When a fix or a NMEA sentence is available, a message will be printed by the GNSS callback function
+
+![](pictures/samples/GNSS_output_bordered.png)
 
 ---------------------
 
@@ -2925,6 +2992,16 @@ Sample application showcasing LWM2M client usage with M2MB API. Debug prints on 
 
 - Manage write, read and monitoring resources changed from the portal
 
+**Requirements**
+
+This application expects the user to configure the PDP context ID 1 with the proper APN.
+it can be done with the following AT command:
+
+`AT+CGDCONT=1,"IPV4V6","<user apn>"`
+
+Depending on the Mobiler Network Operator and Access Technology, the APN might be automatically set by the network itself. In this case, nothing must be done by the user.
+
+
 **Application workflow**
 
 **`M2MB_main.c`**
@@ -2938,8 +3015,6 @@ Sample application showcasing LWM2M client usage with M2MB API. Debug prints on 
 
 **`msgLWM2MTask`**
 - Check registration status
-
-- Configure APN to the correct one for CID 1
 
 - Initialize LWM2M client, 
 
@@ -2955,7 +3030,9 @@ Sample application showcasing LWM2M client usage with M2MB API. Debug prints on 
   
   - Wait for client to register to Portal
   
-  - Send integer and string values
+  - Performs all operations (set, read, get, write) on the related resources
+
+  - Performs a set with notify ack enabled
   
   - Wait for events from server
 
@@ -2964,6 +3041,15 @@ Sample application showcasing LWM2M client usage with M2MB API. Debug prints on 
 
 - Manage events arriving from client \(operations completion status and unsolicited events\)
 - Run lwm2m_taskCB when a monitored resource changes, to manage the action to be done
+
+#### Device Profile upload
+
+**LWM2M resources demo** device profile must be imported to have a real-time update of resources values on the LWM2M browser. 
+
+To do so, import the file `lwm2m_resources_demo.json` on section `Developer` > `Device profiles` of OneEdge IoT portal:
+
+![](pictures/samples/lwm2m_device_profile_bordered.png)
+
 
 #### Custom Object configuration
 
@@ -2990,10 +3076,10 @@ Copy the xml file content and paste it in the new Object form
 
 
 
-Also, the application requires the XML file `/xml/object_35000.xml` (provided with the sample files) to be stored in module's `/XML/` folder. 
+Also, the application requires the XML file `/xml/object_32010.xml` (provided with the sample files) to be stored in module's `/XML/` folder. 
 It can be done with 
 
-`AT#M2MWRITE=/XML/object_35000.xml,<size_in_bytes>`
+`AT#M2MWRITE=/XML/object_32010.xml,<size_in_bytes>`
 
 To load the XML file in the module, Telit AT Controller (TATC) can be used. Once the command above is issued, press the load content button:
 
@@ -3014,7 +3100,14 @@ The file is successfully loaded on the module
 
 ![](pictures/samples/lwm2m_1_bordered.png)
 
-![](pictures/samples/lwm2m_2_bordered.png)
+
+![](pictures/samples/lwm2m_2_1_bordered.png)
+![](pictures/samples/lwm2m_2_2_bordered.png)
+![](pictures/samples/lwm2m_2_3_bordered.png)
+![](pictures/samples/lwm2m_2_4_bordered.png)
+![](pictures/samples/lwm2m_2_5_bordered.png)
+![](pictures/samples/lwm2m_2_6_bordered.png)
+![](pictures/samples/lwm2m_2_7_bordered.png)
 
 
 After the Demo completes the initialization, it is possible to access the object resources from the Portal Object Browser
@@ -3029,7 +3122,7 @@ For example, executing the two Exec Resources at the bottom of the list, the app
 
 ![](pictures/samples/lwm2m_3_exec_bordered.png)
 
-Writing a string resource (id /35000/0/11 ), the application will notify the change
+Writing a string resource (id /32010/0/11 ), the application will notify the change
 
 ![](pictures/samples/lwm2m_4_write_bordered.png)
 
@@ -3265,6 +3358,35 @@ The application connects to an NTP server, gets current date and time and update
 
 
 ![](pictures/samples/NTP_bordered.png)
+
+---------------------
+
+
+
+### RTC example 
+
+Sample application that shows RTC apis functionalities: how to get/set moudle system time and timestamp. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- How to read module timestamp 
+- How to read module system time
+- How to set new system time
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Init log azx and print a welcome message
+- Init net functionality and wait for module registration
+- Init RTC functionality and get module time in timestamp format (seconds from the epoch)
+- Get moudle system time in date/time format
+- Add 1 hour to timestamp, convert it to system time and set it to module
+
+![](pictures/samples/RTC_output_bordered.png)
 
 ---------------------
 
@@ -4045,6 +4167,54 @@ The application shows how to create and manage tasks with m2mb APIs. Debug print
 
 
 
+### UART USB tunnel example 
+
+Sample application that opens a tunnel between main UART and USB0 port.
+
+
+**Features**
+
+
+- Opens `Main UART` port with a callback function
+- Opens `USB0` port with a callback function
+- Creates a simple task to manage data exchange between ports
+
+
+**Application workflow**
+
+**`M2MB_main function`**
+
+- Create `Main UART` handle and configure its parameters
+- Create `USB0` handle and configure its parameters
+- Create the data management task
+- Write **`READY`** on both ports when the tunneling is ready
+
+**`USB_Cb`**
+
+- When data are received on the `USB0` port, retrieve the available amount and send the value to the data management task with the proper command
+
+**`UART_Cb`**
+
+- When data are received on the `Main UART` port, retrieve the available amount and send the value to the data management task with the proper command
+
+
+**`dataTask_Cb`**
+
+- if command is `TASK_UART_READ_AND_USB_WRITE`, read the requested amount from the `Main UART` port and write it on `USB0`
+- if command is `TASK_USB_READ_AND_UART_WRITE`, read the requested amount from the `USB0` port and write it on `Main UART`
+
+
+UART output received from USB0 (in RED, the user input data from UART )
+![](pictures/samples/uart_usb_tunnel_uart_bordered.png)
+
+
+USB0 output received from UART (in RED, the user input data from USB0 )
+![](pictures/samples/uart_usb_tunnel_usb_bordered.png)
+
+---------------------
+
+
+
 ## USB0 
 *Applications that provide usage examples for various functionalities, log output on USB0*
 
@@ -4691,16 +4861,22 @@ Sample application showing how to use GNSS functionality. Debug prints on **USB0
 - How to enable GNSS receiver on module
 - How to collect location information from receiver
 
+**Note:** on MEx10G1 product family both M2MB_GNSS_SERVICE_NMEA_REPORT and M2MB_GNSS_SERVICE_POSITION_REPORT services are available, while on ME910C1 product family only M2MB_GNSS_SERVICE_POSITION_REPORT is available 
 
 **Application workflow**
 
 **`M2MB_main.c`**
 
 - Open USB/UART/UART_AUX
-- Init gnss, enable position report and start it.
-- When a fix is available, a message will be printed by the GNSS callback function
+- Print a welcome message
+- Create GNSS task and send a message to it
 
-![](pictures/samples/gnss_bordered.png)
+**`gps_task.c`**
+- Init Info feature and get module type
+- Init gnss, enable position/NMEA report and start it.
+- When a fix or a NMEA sentence is available, a message will be printed by the GNSS callback function
+
+![](pictures/samples/GNSS_output_bordered.png)
 
 ---------------------
 
@@ -5027,6 +5203,16 @@ Sample application showcasing LWM2M client usage with M2MB API. Debug prints on 
 
 - Manage write, read and monitoring resources changed from the portal
 
+**Requirements**
+
+This application expects the user to configure the PDP context ID 1 with the proper APN.
+it can be done with the following AT command:
+
+`AT+CGDCONT=1,"IPV4V6","<user apn>"`
+
+Depending on the Mobiler Network Operator and Access Technology, the APN might be automatically set by the network itself. In this case, nothing must be done by the user.
+
+
 **Application workflow**
 
 **`M2MB_main.c`**
@@ -5040,8 +5226,6 @@ Sample application showcasing LWM2M client usage with M2MB API. Debug prints on 
 
 **`msgLWM2MTask`**
 - Check registration status
-
-- Configure APN to the correct one for CID 1
 
 - Initialize LWM2M client, 
 
@@ -5057,7 +5241,9 @@ Sample application showcasing LWM2M client usage with M2MB API. Debug prints on 
   
   - Wait for client to register to Portal
   
-  - Send integer and string values
+  - Performs all operations (set, read, get, write) on the related resources
+
+  - Performs a set with notify ack enabled
   
   - Wait for events from server
 
@@ -5066,6 +5252,15 @@ Sample application showcasing LWM2M client usage with M2MB API. Debug prints on 
 
 - Manage events arriving from client \(operations completion status and unsolicited events\)
 - Run lwm2m_taskCB when a monitored resource changes, to manage the action to be done
+
+#### Device Profile upload
+
+**LWM2M resources demo** device profile must be imported to have a real-time update of resources values on the LWM2M browser. 
+
+To do so, import the file `lwm2m_resources_demo.json` on section `Developer` > `Device profiles` of OneEdge IoT portal:
+
+![](pictures/samples/lwm2m_device_profile_bordered.png)
+
 
 #### Custom Object configuration
 
@@ -5092,10 +5287,10 @@ Copy the xml file content and paste it in the new Object form
 
 
 
-Also, the application requires the XML file `/xml/object_35000.xml` (provided with the sample files) to be stored in module's `/XML/` folder. 
+Also, the application requires the XML file `/xml/object_32010.xml` (provided with the sample files) to be stored in module's `/XML/` folder. 
 It can be done with 
 
-`AT#M2MWRITE=/XML/object_35000.xml,<size_in_bytes>`
+`AT#M2MWRITE=/XML/object_32010.xml,<size_in_bytes>`
 
 To load the XML file in the module, Telit AT Controller (TATC) can be used. Once the command above is issued, press the load content button:
 
@@ -5116,7 +5311,14 @@ The file is successfully loaded on the module
 
 ![](pictures/samples/lwm2m_1_bordered.png)
 
-![](pictures/samples/lwm2m_2_bordered.png)
+
+![](pictures/samples/lwm2m_2_1_bordered.png)
+![](pictures/samples/lwm2m_2_2_bordered.png)
+![](pictures/samples/lwm2m_2_3_bordered.png)
+![](pictures/samples/lwm2m_2_4_bordered.png)
+![](pictures/samples/lwm2m_2_5_bordered.png)
+![](pictures/samples/lwm2m_2_6_bordered.png)
+![](pictures/samples/lwm2m_2_7_bordered.png)
 
 
 After the Demo completes the initialization, it is possible to access the object resources from the Portal Object Browser
@@ -5131,7 +5333,7 @@ For example, executing the two Exec Resources at the bottom of the list, the app
 
 ![](pictures/samples/lwm2m_3_exec_bordered.png)
 
-Writing a string resource (id /35000/0/11 ), the application will notify the change
+Writing a string resource (id /32010/0/11 ), the application will notify the change
 
 ![](pictures/samples/lwm2m_4_write_bordered.png)
 
@@ -5367,6 +5569,35 @@ The application connects to an NTP server, gets current date and time and update
 
 
 ![](pictures/samples/NTP_bordered.png)
+
+---------------------
+
+
+
+### RTC example 
+
+Sample application that shows RTC apis functionalities: how to get/set moudle system time and timestamp. Debug prints on **USB0**
+
+
+**Features**
+
+
+- How to read module timestamp 
+- How to read module system time
+- How to set new system time
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Init log azx and print a welcome message
+- Init net functionality and wait for module registration
+- Init RTC functionality and get module time in timestamp format (seconds from the epoch)
+- Get moudle system time in date/time format
+- Add 1 hour to timestamp, convert it to system time and set it to module
+
+![](pictures/samples/RTC_output_bordered.png)
 
 ---------------------
 

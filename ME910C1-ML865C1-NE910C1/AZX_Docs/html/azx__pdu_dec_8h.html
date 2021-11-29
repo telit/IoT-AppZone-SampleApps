@@ -34,7 +34,7 @@
   <td id="projectlogo"><img alt="Logo" src="telit-logo.png"/></td>
   <td id="projectalign" style="padding-left: 2em;">
    <div id="projectname">AZX (AppZone eXtensions) documentation
-   &#160;<span id="projectnumber">1.1.10-CxL</span>
+   &#160;<span id="projectnumber">1.1.12-CxL</span>
    </div>
    <div id="projectbrief">A set of companion utilities that make AZ development easier</div>
   </td>
@@ -100,15 +100,27 @@ $(document).ready(function(){initNavTree('azx__pdu_dec_8h.html','');});
 
 <p>Decoding functionalities for PDUs.  
 <a href="#details">More...</a></p>
-
+<div class="textblock"><code>#include &quot;azx_pduCommon.h&quot;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for azx_pduDec.h:</div>
+<div class="dyncontent">
+<div class="center"><img src="azx__pdu_dec_8h__incl.png" border="0" usemap="#hdr_2azx__pdu_dec_8h" alt=""/></div>
+<map name="hdr_2azx__pdu_dec_8h" id="hdr_2azx__pdu_dec_8h">
+<area shape="rect" title="Decoding functionalities for PDUs." alt="" coords="19,5,147,32"/>
+<area shape="rect" href="azx__pdu_common_8h_source.html" title=" " alt="" coords="16,80,151,107"/>
+<area shape="rect" title=" " alt="" coords="5,155,71,181"/>
+<area shape="rect" title=" " alt="" coords="95,155,165,181"/>
+</map>
+</div>
+</div>
 <p><a href="azx__pdu_dec_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga71756909d9789b37acdf20e3997a9b27"><td class="memItemLeft" align="right" valign="top">INT32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pdu_dec_usage.html#ga71756909d9789b37acdf20e3997a9b27">azx_pdu_decode</a> (UINT8 *pdu, UINT32 pdu_len, pdu_struct *packet, CHAR *number, CHAR *msg)</td></tr>
+<tr class="memitem:ga71756909d9789b37acdf20e3997a9b27"><td class="memItemLeft" align="right" valign="top">INT32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pdu_dec_usage.html#ga71756909d9789b37acdf20e3997a9b27">azx_pdu_decode</a> (UINT8 *pdu, UINT32 pdu_len, <a class="el" href="structpdu__struct.html">pdu_struct</a> *packet, CHAR *number, CHAR *msg)</td></tr>
 <tr class="memdesc:ga71756909d9789b37acdf20e3997a9b27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decodes an incoming PDU in binary format.  <a href="group__pdu_dec_usage.html#ga71756909d9789b37acdf20e3997a9b27">More...</a><br /></td></tr>
 <tr class="separator:ga71756909d9789b37acdf20e3997a9b27"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga0c48f5ebe23043bb044abce2f8e571a5"><td class="memItemLeft" align="right" valign="top">INT32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pdu_dec_usage.html#ga0c48f5ebe23043bb044abce2f8e571a5">azx_pdu_decodeString</a> (CHAR *pdu_str, pdu_struct *packet, CHAR *number, CHAR *msg)</td></tr>
+<tr class="memitem:ga0c48f5ebe23043bb044abce2f8e571a5"><td class="memItemLeft" align="right" valign="top">INT32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pdu_dec_usage.html#ga0c48f5ebe23043bb044abce2f8e571a5">azx_pdu_decodeString</a> (CHAR *pdu_str, <a class="el" href="structpdu__struct.html">pdu_struct</a> *packet, CHAR *number, CHAR *msg)</td></tr>
 <tr class="memdesc:ga0c48f5ebe23043bb044abce2f8e571a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decodes an incoming PDU in ASCII string format.  <a href="group__pdu_dec_usage.html#ga0c48f5ebe23043bb044abce2f8e571a5">More...</a><br /></td></tr>
 <tr class="separator:ga0c48f5ebe23043bb044abce2f8e571a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga883238aa220185561f08b9112ec96bfd"><td class="memItemLeft" align="right" valign="top">UINT16&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pdu_dec_usage.html#ga883238aa220185561f08b9112ec96bfd">azx_pdu_s_utf8_to_ascii</a> (UINT8 *in, UINT16 in_len)</td></tr>

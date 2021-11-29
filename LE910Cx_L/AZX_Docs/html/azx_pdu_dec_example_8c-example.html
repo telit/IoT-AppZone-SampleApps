@@ -34,7 +34,7 @@
   <td id="projectlogo"><img alt="Logo" src="telit-logo.png"/></td>
   <td id="projectalign" style="padding-left: 2em;">
    <div id="projectname">AZX (AppZone eXtensions) documentation
-   &#160;<span id="projectnumber">1.1.10-CxL</span>
+   &#160;<span id="projectnumber">1.1.12-CxL</span>
    </div>
    <div id="projectbrief">A set of companion utilities that make AZ development easier</div>
   </td>
@@ -117,11 +117,11 @@ $(document).ready(function(){initNavTree('azx_pdu_dec_example_8c-example.html','
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;  <span class="comment">//&quot;how are you&quot; sent by +391234567890</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;  <span class="keywordtype">char</span> pdustr[] = <span class="stringliteral">&quot;0791932350591211000C919321436587090000810191118191800CC8F71D14969741F977FD07&quot;</span>;</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;  pdu_struct pack;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;  <a name="_a0"></a><a class="code" href="structpdu__struct.html">pdu_struct</a> pack;</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;  <span class="keywordtype">char</span> number[32];</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;  <span class="keywordtype">char</span> msg[160];</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;  <span class="keywordtype">int</span> len = <a name="a0"></a><a class="code" href="group__pdu_dec_usage.html#ga71756909d9789b37acdf20e3997a9b27">azx_pdu_decode</a>(pdu, len, &amp;pack, number, msg);</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;  <span class="keywordtype">int</span> len = <a name="a1"></a><a class="code" href="group__pdu_dec_usage.html#ga71756909d9789b37acdf20e3997a9b27">azx_pdu_decode</a>(pdu, len, &amp;pack, number, msg);</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;  AZX_LOG_INFO(<span class="stringliteral">&quot;packet code type: %d\r\n&quot;</span>, packet.tp_dcs);</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;  AZX_LOG_INFO(<span class="stringliteral">&quot;packet sender type: %u\r\n&quot;</span>, packet.sender.type);</div>
@@ -135,7 +135,7 @@ $(document).ready(function(){initNavTree('azx_pdu_dec_example_8c-example.html','
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;  AZX_LOG_INFO(<span class="stringliteral">&quot;Sender: %s\r\n&quot;</span>, number);</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;  <span class="keywordtype">int</span> len = <a name="a1"></a><a class="code" href="group__pdu_dec_usage.html#ga0c48f5ebe23043bb044abce2f8e571a5">azx_pdu_decodeString</a>(pdustr, &amp;pack, number, msg);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;  <span class="keywordtype">int</span> len = <a name="a2"></a><a class="code" href="group__pdu_dec_usage.html#ga0c48f5ebe23043bb044abce2f8e571a5">azx_pdu_decodeString</a>(pdustr, &amp;pack, number, msg);</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;  AZX_LOG_INFO(<span class="stringliteral">&quot;packet code type: %d\r\n&quot;</span>, packet.tp_dcs);</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;  AZX_LOG_INFO(<span class="stringliteral">&quot;packet sender type: %u\r\n&quot;</span>, packet.sender.type);</div>
@@ -153,6 +153,7 @@ $(document).ready(function(){initNavTree('azx_pdu_dec_example_8c-example.html','
 </div><!-- fragment --> </div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aapp__cfg_8h_html"><div class="ttname"><a href="app__cfg_8h.html">app_cfg.h</a></div><div class="ttdoc">Application configuration settings conveniently located here.</div></div>
+<div class="ttc" id="astructpdu__struct_html"><div class="ttname"><a href="structpdu__struct.html">pdu_struct</a></div><div class="ttdef"><b>Definition:</b> azx_pduCommon.h:288</div></div>
 <div class="ttc" id="agroup__pdu_dec_usage_html_ga71756909d9789b37acdf20e3997a9b27"><div class="ttname"><a href="group__pdu_dec_usage.html#ga71756909d9789b37acdf20e3997a9b27">azx_pdu_decode</a></div><div class="ttdeci">INT32 azx_pdu_decode(UINT8 *pdu, UINT32 pdu_len, pdu_struct *packet, CHAR *number, CHAR *msg)</div><div class="ttdoc">Decodes an incoming PDU in binary format.</div></div>
 <div class="ttc" id="aazx__pdu_dec_8h_html"><div class="ttname"><a href="azx__pdu_dec_8h.html">azx_pduDec.h</a></div><div class="ttdoc">Decoding functionalities for PDUs.</div></div>
 <div class="ttc" id="agroup__pdu_dec_usage_html_ga0c48f5ebe23043bb044abce2f8e571a5"><div class="ttname"><a href="group__pdu_dec_usage.html#ga0c48f5ebe23043bb044abce2f8e571a5">azx_pdu_decodeString</a></div><div class="ttdeci">INT32 azx_pdu_decodeString(CHAR *pdu_str, pdu_struct *packet, CHAR *number, CHAR *msg)</div><div class="ttdoc">Decodes an incoming PDU in ASCII string format.</div></div>
