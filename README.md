@@ -17,6 +17,8 @@ Each module family has its own subfolder, containing all the sample apps availab
 
 ## Usage
 
+These instructions refer to building IoT AppZone Sample apps with [IoT AppZone IDE v5](https://bit.ly/31VcYJB) or higher.
+
 The master branch will always contain the latest sample apps package version. Older ones will be available through tags.
 
 To use a specific sample app, first download the repository content by pressing the green button "Code" and selecting "Download ZIP".
@@ -65,5 +67,5 @@ Done! The project is now updated with the latest sample app source code availabl
 
 For further info, please go on Telit's cellular modules product webpage https://www.telit.com/m2m-iot-products/cellular-modules/standard-industrial-grade/
 
-AppZone development resources are available at the link https://www.telit.com/developer-zone/iot-app-zone/iot-app-zone-developer-resources/
+AppZone development resources are available at the link [https://www.telit.com/developer-zone/iot-app-zone/iot-app-zone-developer-resources/](https://bit.ly/31VcYJB)
 
