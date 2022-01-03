@@ -62,6 +62,19 @@ Done! The project is now updated with the latest sample app source code availabl
 
 ![](./pics/project_complete.png)
 
+### Build and Deploy
+
+For additional info about building and deploying an application, please refer to the following links:
+
+[Build](https://s3.amazonaws.com/site_support/Telit/AppZone-SDK/User+Guides+AppZone+2.0/az-c-m2mb-ug-r1/index.html#!Documents/buildapplications.htm)
+
+[Deploy](https://s3.amazonaws.com/site_support/Telit/AppZone-SDK/User+Guides+AppZone+2.0/az-c-m2mb-ug-r1/index.html#!Documents/buildapplications.htm)
+
+**Important!**
+
+When building a project, please be sure that the module Firmware and IDE plugin versions are aligned.
+
+![](./pics/plugin_version.png)
 
 ---
 
