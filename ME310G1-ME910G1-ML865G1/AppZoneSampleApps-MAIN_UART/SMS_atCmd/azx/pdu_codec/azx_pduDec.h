@@ -29,7 +29,7 @@
 /** \defgroup pduDecUsage Usage of pdu decoding functionalities
 *    Functions usable to retrieve ASCII message and other info from a PDU message in binary format
 */
-
+#include "azx_pduCommon.h"
 
 
 /*-----------------------------------------------------------------------------------------------*/

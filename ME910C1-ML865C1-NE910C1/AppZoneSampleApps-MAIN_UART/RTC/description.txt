@@ -1,0 +1,1 @@
+Sample application that shows RTC apis functionalities: how to get/set moudle system time and timestamp. Debug prints on MAIN UART

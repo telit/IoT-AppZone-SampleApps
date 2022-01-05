@@ -12,13 +12,15 @@
   "availability": {
     "MXXXXC1": {
       "firmwares": [
-        "30.00.xx9"
+        "30.00.xx9",
+        "30.01.xx0.0"
       ]
     },
     "MXXXXG1": {
       "firmwares": [
         "37.00.xx2",
-        "37.00.xx3"
+        "37.00.xx3",
+        "37.00.xx4.1"
       ]
     },
     "LE910Cx-L": {
@@ -35,9 +37,20 @@
     }
   },
   "groups": [
-    {"name": "MAIN_UART", "limitations": []},
-    {"name": "AUX_UART", "limitations": ["LE910Cx-L"]},
-    {"name": "USB0", "limitations": []}
+    {
+      "name": "MAIN_UART",
+      "limitations": []
+    },
+    {
+      "name": "AUX_UART",
+      "limitations": [
+        "LE910Cx-L"
+      ]
+    },
+    {
+      "name": "USB0",
+      "limitations": []
+    }
   ],
   "platform": "GCC",
   "license": "MIT",

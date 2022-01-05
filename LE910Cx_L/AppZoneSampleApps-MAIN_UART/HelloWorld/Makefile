@@ -12,12 +12,12 @@ endif
 
 #### BINARIES
 
-CC := $(TOOLCHAIN_BIN)arm-linux-gnueabi-gcc  
-CXX := $(TOOLCHAIN_BIN)arm-linux-gnueabi-g++  
-CPP := $(TOOLCHAIN_BIN)arm-linux-gnueabi-gcc -E 
+CC := $(TOOLCHAIN_BIN)arm-linux-gnueabi-gcc --sysroot=$(SYSLIB)
+CXX := $(TOOLCHAIN_BIN)arm-linux-gnueabi-g++ --sysroot=$(SYSLIB)
+CPP := $(TOOLCHAIN_BIN)arm-linux-gnueabi-gcc -E --sysroot=$(SYSLIB)
 AR := $(TOOLCHAIN_BIN)arm-linux-gnueabi-gcc-ar
 AS := $(TOOLCHAIN_BIN)arm-linux-gnueabi-gcc-as
-LD := $(TOOLCHAIN_BIN)arm-linux-gnueabi-ld  --sysroot=$(SYSLIB)
+LD := $(TOOLCHAIN_BIN)arm-linux-gnueabi-ld --sysroot=$(SYSLIB)
 NM := $(TOOLCHAIN_BIN)arm-linux-gnueabi-nm
 
 OBJCOPY:=$(TOOLCHAIN_BIN)arm-linux-gnueabi-objcopy

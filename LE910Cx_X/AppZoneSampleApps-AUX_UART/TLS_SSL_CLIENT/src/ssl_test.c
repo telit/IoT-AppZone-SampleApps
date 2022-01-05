@@ -9,11 +9,11 @@
     The file contains the TLS/SSL utilities
 
   @details
-  
-  @version 
-    1.1.4
+
+  @version
+    1.1.6
   @note
-  
+
 
   @author
 
@@ -52,7 +52,7 @@
 /* Local defines ================================================================================*/
 
 /* 0: test using HTTPS server with client authentication (port 20443)
-   1: test using HTTPS server on port 443 with server authentication; 
+   1: test using HTTPS server on port 443 with server authentication;
 */
 #define HTTP_443 1
 
@@ -65,17 +65,11 @@
   CHAR  queryBuf[] = "GET / HTTP/1.1\r\nHost: modules.telit.com\r\n\r\n";;
   M2MB_SSL_AUTH_TYPE_E SSL_AUTH_MODE  = M2MB_SSL_SERVER_AUTH;
 #else //https with client cert
-  #define WRONG_CLIENT_TEST 0  //test with wrong certificates to verify the secure socket on the server
   #define SERVER "modules.telit.com"
   #define CA_CERT_PATH LOCALPATH "/ssl_certs/modulesCA.crt"
 
-#if WRONG_CLIENT_TEST
-  #define CLIENT_CERT_PATH LOCALPATH "/ssl_certs/wrong_Client.crt"
-  #define CLIENT_KEY_PATH LOCALPATH "/ssl_certs/wrong_Client_pkcs1.key"
-#else
   #define CLIENT_CERT_PATH LOCALPATH "/ssl_certs/modulesClient.crt"
   #define CLIENT_KEY_PATH LOCALPATH "/ssl_certs/modulesClient_pkcs1.key"  //Only RSA Private keys are supported
-#endif
 
   #define SERVER_PORT 20443 //echo client+server
   M2MB_SSL_AUTH_TYPE_E SSL_AUTH_MODE  = M2MB_SSL_SERVER_CLIENT_AUTH;
@@ -156,7 +150,7 @@ void NetCallback(M2MB_NET_HANDLE h, M2MB_NET_IND_E net_event, UINT16 resp_size, 
 {
   (void)resp_size;
   (void)myUserdata;
-  
+
   M2MB_NET_REG_STATUS_T *stat_info;
 
   switch (net_event)
@@ -198,7 +192,7 @@ void PdpCallback(M2MB_PDP_HANDLE h, M2MB_PDP_IND_E pdp_event, UINT8 cid, void *u
       m2mb_pdp_get_my_ip(h, cid, M2MB_PDP_IPV4, &CBtmpAddress.sin_addr.s_addr);
       m2mb_socket_bsd_inet_ntop( M2MB_SOCKET_BSD_AF_INET, &CBtmpAddress.sin_addr.s_addr, ( CHAR * )&( CBtmpIPaddr ), sizeof( CBtmpIPaddr ) );
       AZX_LOG_DEBUG( "IP address: %s\r\n", CBtmpIPaddr);
-      
+
       m2mb_os_ev_set(net_pdp_evHandle, EV_PDP_BIT, M2MB_OS_EV_SET);
       break;
 
@@ -217,7 +211,7 @@ INT32 msgHTTPSTask(INT32 type, INT32 param1, INT32 param2)
   (void)type;
   (void)param1;
   (void)param2;
-  
+
   M2MB_RESULT_E retVal = M2MB_RESULT_SUCCESS;
 
   M2MB_OS_RESULT_E        osRes;
@@ -292,6 +286,16 @@ INT32 msgHTTPSTask(INT32 type, INT32 param1, INT32 param2)
     else
     {
       AZX_LOG_DEBUG("m2mb_ssl_create_config PASSED \r\n");
+    }
+
+    sslRes = m2mb_ssl_config( sslConfigHndl, M2MB_SSL_NAME_SNI, (void*)SERVER );
+    if(sslRes != 0)
+    {
+      AZX_LOG_ERROR("m2mb_ssl_config SNI failed\r\n");
+    }
+    else
+    {
+      AZX_LOG_DEBUG("m2mb_ssl_config SNI succeeded\r\n");
     }
 
     sslCtxtHndl = m2mb_ssl_create_ctxt();
@@ -469,7 +473,7 @@ INT32 msgHTTPSTask(INT32 type, INT32 param1, INT32 param2)
     {
       AZX_LOG_ERROR( "m2mb_net_get_reg_status_info did not return M2MB_RESULT_SUCCESS\r\n" );
     }
-    
+
     /*Wait for network registration event to occur (released in NetCallback function) */
     m2mb_os_ev_get(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_GET_ANY_AND_CLEAR, &curEvBits, M2MB_OS_WAIT_FOREVER);
 
@@ -507,7 +511,7 @@ INT32 msgHTTPSTask(INT32 type, INT32 param1, INT32 param2)
         return -1;
       }
     }
-    
+
     /*Wait for pdp activation event to occur (released in PDPCallback function) */
     m2mb_os_ev_get(net_pdp_evHandle, EV_PDP_BIT, M2MB_OS_EV_GET_ANY_AND_CLEAR, &curEvBits, M2MB_OS_WAIT_FOREVER);
 
@@ -663,17 +667,17 @@ INT32 msgHTTPSTask(INT32 type, INT32 param1, INT32 param2)
 
 
   m2mb_ssl_delete_config( sslConfigHndl );
-    
+
   if(SSL_AUTH_MODE == M2MB_SSL_SERVER_AUTH || SSL_AUTH_MODE == M2MB_SSL_SERVER_CLIENT_AUTH)
   {
     m2mb_ssl_cert_delete( M2MB_SSL_CACERT, (CHAR*) "CAListTest" );
   }
-  
+
   if(SSL_AUTH_MODE == M2MB_SSL_SERVER_CLIENT_AUTH)
   {
     m2mb_ssl_cert_delete( M2MB_SSL_CERT, (CHAR*) "ClientCertTest" );
   }
-  
+
   m2mb_ssl_delete_ctxt( sslCtxtHndl );
 
   ret = m2mb_pdp_deactivate(pdpHandle, PDP_CTX);

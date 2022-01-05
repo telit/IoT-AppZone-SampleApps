@@ -30,7 +30,7 @@
 /** \defgroup pduEncUsage Usage of pdu encoding functionalities
 *    Functions usable to create a PDU message from a string text
 */
-
+#include "azx_pduCommon.h"
 /*-----------------------------------------------------------------------------------------------*/
 /**
   @brief
