@@ -35,9 +35,11 @@ var annotated_dup =
     [ "AZX_SPI_FLASH_SPI_CHIP", "struct_a_z_x___s_p_i___f_l_a_s_h___s_p_i___c_h_i_p.html", "struct_a_z_x___s_p_i___f_l_a_s_h___s_p_i___c_h_i_p" ],
     [ "AZX_SPI_FLASH_SPI_SLAVE", "struct_a_z_x___s_p_i___f_l_a_s_h___s_p_i___s_l_a_v_e.html", "struct_a_z_x___s_p_i___f_l_a_s_h___s_p_i___s_l_a_v_e" ],
     [ "AZX_TASKS_MESSAGE_T", "struct_a_z_x___t_a_s_k_s___m_e_s_s_a_g_e___t.html", "struct_a_z_x___t_a_s_k_s___m_e_s_s_a_g_e___t" ],
+    [ "dcs_struct", "structdcs__struct.html", "structdcs__struct" ],
     [ "EASY_AT_HANDLES_TAG", "struct_e_a_s_y___a_t___h_a_n_d_l_e_s___t_a_g.html", null ],
     [ "EASY_AT_MODULE_TAG", "struct_e_a_s_y___a_t___m_o_d_u_l_e___t_a_g.html", null ],
     [ "FtpCallbackOptions", "struct_ftp_callback_options.html", null ],
+    [ "pdu_struct", "structpdu__struct.html", "structpdu__struct" ],
     [ "sockaddr_storage", "structsockaddr__storage.html", "structsockaddr__storage" ],
     [ "timezone", "structtimezone.html", "structtimezone" ]
 ];

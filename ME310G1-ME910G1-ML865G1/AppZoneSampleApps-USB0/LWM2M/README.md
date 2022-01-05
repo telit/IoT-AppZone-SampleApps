@@ -21,6 +21,16 @@ Sample application showcasing LWM2M client usage with M2MB API. Debug prints on 
 
 - Manage write, read and monitoring resources changed from the portal
 
+**Requirements**
+
+This application expects the user to configure the PDP context ID 1 with the proper APN.
+it can be done with the following AT command:
+
+`AT+CGDCONT=1,"IPV4V6","<user apn>"`
+
+Depending on the Mobiler Network Operator and Access Technology, the APN might be automatically set by the network itself. In this case, nothing must be done by the user.
+
+
 **Application workflow**
 
 **`M2MB_main.c`**
@@ -34,8 +44,6 @@ Sample application showcasing LWM2M client usage with M2MB API. Debug prints on 
 
 **`msgLWM2MTask`**
 - Check registration status
-
-- Configure APN to the correct one for CID 1
 
 - Initialize LWM2M client, 
 
@@ -51,7 +59,9 @@ Sample application showcasing LWM2M client usage with M2MB API. Debug prints on 
   
   - Wait for client to register to Portal
   
-  - Send integer and string values
+  - Performs all operations (set, read, get, write) on the related resources
+
+  - Performs a set with notify ack enabled
   
   - Wait for events from server
 
@@ -60,6 +70,15 @@ Sample application showcasing LWM2M client usage with M2MB API. Debug prints on 
 
 - Manage events arriving from client \(operations completion status and unsolicited events\)
 - Run lwm2m_taskCB when a monitored resource changes, to manage the action to be done
+
+#### Device Profile upload
+
+**LWM2M resources demo** device profile must be imported to have a real-time update of resources values on the LWM2M browser. 
+
+To do so, import the file `lwm2m_resources_demo.json` on section `Developer` > `Device profiles` of OneEdge IoT portal:
+
+![](../../pictures/samples/lwm2m_device_profile_bordered.png)
+
 
 #### Custom Object configuration
 
@@ -86,10 +105,10 @@ Copy the xml file content and paste it in the new Object form
 
 
 
-Also, the application requires the XML file `/xml/object_35000.xml` (provided with the sample files) to be stored in module's `/XML/` folder. 
+Also, the application requires the XML file `/xml/object_32010.xml` (provided with the sample files) to be stored in module's `/XML/` folder. 
 It can be done with 
 
-`AT#M2MWRITE=/XML/object_35000.xml,<size_in_bytes>`
+`AT#M2MWRITE=/XML/object_32010.xml,<size_in_bytes>`
 
 To load the XML file in the module, Telit AT Controller (TATC) can be used. Once the command above is issued, press the load content button:
 
@@ -110,7 +129,14 @@ The file is successfully loaded on the module
 
 ![](../../pictures/samples/lwm2m_1_bordered.png)
 
-![](../../pictures/samples/lwm2m_2_bordered.png)
+
+![](../../pictures/samples/lwm2m_2_1_bordered.png)
+![](../../pictures/samples/lwm2m_2_2_bordered.png)
+![](../../pictures/samples/lwm2m_2_3_bordered.png)
+![](../../pictures/samples/lwm2m_2_4_bordered.png)
+![](../../pictures/samples/lwm2m_2_5_bordered.png)
+![](../../pictures/samples/lwm2m_2_6_bordered.png)
+![](../../pictures/samples/lwm2m_2_7_bordered.png)
 
 
 After the Demo completes the initialization, it is possible to access the object resources from the Portal Object Browser
@@ -125,7 +151,7 @@ For example, executing the two Exec Resources at the bottom of the list, the app
 
 ![](../../pictures/samples/lwm2m_3_exec_bordered.png)
 
-Writing a string resource (id /35000/0/11 ), the application will notify the change
+Writing a string resource (id /32010/0/11 ), the application will notify the change
 
 ![](../../pictures/samples/lwm2m_4_write_bordered.png)
 

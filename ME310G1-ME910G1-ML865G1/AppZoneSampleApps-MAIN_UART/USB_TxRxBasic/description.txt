@@ -1,0 +1,1 @@
+Sample application that shows how to use the basic read/write USB apis. Synchronous or asynchronous mode is available setting SYNC to 1 or 0. Debug prints on MAIN UART

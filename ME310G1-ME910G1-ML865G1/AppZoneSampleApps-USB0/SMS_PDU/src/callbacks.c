@@ -34,11 +34,12 @@
 #include "azx_log.h"
 #include "azx_utils.h"
 
-#include "ul_gsm_pdu.h"
+
 #include "azx_pduEnc.h"
 #include "azx_pduDec.h"
 
 #include "callbacks.h"
+#include "azx_pduCommon.h"
 
 /* Local defines ================================================================================*/
 /* Local typedefs ===============================================================================*/
@@ -118,7 +119,7 @@ void Sms_Callback(M2MB_SMS_HANDLE h, M2MB_SMS_IND_E sms_event, UINT16 resp_size,
   {
     pdu_struct packet;
     static char number[32];
-    static char message[161];
+    static char message[SMS_PDU_MAX_SIZE]; //more bytes needed due to HEX_raw outtput format
     INT32 len;
 
     AZX_LOG_INFO("M2MB_SMS_READ_RESP Callback\r\n\n");

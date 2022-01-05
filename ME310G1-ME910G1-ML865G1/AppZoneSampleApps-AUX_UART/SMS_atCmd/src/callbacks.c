@@ -41,9 +41,9 @@
 
 #include "app_cfg.h"
 
-#include "ul_gsm_pdu.h"
 #include "azx_pduEnc.h"
 #include "azx_pduDec.h"
+#include "azx_pduCommon.h"
 
 #include "at_utils.h"
 
@@ -51,7 +51,7 @@
 
 /* Local defines ================================================================================*/
 
-#define SMS_PDU_MAX_SIZE 400
+
 
 #define CONFIG_FILE  LOCALPATH "/sms_config.txt"
 

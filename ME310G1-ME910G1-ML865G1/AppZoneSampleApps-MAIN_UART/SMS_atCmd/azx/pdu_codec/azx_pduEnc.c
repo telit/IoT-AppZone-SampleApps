@@ -26,7 +26,8 @@
 #include <string.h>
 #include "m2mb_types.h"
 
-#include "ul_gsm_pdu.h"
+
+#include "azx_pduCommon.h"
 
 /* Local defines ================================================================================*/
 /* Local typedefs ===============================================================================*/

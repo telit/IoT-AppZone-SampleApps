@@ -1,0 +1,55 @@
+{
+  "name": "Sample App for watchdog functionality",
+  "type": "sample-app",
+  "description": "A sample app that shows how to set and implement a watchdog.",
+  "copyright": "Telit Communications, 2021",
+  "homepage": "https://www.telit.com/",
+  "keywords": [
+    "IoT AppZone",
+    "Watchdog"
+  ],
+  "availability": {
+    "MXXXXC1": {
+      "firmwares": [
+        "30.01.xx0.0"
+      ]
+    },
+    "MXXXXG1": {
+      "firmwares": [
+        "37.00.xx4.1"
+      ]
+    }
+  },
+  "groups": [
+    {
+      "name": "MAIN_UART",
+      "limitations": []
+    },
+    {
+      "name": "AUX_UART",
+      "limitations": []
+    },
+    {
+      "name": "USB0",
+      "limitations": []
+    }
+  ],
+  "platform": "GCC",
+  "license": "MIT",
+  "support": {
+    "email": "ts-emea@telit.com"
+  },
+  "authors": [
+    {
+      "name": "Roberta Galeazzo",
+      "email": "Roberta.Galeazzo@telit.com",
+      "homepage": "http://www.telit.com/",
+      "role": "Developer"
+    }
+  ],
+  "requires": {
+    "core/azx_log": "master",
+    "core/azx_tasks": "master",
+    "core/azx_utils": "master"
+  }
+}

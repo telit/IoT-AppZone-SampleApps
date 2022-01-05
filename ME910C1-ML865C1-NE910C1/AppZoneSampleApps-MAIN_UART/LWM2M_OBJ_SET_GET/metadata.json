@@ -1,0 +1,65 @@
+{
+  "name": "Sample App for LwM2M with OBJSET and OBJGET calls",
+  "type": "sample-app",
+  "description": "A sample app that shows LwM2M client m2mb_lwm2m_objget and m2mb_lwm2m_objset M2MB APIs usage.",
+  "copyright": "Telit Communications, 2021",
+  "homepage": "https://www.telit.com/",
+  "keywords": [
+    "IoT AppZone",
+    "LwM2M",
+    "OneEdge"
+  ],
+  "availability": {
+    "MXXXXC1": {
+      "firmwares": [
+        "30.01.xx0.0"
+      ]
+    },
+    "MXXXXG1": {
+      "firmwares": [
+        "37.00.xx4.1"
+      ]
+    },
+    "LE910Cx-L": {
+      "firmwares": []
+    },
+    "LE910Cx-X": {
+      "firmwares": [
+      ]
+    }
+  },
+  "groups": [
+    {
+      "name": "MAIN_UART",
+      "limitations": []
+    },
+    {
+      "name": "AUX_UART",
+      "limitations": [
+        "LE910Cx-L"
+      ]
+    },
+    {
+      "name": "USB0",
+      "limitations": []
+    }
+  ],
+  "platform": "GCC",
+  "license": "MIT",
+  "support": {
+    "email": "ts-emea@telit.com"
+  },
+  "authors": [
+    {
+      "name": "Alessio Quieti",
+      "email": "alessio.quieti@telit.com",
+      "homepage": "http://www.telit.com/",
+      "role": "Developer"
+    }
+  ],
+  "requires": {
+    "core/azx_log": "master",
+    "core/azx_utils": "master",
+    "core/azx_tasks": "master"
+  }
+}

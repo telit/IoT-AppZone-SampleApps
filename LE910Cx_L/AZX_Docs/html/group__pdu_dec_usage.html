@@ -34,7 +34,7 @@
   <td id="projectlogo"><img alt="Logo" src="telit-logo.png"/></td>
   <td id="projectalign" style="padding-left: 2em;">
    <div id="projectname">AZX (AppZone eXtensions) documentation
-   &#160;<span id="projectnumber">1.1.10-CxL</span>
+   &#160;<span id="projectnumber">1.1.13-CxL</span>
    </div>
    <div id="projectbrief">A set of companion utilities that make AZ development easier</div>
   </td>
@@ -103,10 +103,10 @@ $(document).ready(function(){initNavTree('group__pdu_dec_usage.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga71756909d9789b37acdf20e3997a9b27"><td class="memItemLeft" align="right" valign="top">INT32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pdu_dec_usage.html#ga71756909d9789b37acdf20e3997a9b27">azx_pdu_decode</a> (UINT8 *pdu, UINT32 pdu_len, pdu_struct *packet, CHAR *number, CHAR *msg)</td></tr>
+<tr class="memitem:ga71756909d9789b37acdf20e3997a9b27"><td class="memItemLeft" align="right" valign="top">INT32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pdu_dec_usage.html#ga71756909d9789b37acdf20e3997a9b27">azx_pdu_decode</a> (UINT8 *pdu, UINT32 pdu_len, <a class="el" href="structpdu__struct.html">pdu_struct</a> *packet, CHAR *number, CHAR *msg)</td></tr>
 <tr class="memdesc:ga71756909d9789b37acdf20e3997a9b27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decodes an incoming PDU in binary format.  <a href="group__pdu_dec_usage.html#ga71756909d9789b37acdf20e3997a9b27">More...</a><br /></td></tr>
 <tr class="separator:ga71756909d9789b37acdf20e3997a9b27"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga0c48f5ebe23043bb044abce2f8e571a5"><td class="memItemLeft" align="right" valign="top">INT32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pdu_dec_usage.html#ga0c48f5ebe23043bb044abce2f8e571a5">azx_pdu_decodeString</a> (CHAR *pdu_str, pdu_struct *packet, CHAR *number, CHAR *msg)</td></tr>
+<tr class="memitem:ga0c48f5ebe23043bb044abce2f8e571a5"><td class="memItemLeft" align="right" valign="top">INT32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pdu_dec_usage.html#ga0c48f5ebe23043bb044abce2f8e571a5">azx_pdu_decodeString</a> (CHAR *pdu_str, <a class="el" href="structpdu__struct.html">pdu_struct</a> *packet, CHAR *number, CHAR *msg)</td></tr>
 <tr class="memdesc:ga0c48f5ebe23043bb044abce2f8e571a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decodes an incoming PDU in ASCII string format.  <a href="group__pdu_dec_usage.html#ga0c48f5ebe23043bb044abce2f8e571a5">More...</a><br /></td></tr>
 <tr class="separator:ga0c48f5ebe23043bb044abce2f8e571a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga883238aa220185561f08b9112ec96bfd"><td class="memItemLeft" align="right" valign="top">UINT16&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pdu_dec_usage.html#ga883238aa220185561f08b9112ec96bfd">azx_pdu_s_utf8_to_ascii</a> (UINT8 *in, UINT16 in_len)</td></tr>
@@ -137,7 +137,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">pdu_struct *&#160;</td>
+          <td class="paramtype"><a class="el" href="structpdu__struct.html">pdu_struct</a> *&#160;</td>
           <td class="paramname"><em>packet</em>, </td>
         </tr>
         <tr>
@@ -166,7 +166,7 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">pdu</td><td>Pointer to the buffer containing the pdu stream in binary format </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pdu_len</td><td>Size in bytes of the pdu </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">packet</td><td>Pointer to the pdu_struct that will be filled with all the information about the PDU </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">packet</td><td>Pointer to the <a class="el" href="structpdu__struct.html">pdu_struct</a> that will be filled with all the information about the PDU </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">number</td><td>String buffer that will be filled with the caller number </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">msg</td><td>String buffer that will be filled with the incoming text message in ascii format</td></tr>
   </table>
@@ -176,7 +176,7 @@ Functions</h2></td></tr>
 <p><b>Refer to</b> azx_pdu_Encoder()</p>
 <p><br  />
  </p>
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_pdu_dec_example_8c-example.html#a0">azx_pduDec_example.c</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_pdu_dec_example_8c-example.html#a1">azx_pduDec_example.c</a>.</dd>
 </dl>
 
 </div>
@@ -196,7 +196,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">pdu_struct *&#160;</td>
+          <td class="paramtype"><a class="el" href="structpdu__struct.html">pdu_struct</a> *&#160;</td>
           <td class="paramname"><em>packet</em>, </td>
         </tr>
         <tr>
@@ -223,7 +223,7 @@ Functions</h2></td></tr>
 <p>This function decodes the incoming PDU (in ASCII string format) to output structure. Sender Number and SMS text message are returned as strings </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">pdu_str</td><td>Pointer to the buffer containing the pdu string </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">packet</td><td>Pointer to the pdu_struct that will be filled with all the information about the PDU </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">packet</td><td>Pointer to the <a class="el" href="structpdu__struct.html">pdu_struct</a> that will be filled with all the information about the PDU </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">number</td><td>String buffer that will be filled with the caller number </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">msg</td><td>String buffer that will be filled with the incoming text message in ascii format</td></tr>
   </table>
@@ -233,7 +233,7 @@ Functions</h2></td></tr>
 <p><b>Refer to</b> azx_pdu_Encoder()</p>
 <p><br  />
  </p>
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_pdu_dec_example_8c-example.html#a1">azx_pduDec_example.c</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_pdu_dec_example_8c-example.html#a2">azx_pduDec_example.c</a>.</dd>
 </dl>
 
 </div>

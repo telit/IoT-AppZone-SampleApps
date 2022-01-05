@@ -1,7 +1,7 @@
 
 ### I2C Combined
 
-Sample application showing how to communicate with an I2C slave device with I2C raw mode. Debug prints on **AUX UART**
+Sample application showing how to communicate with an I2C slave device with I2C raw mode. Debug prints on MAIN UART
 
 
 **Features**

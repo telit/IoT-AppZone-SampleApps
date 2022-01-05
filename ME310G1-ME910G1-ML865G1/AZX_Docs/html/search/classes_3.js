@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['sockaddr_5fstorage_629',['sockaddr_storage',['../structsockaddr__storage.html',1,'']]]
+  ['ftpcallbackoptions_631',['FtpCallbackOptions',['../struct_ftp_callback_options.html',1,'']]]
 ];
