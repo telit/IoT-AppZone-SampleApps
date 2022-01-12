@@ -11,7 +11,7 @@
   @details
 
   @version
-    1.1.6
+    1.1.7
   @note
 
 
@@ -79,7 +79,7 @@
 
 #define APN      "web.omnitel.it"
 
-#define PDP_CTX   (UINT8)3
+#define PDP_CTX   (UINT8)1
 
 /* Local typedefs ===============================================================================*/
 
@@ -92,7 +92,7 @@ M2MB_SOCKET_BSD_SOCKET sock_client = M2MB_SOCKET_BSD_INVALID_SOCKET;
 
 M2MB_SSL_CONFIG_T sslConfig;
 M2MB_SSL_CONNECTION_HANDLE sslConnHndl;
-M2MB_SSL_CIPHER_SUITE_E CipherSuite[4];
+M2MB_SSL_CIPHER_SUITE_E CipherSuite[M2MB_SSL_MAX_CIPHERSUITES];
 M2MB_SSL_CONFIG_HANDLE sslConfigHndl;
 
 M2MB_SSL_CTXT_HANDLE sslCtxtHndl;
@@ -267,11 +267,15 @@ INT32 msgHTTPSTask(INT32 type, INT32 param1, INT32 param2)
 
     sslConfig.CipherSuites = CipherSuite; //(M2MB_SSL_CIPHER_SUITE_E *)malloc( 4*sizeof( M2MB_SSL_CIPHER_SUITE_E ) );
 
-    sslConfig.CipherSuites[0] = M2MB_TLS_RSA_WITH_AES_256_CBC_SHA256;
-    sslConfig.CipherSuites[1] = M2MB_TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256;
-    sslConfig.CipherSuites[2] = M2MB_TLS_RSA_WITH_AES_128_CBC_SHA256;
-    sslConfig.CipherSuites[3] = M2MB_TLS_RSA_WITH_AES_256_CBC_SHA;
-    sslConfig.CipherSuitesNum = 4;
+    sslConfig.CipherSuites[0] = M2MB_TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256;
+    sslConfig.CipherSuites[1] = M2MB_TLS_RSA_WITH_AES_256_CBC_SHA;
+    sslConfig.CipherSuites[2] = M2MB_TLS_DHE_RSA_WITH_AES_128_CBC_SHA;
+    sslConfig.CipherSuites[3] = M2MB_TLS_DHE_RSA_WITH_AES_256_CBC_SHA;
+    sslConfig.CipherSuites[4] = M2MB_TLS_RSA_WITH_AES_256_CBC_SHA;
+    sslConfig.CipherSuites[5] = M2MB_TLS_RSA_WITH_AES_128_CBC_SHA256;
+    sslConfig.CipherSuites[6] = M2MB_TLS_DHE_RSA_WITH_AES_128_CBC_SHA256;
+    sslConfig.CipherSuites[7] = M2MB_TLS_RSA_WITH_AES_256_CBC_SHA256;
+    sslConfig.CipherSuitesNum = 8;
 
     sslConfig.AuthType = SSL_AUTH_MODE;
     sslConfigHndl = m2mb_ssl_create_config( sslConfig,&sslRes );
