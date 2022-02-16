@@ -13,7 +13,7 @@ Sample application showing how to use HTTPs client functionalities. Debug prints
 
 NOTE: the sample app has an optional dependency on azx_base64.h if basic authentication is required (refer to `HTTP_BASIC_AUTH_GET` define in `M2MB_main.c` for further details)
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

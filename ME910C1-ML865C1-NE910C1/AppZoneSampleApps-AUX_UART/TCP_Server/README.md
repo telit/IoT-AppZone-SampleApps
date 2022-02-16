@@ -13,7 +13,7 @@ Sample application showcasing TCP listening socket demo with M2MB API. Debug pri
 
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

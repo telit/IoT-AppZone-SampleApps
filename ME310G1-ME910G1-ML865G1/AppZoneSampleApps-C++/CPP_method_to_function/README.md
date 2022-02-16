@@ -12,7 +12,7 @@ Sample application showing how to manage class methods as function pointers. Deb
 - how to configure the static function to convert the input parameter with a static cast and call the input class instance method
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

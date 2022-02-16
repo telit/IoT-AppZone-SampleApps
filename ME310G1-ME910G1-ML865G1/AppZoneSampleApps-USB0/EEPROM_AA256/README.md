@@ -29,7 +29,7 @@ This demo application requires that:
 - Deinit EEPROM utility
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

@@ -12,7 +12,7 @@ Sample application that opens a tunnel between main UART and USB0 port.
 - Creates a simple task to manage data exchange between ports
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main function`**
 

@@ -12,7 +12,7 @@ Sample application showcasing MQTT client functionalities (with SSL). Debug prin
 - How to connect to a broker with SSL and exchange data over a subscribed topic
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

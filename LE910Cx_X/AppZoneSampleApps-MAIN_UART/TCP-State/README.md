@@ -11,7 +11,7 @@ Sample application showcasing how to check a TPC connected socket current status
 - How to open a TCP client socket 
 - How to check if the TCP socket is still valid
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

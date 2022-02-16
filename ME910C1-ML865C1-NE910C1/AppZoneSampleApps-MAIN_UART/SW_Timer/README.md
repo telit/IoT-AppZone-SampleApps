@@ -11,7 +11,7 @@ The sample application shows how to use SW Timers M2MB API. Debug prints on **MA
 - How to use the timer to manage recurring events
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

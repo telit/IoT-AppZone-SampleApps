@@ -11,7 +11,7 @@ Sample application that shows how to use the basic read/write USB apis. Synchron
 - Read and write on USB (asynchronous mode)
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

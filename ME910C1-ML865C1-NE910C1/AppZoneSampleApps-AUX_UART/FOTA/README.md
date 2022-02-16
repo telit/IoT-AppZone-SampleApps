@@ -11,7 +11,7 @@ Sample application showcasing FOTA usage with M2MB API. Debug prints on **AUX UA
 - How to apply the delta and update the module firmware
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

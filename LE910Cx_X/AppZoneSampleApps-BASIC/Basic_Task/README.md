@@ -11,7 +11,7 @@ The application shows how to create and manage tasks with m2mb APIs. Debug print
 - How to start the task and send messages to it
 - how to destroy the task
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

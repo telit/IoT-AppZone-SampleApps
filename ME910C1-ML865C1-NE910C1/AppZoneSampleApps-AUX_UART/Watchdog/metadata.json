@@ -11,12 +11,12 @@
   "availability": {
     "MXXXXC1": {
       "firmwares": [
-        "30.01.xx0.0"
+        "30.01.xx0"
       ]
     },
     "MXXXXG1": {
       "firmwares": [
-        "37.00.xx4.1"
+        "37.00.xx4"
       ]
     }
   },

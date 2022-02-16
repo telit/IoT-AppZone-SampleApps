@@ -19,7 +19,7 @@ AT#M2MWRITE="/mod/ota_config.txt",<filesize>
 ```
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

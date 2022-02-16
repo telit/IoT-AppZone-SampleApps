@@ -13,7 +13,7 @@ Sample application showcasing AWS Iot Core MQTT communication. Debug prints on *
 - How to connect to AWS server with SSL and exchange data over a topic
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 
@@ -49,7 +49,7 @@ Sample application showcasing AWS Iot Core MQTT communication. Debug prints on *
 - Disable PDP context
 
 
-### How to get started with AWS IoT
+#### How to get started with AWS IoT
 
 - Go to [AWS console](https://aws.amazon.com/console/) and create an account if one is not available yet.
 - Go to **`IoT Core`** section
@@ -87,14 +87,14 @@ Sample application showcasing AWS Iot Core MQTT communication. Debug prints on *
 
 For further information, please refer to the full [AWS IoT documentation](https://docs.aws.amazon.com/iot/latest/developerguide/iot-console-signin.html)
 
-### Application setup
+#### Application setup
 
 - Set **`CLIENTCERTFILE`** and **`CLIENTKEYFILE`** defines in **`aws_demo.c file`** in order to match the certificate and key created in the previous section.
 - Set **`AWS_BROKER_ADDRESS`** to the correct AWS URL. It can be retrieved from AWS IoT **`Manage`** > **`Things`** > **`Interact`** in the HTTPS **`Rest API Endpoint`** URL. 
 - Set **`CLIENT_ID`** to the desired Client ID for your AWS device
 - (Optional) if required, change **`CACERTFILE`** to match the one to be used.
 
-### Device setup
+#### Device setup
 
 The application requires the certificates (provided in sample app **`certs`** subfolder ) to be stored in **`/data/azc/mod/ssl_certs/`** folder. It can be created with 
 

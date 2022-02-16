@@ -11,7 +11,7 @@ Sample application that shows how to set and implement a watchdog. Task has been
 - Handle watchdog kicks with a timer
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

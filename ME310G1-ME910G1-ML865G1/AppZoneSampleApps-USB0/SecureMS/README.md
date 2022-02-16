@@ -20,7 +20,7 @@ Sample application showcasing how to manage secure microservice functionalities.
 - Try to pass data from a trusted item to a non trusted item using untrusted TZ buffers, and verify it fails
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

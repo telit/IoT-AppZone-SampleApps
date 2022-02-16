@@ -12,7 +12,7 @@ Sample application showing how use lfs2 porting with RAM disk and SPI data flash
 - How to create and manage SPI Flash memory partition
 - How to manage file-system in SPI Flash memory partition
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

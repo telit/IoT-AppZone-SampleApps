@@ -11,7 +11,7 @@ The application prints "Hello World!" on USB 0 every 2 seconds using
 - How to print messages out of the channel
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

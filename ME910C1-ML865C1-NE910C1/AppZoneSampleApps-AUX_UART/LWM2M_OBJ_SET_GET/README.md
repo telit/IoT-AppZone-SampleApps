@@ -29,7 +29,7 @@ it can be done with the following AT command:
 Depending on the Mobiler Network Operator and Access Technology, the APN might be automatically set by the network itself. In this case, nothing must be done by the user.
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

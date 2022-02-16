@@ -12,7 +12,7 @@ Sample application that shows RTC apis functionalities: how to get/set moudle sy
 - How to set new system time
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

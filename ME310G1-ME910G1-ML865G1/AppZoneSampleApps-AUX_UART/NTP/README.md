@@ -12,7 +12,7 @@ The application connects to an NTP server, gets current date and time and update
 
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

@@ -11,7 +11,7 @@ Sample application showing how to communicate over SPI with m2mb API. Debug prin
 - How to communicate over SPI bus
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

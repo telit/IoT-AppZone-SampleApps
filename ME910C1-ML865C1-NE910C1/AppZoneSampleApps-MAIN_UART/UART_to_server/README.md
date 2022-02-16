@@ -12,7 +12,7 @@ Sample application showcasing how to send data from main UART to a connected TCP
 - How to transmit received data from the UART to the server and viceversa
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

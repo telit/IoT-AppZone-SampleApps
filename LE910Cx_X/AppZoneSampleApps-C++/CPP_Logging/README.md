@@ -12,7 +12,7 @@ Sample application showcasing how to create a C++ OO code, providing a logging c
 - how to configure makefile flags to build the application
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

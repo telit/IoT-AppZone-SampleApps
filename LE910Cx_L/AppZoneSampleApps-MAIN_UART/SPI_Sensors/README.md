@@ -10,7 +10,7 @@ Sample application showing SPI usage, configuring two ST devices: a magnetometer
 - How to open an SPI bus with a slave device
 - How to communicate with the device over the SPI bus
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

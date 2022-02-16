@@ -1,0 +1,67 @@
+{
+  "name": "Sample App for LwM2M management of FOTA events and ACKs, using AT interface for URCs",
+  "type": "sample-app",
+  "description": "A sample app that shows LwM2M client usage to manage a remote FOTA request, sending the ACKs for each step",
+  "copyright": "Telit Communications, 2022",
+  "homepage": "https://www.telit.com/",
+  "keywords": [
+    "IoT AppZone",
+    "LwM2M",
+    "OneEdge",
+    "FOTA"
+  ],
+  "availability": {
+    "MXXXXC1": {
+      "firmwares": [
+        "30.01.xx0"
+      ]
+    },
+    "MXXXXG1": {
+      "firmwares": [
+        "37.00.xx4"
+      ]
+    },
+    "LE910Cx-L": {
+      "firmwares": []
+    },
+    "LE910Cx-X": {
+      "firmwares": [
+        "25.30.xx3.1"
+      ]
+    }
+  },
+  "groups": [
+    {
+      "name": "MAIN_UART",
+      "limitations": []
+    },
+    {
+      "name": "AUX_UART",
+      "limitations": [
+        "LE910Cx-L"
+      ]
+    },
+    {
+      "name": "USB0",
+      "limitations": []
+    }
+  ],
+  "platform": "GCC",
+  "license": "MIT",
+  "support": {
+    "email": "ts-emea@telit.com"
+  },
+  "authors": [
+    {
+      "name": "Fabio Pintus",
+      "email": "fabio.pintus@telit.com",
+      "homepage": "http://www.telit.com/",
+      "role": "Developer"
+    }
+  ],
+  "requires": {
+    "core/azx_log": "master",
+    "core/azx_utils": "master",
+    "core/azx_tasks": "master"
+  }
+}
