@@ -11,7 +11,7 @@ Sample application showing how to use GPIOs and interrupts. Debug prints on **AU
 - How to open a second GPIO in output mode to trigger the first one
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

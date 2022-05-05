@@ -11,7 +11,7 @@ The application prints "Hello World!" over selected output every two seconds. De
 - How to print logging information on the channel using AZX LOG sample functions
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

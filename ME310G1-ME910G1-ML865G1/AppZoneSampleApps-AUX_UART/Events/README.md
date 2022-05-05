@@ -11,7 +11,7 @@ Sample application showcasing events setup and usage. Debug prints on **AUX UART
 - How to wait for events and generate them in callback functions to synchronize blocks of code
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

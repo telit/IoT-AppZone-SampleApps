@@ -12,7 +12,7 @@ Sample application showing mutex usage, with ownership and prioritization usage.
 - how to reorder the pending tasks queue for the mutex
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

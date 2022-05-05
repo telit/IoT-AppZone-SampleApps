@@ -12,7 +12,7 @@ Sample application prints some Module/SIM information as IMEI, fw version, IMSI 
 - How to get and print some informatio about Module registration as Netowrk Operator, AcT, RSSI, etc
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

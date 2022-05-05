@@ -11,7 +11,7 @@ Sample application showcasing M2MB File system API usage. Debug prints on **AUX 
 - How to reopen the file in read mode and read data from it
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

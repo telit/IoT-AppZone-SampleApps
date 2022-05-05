@@ -12,7 +12,7 @@ Sample application showing how to communicate with an I2C slave device. Debug pr
 
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

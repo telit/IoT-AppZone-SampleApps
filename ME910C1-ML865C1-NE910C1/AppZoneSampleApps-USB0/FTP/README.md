@@ -12,7 +12,7 @@ Sample application showcasing FTP client demo with AZX FTP. Debug prints on **US
 - How to exchange data with the server
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

@@ -17,7 +17,7 @@ AT#M2MWRITE="/mod/test.gz",138
 >>> here receive the prompt; then type or send the file, sized 138 bytes
 ```
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

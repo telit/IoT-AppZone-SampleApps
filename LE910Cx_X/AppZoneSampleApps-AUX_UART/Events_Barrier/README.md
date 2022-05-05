@@ -11,7 +11,7 @@ Sample application showcasing how to setup and use multiple events to create a b
 - How to wait for multiple events in the same point, and generate them in callback functions to synchronize blocks of code
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

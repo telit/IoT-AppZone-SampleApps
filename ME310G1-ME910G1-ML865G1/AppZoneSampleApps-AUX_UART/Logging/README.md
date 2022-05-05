@@ -12,7 +12,7 @@ Sample application showing how to print on one of the available output interface
 - How to use different logging macros
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

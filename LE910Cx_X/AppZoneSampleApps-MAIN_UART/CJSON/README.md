@@ -12,7 +12,7 @@ Sample application showcasing how to manage JSON objects. Debug prints on **MAIN
 - How to manipulate JSON objects
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

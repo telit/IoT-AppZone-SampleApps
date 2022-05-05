@@ -13,7 +13,7 @@ Sample application showcasing TLS/SSL with client certificates usage with M2MB A
 
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

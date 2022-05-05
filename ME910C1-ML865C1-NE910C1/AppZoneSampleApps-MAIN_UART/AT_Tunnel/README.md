@@ -11,7 +11,7 @@ Sample application showcasing how to perform an AT tunnel from Main UART to an A
 - How to receive data from main UART and tunnel it to the AT interface, then report back to UART the AT response
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

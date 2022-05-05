@@ -11,7 +11,7 @@ Sample application showing how to use AT Instance functionality (sending AT comm
 - How to send AT commands and receive responses on the AT interface
 
 
-**Application workflow, sync mode**
+#### Application workflow, sync mode
 
 **`M2MB_main.c`**
 
@@ -30,7 +30,7 @@ Sample application showing how to use AT Instance functionality (sending AT comm
 ![](../../pictures/samples/ati_sync_bordered.png)
 
 
-**Application workflow, async mode**
+#### Application workflow, async mode
 
 **`M2MB_main.c`**
 

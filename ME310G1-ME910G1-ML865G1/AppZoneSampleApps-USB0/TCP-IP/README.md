@@ -12,7 +12,7 @@ Sample application showcasing TCP echo demo with M2MB API. Debug prints on **USB
 - How to communicate over the socket
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

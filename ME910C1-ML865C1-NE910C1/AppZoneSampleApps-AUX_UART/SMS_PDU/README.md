@@ -12,7 +12,7 @@ Sample application showcasing how to create and decode PDUs to be used with m2mb
 - How to decode a received SMS response from PDU to ASCII mode.
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

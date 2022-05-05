@@ -12,7 +12,7 @@ Sample application showcasing multi tasking functionalities with M2MB API. Debug
 - How to use a semaphore to synchronize two tasks
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

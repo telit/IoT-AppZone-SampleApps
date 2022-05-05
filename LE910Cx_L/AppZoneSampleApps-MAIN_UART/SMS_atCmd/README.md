@@ -18,7 +18,7 @@ AT#M2MWRITE="/data/azc/mod/sms_config.txt",138
 >>> here receive the prompt; then type or send the file, sized 138 bytes
 ```
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

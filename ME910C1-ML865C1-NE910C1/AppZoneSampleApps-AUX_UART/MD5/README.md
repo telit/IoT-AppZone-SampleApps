@@ -10,7 +10,7 @@ Sample application showing how to compute MD5 hashes using m2mb crypto. Debug pr
 - Compute MD5 hash of a string
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

@@ -18,7 +18,7 @@ This app will try to manage another app called "second.bin", which already exist
 the app must be built using the flag ROM_START=<address> in the Makefile to set a different starting address than the main app (by default, 0x40000000). For example, 0x41000000.
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

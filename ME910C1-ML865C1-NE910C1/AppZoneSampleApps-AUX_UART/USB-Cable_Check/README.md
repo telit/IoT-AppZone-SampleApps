@@ -12,7 +12,7 @@ Sample application showing how to check if USB cable is plugged in or not. Debug
 
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

@@ -17,7 +17,7 @@ Sample application showcasing how to manage Elliptic Curve Cryptography function
 - How to make Bob and Alice create an AES context with the newly created shared keys, encode data and decode it on the other side
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

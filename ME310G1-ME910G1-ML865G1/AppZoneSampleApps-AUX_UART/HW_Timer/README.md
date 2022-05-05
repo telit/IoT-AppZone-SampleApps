@@ -12,7 +12,7 @@ The sample application shows how to use HW Timers M2MB API. Debug prints on **AU
 
 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 

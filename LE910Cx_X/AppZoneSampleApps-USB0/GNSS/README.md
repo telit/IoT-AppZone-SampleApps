@@ -12,7 +12,7 @@ Sample application showing how to use GNSS functionality. Debug prints on **USB0
 
 **Note:** on MEx10G1 product family both M2MB_GNSS_SERVICE_NMEA_REPORT and M2MB_GNSS_SERVICE_POSITION_REPORT services are available, while on ME910C1 product family only M2MB_GNSS_SERVICE_POSITION_REPORT is available 
 
-**Application workflow**
+#### Application workflow
 
 **`M2MB_main.c`**
 
