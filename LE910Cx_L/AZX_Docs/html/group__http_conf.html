@@ -34,7 +34,7 @@
   <td id="projectlogo"><img alt="Logo" src="telit-logo.png"/></td>
   <td id="projectalign" style="padding-left: 2em;">
    <div id="projectname">AZX (AppZone eXtensions) documentation
-   &#160;<span id="projectnumber">1.1.15-CxL</span>
+   &#160;<span id="projectnumber">1.1.16-CxL</span>
    </div>
    <div id="projectbrief">A set of companion utilities that make AZ development easier</div>
   </td>
@@ -123,9 +123,9 @@ typedef enum <a class="el" href="group__http_conf.html#ga30623080daf9875d7ef4a53
 typedef enum <a class="el" href="group__http_conf.html#ga91dcf453b00607b13fb25aa4fb9996d8">_HTTP_AUTH_SCHEMA</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_conf.html#gafb5cf49a7418b6b306a91aca97342df3">AZX_HTTP_AUTH_SCHEMA</a></td></tr>
 <tr class="memdesc:gafb5cf49a7418b6b306a91aca97342df3"><td class="mdescLeft">&#160;</td><td class="mdescRight">HTTP Supported authentication methods. <br /></td></tr>
 <tr class="separator:gafb5cf49a7418b6b306a91aca97342df3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaaad9f441f95bdedecbd30f8145df2585"><td class="memItemLeft" align="right" valign="top">typedef INT32(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_conf.html#gaaad9f441f95bdedecbd30f8145df2585">AZX_HTTPS_USER_CB</a>) (void *, UINT32, INT8 *)</td></tr>
-<tr class="memdesc:gaaad9f441f95bdedecbd30f8145df2585"><td class="mdescLeft">&#160;</td><td class="mdescRight">User callback prototype.  <a href="group__http_conf.html#gaaad9f441f95bdedecbd30f8145df2585">More...</a><br /></td></tr>
-<tr class="separator:gaaad9f441f95bdedecbd30f8145df2585"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad57846e79605499b70bd0562684f4948"><td class="memItemLeft" align="right" valign="top">typedef INT32(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_conf.html#gad57846e79605499b70bd0562684f4948">AZX_HTTPS_USER_CB</a>) (void *, UINT32, void *)</td></tr>
+<tr class="memdesc:gad57846e79605499b70bd0562684f4948"><td class="mdescLeft">&#160;</td><td class="mdescRight">User callback prototype.  <a href="group__http_conf.html#gad57846e79605499b70bd0562684f4948">More...</a><br /></td></tr>
+<tr class="separator:gad57846e79605499b70bd0562684f4948"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga3cb8375a9c231c36d41bcc6390f26890"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_conf.html#ga3cb8375a9c231c36d41bcc6390f26890">user_base64_encode</a>) (UINT8 *out, const UINT8 *in, int inlen)</td></tr>
 <tr class="memdesc:ga3cb8375a9c231c36d41bcc6390f26890"><td class="mdescLeft">&#160;</td><td class="mdescRight">User base 64 encoder function prototype.  <a href="group__http_conf.html#ga3cb8375a9c231c36d41bcc6390f26890">More...</a><br /></td></tr>
 <tr class="separator:ga3cb8375a9c231c36d41bcc6390f26890"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -235,29 +235,29 @@ Functions</h2></td></tr>
 </div><!-- fragment --> 
 </div>
 </div>
-<a id="gaaad9f441f95bdedecbd30f8145df2585"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gaaad9f441f95bdedecbd30f8145df2585">&#9670;&nbsp;</a></span>AZX_HTTPS_USER_CB</h2>
+<a id="gad57846e79605499b70bd0562684f4948"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gad57846e79605499b70bd0562684f4948">&#9670;&nbsp;</a></span>AZX_HTTPS_USER_CB</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef INT32( * AZX_HTTPS_USER_CB) (void *, UINT32, INT8 *)</td>
+          <td class="memname">typedef INT32( * AZX_HTTPS_USER_CB) (void *, UINT32, void *)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>User callback prototype. </p>
-<p>This is the function signature (user must define one and pass it to will be called by the client to allow user receive and manage incoming data.</p>
+<p>This is the function signature. User must define one and pass it to <a class="el" href="group__http_conf.html#ga0e2abd820dff5b4f020b1b70d797b249" title="Sets user callback.">azx_http_setCB()</a>. It will be called by the client to allow user receive and manage incoming data, or to notify the amount of transmitted data during a POST operation.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">Incoming</td><td>data buffer </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">Incoming</td><td>data length </td></tr>
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">the</td><td>Event Flag pointer. It can be used to force the HTTP client to stop current operation.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Incoming</td><td>data buffer in case of download (GET), NULL in case of upload (POST) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">Incoming</td><td>data length in case of GET, sent data length in case of POST </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">the</td><td>user provided context</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Integer value, not used</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Integer value, if 0, HTTPS client will keep transferring data, otherwise it will abort the process.</dd></dl>
 <p><b>Refer to</b> azx_https_set_CB() <a class="el" href="structazx__http_callback_options.html" title="The HTTP callback options structure.">azx_httpCallbackOptions</a> </p>
 
 </div>
@@ -441,13 +441,20 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>None</dd></dl>
 <p><b>Refer to</b> <a class="el" href="structazx__http_callback_options.html" title="The HTTP callback options structure.">azx_httpCallbackOptions</a></p>
-<p><b>Sample usage</b> </p><div class="fragment"><div class="line">INT8 cbEvt = 0;</div>
+<p><b>Sample usage</b> </p><div class="fragment"><div class="line">INT8 cbArg = 0;</div>
 <div class="line"> </div>
-<div class="line"><span class="keywordtype">int</span> DATA_CB(<span class="keywordtype">char</span>* buffer, UINT32 size, INT8 *flag)</div>
+<div class="line"><span class="keywordtype">int</span> DATA_CB(<span class="keywordtype">char</span>* buffer, UINT32 size, INT8 *cbArg)</div>
 <div class="line">{</div>
 <div class="line">  <span class="comment">//set stop flag if needed</span></div>
-<div class="line">  <span class="comment">// *flag = 1;</span></div>
-<div class="line"> </div>
+<div class="line">  <span class="comment">// return = 1;</span></div>
+<div class="line">  <span class="keywordflow">if</span>(buffer != NULL)</div>
+<div class="line">  {</div>
+<div class="line">     <span class="comment">//download operation</span></div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">else</span></div>
+<div class="line">  {</div>
+<div class="line">     <span class="comment">//upload operation</span></div>
+<div class="line">  }</div>
 <div class="line">  <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
 <div class="line"> </div>
@@ -456,7 +463,7 @@ Functions</h2></td></tr>
 <div class="line">cbOpt.<a class="code" href="structazx__http_callback_options.html#ae999de10c7ec41abc95949d9e3b90102">user_cb_bytes_size</a> = 1500;</div>
 <div class="line">cbOpt.<a class="code" href="structazx__http_callback_options.html#ad1867ec1a9d182c41114cd4cab164b65">cbFunc</a> = DATA_CB;</div>
 <div class="line">cbOpt.<a class="code" href="structazx__http_callback_options.html#ad467e1a167c72ecb0b3fb027d191583b">cbData</a> = m2mb_os_malloc(cbOpt.<a class="code" href="structazx__http_callback_options.html#ae999de10c7ec41abc95949d9e3b90102">user_cb_bytes_size</a> + 1); <span class="comment">//one more element for \0</span></div>
-<div class="line">cbOpt.<a class="code" href="structazx__http_callback_options.html#a194817cf069ae7e296a2cacf6c908db1">cbEvtFlag</a> = &amp;cbEvt;</div>
+<div class="line">cbOpt.<a class="code" href="structazx__http_callback_options.html#ac79c8b6ed8ce8c47de5bfb2b4260994c">cbArg</a> = &amp;cbArg;</div>
 <div class="line"> </div>
 <div class="line"><a class="code" href="struct_a_z_x___h_t_t_p___i_n_f_o.html">AZX_HTTP_INFO</a> hi;</div>
 <div class="line">memset(&amp;hi, 0, <span class="keyword">sizeof</span>(HTTP_INFO));</div>
@@ -498,7 +505,7 @@ Functions</h2></td></tr>
 <p><b>Sample usage</b> </p><div class="fragment"><div class="line"><a class="code" href="struct_a_z_x___h_t_t_p___s_s_l.html">AZX_HTTP_SSL</a>  tls = {0};</div>
 <div class="line"><span class="keywordflow">if</span>(-1 == <a class="code" href="group__http_conf.html#gae40751f148308705cd22ee69282afbe8">azx_http_SSLInit</a>(&amp;tls))</div>
 <div class="line">{</div>
-<div class="line">  AZX_LOG_INFO(<span class="stringliteral">&quot;SSL init error \r\n&quot;</span>);</div>
+<div class="line">  <a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;SSL init error \r\n&quot;</span>);</div>
 <div class="line">}</div>
 </div><!-- fragment --> <dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_https_example_8c-example.html#a16">azx_https_example.c</a>.</dd>
 </dl>
@@ -508,16 +515,17 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="agroup__http_conf_html_ga0e2abd820dff5b4f020b1b70d797b249"><div class="ttname"><a href="group__http_conf.html#ga0e2abd820dff5b4f020b1b70d797b249">azx_http_setCB</a></div><div class="ttdeci">void azx_http_setCB(AZX_HTTP_INFO *hi, azx_httpCallbackOptions http_cb)</div><div class="ttdoc">Sets user callback.</div></div>
+<div class="ttc" id="astructazx__http_callback_options_html_ac79c8b6ed8ce8c47de5bfb2b4260994c"><div class="ttname"><a href="structazx__http_callback_options.html#ac79c8b6ed8ce8c47de5bfb2b4260994c">azx_httpCallbackOptions::cbArg</a></div><div class="ttdeci">void * cbArg</div><div class="ttdef"><b>Definition:</b> azx_https.h:241</div></div>
 <div class="ttc" id="astruct_a_z_x___h_t_t_p___i_n_f_o_html"><div class="ttname"><a href="struct_a_z_x___h_t_t_p___i_n_f_o.html">AZX_HTTP_INFO</a></div><div class="ttdoc">The HTTP operation structure.</div><div class="ttdef"><b>Definition:</b> azx_https.h:258</div></div>
 <div class="ttc" id="agroup__http_conf_html_gae40751f148308705cd22ee69282afbe8"><div class="ttname"><a href="group__http_conf.html#gae40751f148308705cd22ee69282afbe8">azx_http_SSLInit</a></div><div class="ttdeci">int azx_http_SSLInit(AZX_HTTP_SSL *sslInfo)</div><div class="ttdoc">Initialize SSL data.</div></div>
 <div class="ttc" id="astructazx__http_callback_options_html"><div class="ttname"><a href="structazx__http_callback_options.html">azx_httpCallbackOptions</a></div><div class="ttdoc">The HTTP callback options structure.</div><div class="ttdef"><b>Definition:</b> azx_https.h:234</div></div>
 <div class="ttc" id="agroup__http_conf_html_gae9912e7808e5d0674afa85487ec85387"><div class="ttname"><a href="group__http_conf.html#gae9912e7808e5d0674afa85487ec85387">azx_http_initialize</a></div><div class="ttdeci">void azx_http_initialize(AZX_HTTP_OPTIONS *opts)</div><div class="ttdoc">Initialize HTTPs client parameters.</div></div>
-<div class="ttc" id="astructazx__http_callback_options_html_a194817cf069ae7e296a2cacf6c908db1"><div class="ttname"><a href="structazx__http_callback_options.html#a194817cf069ae7e296a2cacf6c908db1">azx_httpCallbackOptions::cbEvtFlag</a></div><div class="ttdeci">INT8 * cbEvtFlag</div><div class="ttdef"><b>Definition:</b> azx_https.h:241</div></div>
 <div class="ttc" id="astructazx__http_callback_options_html_ad467e1a167c72ecb0b3fb027d191583b"><div class="ttname"><a href="structazx__http_callback_options.html#ad467e1a167c72ecb0b3fb027d191583b">azx_httpCallbackOptions::cbData</a></div><div class="ttdeci">void * cbData</div><div class="ttdef"><b>Definition:</b> azx_https.h:239</div></div>
 <div class="ttc" id="agroup__http_conf_html_gab1e72fc6db9cd975e6ec9e222b131f67"><div class="ttname"><a href="group__http_conf.html#gab1e72fc6db9cd975e6ec9e222b131f67">AZX_HTTP_LOG_HOOK_LEVELS_E</a></div><div class="ttdeci">AZX_HTTP_LOG_HOOK_LEVELS_E</div><div class="ttdoc">HTTP Log global level.</div><div class="ttdef"><b>Definition:</b> azx_https.h:291</div></div>
 <div class="ttc" id="astruct_a_z_x___h_t_t_p___o_p_t_i_o_n_s_html"><div class="ttname"><a href="struct_a_z_x___h_t_t_p___o_p_t_i_o_n_s.html">AZX_HTTP_OPTIONS</a></div><div class="ttdef"><b>Definition:</b> azx_https.h:393</div></div>
 <div class="ttc" id="astructazx__http_callback_options_html_ae999de10c7ec41abc95949d9e3b90102"><div class="ttname"><a href="structazx__http_callback_options.html#ae999de10c7ec41abc95949d9e3b90102">azx_httpCallbackOptions::user_cb_bytes_size</a></div><div class="ttdeci">UINT32 user_cb_bytes_size</div><div class="ttdef"><b>Definition:</b> azx_https.h:237</div></div>
 <div class="ttc" id="astruct_a_z_x___h_t_t_p___o_p_t_i_o_n_s_html_af5d583d83b87d5336dca07024feedd50"><div class="ttname"><a href="struct_a_z_x___h_t_t_p___o_p_t_i_o_n_s.html#af5d583d83b87d5336dca07024feedd50">AZX_HTTP_OPTIONS::cid</a></div><div class="ttdeci">unsigned char cid</div><div class="ttdef"><b>Definition:</b> azx_https.h:395</div></div>
+<div class="ttc" id="agroup__log_usage_html_ga847d9b9f62e31bf14b31882be7418675"><div class="ttname"><a href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a></div><div class="ttdeci">#define AZX_LOG_INFO(a...)</div><div class="ttdef"><b>Definition:</b> azx_log.h:300</div></div>
 <div class="ttc" id="astruct_a_z_x___h_t_t_p___s_s_l_html"><div class="ttname"><a href="struct_a_z_x___h_t_t_p___s_s_l.html">AZX_HTTP_SSL</a></div><div class="ttdoc">HTTP SSL structure.</div><div class="ttdef"><b>Definition:</b> azx_https.h:132</div></div>
 <div class="ttc" id="astructazx__http_callback_options_html_ad1867ec1a9d182c41114cd4cab164b65"><div class="ttname"><a href="structazx__http_callback_options.html#ad1867ec1a9d182c41114cd4cab164b65">azx_httpCallbackOptions::cbFunc</a></div><div class="ttdeci">AZX_HTTPS_USER_CB cbFunc</div><div class="ttdef"><b>Definition:</b> azx_https.h:242</div></div>
 <!-- HTML footer for doxygen 1.8.15-->

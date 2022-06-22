@@ -34,7 +34,7 @@
   <td id="projectlogo"><img alt="Logo" src="telit-logo.png"/></td>
   <td id="projectalign" style="padding-left: 2em;">
    <div id="projectname">AZX (AppZone eXtensions) documentation
-   &#160;<span id="projectnumber">1.1.15-CxL</span>
+   &#160;<span id="projectnumber">1.1.16-CxL</span>
    </div>
    <div id="projectbrief">A set of companion utilities that make AZ development easier</div>
   </td>
@@ -109,9 +109,9 @@ Data Fields</h2></td></tr>
 <tr class="separator:ae999de10c7ec41abc95949d9e3b90102"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad467e1a167c72ecb0b3fb027d191583b"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structazx__http_callback_options.html#ad467e1a167c72ecb0b3fb027d191583b">cbData</a></td></tr>
 <tr class="separator:ad467e1a167c72ecb0b3fb027d191583b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a194817cf069ae7e296a2cacf6c908db1"><td class="memItemLeft" align="right" valign="top">INT8 *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structazx__http_callback_options.html#a194817cf069ae7e296a2cacf6c908db1">cbEvtFlag</a></td></tr>
-<tr class="separator:a194817cf069ae7e296a2cacf6c908db1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1867ec1a9d182c41114cd4cab164b65"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__http_conf.html#gaaad9f441f95bdedecbd30f8145df2585">AZX_HTTPS_USER_CB</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structazx__http_callback_options.html#ad1867ec1a9d182c41114cd4cab164b65">cbFunc</a></td></tr>
+<tr class="memitem:ac79c8b6ed8ce8c47de5bfb2b4260994c"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structazx__http_callback_options.html#ac79c8b6ed8ce8c47de5bfb2b4260994c">cbArg</a></td></tr>
+<tr class="separator:ac79c8b6ed8ce8c47de5bfb2b4260994c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1867ec1a9d182c41114cd4cab164b65"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__http_conf.html#gad57846e79605499b70bd0562684f4948">AZX_HTTPS_USER_CB</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structazx__http_callback_options.html#ad1867ec1a9d182c41114cd4cab164b65">cbFunc</a></td></tr>
 <tr class="separator:ad1867ec1a9d182c41114cd4cab164b65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -121,6 +121,23 @@ Data Fields</h2></td></tr>
 <dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_https_example_8c-example.html#_a6">azx_https_example.c</a>.</dd>
 </dl>
 </div><h2 class="groupheader">Field Documentation</h2>
+<a id="ac79c8b6ed8ce8c47de5bfb2b4260994c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac79c8b6ed8ce8c47de5bfb2b4260994c">&#9670;&nbsp;</a></span>cbArg</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void* azx_httpCallbackOptions::cbArg</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Callback argument pointer. This is a user provided context. </p>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_https_example_8c-example.html#a14">azx_https_example.c</a>.</dd>
+</dl>
+
+</div>
+</div>
 <a id="ad467e1a167c72ecb0b3fb027d191583b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad467e1a167c72ecb0b3fb027d191583b">&#9670;&nbsp;</a></span>cbData</h2>
 
@@ -138,23 +155,6 @@ Data Fields</h2></td></tr>
 
 </div>
 </div>
-<a id="a194817cf069ae7e296a2cacf6c908db1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a194817cf069ae7e296a2cacf6c908db1">&#9670;&nbsp;</a></span>cbEvtFlag</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">INT8* azx_httpCallbackOptions::cbEvtFlag</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Callback event pointer. This is a flag. When activated (set to a value different from 0) from user application side this leads the HTTP read process to be forcefully stopped </p>
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_https_example_8c-example.html#a14">azx_https_example.c</a>.</dd>
-</dl>
-
-</div>
-</div>
 <a id="ad1867ec1a9d182c41114cd4cab164b65"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad1867ec1a9d182c41114cd4cab164b65">&#9670;&nbsp;</a></span>cbFunc</h2>
 
@@ -162,7 +162,7 @@ Data Fields</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="group__http_conf.html#gaaad9f441f95bdedecbd30f8145df2585">AZX_HTTPS_USER_CB</a> azx_httpCallbackOptions::cbFunc</td>
+          <td class="memname"><a class="el" href="group__http_conf.html#gad57846e79605499b70bd0562684f4948">AZX_HTTPS_USER_CB</a> azx_httpCallbackOptions::cbFunc</td>
         </tr>
       </table>
 </div><div class="memdoc">

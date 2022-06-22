@@ -58,5 +58,6 @@ var group__http_usage =
     [ "azx_http_get", "group__http_usage.html#ga5af72b34cc3de7e623f3c9240f6ec0d0", null ],
     [ "azx_http_getCID", "group__http_usage.html#ga272faa61175fcf4e7a00529957106d35", null ],
     [ "azx_http_head", "group__http_usage.html#ga5717de1767a336a315469ea5c2c8e0a8", null ],
-    [ "azx_http_post", "group__http_usage.html#ga468c6015a239492a88c0c530fe73d973", null ]
+    [ "azx_http_post", "group__http_usage.html#ga468c6015a239492a88c0c530fe73d973", null ],
+    [ "azx_http_post_file", "group__http_usage.html#ga296106c2ccb99b6c3f37cefe8bd75b2b", null ]
 ];

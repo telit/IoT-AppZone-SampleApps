@@ -5,7 +5,7 @@
 #define HDR_AZX_TASKS_H_
 /**
  * @file azx_tasks.h
- * @version 1.0.4
+ * @version 1.0.5
  * @dependencies core/azx_log core/azx_utils
  * @author Alessio Quieti
  * @date 07/04/2018
@@ -54,7 +54,7 @@ typedef INT32 (*USER_TASK_CB)(INT32, INT32, INT32);
 #define AZX_TASKS_MAX_QUEUE_SIZE 100   /**<Maximum task message queue size in slots*/
 
 #define AZX_TASKS_PRIORITY_MAX   1     /**<Maximum task priority value */
-#define AZX_TASKS_PRIORITY_MIN  32     /**<Minimum task priority value*/
+#define AZX_TASKS_PRIORITY_MIN  50     /**<Minimum task priority value*/
 
 #define AZX_TASKS_MAX_TASKS 32         /**< Maximum allowed tasks number */
 

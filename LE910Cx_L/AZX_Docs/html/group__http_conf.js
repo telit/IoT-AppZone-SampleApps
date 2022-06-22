@@ -1,8 +1,8 @@
 var group__http_conf =
 [
     [ "azx_httpCallbackOptions", "structazx__http_callback_options.html", [
+      [ "cbArg", "structazx__http_callback_options.html#ac79c8b6ed8ce8c47de5bfb2b4260994c", null ],
       [ "cbData", "structazx__http_callback_options.html#ad467e1a167c72ecb0b3fb027d191583b", null ],
-      [ "cbEvtFlag", "structazx__http_callback_options.html#a194817cf069ae7e296a2cacf6c908db1", null ],
       [ "cbFunc", "structazx__http_callback_options.html#ad1867ec1a9d182c41114cd4cab164b65", null ],
       [ "user_cb_bytes_size", "structazx__http_callback_options.html#ae999de10c7ec41abc95949d9e3b90102", null ]
     ] ],
@@ -10,7 +10,7 @@ var group__http_conf =
     [ "AZX_HTTP_AUTH_SCHEMA", "group__http_conf.html#gafb5cf49a7418b6b306a91aca97342df3", null ],
     [ "AZX_HTTP_METHOD", "group__http_conf.html#gac324733f55c37381f15963897b55dd68", null ],
     [ "azx_httpDebugHook", "group__http_conf.html#gae45c5ce7ad62c080a02504578c721840", null ],
-    [ "AZX_HTTPS_USER_CB", "group__http_conf.html#gaaad9f441f95bdedecbd30f8145df2585", null ],
+    [ "AZX_HTTPS_USER_CB", "group__http_conf.html#gad57846e79605499b70bd0562684f4948", null ],
     [ "user_base64_encode", "group__http_conf.html#ga3cb8375a9c231c36d41bcc6390f26890", null ],
     [ "_AZX_HTTP_METHOD", "group__http_conf.html#ga30623080daf9875d7ef4a53282de1ac0", [
       [ "AZX_HTTP_GET", "group__http_conf.html#gga30623080daf9875d7ef4a53282de1ac0ae405fbb86fb9b0c85f7413e63ba650e6", null ],

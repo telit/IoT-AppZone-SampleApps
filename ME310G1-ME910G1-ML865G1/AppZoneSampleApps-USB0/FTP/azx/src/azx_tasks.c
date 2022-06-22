@@ -217,14 +217,14 @@ INT32 azx_tasks_createTask( char *task_name, INT32 stack_size, INT32 priority, I
     return AZX_TASKS_NOTINIT_ERR;
   }
 
-  if (priority < 1 || priority > 32)
+  if (priority < AZX_TASKS_PRIORITY_MAX || priority > AZX_TASKS_PRIORITY_MIN)
   {
     AZX_LOG_ERROR("priority out of bounds\r\n");
     return AZX_TASKS_WRONG_PRIO_ERR;
   }
   else
   {
-    task_prio = priority + 200; //201 to 232
+    task_prio = priority + 200; //201 to 250
   }
 
   if (stack_size < AZX_TASKS_MIN_STACK_SIZE || stack_size > AZX_TASKS_MAX_STACK_SIZE)  //1 to 32KB

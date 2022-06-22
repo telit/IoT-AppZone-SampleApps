@@ -1,4 +1,4 @@
-/*Copyright (C) 2020 Telit Communications S.p.A. Italy - All Rights Reserved.*/
+/*Copyright (C) 2022 Telit Communications S.p.A. Italy - All Rights Reserved.*/
 /*    See LICENSE file in the project root for full license information.     */
 
 /* Include files =============================================================*/
@@ -17,6 +17,7 @@
 #include "m2mb_socket.h"
 #include "m2mb_ssl.h"
 #include "m2mb_fs_posix.h"
+#include "m2mb_fs_errno.h"
 
 
 #include "azx_log.h"
@@ -47,7 +48,7 @@ typedef struct
 } HTTPS_PARAMS_T;
 
 /* Local statics =============================================================*/
-static M2MB_SSL_CIPHER_SUITE_E CipherSuites[4];
+static M2MB_SSL_CIPHER_SUITE_E CipherSuites[M2MB_SSL_MAX_CIPHERSUITES];
 static HTTPS_PARAMS_T https_params; /* internal */
 
 
@@ -133,7 +134,7 @@ static int strtoken( char *src, char *field_title, char *field_value )
   len = MIN( (UINT32)(p_end_line - src), (UINT32)(sizeof(current_line) - 2 ) );
   strncpy( current_line, src, len );
   current_line[len] = '\0';
-  
+
   if( ( p_split = strstr( current_line, ":" ) ) == NULL )
   {
     strcpy( field_title, current_line );
@@ -215,17 +216,7 @@ static int parse_url( char *src_url, int *https, char *host, int *port, char *ur
   *port = atoi(port_buffer);
 
   return 0;
-  /*
-    if((p2=strstr(p1, "@")) != NULL)
-    {
-    if((p3=strstr(p1, ":")) != NULL)
-    {
-      strncpy(username, p1, p3-p1);
-      strncpy(password, p3+1, p2-p3 -1);
-      p1 = p2+1;
-    }
-    }
-  */
+
 }
 
 static int https_init( AZX_HTTP_INFO *hi, char *url )
@@ -253,7 +244,7 @@ static int https_init( AZX_HTTP_INFO *hi, char *url )
       https_close( hi );
       return -1;
     }
-    
+
   }
 
   AZX_HTTP_LOG(AZX_HTTP_LOG_INFO, "Connecting to %s:%d/%s\n\r", hi->url.host, hi->url.port, hi->url.path );
@@ -313,7 +304,7 @@ static int https_header( AZX_HTTP_INFO *hi, char *header )
         if( ( pt2 = strstr( pt1, " " ) ) != NULL )
         {
           int i;
-          
+
           for (i = 0; i < (pt2 - pt1); i++)
           {
             t1[i] = pt1[i];
@@ -607,7 +598,7 @@ static int https_write( AZX_HTTP_INFO *hi, char *buffer, int len )
 {
   int ret, slen = 0;
 
-  AZX_HTTP_LOG(AZX_HTTP_LOG_DEBUG, "%s", buffer);
+  AZX_HTTP_LOG(AZX_HTTP_LOG_DEBUG, "<%.*s>", len, buffer);
   while( 1 )
   {
     if( hi->url.https == 1 )
@@ -809,7 +800,7 @@ static int https_read_chunked( AZX_HTTP_INFO *hi, BOOLEAN only_header )
         {
           if( hi->http_cb.cbFunc != NULL )
           {
-            hi->http_cb.cbFunc( hi->w_buf, hi->w_len, hi->http_cb.cbEvtFlag );
+            hi->http_cb.cbFunc( hi->w_buf, hi->w_len, hi->http_cb.cbArg );
           }
 
           return hi->response.status;
@@ -824,12 +815,11 @@ static int https_read_chunked( AZX_HTTP_INFO *hi, BOOLEAN only_header )
       {
         if( hi->http_cb.cbFunc != NULL )
         {
-          hi->http_cb.cbFunc( hi->w_buf, hi->w_len, hi->http_cb.cbEvtFlag );
-        }
 
-        if( *( hi->http_cb.cbEvtFlag ) )
-        {
-          return hi->response.status;
+          if(0 != hi->http_cb.cbFunc( hi->w_buf, hi->w_len, hi->http_cb.cbArg ))
+          {
+            return hi->response.status;
+          }
         }
 
         hi->w_len = 0;
@@ -847,7 +837,7 @@ static int https_read_chunked( AZX_HTTP_INFO *hi, BOOLEAN only_header )
 
   if( hi->http_cb.cbFunc != NULL )
   {
-    hi->http_cb.cbFunc( hi->w_buf, hi->w_len, hi->http_cb.cbEvtFlag );
+    hi->http_cb.cbFunc( hi->w_buf, hi->w_len, hi->http_cb.cbArg );
   }
 
   return hi->response.status;
@@ -982,30 +972,33 @@ void azx_http_setCB( AZX_HTTP_INFO *hi, azx_httpCallbackOptions http_cb )
 {
   hi->http_cb.cbFunc = http_cb.cbFunc;
   hi->http_cb.cbData = http_cb.cbData;
-  hi->http_cb.cbEvtFlag = http_cb.cbEvtFlag;
+  hi->http_cb.cbArg = http_cb.cbArg;
   hi->http_cb.user_cb_bytes_size = http_cb.user_cb_bytes_size;
 }
 
 
 int azx_http_SSLInit( AZX_HTTP_SSL *sslInfo )
 {
-  memset( sslInfo, 0, sizeof( AZX_HTTP_SSL ) );
   INT32 sslRes;
   M2MB_SSL_CONFIG_T sslConfig;
+
   sslConfig.ProtVers = M2MB_SSL_PROTOCOL_TLS_1_2;
   sslConfig.CipherSuites = CipherSuites;
-  sslConfig.CipherSuites[0] = M2MB_TLS_RSA_WITH_AES_256_CBC_SHA256;
-  sslConfig.CipherSuites[1] = M2MB_TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256;
-  sslConfig.CipherSuites[2] = M2MB_TLS_RSA_WITH_AES_128_CBC_SHA256;
-  sslConfig.CipherSuites[3] = M2MB_TLS_RSA_WITH_AES_256_CBC_SHA;
-  sslConfig.CipherSuitesNum = 4;
+  sslConfig.CipherSuites[0] = M2MB_TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256;
+  sslConfig.CipherSuites[1] = M2MB_TLS_RSA_WITH_AES_256_CBC_SHA;
+  sslConfig.CipherSuites[2] = M2MB_TLS_DHE_RSA_WITH_AES_128_CBC_SHA;
+  sslConfig.CipherSuites[3] = M2MB_TLS_DHE_RSA_WITH_AES_256_CBC_SHA;
+  sslConfig.CipherSuites[4] = M2MB_TLS_RSA_WITH_AES_256_CBC_SHA;
+  sslConfig.CipherSuites[5] = M2MB_TLS_RSA_WITH_AES_128_CBC_SHA256;
+  sslConfig.CipherSuites[6] = M2MB_TLS_DHE_RSA_WITH_AES_128_CBC_SHA256;
+  sslConfig.CipherSuites[7] = M2MB_TLS_RSA_WITH_AES_256_CBC_SHA256;
+  sslConfig.CipherSuitesNum = 8;
   sslConfig.AuthType = sslInfo->sslAuthType;
 
   if( !http_isInit() )
   {
     return -1;
   }
-
   sslInfo->sslConf = m2mb_ssl_create_config( sslConfig, &sslRes );
 
   if( sslInfo->sslConf == NULL )
@@ -1030,13 +1023,11 @@ int azx_http_SSLInit( AZX_HTTP_SSL *sslInfo )
     AZX_HTTP_LOG( AZX_HTTP_LOG_DEBUG, "m2mb_ssl_create_ctxt PASSED \r\n" );
   }
 
-  M2MB_SSL_SEC_INFO_U sslCertInfo;
-  M2MB_SSL_CA_INFO_T ca_Info[M2MB_SSL_MAX_CA_LIST];
-  #if 1
-
   if( sslConfig.AuthType == M2MB_SSL_SERVER_AUTH ||
       sslConfig.AuthType == M2MB_SSL_SERVER_CLIENT_AUTH )
   {
+    M2MB_SSL_SEC_INFO_U sslCertInfo;
+    M2MB_SSL_CA_INFO_T ca_Info[M2MB_SSL_MAX_CA_LIST];
     sslCertInfo.ca_List.ca_Cnt = 1;
     sslCertInfo.ca_List.ca_Info[0] = &ca_Info[0];
 
@@ -1057,32 +1048,32 @@ int azx_http_SSLInit( AZX_HTTP_SSL *sslInfo )
       AZX_HTTP_LOG( AZX_HTTP_LOG_DEBUG, "cannot load root CA certificate \r\n" );
       return -1;
     }
-  }
 
-  if( sslConfig.AuthType == M2MB_SSL_SERVER_CLIENT_AUTH )
-  {
-    if( -1 == readCertFile( ( char * )sslInfo->CLIENT_CERT_FILEPATH, &sslCertInfo.cert.cert_Buf,
-                            &sslCertInfo.cert.cert_Size ) )
+    if( sslConfig.AuthType == M2MB_SSL_SERVER_CLIENT_AUTH )
     {
-      return -1;
-    }
+      if( -1 == readCertFile( ( char * )sslInfo->CLIENT_CERT_FILEPATH, &sslCertInfo.cert.cert_Buf,
+          &sslCertInfo.cert.cert_Size ) )
+      {
+        return -1;
+      }
 
-    if( -1 == readCertFile( ( char * )sslInfo->CLIENT_KEY_FILEPATH, &sslCertInfo.cert.key_Buf,
-                            &sslCertInfo.cert.key_Size ) )
-    {
-      return -1;
-    }
+      if( -1 == readCertFile( ( char * )sslInfo->CLIENT_KEY_FILEPATH, &sslCertInfo.cert.key_Buf,
+          &sslCertInfo.cert.key_Size ) )
+      {
+        return -1;
+      }
 
-    if( 0 != m2mb_ssl_cert_store( M2MB_SSL_CERT, sslCertInfo, ( CHAR * ) SSL_CLIENT_NAME ) )
-    {
-      AZX_HTTP_LOG( AZX_HTTP_LOG_DEBUG, "cannot store Client certificate \r\n" );
-      return -1;
-    }
+      if( 0 != m2mb_ssl_cert_store( M2MB_SSL_CERT, sslCertInfo, ( CHAR * ) SSL_CLIENT_NAME ) )
+      {
+        AZX_HTTP_LOG( AZX_HTTP_LOG_DEBUG, "cannot store Client certificate \r\n" );
+        return -1;
+      }
 
-    if( 0 != m2mb_ssl_cert_load( sslInfo->sslH, M2MB_SSL_CERT, ( CHAR * ) SSL_CLIENT_NAME ) )
-    {
-      AZX_HTTP_LOG( AZX_HTTP_LOG_DEBUG, "cannot load Client certificate \r\n" );
-      return -1;
+      if( 0 != m2mb_ssl_cert_load( sslInfo->sslH, M2MB_SSL_CERT, ( CHAR * ) SSL_CLIENT_NAME ) )
+      {
+        AZX_HTTP_LOG( AZX_HTTP_LOG_DEBUG, "cannot load Client certificate \r\n" );
+        return -1;
+      }
     }
   }
 
@@ -1091,7 +1082,6 @@ int azx_http_SSLInit( AZX_HTTP_SSL *sslInfo )
     AZX_HTTP_LOG( AZX_HTTP_LOG_INFO, "Certificates successfully loaded!\r\n" );
   }
 
-  #endif
   return 0;
 }
 
@@ -1154,13 +1144,97 @@ int azx_http_post( AZX_HTTP_INFO *hi, char *url )
   }
 
   hi->request.method = AZX_HTTP_POST;
-  hi->request.content_length = ( int ) strlen( hi->request.post_data );
+  //hi->request.content_length = ( int ) strlen( hi->request.post_data );
 
   if( https_write_header( hi ) == -1 )
   {
     https_close( hi );
     return -1;
   }
+
+  ret = https_read_chunked( hi, FALSE );
+  https_close( hi );
+  return ret;
+}
+
+int azx_http_post_file( AZX_HTTP_INFO *hi, char *url, char *filepath)
+{
+  int         ret;
+
+  char chunk_buf[512];
+  int chunk_size = sizeof(chunk_buf);
+  SSIZE_T read;
+  int data_size;
+  INT32 fd;
+  struct M2MB_STAT st;
+  if( https_open( hi, url ) != 0 )
+  {
+    return -1;
+  }
+
+  hi->request.method = AZX_HTTP_POST;
+
+  if (0 ==m2mb_fs_stat(filepath, &st))
+  {
+    AZX_HTTP_LOG( AZX_HTTP_LOG_DEBUG, "\r\nLocal file %s size: %u\r\n", filepath,  st.st_size);
+    data_size = (int)st.st_size;
+  }
+  else
+  {
+    return -1;
+  }
+
+  hi->request.content_length = data_size;
+  hi->request.post_data = NULL;
+
+  if( https_write_header( hi ) == -1 )
+  {
+    https_close( hi );
+    return -1;
+  }
+
+  fd = m2mb_fs_open(filepath, M2MB_O_RDONLY);
+  if(fd == -1)
+  {
+    AZX_HTTP_LOG( AZX_HTTP_LOG_ERROR, "Cannot open file %s for POST\r\n", filepath);
+    return -1;
+  }
+
+  while(data_size > 0)
+  {
+
+    read = m2mb_fs_read(fd, chunk_buf, chunk_size);
+    if (read < 0)
+    {
+      AZX_HTTP_LOG( AZX_HTTP_LOG_ERROR, "Cannot read file %s for POST. %d\r\n", filepath, m2mb_fs_get_errno_value());
+      m2mb_fs_close(fd);
+      return -1;
+    }
+    else
+    {
+      if( ( ret = https_write( hi, chunk_buf, read ) ) != read )
+      {
+        https_close( hi );
+        m2mb_fs_close(fd);
+        return -1;
+      }
+      else
+      {
+        if( hi->http_cb.cbFunc != NULL )
+        {
+          if(0 != hi->http_cb.cbFunc( NULL, ret, hi->http_cb.cbArg ))
+          {
+            https_close( hi );
+            m2mb_fs_close(fd);
+            return AZX_HTTP_CLIENT_CLOSED_REQUEST;
+          }
+        }
+        data_size -= read;
+      }
+    }
+  }
+
+  m2mb_fs_close(fd);
 
   ret = https_read_chunked( hi, FALSE );
   https_close( hi );

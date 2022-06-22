@@ -1,0 +1,1 @@
+Sample application that shows UDP listening socket demo with m2mb apis. Debug prints on MAIN UART

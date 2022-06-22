@@ -34,7 +34,7 @@
   <td id="projectlogo"><img alt="Logo" src="telit-logo.png"/></td>
   <td id="projectalign" style="padding-left: 2em;">
    <div id="projectname">AZX (AppZone eXtensions) documentation
-   &#160;<span id="projectnumber">1.1.15-CxL</span>
+   &#160;<span id="projectnumber">1.1.16-CxL</span>
    </div>
    <div id="projectbrief">A set of companion utilities that make AZ development easier</div>
   </td>
@@ -123,30 +123,30 @@ $(document).ready(function(){initNavTree('azx_pdu_dec_example_8c-example.html','
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;  <span class="keywordtype">int</span> len = <a name="a1"></a><a class="code" href="group__pdu_dec_usage.html#ga71756909d9789b37acdf20e3997a9b27">azx_pdu_decode</a>(pdu, len, &amp;pack, number, msg);</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;  AZX_LOG_INFO(<span class="stringliteral">&quot;packet code type: %d\r\n&quot;</span>, packet.tp_dcs);</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;  AZX_LOG_INFO(<span class="stringliteral">&quot;packet sender type: %u\r\n&quot;</span>, packet.sender.type);</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  AZX_LOG_INFO(<span class="stringliteral">&quot;packet msg len: %u\r\n&quot;</span>, packet.msg.len);</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;  AZX_LOG_INFO(<span class="stringliteral">&quot;packet msg bytes: %u\r\n&quot;</span>, packet.msg.bytes);</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;  AZX_LOG_INFO(<span class="stringliteral">&quot;packet protocol ID: %d\r\n&quot;</span>, packet.tp_pid);</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;  <a name="a2"></a><a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;packet code type: %d\r\n&quot;</span>, packet.tp_dcs);</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;  <a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;packet sender type: %u\r\n&quot;</span>, packet.sender.type);</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  <a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;packet msg len: %u\r\n&quot;</span>, packet.msg.len);</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;  <a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;packet msg bytes: %u\r\n&quot;</span>, packet.msg.bytes);</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;  <a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;packet protocol ID: %d\r\n&quot;</span>, packet.tp_pid);</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;  AZX_LOG_INFO(<span class="stringliteral">&quot;packet date %u/%u/%u %u:%u:%u %.0f\r\n&quot;</span>, packet.year, packet.month, packet.date, packet.hour, packet.min, packet.sec, packet.tz / 4.0);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;  <a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;packet date %u/%u/%u %u:%u:%u %.0f\r\n&quot;</span>, packet.year, packet.month, packet.date, packet.hour, packet.min, packet.sec, packet.tz / 4.0);</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;  AZX_LOG_INFO(<span class="stringliteral">&quot;Received SMS, content: %s\r\n&quot;</span>, message);</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;  AZX_LOG_INFO(<span class="stringliteral">&quot;Sender: %s\r\n&quot;</span>, number);</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;  <a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;Received SMS, content: %s\r\n&quot;</span>, message);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;  <a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;Sender: %s\r\n&quot;</span>, number);</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;  <span class="keywordtype">int</span> len = <a name="a2"></a><a class="code" href="group__pdu_dec_usage.html#ga0c48f5ebe23043bb044abce2f8e571a5">azx_pdu_decodeString</a>(pdustr, &amp;pack, number, msg);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;  <span class="keywordtype">int</span> len = <a name="a3"></a><a class="code" href="group__pdu_dec_usage.html#ga0c48f5ebe23043bb044abce2f8e571a5">azx_pdu_decodeString</a>(pdustr, &amp;pack, number, msg);</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;  AZX_LOG_INFO(<span class="stringliteral">&quot;packet code type: %d\r\n&quot;</span>, packet.tp_dcs);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;  AZX_LOG_INFO(<span class="stringliteral">&quot;packet sender type: %u\r\n&quot;</span>, packet.sender.type);</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;  AZX_LOG_INFO(<span class="stringliteral">&quot;packet msg len: %u\r\n&quot;</span>, packet.msg.len);</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;  AZX_LOG_INFO(<span class="stringliteral">&quot;packet msg bytes: %u\r\n&quot;</span>, packet.msg.bytes);</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;  AZX_LOG_INFO(<span class="stringliteral">&quot;packet protocol ID: %d\r\n&quot;</span>, packet.tp_pid);</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;  <a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;packet code type: %d\r\n&quot;</span>, packet.tp_dcs);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;  <a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;packet sender type: %u\r\n&quot;</span>, packet.sender.type);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;  <a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;packet msg len: %u\r\n&quot;</span>, packet.msg.len);</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;  <a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;packet msg bytes: %u\r\n&quot;</span>, packet.msg.bytes);</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;  <a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;packet protocol ID: %d\r\n&quot;</span>, packet.tp_pid);</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;  AZX_LOG_INFO(<span class="stringliteral">&quot;packet date %u/%u/%u %u:%u:%u %.0f\r\n&quot;</span>, packet.year, packet.month, packet.date, packet.hour, packet.min, packet.sec, packet.tz / 4.0);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;  <a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;packet date %u/%u/%u %u:%u:%u %.0f\r\n&quot;</span>, packet.year, packet.month, packet.date, packet.hour, packet.min, packet.sec, packet.tz / 4.0);</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;  AZX_LOG_INFO(<span class="stringliteral">&quot;Received SMS, content: %s\r\n&quot;</span>, message);</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;  AZX_LOG_INFO(<span class="stringliteral">&quot;Sender: %s\r\n&quot;</span>, number);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;  <a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;Received SMS, content: %s\r\n&quot;</span>, message);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;  <a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;Sender: %s\r\n&quot;</span>, number);</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;}</div>
@@ -158,6 +158,7 @@ $(document).ready(function(){initNavTree('azx_pdu_dec_example_8c-example.html','
 <div class="ttc" id="aazx__pdu_dec_8h_html"><div class="ttname"><a href="azx__pdu_dec_8h.html">azx_pduDec.h</a></div><div class="ttdoc">Decoding functionalities for PDUs.</div></div>
 <div class="ttc" id="agroup__pdu_dec_usage_html_ga0c48f5ebe23043bb044abce2f8e571a5"><div class="ttname"><a href="group__pdu_dec_usage.html#ga0c48f5ebe23043bb044abce2f8e571a5">azx_pdu_decodeString</a></div><div class="ttdeci">INT32 azx_pdu_decodeString(CHAR *pdu_str, pdu_struct *packet, CHAR *number, CHAR *msg)</div><div class="ttdoc">Decodes an incoming PDU in ASCII string format.</div></div>
 <div class="ttc" id="aazx__log_8h_html"><div class="ttname"><a href="azx__log_8h.html">azx_log.h</a></div><div class="ttdoc">Logging utilities to print on available output channels.</div></div>
+<div class="ttc" id="agroup__log_usage_html_ga847d9b9f62e31bf14b31882be7418675"><div class="ttname"><a href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a></div><div class="ttdeci">#define AZX_LOG_INFO(a...)</div><div class="ttdef"><b>Definition:</b> azx_log.h:300</div></div>
 <!-- HTML footer for doxygen 1.8.15-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

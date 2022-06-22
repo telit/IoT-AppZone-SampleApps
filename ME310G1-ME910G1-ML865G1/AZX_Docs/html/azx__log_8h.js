@@ -1,13 +1,13 @@
 var azx__log_8h =
 [
     [ "AZX_LOG_CFG_T", "struct_a_z_x___l_o_g___c_f_g___t.html", "struct_a_z_x___l_o_g___c_f_g___t" ],
-    [ "AZX_LOG_CRITICAL", "azx__log_8h.html#a4cbebf6589190814b5ee9adb22bb1d44", null ],
-    [ "AZX_LOG_DEBUG", "azx__log_8h.html#acd61f6160b4cd02c2ec2259b5bc94670", null ],
-    [ "AZX_LOG_ERROR", "azx__log_8h.html#a81e4f03b2a752e5e9cfae1e037ce7256", null ],
-    [ "AZX_LOG_INFO", "azx__log_8h.html#a847d9b9f62e31bf14b31882be7418675", null ],
+    [ "AZX_LOG_CRITICAL", "group__log_usage.html#ga4cbebf6589190814b5ee9adb22bb1d44", null ],
+    [ "AZX_LOG_DEBUG", "group__log_usage.html#gacd61f6160b4cd02c2ec2259b5bc94670", null ],
+    [ "AZX_LOG_ERROR", "group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256", null ],
+    [ "AZX_LOG_INFO", "group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675", null ],
     [ "AZX_LOG_INIT", "azx__log_8h.html#a4af7b5c67a5df4ffbcafe9a91a4677bc", null ],
-    [ "AZX_LOG_TRACE", "azx__log_8h.html#aa85ac7254570a307564019c5dfb98d83", null ],
-    [ "AZX_LOG_WARN", "azx__log_8h.html#a47bb701aa779a05aa34ed01fcfbbdd54", null ],
+    [ "AZX_LOG_TRACE", "group__log_usage.html#gaa85ac7254570a307564019c5dfb98d83", null ],
+    [ "AZX_LOG_WARN", "group__log_usage.html#ga47bb701aa779a05aa34ed01fcfbbdd54", null ],
     [ "_azx_log_function", "azx__log_8h.html#a0b1d083f518b1fac0659671b6b744bff", null ],
     [ "AZX_LOG_ERRORS_E", "group__log_usage.html#gabe77e5a2f7b57b5029c6f7cdfa7e3dd0", [
       [ "AZX_LOG_NOT_INIT", "group__log_usage.html#ggabe77e5a2f7b57b5029c6f7cdfa7e3dd0a12ddd7346038a59740724ffcc8c20e12", null ],

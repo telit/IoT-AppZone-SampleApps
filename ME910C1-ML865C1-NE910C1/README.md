@@ -4,7 +4,7 @@
 
 
 
-Package Version: **1.1.15-C1**
+Package Version: **1.1.16-C1**
 
 Minimum Firmware Version: **30.01.000.0**
 
@@ -932,6 +932,44 @@ Sample application showcasing FOTA usage with M2MB API. Debug prints on **AUX UA
 
 
 
+### FOTA from Local File example 
+
+Sample application that shows how perform FOTA upgrade using a delta file stored into file system. Debug prints on **AUX UART**
+
+
+**Features**
+
+
+- How to store and get FOTA upgrade information to/from a file
+- How to get delta file from module file system
+- How to apply the delta and update module firmware
+
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Check if module has been already upgraded or needs to be upgraded reading FOTA upgrade status from a file
+- Create a fota task to manage FOTA and start it with INIT option
+
+**smartFotaTask()**
+- Initialize FOTA system then reset parameters.
+- Get FOTA partiton size and block size
+- Copy delta file from file system to FOTA paartition. when it is completed, FOTADownloadCallback is called.
+- If delta file is correct, apply it. Once complete, write FOTA status flag and current fw version to a file, restart the module.
+
+
+![](pictures/samples/Fota_from_file_app_bordered.png)
+
+---------------------
+
+
+
 ### FTP
 
 Sample application showcasing FTP client demo with AZX FTP. Debug prints on **AUX UART**
@@ -1360,7 +1398,7 @@ Depending on the Mobiler Network Operator and Access Technology, the APN might b
 
 **LWM2M resources demo** device profile must be imported to have a real-time update of resources values on the LWM2M browser. 
 
-To do so, import the file `lwm2m_resources_demo.json` on section `Developer` > `Device profiles` of OneEdge IoT portal:
+To do so, import the file `json/lwm2m_resources_demo.json` (provided with the sample files) on section `Developer` > `Device profiles` of OneEdge IoT portal:
 
 ![](pictures/samples/lwm2m_device_profile_bordered.png)
 
@@ -1390,7 +1428,7 @@ Copy the xml file content and paste it in the new Object form
 
 
 
-Also, the application requires the XML file `/xml/object_32010.xml` (provided with the sample files) to be stored in module's `/XML/` folder. 
+Also, the application requires the XML file `xml/object_32010.xml` (provided with the sample files) to be stored in module's `/XML/` folder. 
 It can be done with 
 
 `AT#M2MWRITE=/XML/object_32010.xml,<size_in_bytes>`
@@ -1408,6 +1446,46 @@ Select the file from your computer
 The file is successfully loaded on the module
 
 ![](pictures/samples/lwm2m_xml_7_done_bordered.png)
+
+#### Onboard the device
+
+**Get the Telit ID**
+
+To retrieve the Telit ID data, issue `AT#TID` to get the Telit ID. The command response will be similar to
+
+\#TID: **xxxxxxxxxxxxxxxxxxxxxxxxxxx**,1
+OK
+
+
+Take note of the Telit ID highlighted in **bold** above (or copy it on a text editor): this ID it will be needed for the onboarding process.
+
+**Create a new Thing**
+
+From the OneEdge portal, on **"Things"** section, click **"New Thing"** button in the top right corner.
+
+![](pictures/samples/lwm2m_new_thing_bordered.png)
+
+In the Create a new thing dialog, select "Telit Module"
+
+![](pictures/samples/lwm2m_telit_module_bordered.png)
+
+A dialog appears: select “Default” thing definition
+
+![](pictures/samples/lwm2m_fota_ack_default_thing_bordered.png)
+
+In the following screen, provide the Telit ID as “Identifier”
+Click on “Find” and make sure that model, firmware and the other details are properly
+populated.
+
+Click on lwm2m tab and set the device profile previously imported as shown in the screenshot below
+
+![](pictures/samples/lwm2m_demo_device_profile_bordered.png)
+
+Click **"Add"** to complete the new thing creation procedure.
+
+**If the Thing already exists, its device profile can be changed by following the steps shown in the picture below**
+
+![](pictures/samples/lwm2m_change_device_profile_bordered.png)
 
 
 #### Application execution example
@@ -1476,7 +1554,7 @@ Depending on the Mobile Network Operator and Access Technology, the APN might be
 
 **Minimal FOTA profile (short lifetime)** device profile must be imported and selected to improve the responsiveness of the FOTA operations
 
-To do so, import the file `lwm2m_fota_profile_short.json` on section `Developer` > `Device profiles` of OneEdge IoT portal:
+To do so, import the file `json/lwm2m_fota_profile_short.json` (provided with the sample files) on section `Developer` > `Device profiles` of OneEdge IoT portal:
 
 ![](pictures/samples/lwm2m_device_profile_bordered.png)
 
@@ -1640,7 +1718,7 @@ Depending on the Mobiler Network Operator and Access Technology, the APN might b
 
 **LWM2M resources demo** device profile must be imported to have a real-time update of resources values on the LWM2M browser.
 
-To do so, import the file `lwm2m_resources_demo.json` on section `Developer` > `Device profiles` of OneEdge IoT portal:
+To do so, import the file `json/lwm2m_resources_demo.json` (provided with the sample files) on section `Developer` > `Device profiles` of OneEdge IoT portal:
 
 ![](pictures/samples/lwm2m_device_profile_bordered.png)
 
@@ -1670,7 +1748,7 @@ Copy the xml file content and paste it in the new Object form
 
 
 
-Also, the application requires the XML file `/xml/object_32011.xml` (provided with the sample files) to be stored in module's `/XML/` folder.
+Also, the application requires the XML file `xml/object_32011.xml` (provided with the sample files) to be stored in module's `/XML/` folder.
 It can be done with
 
 `AT#M2MWRITE=/XML/object_32011.xml,<size_in_bytes>`
@@ -1688,6 +1766,50 @@ Select the file from your computer
 The file is successfully loaded on the module
 
 ![](pictures/samples/lwm2m_xml_7_done_bordered.png)
+
+
+
+#### Onboard the device
+
+**Get the Telit ID**
+
+To retrieve the Telit ID data, issue `AT#TID` to get the Telit ID. The command response will be similar to
+
+\#TID: **xxxxxxxxxxxxxxxxxxxxxxxxxxx**,1
+OK
+
+
+Take note of the Telit ID highlighted in **bold** above (or copy it on a text editor): this ID it will be needed for the onboarding process.
+
+**Create a new Thing**
+
+From the OneEdge portal, on **"Things"** section, click **"New Thing"** button in the top right corner.
+
+![](pictures/samples/lwm2m_new_thing_bordered.png)
+
+In the Create a new thing dialog, select "Telit Module"
+
+![](pictures/samples/lwm2m_telit_module_bordered.png)
+
+A dialog appears: select “Default” thing definition
+
+![](pictures/samples/lwm2m_fota_ack_default_thing_bordered.png)
+
+In the following screen, provide the Telit ID as “Identifier”
+Click on “Find” and make sure that model, firmware and the other details are properly
+populated.
+
+Click on lwm2m tab and set the device profile previously imported as shown in the screenshot below
+
+![](pictures/samples/lwm2m_demo_objget_device_profile_bordered.png)
+
+Click **"Add"** to complete the new thing creation procedure.
+
+
+**If the Thing already exists, its device profile can be changed by following the steps shown in the picture below**
+
+![](pictures/samples/lwm2m_change_device_profile_objget_bordered.png)
+
 
 
 #### Application execution example
@@ -3046,6 +3168,44 @@ Sample application showcasing FOTA usage with M2MB API. Debug prints on **USB0**
 
 
 
+### FOTA from Local File example 
+
+Sample application that shows how perform FOTA upgrade using a delta file stored into file system. Debug prints on **USB0**
+
+
+**Features**
+
+
+- How to store and get FOTA upgrade information to/from a file
+- How to get delta file from module file system
+- How to apply the delta and update module firmware
+
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Check if module has been already upgraded or needs to be upgraded reading FOTA upgrade status from a file
+- Create a fota task to manage FOTA and start it with INIT option
+
+**smartFotaTask()**
+- Initialize FOTA system then reset parameters.
+- Get FOTA partiton size and block size
+- Copy delta file from file system to FOTA paartition. when it is completed, FOTADownloadCallback is called.
+- If delta file is correct, apply it. Once complete, write FOTA status flag and current fw version to a file, restart the module.
+
+
+![](pictures/samples/Fota_from_file_app_bordered.png)
+
+---------------------
+
+
+
 ### FTP
 
 Sample application showcasing FTP client demo with AZX FTP. Debug prints on **USB0**
@@ -3537,7 +3697,7 @@ Depending on the Mobiler Network Operator and Access Technology, the APN might b
 
 **LWM2M resources demo** device profile must be imported to have a real-time update of resources values on the LWM2M browser. 
 
-To do so, import the file `lwm2m_resources_demo.json` on section `Developer` > `Device profiles` of OneEdge IoT portal:
+To do so, import the file `json/lwm2m_resources_demo.json` (provided with the sample files) on section `Developer` > `Device profiles` of OneEdge IoT portal:
 
 ![](pictures/samples/lwm2m_device_profile_bordered.png)
 
@@ -3567,7 +3727,7 @@ Copy the xml file content and paste it in the new Object form
 
 
 
-Also, the application requires the XML file `/xml/object_32010.xml` (provided with the sample files) to be stored in module's `/XML/` folder. 
+Also, the application requires the XML file `xml/object_32010.xml` (provided with the sample files) to be stored in module's `/XML/` folder. 
 It can be done with 
 
 `AT#M2MWRITE=/XML/object_32010.xml,<size_in_bytes>`
@@ -3585,6 +3745,46 @@ Select the file from your computer
 The file is successfully loaded on the module
 
 ![](pictures/samples/lwm2m_xml_7_done_bordered.png)
+
+#### Onboard the device
+
+**Get the Telit ID**
+
+To retrieve the Telit ID data, issue `AT#TID` to get the Telit ID. The command response will be similar to
+
+\#TID: **xxxxxxxxxxxxxxxxxxxxxxxxxxx**,1
+OK
+
+
+Take note of the Telit ID highlighted in **bold** above (or copy it on a text editor): this ID it will be needed for the onboarding process.
+
+**Create a new Thing**
+
+From the OneEdge portal, on **"Things"** section, click **"New Thing"** button in the top right corner.
+
+![](pictures/samples/lwm2m_new_thing_bordered.png)
+
+In the Create a new thing dialog, select "Telit Module"
+
+![](pictures/samples/lwm2m_telit_module_bordered.png)
+
+A dialog appears: select “Default” thing definition
+
+![](pictures/samples/lwm2m_fota_ack_default_thing_bordered.png)
+
+In the following screen, provide the Telit ID as “Identifier”
+Click on “Find” and make sure that model, firmware and the other details are properly
+populated.
+
+Click on lwm2m tab and set the device profile previously imported as shown in the screenshot below
+
+![](pictures/samples/lwm2m_demo_device_profile_bordered.png)
+
+Click **"Add"** to complete the new thing creation procedure.
+
+**If the Thing already exists, its device profile can be changed by following the steps shown in the picture below**
+
+![](pictures/samples/lwm2m_change_device_profile_bordered.png)
 
 
 #### Application execution example
@@ -3653,7 +3853,7 @@ Depending on the Mobile Network Operator and Access Technology, the APN might be
 
 **Minimal FOTA profile (short lifetime)** device profile must be imported and selected to improve the responsiveness of the FOTA operations
 
-To do so, import the file `lwm2m_fota_profile_short.json` on section `Developer` > `Device profiles` of OneEdge IoT portal:
+To do so, import the file `json/lwm2m_fota_profile_short.json` (provided with the sample files) on section `Developer` > `Device profiles` of OneEdge IoT portal:
 
 ![](pictures/samples/lwm2m_device_profile_bordered.png)
 
@@ -3817,7 +4017,7 @@ Depending on the Mobiler Network Operator and Access Technology, the APN might b
 
 **LWM2M resources demo** device profile must be imported to have a real-time update of resources values on the LWM2M browser.
 
-To do so, import the file `lwm2m_resources_demo.json` on section `Developer` > `Device profiles` of OneEdge IoT portal:
+To do so, import the file `json/lwm2m_resources_demo.json` (provided with the sample files) on section `Developer` > `Device profiles` of OneEdge IoT portal:
 
 ![](pictures/samples/lwm2m_device_profile_bordered.png)
 
@@ -3847,7 +4047,7 @@ Copy the xml file content and paste it in the new Object form
 
 
 
-Also, the application requires the XML file `/xml/object_32011.xml` (provided with the sample files) to be stored in module's `/XML/` folder.
+Also, the application requires the XML file `xml/object_32011.xml` (provided with the sample files) to be stored in module's `/XML/` folder.
 It can be done with
 
 `AT#M2MWRITE=/XML/object_32011.xml,<size_in_bytes>`
@@ -3865,6 +4065,50 @@ Select the file from your computer
 The file is successfully loaded on the module
 
 ![](pictures/samples/lwm2m_xml_7_done_bordered.png)
+
+
+
+#### Onboard the device
+
+**Get the Telit ID**
+
+To retrieve the Telit ID data, issue `AT#TID` to get the Telit ID. The command response will be similar to
+
+\#TID: **xxxxxxxxxxxxxxxxxxxxxxxxxxx**,1
+OK
+
+
+Take note of the Telit ID highlighted in **bold** above (or copy it on a text editor): this ID it will be needed for the onboarding process.
+
+**Create a new Thing**
+
+From the OneEdge portal, on **"Things"** section, click **"New Thing"** button in the top right corner.
+
+![](pictures/samples/lwm2m_new_thing_bordered.png)
+
+In the Create a new thing dialog, select "Telit Module"
+
+![](pictures/samples/lwm2m_telit_module_bordered.png)
+
+A dialog appears: select “Default” thing definition
+
+![](pictures/samples/lwm2m_fota_ack_default_thing_bordered.png)
+
+In the following screen, provide the Telit ID as “Identifier”
+Click on “Find” and make sure that model, firmware and the other details are properly
+populated.
+
+Click on lwm2m tab and set the device profile previously imported as shown in the screenshot below
+
+![](pictures/samples/lwm2m_demo_objget_device_profile_bordered.png)
+
+Click **"Add"** to complete the new thing creation procedure.
+
+
+**If the Thing already exists, its device profile can be changed by following the steps shown in the picture below**
+
+![](pictures/samples/lwm2m_change_device_profile_objget_bordered.png)
+
 
 
 #### Application execution example
@@ -4426,6 +4670,51 @@ Sample application showcasing TCP echo demo with M2MB API. Debug prints on **USB
 
 
 
+### TCP non blocking example 
+
+Sample application that shows how to configure and connect a TCP-IP non blocking socket. Debug prints on **USB0**
+
+
+**Features**
+
+
+- How to check module registration and activate PDP context
+- How to open a TCP client non Blocking socket 
+- How to communicate over the socket
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Create a task to manage socket and start it
+
+**`m2m_tcp_test.c`**
+
+- Initialize Network structure and check registration
+
+- Initialize PDP structure and start PDP context
+
+- Create socket and link it to the PDP context id
+
+- Set the socket as non Blocking and connect to server. Uses m2mb_socket_bsd_select, m2mb_socket_bsd_fd_isset_func to check when socket is connected.
+
+- Send data and receive response
+
+- Close socket
+
+- Disable PDP context
+
+![](pictures/samples/TCP_non_lock_output_bordered.png)
+
+---------------------
+
+
+
 ### TCP Socket status
 
 Sample application showcasing how to check a TPC connected socket current status. Debug prints on **USB0**
@@ -4641,6 +4930,43 @@ Sample application showcasing UDP echo demo with M2MB API. Debug prints on **USB
 - Disable PDP context
 
 ![](pictures/samples/udp_bordered.png)
+
+---------------------
+
+
+
+### UDP_Server example 
+
+Sample application that shows UDP listening socket demo with m2mb apis. Debug prints on **USB0**
+
+
+**Features**
+
+
+- How to configure an UDP socket into listen mode 
+- How to receive data using m2mb_socket_bsd_select  
+- How to read data received and send data to client
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Print welcome message
+- Init task apis and create M2M_msgUDPTask to handle UDP socket
+
+
+**`m2mb_udp_test.c`**
+
+**`M2M_msgUDPTask`**
+
+- Wait for module registration
+- Activate PDP context
+- Create UDP listen socket
+- Wait for incoming data from client using m2mb_socket_bsd_select
+- When there are data on socket, read them and send some data back to client
+
+![](pictures/samples/UDP_Server_output_bordered.png)
 
 ---------------------
 
@@ -5290,6 +5616,44 @@ Sample application showcasing FOTA usage with M2MB API. Debug prints on **MAIN U
 
 
 
+### FOTA from Local File example 
+
+Sample application that shows how perform FOTA upgrade using a delta file stored into file system. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- How to store and get FOTA upgrade information to/from a file
+- How to get delta file from module file system
+- How to apply the delta and update module firmware
+
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Check if module has been already upgraded or needs to be upgraded reading FOTA upgrade status from a file
+- Create a fota task to manage FOTA and start it with INIT option
+
+**smartFotaTask()**
+- Initialize FOTA system then reset parameters.
+- Get FOTA partiton size and block size
+- Copy delta file from file system to FOTA paartition. when it is completed, FOTADownloadCallback is called.
+- If delta file is correct, apply it. Once complete, write FOTA status flag and current fw version to a file, restart the module.
+
+
+![](pictures/samples/Fota_from_file_app_bordered.png)
+
+---------------------
+
+
+
 ### FTP
 
 Sample application showcasing FTP client demo with AZX FTP. Debug prints on **MAIN UART**
@@ -5781,7 +6145,7 @@ Depending on the Mobiler Network Operator and Access Technology, the APN might b
 
 **LWM2M resources demo** device profile must be imported to have a real-time update of resources values on the LWM2M browser. 
 
-To do so, import the file `lwm2m_resources_demo.json` on section `Developer` > `Device profiles` of OneEdge IoT portal:
+To do so, import the file `json/lwm2m_resources_demo.json` (provided with the sample files) on section `Developer` > `Device profiles` of OneEdge IoT portal:
 
 ![](pictures/samples/lwm2m_device_profile_bordered.png)
 
@@ -5811,7 +6175,7 @@ Copy the xml file content and paste it in the new Object form
 
 
 
-Also, the application requires the XML file `/xml/object_32010.xml` (provided with the sample files) to be stored in module's `/XML/` folder. 
+Also, the application requires the XML file `xml/object_32010.xml` (provided with the sample files) to be stored in module's `/XML/` folder. 
 It can be done with 
 
 `AT#M2MWRITE=/XML/object_32010.xml,<size_in_bytes>`
@@ -5829,6 +6193,46 @@ Select the file from your computer
 The file is successfully loaded on the module
 
 ![](pictures/samples/lwm2m_xml_7_done_bordered.png)
+
+#### Onboard the device
+
+**Get the Telit ID**
+
+To retrieve the Telit ID data, issue `AT#TID` to get the Telit ID. The command response will be similar to
+
+\#TID: **xxxxxxxxxxxxxxxxxxxxxxxxxxx**,1
+OK
+
+
+Take note of the Telit ID highlighted in **bold** above (or copy it on a text editor): this ID it will be needed for the onboarding process.
+
+**Create a new Thing**
+
+From the OneEdge portal, on **"Things"** section, click **"New Thing"** button in the top right corner.
+
+![](pictures/samples/lwm2m_new_thing_bordered.png)
+
+In the Create a new thing dialog, select "Telit Module"
+
+![](pictures/samples/lwm2m_telit_module_bordered.png)
+
+A dialog appears: select “Default” thing definition
+
+![](pictures/samples/lwm2m_fota_ack_default_thing_bordered.png)
+
+In the following screen, provide the Telit ID as “Identifier”
+Click on “Find” and make sure that model, firmware and the other details are properly
+populated.
+
+Click on lwm2m tab and set the device profile previously imported as shown in the screenshot below
+
+![](pictures/samples/lwm2m_demo_device_profile_bordered.png)
+
+Click **"Add"** to complete the new thing creation procedure.
+
+**If the Thing already exists, its device profile can be changed by following the steps shown in the picture below**
+
+![](pictures/samples/lwm2m_change_device_profile_bordered.png)
 
 
 #### Application execution example
@@ -5897,7 +6301,7 @@ Depending on the Mobile Network Operator and Access Technology, the APN might be
 
 **Minimal FOTA profile (short lifetime)** device profile must be imported and selected to improve the responsiveness of the FOTA operations
 
-To do so, import the file `lwm2m_fota_profile_short.json` on section `Developer` > `Device profiles` of OneEdge IoT portal:
+To do so, import the file `json/lwm2m_fota_profile_short.json` (provided with the sample files) on section `Developer` > `Device profiles` of OneEdge IoT portal:
 
 ![](pictures/samples/lwm2m_device_profile_bordered.png)
 
@@ -6061,7 +6465,7 @@ Depending on the Mobiler Network Operator and Access Technology, the APN might b
 
 **LWM2M resources demo** device profile must be imported to have a real-time update of resources values on the LWM2M browser.
 
-To do so, import the file `lwm2m_resources_demo.json` on section `Developer` > `Device profiles` of OneEdge IoT portal:
+To do so, import the file `json/lwm2m_resources_demo.json` (provided with the sample files) on section `Developer` > `Device profiles` of OneEdge IoT portal:
 
 ![](pictures/samples/lwm2m_device_profile_bordered.png)
 
@@ -6091,7 +6495,7 @@ Copy the xml file content and paste it in the new Object form
 
 
 
-Also, the application requires the XML file `/xml/object_32011.xml` (provided with the sample files) to be stored in module's `/XML/` folder.
+Also, the application requires the XML file `xml/object_32011.xml` (provided with the sample files) to be stored in module's `/XML/` folder.
 It can be done with
 
 `AT#M2MWRITE=/XML/object_32011.xml,<size_in_bytes>`
@@ -6109,6 +6513,50 @@ Select the file from your computer
 The file is successfully loaded on the module
 
 ![](pictures/samples/lwm2m_xml_7_done_bordered.png)
+
+
+
+#### Onboard the device
+
+**Get the Telit ID**
+
+To retrieve the Telit ID data, issue `AT#TID` to get the Telit ID. The command response will be similar to
+
+\#TID: **xxxxxxxxxxxxxxxxxxxxxxxxxxx**,1
+OK
+
+
+Take note of the Telit ID highlighted in **bold** above (or copy it on a text editor): this ID it will be needed for the onboarding process.
+
+**Create a new Thing**
+
+From the OneEdge portal, on **"Things"** section, click **"New Thing"** button in the top right corner.
+
+![](pictures/samples/lwm2m_new_thing_bordered.png)
+
+In the Create a new thing dialog, select "Telit Module"
+
+![](pictures/samples/lwm2m_telit_module_bordered.png)
+
+A dialog appears: select “Default” thing definition
+
+![](pictures/samples/lwm2m_fota_ack_default_thing_bordered.png)
+
+In the following screen, provide the Telit ID as “Identifier”
+Click on “Find” and make sure that model, firmware and the other details are properly
+populated.
+
+Click on lwm2m tab and set the device profile previously imported as shown in the screenshot below
+
+![](pictures/samples/lwm2m_demo_objget_device_profile_bordered.png)
+
+Click **"Add"** to complete the new thing creation procedure.
+
+
+**If the Thing already exists, its device profile can be changed by following the steps shown in the picture below**
+
+![](pictures/samples/lwm2m_change_device_profile_objget_bordered.png)
+
 
 
 #### Application execution example
@@ -6670,6 +7118,51 @@ Sample application showcasing TCP echo demo with M2MB API. Debug prints on **MAI
 
 
 
+### TCP non blocking example 
+
+Sample application that shows how to configure and connect a TCP-IP non blocking socket. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- How to check module registration and activate PDP context
+- How to open a TCP client non Blocking socket 
+- How to communicate over the socket
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Create a task to manage socket and start it
+
+**`m2m_tcp_test.c`**
+
+- Initialize Network structure and check registration
+
+- Initialize PDP structure and start PDP context
+
+- Create socket and link it to the PDP context id
+
+- Set the socket as non Blocking and connect to server. Uses m2mb_socket_bsd_select, m2mb_socket_bsd_fd_isset_func to check when socket is connected.
+
+- Send data and receive response
+
+- Close socket
+
+- Disable PDP context
+
+![](pictures/samples/TCP_non_lock_output_bordered.png)
+
+---------------------
+
+
+
 ### TCP Socket status
 
 Sample application showcasing how to check a TPC connected socket current status. Debug prints on **MAIN UART**
@@ -6921,6 +7414,43 @@ Sample application showcasing UDP echo demo with M2MB API. Debug prints on **MAI
 - Disable PDP context
 
 ![](pictures/samples/udp_bordered.png)
+
+---------------------
+
+
+
+### UDP_Server example 
+
+Sample application that shows UDP listening socket demo with m2mb apis. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- How to configure an UDP socket into listen mode 
+- How to receive data using m2mb_socket_bsd_select  
+- How to read data received and send data to client
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Print welcome message
+- Init task apis and create M2M_msgUDPTask to handle UDP socket
+
+
+**`m2mb_udp_test.c`**
+
+**`M2M_msgUDPTask`**
+
+- Wait for module registration
+- Activate PDP context
+- Create UDP listen socket
+- Wait for incoming data from client using m2mb_socket_bsd_select
+- When there are data on socket, read them and send some data back to client
+
+![](pictures/samples/UDP_Server_output_bordered.png)
 
 ---------------------
 

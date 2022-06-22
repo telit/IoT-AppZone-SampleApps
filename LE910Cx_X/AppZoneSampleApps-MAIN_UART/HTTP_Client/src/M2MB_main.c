@@ -13,7 +13,7 @@
   @description
     Sample application showing how to use HTTPs client functionalities. Debug prints on MAIN UART
   @version 
-    1.1.1
+    1.1.3
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -209,28 +209,33 @@ static int http_debug_hk(AZX_HTTP_LOG_HOOK_LEVELS_E level, const char *function,
 
 }
 
-INT8 cbEvt = 0;
-int CB_COUNT = 0;
 
 /* Global functions =============================================================================*/
-INT32 DATA_CB(void *buffer, UINT32 size, INT8 *flag)
+INT32 g_cbArg = 0;
+
+INT32 DATA_CB(void *buffer, UINT32 size, void *cbArg)
 {
-  /**** Stop http donwload on a specific user event
+  INT32 CB_COUNT = *(INT32*)cbArg;
   CB_COUNT++;
+  /**** Stop http download on a specific user event
   if(CB_COUNT >= 3)
   {
     AZX_LOG_INFO("\r\nCB COUNT LIMIT REACHED\r\n");
-   *flag = 1;
-    return 0;
+   
+    return 1;
   }
    */
-  strcat((char*) buffer,"\0");
 
-  AZX_LOG_TRACE("Received %d bytes from HTTP client.\r\n", size);
-  AZX_LOG_INFO("%s",buffer);
-
-  *flag = 0; /*Keep going*/
-
+  if(buffer != NULL)
+  {
+    AZX_LOG_DEBUG("Received %d bytes from HTTP client.\r\n", size);
+    AZX_LOG_INFO("%.*s",buffer, size);
+  }
+  else
+  {
+    AZX_LOG_DEBUG("Transmitted %d bytes to HTTP server\r\n", size);
+  }
+  /*return != 0 to force an abort of the transmission */
   return 0;
 }
 
@@ -353,7 +358,7 @@ INT32 httpTaskCB(INT32 type, INT32 param1, INT32 param2)
   cbOpt.user_cb_bytes_size = 1500;
   cbOpt.cbFunc = DATA_CB;
   cbOpt.cbData = m2mb_os_malloc(cbOpt.user_cb_bytes_size + 1); //one more element for \0
-  cbOpt.cbEvtFlag = &cbEvt;
+  cbOpt.cbArg = &g_cbArg;
   azx_http_setCB(&hi, cbOpt);
 
   hi.tls = tls;
@@ -367,7 +372,7 @@ INT32 httpTaskCB(INT32 type, INT32 param1, INT32 param2)
   ret = azx_http_get(&hi,(char*) "https://www.google.com");                 //HTTPS & CHUNKED
 #endif
 #if HTTPS_SERVER_AUTH_GET
-  ret = azx_http_get(&hi,"https://modules.telit.com", response, sizeof(response));    // HTTPS + SSL server auth
+  ret = azx_http_get(&hi, (char*) "https://modules.telit.com");    // HTTPS + SSL server auth
 #endif
 #if HTTP_GET
   ret = azx_http_get(&hi, (char*) "http://linux-ip.net");                              // HTTP only
@@ -376,7 +381,7 @@ INT32 httpTaskCB(INT32 type, INT32 param1, INT32 param2)
 #if HTTP_BASIC_AUTH_GET
   hi.request.auth_type = azx_AuthSchemaBasic;
   hi.user_b64encode = azx_base64Encoder;
-  ret = azx_http_get(&hi,"http://guest:guest@jigsaw.w3.org/HTTP/Basic/");         //BASIC AUTH
+  ret = azx_http_get(&hi, (char*) "http://guest:guest@jigsaw.w3.org/HTTP/Basic/");         //BASIC AUTH
 #endif
   AZX_LOG_INFO("\r\nDone.\r\n");
 #endif
@@ -403,6 +408,7 @@ INT32 httpTaskCB(INT32 type, INT32 param1, INT32 param2)
   hi.request.post_data = (char *)m2mb_os_malloc(sizeof(char)* (strlen(data) + 1));
   memset(hi.request.post_data, 0, sizeof(sizeof(char)* (strlen(data) + 1)));
   strcpy(hi.request.post_data,data);
+  hi.request.content_length = strlen(hi.request.post_data);
   ret = azx_http_post(&hi,(char *)"http://postman-echo.com:80/post");
 
   m2mb_os_free(hi.request.post_data);

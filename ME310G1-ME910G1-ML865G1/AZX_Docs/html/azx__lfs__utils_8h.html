@@ -34,7 +34,7 @@
   <td id="projectlogo"><img alt="Logo" src="telit-logo.png"/></td>
   <td id="projectalign" style="padding-left: 2em;">
    <div id="projectname">AZX (AppZone eXtensions) documentation
-   &#160;<span id="projectnumber">1.1.15-CxL</span>
+   &#160;<span id="projectnumber">1.1.16-CxL</span>
    </div>
    <div id="projectbrief">A set of companion utilities that make AZ development easier</div>
   </td>
@@ -400,7 +400,7 @@ LFS2_ERROR_T&#160;</td><td class="memItemRight" valign="bottom"><b>azx_lfsDirRmB
 <div class="line">                              <a class="code" href="azx__lfs__utils_8h.html#a5b92e54ce582ccb70b6fe647e23e3f6dad645ea77579b43e414e0deda9966145c">AZX_LFSDIR_MODE_APPEND</a>,</div>
 <div class="line">                              &amp;lfs2) != TEST_OK)</div>
 <div class="line">{</div>
-<div class="line">  AZX_LOG_ERROR(<span class="stringliteral">&quot;directoryCreation failed!!\r\n&quot;</span>);</div>
+<div class="line">  <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;directoryCreation failed!!\r\n&quot;</span>);</div>
 <div class="line">  <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 </div><!-- fragment --> 
@@ -488,7 +488,7 @@ LFS2_ERROR_T&#160;</td><td class="memItemRight" valign="bottom"><b>azx_lfsDirRmB
 <div class="line">opts.spi.op_mode_tx = SPI_OPM_TX_SING;</div>
 <div class="line"><span class="keywordflow">if</span> (<a class="code" href="azx__spi__flash__jsc_8h.html#ae0ce5dec84f2a12c41842f877eeeec7e">azx_spi_flash_initialize</a>(SPI_FLASH_JS28P1GQSCAHG_CS_GPIO, &amp;opts, &amp;g_chip) != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
 <div class="line"> <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 <div class="line">lfsContext.context = g_chip;</div>
@@ -518,7 +518,7 @@ LFS2_ERROR_T&#160;</td><td class="memItemRight" valign="bottom"><b>azx_lfsDirRmB
 <div class="line">                     &amp;lfs2);</div>
 <div class="line"><span class="keywordflow">if</span> (ret != LFS2_ERR_OK)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;\nError lfsMountByContext memory: err = %d \r\n&quot;</span>, ret);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;\nError lfsMountByContext memory: err = %d \r\n&quot;</span>, ret);</div>
 <div class="line"> <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 <div class="line">...</div>
@@ -530,7 +530,7 @@ LFS2_ERROR_T&#160;</td><td class="memItemRight" valign="bottom"><b>azx_lfsDirRmB
 <div class="line">                                    &amp;listContent,</div>
 <div class="line">                                    &amp;lfs2) != LFS2_ERR_OK)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;azx_lfs_flashListsContentByContext failed!!\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;azx_lfs_flashListsContentByContext failed!!\r\n&quot;</span>);</div>
 <div class="line"> <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 <div class="line"> </div>
@@ -539,10 +539,10 @@ LFS2_ERROR_T&#160;</td><td class="memItemRight" valign="bottom"><b>azx_lfsDirRmB
 <div class="line"> <a class="code" href="struct_a_z_x___l_f_s___i_n_f_o___f_i_l_e.html">AZX_LFS_INFO_FILE_E</a> *current = listContent;</div>
 <div class="line"> <a class="code" href="struct_a_z_x___l_f_s___i_n_f_o___f_i_l_e.html">AZX_LFS_INFO_FILE_E</a> *prev = NULL;</div>
 <div class="line"> </div>
-<div class="line"> AZX_LOG_INFO(<span class="stringliteral">&quot;\n\rList:\n\r&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;\n\rList:\n\r&quot;</span>);</div>
 <div class="line"> <span class="keywordflow">do</span></div>
 <div class="line"> {</div>
-<div class="line">     AZX_LOG_INFO(<span class="stringliteral">&quot;%s, %d, %d\r\n&quot;</span>, current-&gt;<a class="code" href="struct_a_z_x___l_f_s___i_n_f_o___f_i_l_e.html#a413ff5942d1eaa515fc507c3562e0a49">info</a>.name, current-&gt;<a class="code" href="struct_a_z_x___l_f_s___i_n_f_o___f_i_l_e.html#a413ff5942d1eaa515fc507c3562e0a49">info</a>.size, current-&gt;<a class="code" href="struct_a_z_x___l_f_s___i_n_f_o___f_i_l_e.html#a413ff5942d1eaa515fc507c3562e0a49">info</a>.type);</div>
+<div class="line">     <a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;%s, %d, %d\r\n&quot;</span>, current-&gt;<a class="code" href="struct_a_z_x___l_f_s___i_n_f_o___f_i_l_e.html#a413ff5942d1eaa515fc507c3562e0a49">info</a>.name, current-&gt;<a class="code" href="struct_a_z_x___l_f_s___i_n_f_o___f_i_l_e.html#a413ff5942d1eaa515fc507c3562e0a49">info</a>.size, current-&gt;<a class="code" href="struct_a_z_x___l_f_s___i_n_f_o___f_i_l_e.html#a413ff5942d1eaa515fc507c3562e0a49">info</a>.type);</div>
 <div class="line">     prev = current;</div>
 <div class="line">     current = current-&gt;<a class="code" href="struct_a_z_x___l_f_s___i_n_f_o___f_i_l_e.html#a1467c82be849a9e4db0566b7cad0870c">next</a>;</div>
 <div class="line">     prev-&gt;<a class="code" href="struct_a_z_x___l_f_s___i_n_f_o___f_i_l_e.html#a1467c82be849a9e4db0566b7cad0870c">next</a> = NULL;</div>
@@ -550,7 +550,7 @@ LFS2_ERROR_T&#160;</td><td class="memItemRight" valign="bottom"><b>azx_lfsDirRmB
 <div class="line">     res =  m2mb_os_free((<a class="code" href="struct_a_z_x___l_f_s___i_n_f_o___f_i_l_e.html">AZX_LFS_INFO_FILE_E</a>*) prev);</div>
 <div class="line">     <span class="keywordflow">if</span> (res != M2MB_OS_SUCCESS)</div>
 <div class="line">     {</div>
-<div class="line">         AZX_LOG_ERROR(<span class="stringliteral">&quot;azx_lfs_flashListsContentByContext failed!!\r\n&quot;</span>);</div>
+<div class="line">         <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;azx_lfs_flashListsContentByContext failed!!\r\n&quot;</span>);</div>
 <div class="line">         <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">     }</div>
 <div class="line"> }</div>
@@ -641,7 +641,7 @@ LFS2_ERROR_T&#160;</td><td class="memItemRight" valign="bottom"><b>azx_lfsDirRmB
 <div class="line">opts.spi.op_mode_tx = SPI_OPM_TX_SING;</div>
 <div class="line"><span class="keywordflow">if</span> (<a class="code" href="azx__spi__flash__jsc_8h.html#ae0ce5dec84f2a12c41842f877eeeec7e">azx_spi_flash_initialize</a>(SPI_FLASH_JS28P1GQSCAHG_CS_GPIO, &amp;opts, &amp;g_chip) != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
 <div class="line"> <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 <div class="line">lfsContext.context = g_chip;</div>
@@ -676,7 +676,7 @@ LFS2_ERROR_T&#160;</td><td class="memItemRight" valign="bottom"><b>azx_lfsDirRmB
 <div class="line">                         &amp;lfs2);</div>
 <div class="line"><span class="keywordflow">if</span> (ret != LFS2_ERR_OK)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;\nError lfsMountByContext memory: err = %d \r\n&quot;</span>, ret);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;\nError lfsMountByContext memory: err = %d \r\n&quot;</span>, ret);</div>
 <div class="line"> <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 <div class="line"> </div>
@@ -751,10 +751,10 @@ LFS2_ERROR_T&#160;</td><td class="memItemRight" valign="bottom"><b>azx_lfsDirRmB
 <div class="line">                      size,</div>
 <div class="line">                      &amp;lfs2) != LFS2_ERR_OK)</div>
 <div class="line">{</div>
-<div class="line">  AZX_LOG_ERROR(<span class="stringliteral">&quot;azx_lfsReadByContext failed!!\r\n\n&quot;</span>);</div>
+<div class="line">  <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;azx_lfsReadByContext failed!!\r\n\n&quot;</span>);</div>
 <div class="line">  <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
-<div class="line">AZX_LOG_INFO(<span class="stringliteral">&quot;\nFile: %s, Size: %d, Buffer: %s\r\n&quot;</span>, <span class="stringliteral">&quot;file002.txt&quot;</span>, size, buffer);</div>
+<div class="line"><a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;\nFile: %s, Size: %d, Buffer: %s\r\n&quot;</span>, <span class="stringliteral">&quot;file002.txt&quot;</span>, size, buffer);</div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -833,7 +833,7 @@ LFS2_ERROR_T&#160;</td><td class="memItemRight" valign="bottom"><b>azx_lfsDirRmB
 <div class="line">opts.spi.op_mode_tx = SPI_OPM_TX_SING;</div>
 <div class="line"><span class="keywordflow">if</span> (<a class="code" href="azx__spi__flash__jsc_8h.html#ae0ce5dec84f2a12c41842f877eeeec7e">azx_spi_flash_initialize</a>(SPI_FLASH_JS28P1GQSCAHG_CS_GPIO, &amp;opts, &amp;g_chip) != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
 <div class="line"> <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 <div class="line">lfsContext.context = g_chip;</div>
@@ -863,14 +863,14 @@ LFS2_ERROR_T&#160;</td><td class="memItemRight" valign="bottom"><b>azx_lfsDirRmB
 <div class="line">                     &amp;lfs2);</div>
 <div class="line"><span class="keywordflow">if</span> (ret != LFS2_ERR_OK)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;\nError lfsMountByContext memory: err = %d \r\n&quot;</span>, ret);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;\nError lfsMountByContext memory: err = %d \r\n&quot;</span>, ret);</div>
 <div class="line"> <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 <div class="line">...</div>
 <div class="line"> </div>
 <div class="line">if (<a class="code" href="azx__lfs__utils_8h.html#ac6c8f7222c79f4d0b7b55fb7c03685fd">azx_lfsRmFileByContext</a>(&amp;lfs2, <span class="stringliteral">&quot;file001.txt&quot;</span>) != LFS2_ERR_OK)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;azx_lfsRmFileByContext failed!!\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;azx_lfsRmFileByContext failed!!\r\n&quot;</span>);</div>
 <div class="line"> ...</div>
 <div class="line">}</div>
 </div><!-- fragment --> 
@@ -980,7 +980,7 @@ LFS2_ERROR_T&#160;</td><td class="memItemRight" valign="bottom"><b>azx_lfsDirRmB
 <div class="line">opts.spi.op_mode_tx = SPI_OPM_TX_SING;</div>
 <div class="line"><span class="keywordflow">if</span> (<a class="code" href="azx__spi__flash__jsc_8h.html#ae0ce5dec84f2a12c41842f877eeeec7e">azx_spi_flash_initialize</a>(SPI_FLASH_JS28P1GQSCAHG_CS_GPIO, &amp;opts, &amp;g_chip) != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line">  AZX_LOG_ERROR(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
+<div class="line">  <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
 <div class="line">  <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 <div class="line">lfsContext.context = g_chip;</div>
@@ -1016,7 +1016,7 @@ LFS2_ERROR_T&#160;</td><td class="memItemRight" valign="bottom"><b>azx_lfsDirRmB
 <div class="line">                      &amp;lfs2);</div>
 <div class="line"><span class="keywordflow">if</span> (ret != LFS2_ERR_OK)</div>
 <div class="line">{</div>
-<div class="line">  AZX_LOG_ERROR(<span class="stringliteral">&quot;\nError lfsMountByContext memory: err = %d \r\n&quot;</span>, ret);</div>
+<div class="line">  <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;\nError lfsMountByContext memory: err = %d \r\n&quot;</span>, ret);</div>
 <div class="line">  <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 <div class="line">...</div>
@@ -1033,7 +1033,7 @@ LFS2_ERROR_T&#160;</td><td class="memItemRight" valign="bottom"><b>azx_lfsDirRmB
 <div class="line">                              &amp;g_context</div>
 <div class="line">                              ) != LFS2_ERR_OK)</div>
 <div class="line">{</div>
-<div class="line">  AZX_LOG_ERROR(<span class="stringliteral">&quot;fileCreationUtils failed!!\r\n&quot;</span>);</div>
+<div class="line">  <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;fileCreationUtils failed!!\r\n&quot;</span>);</div>
 <div class="line">  ...</div>
 <div class="line">}</div>
 </div><!-- fragment --> 
@@ -1141,7 +1141,7 @@ LFS2_ERROR_T&#160;</td><td class="memItemRight" valign="bottom"><b>azx_lfsDirRmB
 <div class="line">if (<a class="code" href="azx__lfs__utils_8h.html#a4341542c574a3196c0129f2d5d6f7a4b">azx_ram_initialize</a>(&amp;g_ram, &amp;RAM_Disk,</div>
 <div class="line">        read_size, prog_size, block_size, block_count, block_cycles, cache_size) != LFS2_ERR_OK)</div>
 <div class="line">{</div>
-<div class="line">    AZX_LOG_ERROR(<span class="stringliteral">&quot;Ram Initialization failed!!\r\n&quot;</span>);</div>
+<div class="line">    <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Ram Initialization failed!!\r\n&quot;</span>);</div>
 <div class="line">    <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 <div class="line"> </div>
@@ -1149,7 +1149,7 @@ LFS2_ERROR_T&#160;</td><td class="memItemRight" valign="bottom"><b>azx_lfsDirRmB
 <div class="line"><span class="comment">//free memory</span></div>
 <div class="line">if (<a class="code" href="azx__lfs__utils_8h.html#afaf404673739284db00841cc8a4ef123">azx_ram_releaseResources</a>(g_ram, RAM_Disk) != LFS2_ERR_OK)</div>
 <div class="line">{</div>
-<div class="line">    AZX_LOG_ERROR(<span class="stringliteral">&quot;Release Ram memory failed!!\r\n&quot;</span>);</div>
+<div class="line">    <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Release Ram memory failed!!\r\n&quot;</span>);</div>
 <div class="line">    <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 </div><!-- fragment --> 
@@ -1203,7 +1203,7 @@ LFS2_ERROR_T&#160;</td><td class="memItemRight" valign="bottom"><b>azx_lfsDirRmB
 <div class="line">if (<a class="code" href="azx__lfs__utils_8h.html#a4341542c574a3196c0129f2d5d6f7a4b">azx_ram_initialize</a>(&amp;g_ram, &amp;RAM_Disk,</div>
 <div class="line">      read_size, prog_size, block_size, block_count, block_cycles, cache_size) != LFS2_ERR_OK)</div>
 <div class="line">{</div>
-<div class="line">  AZX_LOG_ERROR(<span class="stringliteral">&quot;Ram Initialization failed!!\r\n&quot;</span>);</div>
+<div class="line">  <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Ram Initialization failed!!\r\n&quot;</span>);</div>
 <div class="line">  <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 <div class="line"> </div>
@@ -1211,7 +1211,7 @@ LFS2_ERROR_T&#160;</td><td class="memItemRight" valign="bottom"><b>azx_lfsDirRmB
 <div class="line"><span class="comment">//free memory</span></div>
 <div class="line">if (<a class="code" href="azx__lfs__utils_8h.html#afaf404673739284db00841cc8a4ef123">azx_ram_releaseResources</a>(g_ram, RAM_Disk) != LFS2_ERR_OK)</div>
 <div class="line">{</div>
-<div class="line">  AZX_LOG_ERROR(<span class="stringliteral">&quot;Release Ram memory failed!!\r\n&quot;</span>);</div>
+<div class="line">  <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Release Ram memory failed!!\r\n&quot;</span>);</div>
 <div class="line">  <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 </div><!-- fragment --> 
@@ -1223,6 +1223,7 @@ LFS2_ERROR_T&#160;</td><td class="memItemRight" valign="bottom"><b>azx_lfsDirRmB
 <div class="ttc" id="astruct_a_z_x___s_p_i___f_l_a_s_h___s_p_i___c_h_i_p_html"><div class="ttname"><a href="struct_a_z_x___s_p_i___f_l_a_s_h___s_p_i___c_h_i_p.html">AZX_SPI_FLASH_SPI_CHIP</a></div><div class="ttdef"><b>Definition:</b> azx_spi_flash_jsc.h:120</div></div>
 <div class="ttc" id="aazx__lfs__utils_8h_html_afaf404673739284db00841cc8a4ef123"><div class="ttname"><a href="azx__lfs__utils_8h.html#afaf404673739284db00841cc8a4ef123">azx_ram_releaseResources</a></div><div class="ttdeci">LFS2_ERROR_T azx_ram_releaseResources(AZX_RAM_DISK_S *ptr_ram, char **disk)</div><div class="ttdoc">azx_ram_releaseResources release memory</div></div>
 <div class="ttc" id="aazx__lfs__utils_8h_html_acea82eb3ff5afebe16ecd9d0124fa3aca9bcec5e653f50a5d8a91b46d79a87cf0"><div class="ttname"><a href="azx__lfs__utils_8h.html#acea82eb3ff5afebe16ecd9d0124fa3aca9bcec5e653f50a5d8a91b46d79a87cf0">AZX_LFSWRITE_MODE_CREAT</a></div><div class="ttdef"><b>Definition:</b> azx_lfs_utils.h:122</div></div>
+<div class="ttc" id="agroup__log_usage_html_ga81e4f03b2a752e5e9cfae1e037ce7256"><div class="ttname"><a href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a></div><div class="ttdeci">#define AZX_LOG_ERROR(a...)</div><div class="ttdef"><b>Definition:</b> azx_log.h:292</div></div>
 <div class="ttc" id="aazx__lfs__utils_8h_html_a110109540a1594564983f0d0d5e1ea27a6441c86db4ad938ad458d2be00f7da91"><div class="ttname"><a href="azx__lfs__utils_8h.html#a110109540a1594564983f0d0d5e1ea27a6441c86db4ad938ad458d2be00f7da91">AZX_LFSCONTEXT_FLASH</a></div><div class="ttdef"><b>Definition:</b> azx_lfs_utils.h:65</div></div>
 <div class="ttc" id="aazx__lfs__utils_8h_html_acfc3e279bbd82a1f3724d98e9227d5c7"><div class="ttname"><a href="azx__lfs__utils_8h.html#acfc3e279bbd82a1f3724d98e9227d5c7">azx_lfsWriteByContext</a></div><div class="ttdeci">LFS2_ERROR_T azx_lfsWriteByContext(char *path, UINT32 size, UINT8 *source, AZX_LFSWRITE_MODE_E mode, lfs2_t *lfsObject, const AZX_LFS_CONTEXT_S *context)</div><div class="ttdoc">azx_lfsWriteByContext writes a file</div></div>
 <div class="ttc" id="aazx__lfs__utils_8h_html_a8a8b6840cbe44f1ac7733fa6612d1132"><div class="ttname"><a href="azx__lfs__utils_8h.html#a8a8b6840cbe44f1ac7733fa6612d1132">azx_lfsDirCreationByContext</a></div><div class="ttdeci">LFS2_ERROR_T azx_lfsDirCreationByContext(const char *dir, AZX_LFSDIR_MODE_E mode, lfs2_t *lfsObject)</div><div class="ttdoc">azx_lfsDirCreationByContext create a directory</div></div>
@@ -1237,6 +1238,7 @@ LFS2_ERROR_T&#160;</td><td class="memItemRight" valign="bottom"><b>azx_lfsDirRmB
 <div class="ttc" id="aazx__lfs__utils_8h_html_aa945595fc4377c538cf01a670fb8cc00afdf3047ffb55468e5dba7bdd3efa15a6"><div class="ttname"><a href="azx__lfs__utils_8h.html#aa945595fc4377c538cf01a670fb8cc00afdf3047ffb55468e5dba7bdd3efa15a6">AZX_LFSMOUNT_MODE_MOUNT</a></div><div class="ttdef"><b>Definition:</b> azx_lfs_utils.h:105</div></div>
 <div class="ttc" id="aazx__lfs__utils_8h_html_a566bca4bb52f4663885a039731e50618"><div class="ttname"><a href="azx__lfs__utils_8h.html#a566bca4bb52f4663885a039731e50618">azx_lfsMountByContext</a></div><div class="ttdeci">LFS2_ERROR_T azx_lfsMountByContext(AZX_LFSMOUNT_MODE_E mode, const AZX_LFS_CONTEXT_S *c, lfs2_t *lfsObject)</div><div class="ttdoc">azx_lfsMountByContext mounts and/or format the partition</div></div>
 <div class="ttc" id="astruct_a_z_x___l_f_s___i_n_f_o___f_i_l_e_html"><div class="ttname"><a href="struct_a_z_x___l_f_s___i_n_f_o___f_i_l_e.html">AZX_LFS_INFO_FILE</a></div><div class="ttdef"><b>Definition:</b> azx_lfs_utils.h:51</div></div>
+<div class="ttc" id="agroup__log_usage_html_ga847d9b9f62e31bf14b31882be7418675"><div class="ttname"><a href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a></div><div class="ttdeci">#define AZX_LOG_INFO(a...)</div><div class="ttdef"><b>Definition:</b> azx_log.h:300</div></div>
 <!-- HTML footer for doxygen 1.8.15-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

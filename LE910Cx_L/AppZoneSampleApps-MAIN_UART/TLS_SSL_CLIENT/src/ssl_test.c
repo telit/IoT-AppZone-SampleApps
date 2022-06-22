@@ -11,7 +11,7 @@
   @details
 
   @version
-    1.1.7
+    1.1.8
   @note
 
 
@@ -452,9 +452,11 @@ INT32 msgHTTPSTask(INT32 type, INT32 param1, INT32 param2)
         AZX_LOG_ERROR("cannot load client certificate + key into context!\r\n");
         return -1;
       }
+    }
 
+    if(SSL_AUTH_MODE == M2MB_SSL_SERVER_AUTH || SSL_AUTH_MODE == M2MB_SSL_SERVER_CLIENT_AUTH)
+    {
       AZX_LOG_DEBUG("certificates successfully stored!\r\n");
-
     }
 
     /* Second step: Certificates were loaded, now check network registration and activate PDP context */
