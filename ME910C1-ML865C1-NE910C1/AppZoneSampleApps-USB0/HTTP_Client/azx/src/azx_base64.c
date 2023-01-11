@@ -7,6 +7,11 @@
 #include <ctype.h>
 #include "azx_base64.h"
 
+int cust_isascii(int c) { return !!((c >= 0) && (c <= 127)); }
+
+#ifndef isascii
+#define isascii cust_isascii
+#endif
 
 /* Local defines =============================================================*/
 // Base 64 Related

@@ -34,7 +34,7 @@
   <td id="projectlogo"><img alt="Logo" src="telit-logo.png"/></td>
   <td id="projectalign" style="padding-left: 2em;">
    <div id="projectname">AZX (AppZone eXtensions) documentation
-   &#160;<span id="projectnumber">1.1.15-CxL</span>
+   &#160;<span id="projectnumber">1.1.17-CxL</span>
    </div>
    <div id="projectbrief">A set of companion utilities that make AZ development easier</div>
   </td>
@@ -132,6 +132,9 @@ Macros</h2></td></tr>
 <tr class="memitem:a40bca1270eac14ea5da81c924c02c3b7"><td class="memItemLeft" align="right" valign="top"><a id="a40bca1270eac14ea5da81c924c02c3b7"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>realloc</b>(a,  b)&#160;&#160;&#160;<a class="el" href="azx__gnu__stdlib_8h.html#adde8371f617ee5ec1ac98f0e8f47d62a">azx_gnu_realloc</a>(a,b)</td></tr>
 <tr class="separator:a40bca1270eac14ea5da81c924c02c3b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5134b2f308b8e125e5f987ac66222050"><td class="memItemLeft" align="right" valign="top"><a id="a5134b2f308b8e125e5f987ac66222050"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>exit</b>&#160;&#160;&#160;<a class="el" href="azx__gnu__stdlib_8h.html#afe18e5b043bc40b9f8c1da366de1a25c">azx_gnu_exit</a></td></tr>
+<tr class="separator:a5134b2f308b8e125e5f987ac66222050"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -147,6 +150,9 @@ Functions</h2></td></tr>
 <tr class="memitem:adde8371f617ee5ec1ac98f0e8f47d62a"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azx__gnu__stdlib_8h.html#adde8371f617ee5ec1ac98f0e8f47d62a">azx_gnu_realloc</a> (void *ptr, size_t size)</td></tr>
 <tr class="memdesc:adde8371f617ee5ec1ac98f0e8f47d62a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dynamic memory reallocation.  <a href="azx__gnu__stdlib_8h.html#adde8371f617ee5ec1ac98f0e8f47d62a">More...</a><br /></td></tr>
 <tr class="separator:adde8371f617ee5ec1ac98f0e8f47d62a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe18e5b043bc40b9f8c1da366de1a25c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azx__gnu__stdlib_8h.html#afe18e5b043bc40b9f8c1da366de1a25c">azx_gnu_exit</a> (int status)</td></tr>
+<tr class="memdesc:afe18e5b043bc40b9f8c1da366de1a25c"><td class="mdescLeft">&#160;</td><td class="mdescRight">exit process. remaps stdlib exit()  <a href="azx__gnu__stdlib_8h.html#afe18e5b043bc40b9f8c1da366de1a25c">More...</a><br /></td></tr>
+<tr class="separator:afe18e5b043bc40b9f8c1da366de1a25c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>gnu definition </p>
@@ -210,6 +216,33 @@ NULL in case of error</dd></dl>
 <div class="line">  exit(...)</div>
 <div class="line"><span class="comment">//all pStruct initialized to 0: pStruct-&gt;a = 0; pStruct-&gt;b = 0; pStruct-&gt;ptr = 0;</span></div>
 </div><!-- fragment --> 
+</div>
+</div>
+<a id="afe18e5b043bc40b9f8c1da366de1a25c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe18e5b043bc40b9f8c1da366de1a25c">&#9670;&nbsp;</a></span>azx_gnu_exit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void azx_gnu_exit </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>status</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>exit process. remaps stdlib exit() </p>
+<p>quits the application</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname"></td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="adf00383f106b20e878a20d62fbe11101"></a>

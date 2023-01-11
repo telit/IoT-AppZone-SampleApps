@@ -30,6 +30,7 @@
 #include "m2mb_types.h"
 #include "m2mb_os_api.h"
 #include "m2mb_fs_posix.h"
+
 #include "m2mb_net.h"
 #include "m2mb_pdp.h"
 #include "m2mb_rtc.h"
@@ -45,57 +46,13 @@
 
 #include "aws_demo.h"
 
-#include "app_cfg.h" /*FOR LOCALPATH define*/
+#include "read_parameters.h"
 
 /* Local defines =====================================================================*/
 
-#define SSL_CERT_CA_NAME "ca-cert-pool"
-#define SSL_CLIENT_NAME "SSL-Client"
-
-#define HOSTMISMATCH_ENABLE 0
-#define SNI_ENABLE 1
-
-#define CLIENT_TIMEOUT_SEC 60 /*operations timeout*/
-#define CLIENT_KEEPALIVE_SEC 60 /*KeepAlive timeout*/
-
-
-#define USER_SSL_AUTH      M2MB_SSL_SERVER_CLIENT_AUTH
-
-/* SSL */
-#define MQTT_BROKER_PORT_SSL    (UINT32)8883
-
-/* Configure your certificates names, server URL and credentials */
-
-/*Note: LOCALPATH define in app_cfg.h file depends on the family*/
-#define CACERTPREFILE     LOCALPATH "/ssl_certs/preload_CACert_01.crt"   /* Root CA file path in module filesystem */
-#define CACERTFILE        LOCALPATH "/ssl_certs/Amazon-IoT.crt"   /* Cross signed CA cert, it could be different from the provided one */
-#define CLIENTCERTFILE    LOCALPATH "/ssl_certs/xxxxx.crt"   /* Client certificate file path in module filesystem  */
-#define CLIENTKEYFILE     LOCALPATH "/ssl_certs/xxxxx.key"   /* Client private key file path in module filesystem  */
-
-/* Server configuration */
-#define AWS_BROKER_ADDRESS "xxxxxxxx.amazonaws.com"
-
-/* Client Configuration */
-#define CLIENT_ID "my_client_id"
-#define CLIENT_USERNAME ""
-#define CLIENT_PASSWORD ""
-
-
-
-#define PUB_TOPIC_TEMPLATE "device/%s/updates" /*will be filled with module IMEI number*/
 
 /*Set to 1 to subscribe to publishing topic*/
 #define SUBSCRIBE 0
-
-/* PDP configuration */
-#define APN      "NTX17.NET"
-
-#define PDP_CTX   3
-
-
-
-
-
 
 /* Local typedefs ===============================================================================*/
 
@@ -120,7 +77,9 @@ static INT32 read_time(M2MB_RTC_TIME_T *time);
 static int cell_get_rssi(INT32 *rssi);
 static M2MB_RESULT_E check_net_attach(UINT32 timeout_ms);
 
+
 /* Static functions =============================================================================*/
+
 #if SUBSCRIBE
 static void mqtt_topic_cb( M2MB_MQTT_HANDLE handle, void *arg, const CHAR *topic,
                            UINT16 topic_length, const CHAR *msg, UINT32 msg_length, M2MB_MQTT_RX_STATUS_E status )
@@ -160,7 +119,7 @@ static void CleanSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SSL_C
 
   if(ssl_auth_mode >= M2MB_SSL_SERVER_AUTH)
   {
-    res = m2mb_ssl_cert_delete( M2MB_SSL_CACERT, (CHAR*)SSL_CERT_CA_NAME );
+    res = m2mb_ssl_cert_delete( M2MB_SSL_CACERT, (CHAR*)gSSL_CERT_CA_NAME );
     if(res==0)
     {
       AZX_LOG_TRACE("m2mb_ssl_cert_delete PASS\r\n");
@@ -172,7 +131,7 @@ static void CleanSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SSL_C
   }
   if(ssl_auth_mode >= M2MB_SSL_SERVER_CLIENT_AUTH)
   {
-    res = m2mb_ssl_cert_delete( M2MB_SSL_CERT, (CHAR*)SSL_CLIENT_NAME );
+    res = m2mb_ssl_cert_delete( M2MB_SSL_CERT, (CHAR*)gSSL_CLIENT_NAME );
     if(res==0)
     {
       AZX_LOG_TRACE("m2mb_ssl_cert_delete PASS\r\n");
@@ -257,44 +216,47 @@ static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SS
     return -1;
   }
 
-#if HOSTMISMATCH_ENABLE
-  ret = m2mb_ssl_config( *p_hSSLConfig, M2MB_SSL_NAME_CHECK, (void*)AWS_BROKER_ADDRESS );
-  if(ret != 0)
+  if (gHOSTMISMATCH_ENABLE)
   {
-    AZX_LOG_ERROR("m2mb_ssl_config failed\r\n");
+    res = m2mb_ssl_config( *p_hSSLConfig, M2MB_SSL_NAME_CHECK, (void*)gAWS_BROKER_ADDRESS );
+    if(res != 0)
+    {
+      AZX_LOG_ERROR("m2mb_ssl_config failed\r\n");
+    }
+    else
+    {
+      AZX_LOG_DEBUG("m2mb_ssl_config NAME CHECK succeeded\r\n");
+    }
   }
-  else
+
+
+
+  if(gSNI_ENABLE)
   {
-    AZX_LOG_DEBUG("m2mb_ssl_config NAME CHECK succeeded\r\n");
+    res = m2mb_ssl_config( *p_hSSLConfig, M2MB_SSL_NAME_SNI, (void*)gAWS_BROKER_ADDRESS );
+    if(res != 0)
+    {
+      AZX_LOG_ERROR("m2mb_ssl_config SNI failed\r\n");
+    }
+    else
+    {
+      AZX_LOG_DEBUG("m2mb_ssl_config SNI succeeded\r\n");
+    }
   }
 
-#endif
-
-#if SNI_ENABLE
-  res = m2mb_ssl_config( *p_hSSLConfig, M2MB_SSL_NAME_SNI, (void*)AWS_BROKER_ADDRESS );
-  if(res != 0)
-  {
-    AZX_LOG_ERROR("m2mb_ssl_config SNI failed\r\n");
-  }
-  else
-  {
-    AZX_LOG_DEBUG("m2mb_ssl_config SNI succeeded\r\n");
-  }
-#endif
-
   {
 
-    AZX_LOG_DEBUG("Root CA cert file %s \r\n",CACERTPREFILE);
+    AZX_LOG_DEBUG("Root CA cert file %s \r\n",gCACERTPREFILE);
 
-    if (0 ==m2mb_fs_stat(CACERTPREFILE, &st))
+    if (0 ==m2mb_fs_stat(gCACERTPREFILE, &st))
     {
       AZX_LOG_TRACE("File size: %u\r\n",  st.st_size);
     }
 
-    fd = m2mb_fs_open(CACERTPREFILE,M2MB_O_RDONLY   /*open in read only mode*/ );
+    fd = m2mb_fs_open(gCACERTPREFILE,M2MB_O_RDONLY   /*open in read only mode*/ );
     if (fd == -1 )
     {
-      AZX_LOG_ERROR("Cannot open file %s \r\n",CACERTPREFILE);
+      AZX_LOG_ERROR("Cannot open file %s \r\n",gCACERTPREFILE);
       m2mb_ssl_delete_config(*p_hSSLConfig);
       return -1;
     }
@@ -321,17 +283,17 @@ static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SS
     SSL_info.ca_List.ca_Info[0]->ca_Buf = CA_BUF_PRELOAD;
 
 
-    AZX_LOG_DEBUG("Cross Signed CA cert file %s \r\n",CACERTFILE);
+    AZX_LOG_DEBUG("Cross Signed CA cert file %s \r\n", gCACERTFILE);
 
-    if (0 ==m2mb_fs_stat(CACERTFILE, &st))
+    if (0 ==m2mb_fs_stat(gCACERTFILE, &st))
     {
       AZX_LOG_TRACE("File size: %u\r\n",  st.st_size);
     }
 
-    fd = m2mb_fs_open(CACERTFILE,M2MB_O_RDONLY   /*open in read only mode*/ );
+    fd = m2mb_fs_open(gCACERTFILE, M2MB_O_RDONLY   /*open in read only mode*/ );
     if (fd == -1 )
     {
-      AZX_LOG_ERROR("Cannot open file %s \r\n",CACERTFILE);
+      AZX_LOG_ERROR("Cannot open file %s \r\n", gCACERTFILE);
       m2mb_ssl_delete_config(*p_hSSLConfig);
       return -1;
     }
@@ -359,14 +321,14 @@ static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SS
 
     SSL_info.ca_List.ca_Cnt = 2;
 
-    if (0 != m2mb_ssl_cert_store( M2MB_SSL_CACERT,SSL_info,(CHAR*) SSL_CERT_CA_NAME ))
+    if (0 != m2mb_ssl_cert_store( M2MB_SSL_CACERT,SSL_info,(CHAR*) gSSL_CERT_CA_NAME ))
     {
       AZX_LOG_ERROR("m2mb_ssl_cert_store FAILED\r\n" );
       CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_NO_AUTH);
       return -1;
     }
 
-    if (0 != m2mb_ssl_cert_load( *p_hSSLCtx, M2MB_SSL_CACERT,(CHAR*) SSL_CERT_CA_NAME ))
+    if (0 != m2mb_ssl_cert_load( *p_hSSLCtx, M2MB_SSL_CACERT,(CHAR*) gSSL_CERT_CA_NAME ))
     {
       AZX_LOG_ERROR("m2mb_ssl_cert_load FAILED\r\n" );
       CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_AUTH);
@@ -375,17 +337,17 @@ static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SS
   }
 
   {
-    AZX_LOG_DEBUG("Client certificate file %s \r\n", CLIENTCERTFILE);
+    AZX_LOG_DEBUG("Client certificate file %s \r\n", gCLIENTCERTFILE);
 
-    if (0 ==m2mb_fs_stat(CLIENTCERTFILE, &st))
+    if (0 ==m2mb_fs_stat(gCLIENTCERTFILE, &st))
     {
       AZX_LOG_TRACE("File size: %u\r\n",  st.st_size);
     }
 
-    fd = m2mb_fs_open(CLIENTCERTFILE, M2MB_O_RDONLY);   /*open in read only mode*/
+    fd = m2mb_fs_open(gCLIENTCERTFILE, M2MB_O_RDONLY);   /*open in read only mode*/
     if (fd == -1 )
     {
-      AZX_LOG_ERROR("Cannot open file %s \r\n",CLIENTCERTFILE);
+      AZX_LOG_ERROR("Cannot open file %s \r\n",gCLIENTCERTFILE);
       CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_AUTH);
       return -1;
     }
@@ -413,18 +375,18 @@ static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SS
     SSL_info.cert.cert_Size=st.st_size;
 
 
-    AZX_LOG_DEBUG("Client Key file %s \r\n",CLIENTKEYFILE);
+    AZX_LOG_DEBUG("Client Key file %s \r\n",gCLIENTKEYFILE);
 
-    if (0 ==m2mb_fs_stat(CLIENTKEYFILE, &st))
+    if (0 ==m2mb_fs_stat(gCLIENTKEYFILE, &st))
     {
       AZX_LOG_TRACE("File size: %u\r\n",  st.st_size);
 
     }
 
-    fd = m2mb_fs_open(CLIENTKEYFILE, M2MB_O_RDONLY);   /*open in read only mode*/
+    fd = m2mb_fs_open(gCLIENTKEYFILE, M2MB_O_RDONLY);   /*open in read only mode*/
     if (fd == -1 )
     {
-      AZX_LOG_ERROR("Cannot open file %s \r\n",CLIENTKEYFILE);
+      AZX_LOG_ERROR("Cannot open file %s \r\n",gCLIENTKEYFILE);
       CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_AUTH);
       return -1;
     }
@@ -451,14 +413,14 @@ static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SS
     SSL_info.cert.key_Buf=client_key_buf;
     SSL_info.cert.key_Size=st.st_size;
 
-    if (0 != m2mb_ssl_cert_store( M2MB_SSL_CERT,SSL_info,(CHAR*) SSL_CLIENT_NAME ))
+    if (0 != m2mb_ssl_cert_store( M2MB_SSL_CERT,SSL_info,(CHAR*) gSSL_CLIENT_NAME ))
     {
       AZX_LOG_ERROR("m2mb_ssl_cert_store FAILED\r\n" );
       CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_AUTH);
       return -1;
     }
 
-    if (0 != m2mb_ssl_cert_load( *p_hSSLCtx,M2MB_SSL_CERT,(CHAR*) SSL_CLIENT_NAME ))
+    if (0 != m2mb_ssl_cert_load( *p_hSSLCtx,M2MB_SSL_CERT,(CHAR*) gSSL_CLIENT_NAME ))
     {
       AZX_LOG_ERROR("m2mb_ssl_cert_load FAILED\r\n" );
       CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_CLIENT_AUTH);
@@ -577,42 +539,42 @@ void NetCallback( M2MB_NET_HANDLE h, M2MB_NET_IND_E net_event, UINT16 resp_size,
 
       break;
     case M2MB_NET_GET_SIGNAL_INFO_RESP:
+    {
+      M2MB_NET_GET_SIGNAL_INFO_RESP_T *resp = (M2MB_NET_GET_SIGNAL_INFO_RESP_T*)resp_struct;
+      AZX_LOG_TRACE("GET Signal Info resp is %d, %d\r\n", resp->rat, resp->rssi);
+      gRSSI = resp->rssi;
+      if(resp->sigInfo != NULL)
       {
-        M2MB_NET_GET_SIGNAL_INFO_RESP_T *resp = (M2MB_NET_GET_SIGNAL_INFO_RESP_T*)resp_struct;
-        AZX_LOG_TRACE("GET Signal Info resp is %d, %d\r\n", resp->rat, resp->rssi);
-        gRSSI = resp->rssi;
-        if(resp->sigInfo != NULL)
+        if( (resp->rat == M2MB_NET_RAT_UTRAN) || ((resp->rat >= M2MB_NET_RAT_UTRAN_wHSDPA) && (resp->rat <= M2MB_NET_RAT_UTRAN_wHSDPAandHSUPA)) )
         {
-          if( (resp->rat == M2MB_NET_RAT_UTRAN) || ((resp->rat >= M2MB_NET_RAT_UTRAN_wHSDPA) && (resp->rat <= M2MB_NET_RAT_UTRAN_wHSDPAandHSUPA)) )
+          M2MB_NET_SIGNAL_INFO_UTRAN_T *tmpSigInfo = (M2MB_NET_SIGNAL_INFO_UTRAN_T*)(resp->sigInfo);
+          if(tmpSigInfo)
           {
-            M2MB_NET_SIGNAL_INFO_UTRAN_T *tmpSigInfo = (M2MB_NET_SIGNAL_INFO_UTRAN_T*)(resp->sigInfo);
-            if(tmpSigInfo)
-            {
-              AZX_LOG_TRACE("GET Signal Info resp is %d\r\n", tmpSigInfo->ecio);
-              gRSSI = tmpSigInfo->ecio;
-            }
-            else
-            {
-              AZX_LOG_WARN("Cannot get Signal Info\r\n");
-            }
+            AZX_LOG_TRACE("GET Signal Info resp is %d\r\n", tmpSigInfo->ecio);
+            gRSSI = tmpSigInfo->ecio;
           }
-          else if (resp->rat == M2MB_NET_RAT_EUTRAN)
+          else
           {
-            M2MB_NET_SIGNAL_INFO_EUTRAN_T *tmpSigInfo = (M2MB_NET_SIGNAL_INFO_EUTRAN_T*)(resp->sigInfo);
-            if(tmpSigInfo)
-            {
-              AZX_LOG_TRACE("GET Signal Info resp is %d, %d, %d\r\n", tmpSigInfo->rsrq, tmpSigInfo->rsrp, tmpSigInfo->snr);
-              gRSSI = tmpSigInfo->rsrp;
-            }
-            else
-            {
-              AZX_LOG_WARN("Cannot get Signal Info\r\n");
-            }
+            AZX_LOG_WARN("Cannot get Signal Info\r\n");
           }
         }
-        m2mb_os_ev_set( net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_SET );
+        else if (resp->rat == M2MB_NET_RAT_EUTRAN)
+        {
+          M2MB_NET_SIGNAL_INFO_EUTRAN_T *tmpSigInfo = (M2MB_NET_SIGNAL_INFO_EUTRAN_T*)(resp->sigInfo);
+          if(tmpSigInfo)
+          {
+            AZX_LOG_TRACE("GET Signal Info resp is %d, %d, %d\r\n", tmpSigInfo->rsrq, tmpSigInfo->rsrp, tmpSigInfo->snr);
+            gRSSI = tmpSigInfo->rsrp;
+          }
+          else
+          {
+            AZX_LOG_WARN("Cannot get Signal Info\r\n");
+          }
+        }
       }
-      break;
+      m2mb_os_ev_set( net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_SET );
+    }
+    break;
     default:
       AZX_LOG_DEBUG( "unexpected net_event: %d\r\n", net_event );
       break;
@@ -653,7 +615,7 @@ INT32 AWS_Task( INT32 type, INT32 param1, INT32 param2 )
   ( void )type;
   ( void )param1;
   ( void )param2;
-  
+
   M2MB_RESULT_E retVal = M2MB_RESULT_SUCCESS;
   M2MB_OS_RESULT_E        osRes;
   M2MB_OS_EV_ATTR_HANDLE  evAttrHandle;
@@ -666,11 +628,11 @@ INT32 AWS_Task( INT32 type, INT32 param1, INT32 param2 )
   int ret;
   int task_status = 0;
   void *myUserdata = NULL;
-  
+
   int msgId = 1;
 
   char pub_topic[64] = {0};
-  
+
   M2MB_SSL_CONFIG_HANDLE sslConfigHndl = NULL;
   M2MB_SSL_CTXT_HANDLE sslCtxtHndl = NULL;
 
@@ -680,6 +642,9 @@ INT32 AWS_Task( INT32 type, INT32 param1, INT32 param2 )
 
 
     AZX_LOG_DEBUG( "Init MQTT client for AWS\r\n" );
+    configureParameters(); /*set default values first*/
+    readConfigFromFile(); /*try to read configuration from file (if present)*/
+
     result = m2mb_mqtt_init( &mqttHandle, NULL, NULL );
 
     if( result != M2MB_MQTT_SUCCESS )
@@ -693,8 +658,8 @@ INT32 AWS_Task( INT32 type, INT32 param1, INT32 param2 )
     }
 
     result = m2mb_mqtt_conf( mqttHandle, CMDS(
-        /* Set Client ID */
-        M2MB_MQTT_SET_CLIENT_ID, ( char * ) CLIENT_ID ) );
+            /* Set Client ID */
+            M2MB_MQTT_SET_CLIENT_ID, ( char * ) gCLIENT_ID ) );
 
     if( result != M2MB_MQTT_SUCCESS )
     {
@@ -705,7 +670,7 @@ INT32 AWS_Task( INT32 type, INT32 param1, INT32 param2 )
 
     /* Set Timeout in milliseconds */
     result = m2mb_mqtt_conf( mqttHandle, CMDS(
-        M2MB_MQTT_SET_TIMEOUT_MS, CLIENT_TIMEOUT_SEC * 1000 ) );
+            M2MB_MQTT_SET_TIMEOUT_MS, gCLIENT_TIMEOUT_SEC * 1000 ) );
 
     if( result != M2MB_MQTT_SUCCESS )
     {
@@ -716,7 +681,7 @@ INT32 AWS_Task( INT32 type, INT32 param1, INT32 param2 )
 
     /* Set Keepalive in seconds */
     result = m2mb_mqtt_conf( mqttHandle, CMDS(
-        M2MB_MQTT_SET_KEEPALIVE_SEC, CLIENT_KEEPALIVE_SEC ) );
+            M2MB_MQTT_SET_KEEPALIVE_SEC, gCLIENT_KEEPALIVE_SEC ) );
 
     if( result != M2MB_MQTT_SUCCESS )
     {
@@ -727,7 +692,7 @@ INT32 AWS_Task( INT32 type, INT32 param1, INT32 param2 )
 
     /* Set Username */
     result = m2mb_mqtt_conf( mqttHandle, CMDS(
-        M2MB_MQTT_SET_USERNAME, ( char * ) CLIENT_USERNAME ) );
+            M2MB_MQTT_SET_USERNAME, ( char * ) gCLIENT_USERNAME ) );
 
     if( result != M2MB_MQTT_SUCCESS )
     {
@@ -738,7 +703,7 @@ INT32 AWS_Task( INT32 type, INT32 param1, INT32 param2 )
 
     /* Set Password */
     result = m2mb_mqtt_conf( mqttHandle, CMDS(
-        M2MB_MQTT_SET_PASSWORD, ( char * ) CLIENT_PASSWORD ) );
+            M2MB_MQTT_SET_PASSWORD, ( char * ) gCLIENT_PASSWORD ) );
 
     if( result != M2MB_MQTT_SUCCESS )
     {
@@ -749,7 +714,7 @@ INT32 AWS_Task( INT32 type, INT32 param1, INT32 param2 )
 
     /* Set the PDP context to be used */
     result = m2mb_mqtt_conf( mqttHandle, CMDS(
-        M2MB_MQTT_SET_PDP_CONTEXT, PDP_CTX ) );
+            M2MB_MQTT_SET_PDP_CONTEXT, gPDP_CTX ) );
 
     if( result != M2MB_MQTT_SUCCESS )
     {
@@ -758,7 +723,7 @@ INT32 AWS_Task( INT32 type, INT32 param1, INT32 param2 )
       break;
     }
 
-    if (0 == PrepareSSLEnvironment(&sslConfigHndl, &sslCtxtHndl, USER_SSL_AUTH))
+    if (0 == PrepareSSLEnvironment(&sslConfigHndl, &sslCtxtHndl, (M2MB_SSL_AUTH_TYPE_E)gUSER_SSL_AUTH))
     {
       result = m2mb_mqtt_conf(mqttHandle, CMDS(M2MB_MQTT_SECURE_OPT, sslConfigHndl, sslCtxtHndl));
       if( result != M2MB_MQTT_SUCCESS )
@@ -829,19 +794,19 @@ INT32 AWS_Task( INT32 type, INT32 param1, INT32 param2 )
     }
 
     azx_sleep_ms( 2000 );
-    
-    AZX_LOG_DEBUG( "Activate PDP with APN %s on CID %d....\r\n", APN, PDP_CTX );
-    
-    retVal = m2mb_pdp_activate( pdpHandle, ( UINT8 ) PDP_CTX, ( char * ) APN, ( char * ) NULL,
-        ( char * ) NULL, M2MB_PDP_IPV4 ); //activates cid 3 with APN "internet.wind.biz" and IP type IPV4
+
+    AZX_LOG_DEBUG( "Activate PDP with APN %s on CID %d....\r\n", gAPN, gPDP_CTX );
+
+    retVal = m2mb_pdp_activate( pdpHandle, ( UINT8 ) gPDP_CTX, ( char * ) gAPN, ( char * ) gAPN_UserName,
+            ( char * ) gAPN_Password, M2MB_PDP_IPV4 ); //activates cid 3 with APN "internet.wind.biz" and IP type IPV4
 
     if( retVal != M2MB_RESULT_SUCCESS )
     {
       AZX_LOG_ERROR( "Cannot activate pdp context. Trying deactivating and reactivating again\r\n" );
-      m2mb_pdp_deactivate( pdpHandle, PDP_CTX );
+      m2mb_pdp_deactivate( pdpHandle, gPDP_CTX );
       azx_sleep_ms( 1000 );
-      retVal = m2mb_pdp_activate( pdpHandle, ( UINT8 ) PDP_CTX, ( char * ) APN, ( char * ) NULL,
-          ( char * ) NULL, M2MB_PDP_IPV4 ); //activates cid 3 with APN "internet.wind.biz" and IP type IPV4
+      retVal = m2mb_pdp_activate( pdpHandle, ( UINT8 ) gPDP_CTX, ( char * ) gAPN, ( char * ) gAPN_UserName,
+              ( char * ) gAPN_Password, M2MB_PDP_IPV4 ); //activates cid 3 with APN "internet.wind.biz" and IP type IPV4
 
       if( retVal != M2MB_RESULT_SUCCESS )
       {
@@ -859,7 +824,7 @@ INT32 AWS_Task( INT32 type, INT32 param1, INT32 param2 )
       task_status = APPLICATION_EXIT;
       break;
     }
-    
+
     {
       M2MB_INFO_HANDLE hInfo;
       CHAR *info;
@@ -871,8 +836,8 @@ INT32 AWS_Task( INT32 type, INT32 param1, INT32 param2 )
         sprintf(pub_topic, PUB_TOPIC_TEMPLATE, "generic");
         task_status = APPLICATION_EXIT;
         break;
-      } 
-      else 
+      }
+      else
       {
         retval = m2mb_info_get(hInfo, M2MB_INFO_GET_SERIAL_NUM, &info);
         AZX_LOG_TRACE( "\r\nIMEI: %s \r\n", info);
@@ -881,9 +846,9 @@ INT32 AWS_Task( INT32 type, INT32 param1, INT32 param2 )
       }
     }
 
-    AZX_LOG_INFO( "\r\nConnecting to Server <%s>:%u...\r\n", AWS_BROKER_ADDRESS, MQTT_BROKER_PORT_SSL );
+    AZX_LOG_INFO( "\r\nConnecting to Server <%s>:%u...\r\n", gAWS_BROKER_ADDRESS, gMQTT_BROKER_PORT_SSL );
 
-    result = m2mb_mqtt_connect( mqttHandle, AWS_BROKER_ADDRESS, MQTT_BROKER_PORT_SSL );
+    result = m2mb_mqtt_connect( mqttHandle, gAWS_BROKER_ADDRESS, gMQTT_BROKER_PORT_SSL );
     if( result == M2MB_MQTT_SUCCESS )
     {
       AZX_LOG_INFO( "Done.\r\n" );
@@ -923,17 +888,17 @@ INT32 AWS_Task( INT32 type, INT32 param1, INT32 param2 )
       INT32 rssi;
       int res;
       M2MB_RTC_TIME_T time;
-      
+
       topic = ( char * ) pub_topic;
-      
+
       res = cell_get_rssi(&rssi);
       res |= read_time(&time);
-      
+
       if(0 == res)
       {
         sprintf( msg, "{ \"ID\": %d, \"data\": {\"RSSI\": %d, \"tm\":\"%04d-%02d-%02d,%02d:%02d:%02d\"} }", msgId,
-              rssi, time.year, time.mon, time.day, time.hour, time.min, time.sec);
-              
+                rssi, time.year, time.mon, time.day, time.hour, time.min, time.sec);
+
         AZX_LOG_DEBUG( "PUBLISHING <%s> to topic %s\r\n", msg, topic );
         result = m2mb_mqtt_publish( mqttHandle, M2MB_MQTT_QOS_0, retain, msgId, topic, msg, strlen( msg ) );
 
@@ -969,7 +934,7 @@ INT32 AWS_Task( INT32 type, INT32 param1, INT32 param2 )
       break;
     }
 
-    CleanSSLEnvironment(&sslConfigHndl, &sslCtxtHndl, USER_SSL_AUTH);
+    CleanSSLEnvironment(&sslConfigHndl, &sslCtxtHndl, (M2MB_SSL_AUTH_TYPE_E)gUSER_SSL_AUTH);
 
     result = m2mb_mqtt_deinit( mqttHandle );
     if( result == M2MB_MQTT_SUCCESS )
@@ -991,7 +956,7 @@ INT32 AWS_Task( INT32 type, INT32 param1, INT32 param2 )
   if( task_status == APPLICATION_EXIT )
   {
     AZX_LOG_DEBUG( "application exit\r\n" );
-    ret = m2mb_pdp_deactivate( pdpHandle, PDP_CTX );
+    ret = m2mb_pdp_deactivate( pdpHandle, gPDP_CTX );
 
     if( ret != M2MB_RESULT_SUCCESS )
     {

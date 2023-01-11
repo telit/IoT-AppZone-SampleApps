@@ -34,7 +34,7 @@
   <td id="projectlogo"><img alt="Logo" src="telit-logo.png"/></td>
   <td id="projectalign" style="padding-left: 2em;">
    <div id="projectname">AZX (AppZone eXtensions) documentation
-   &#160;<span id="projectnumber">1.1.15-CxL</span>
+   &#160;<span id="projectnumber">1.1.17-CxL</span>
    </div>
    <div id="projectbrief">A set of companion utilities that make AZ development easier</div>
   </td>
@@ -101,17 +101,23 @@ $(document).ready(function(){initNavTree('azx__gnu__stdio_8h.html','');});
 
 <p>gnu definition  
 <a href="#details">More...</a></p>
-
+<div class="textblock"><code>#include &lt;stdarg.h&gt;</code><br />
+<code>#include &quot;m2mb_fs_stdio.h&quot;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for azx_gnu_stdio.h:</div>
+<div class="dyncontent">
+<div class="center"><img src="azx__gnu__stdio_8h__incl.png" border="0" usemap="#hdr_2azx__gnu__stdio_8h" alt=""/></div>
+<map name="hdr_2azx__gnu__stdio_8h" id="hdr_2azx__gnu__stdio_8h">
+<area shape="rect" title="gnu definition" alt="" coords="31,5,169,32"/>
+<area shape="rect" title=" " alt="" coords="5,80,75,107"/>
+<area shape="rect" title=" " alt="" coords="99,80,221,107"/>
+</map>
+</div>
+</div>
 <p><a href="azx__gnu__stdio_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a0c0ef221f95f64e8632451312fd18cc8"><td class="memItemLeft" align="right" valign="top"><a id="a0c0ef221f95f64e8632451312fd18cc8"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>stdout</b>&#160;&#160;&#160;(void*)(0x88888888)</td></tr>
-<tr class="separator:a0c0ef221f95f64e8632451312fd18cc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ce35bd5ba5021fd3b2e951e8f497656"><td class="memItemLeft" align="right" valign="top"><a id="a5ce35bd5ba5021fd3b2e951e8f497656"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>stderr</b>&#160;&#160;&#160;(void*)(0x99999999)</td></tr>
-<tr class="separator:a5ce35bd5ba5021fd3b2e951e8f497656"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a029f6d343db87fe8c80cf3e5bea2b5c1"><td class="memItemLeft" align="right" valign="top"><a id="a029f6d343db87fe8c80cf3e5bea2b5c1"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>fopen</b>&#160;&#160;&#160;m2mb_fs_fopen</td></tr>
 <tr class="separator:a029f6d343db87fe8c80cf3e5bea2b5c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -142,33 +148,93 @@ Macros</h2></td></tr>
 <tr class="memitem:a3e8cefeee58f762ff50bcef35fa12eec"><td class="memItemLeft" align="right" valign="top"><a id="a3e8cefeee58f762ff50bcef35fa12eec"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>FILE</b>&#160;&#160;&#160;M2MB_FILE_T</td></tr>
 <tr class="separator:a3e8cefeee58f762ff50bcef35fa12eec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a366aba9aac6b1aacd0d1d1c5128512e2"><td class="memItemLeft" align="right" valign="top"><a id="a366aba9aac6b1aacd0d1d1c5128512e2"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>m2m_fputc</b>&#160;&#160;&#160;m2mb_fs_fputc</td></tr>
-<tr class="separator:a366aba9aac6b1aacd0d1d1c5128512e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a32817892a9cd1e99cd12af765e40cb76"><td class="memItemLeft" align="right" valign="top"><a id="a32817892a9cd1e99cd12af765e40cb76"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>m2m_fgetc</b>&#160;&#160;&#160;m2mb_fs_fgetc</td></tr>
-<tr class="separator:a32817892a9cd1e99cd12af765e40cb76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad563440a85b309ed9d55e22d33443474"><td class="memItemLeft" align="right" valign="top"><a id="ad563440a85b309ed9d55e22d33443474"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>clearerr</b>&#160;&#160;&#160;azx_gnu_clearerr</td></tr>
+<tr class="separator:ad563440a85b309ed9d55e22d33443474"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c0ef221f95f64e8632451312fd18cc8"><td class="memItemLeft" align="right" valign="top"><a id="a0c0ef221f95f64e8632451312fd18cc8"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>stdout</b>&#160;&#160;&#160;(FILE*)(0x88888888)</td></tr>
+<tr class="separator:a0c0ef221f95f64e8632451312fd18cc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ce35bd5ba5021fd3b2e951e8f497656"><td class="memItemLeft" align="right" valign="top"><a id="a5ce35bd5ba5021fd3b2e951e8f497656"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>stderr</b>&#160;&#160;&#160;(FILE*)(0x99999999)</td></tr>
+<tr class="separator:a5ce35bd5ba5021fd3b2e951e8f497656"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaca70138f0cb63ddb026921afc635179"><td class="memItemLeft" align="right" valign="top"><a id="aaca70138f0cb63ddb026921afc635179"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>stdin</b>&#160;&#160;&#160;(FILE*)(NULL)</td></tr>
+<tr class="separator:aaca70138f0cb63ddb026921afc635179"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2c758e16b323e6bfe250d26cd26e5e9"><td class="memItemLeft" align="right" valign="top"><a id="af2c758e16b323e6bfe250d26cd26e5e9"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>fputc</b>&#160;&#160;&#160;m2mb_fs_fputc</td></tr>
+<tr class="separator:af2c758e16b323e6bfe250d26cd26e5e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac38485ce41182cbd7ee7d554a2e1d40d"><td class="memItemLeft" align="right" valign="top"><a id="ac38485ce41182cbd7ee7d554a2e1d40d"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>fgetc</b>&#160;&#160;&#160;m2mb_fs_fgetc</td></tr>
+<tr class="separator:ac38485ce41182cbd7ee7d554a2e1d40d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a777150133445feb2cd8a3f846216d9"><td class="memItemLeft" align="right" valign="top"><a id="a8a777150133445feb2cd8a3f846216d9"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>fseek</b>&#160;&#160;&#160;m2mb_fs_fseek</td></tr>
 <tr class="separator:a8a777150133445feb2cd8a3f846216d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a227875b8399b0589b1124555d3ae4007"><td class="memItemLeft" align="right" valign="top"><a id="a227875b8399b0589b1124555d3ae4007"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>fseeko</b>&#160;&#160;&#160;m2mb_fs_fseek</td></tr>
+<tr class="separator:a227875b8399b0589b1124555d3ae4007"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa55a07835c0a09155074815d7a810738"><td class="memItemLeft" align="right" valign="top"><a id="aa55a07835c0a09155074815d7a810738"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>rewind</b>(a)&#160;&#160;&#160;(void)fseek(a, 0L, SEEK_SET)</td></tr>
 <tr class="separator:aa55a07835c0a09155074815d7a810738"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afea8baccc13623417424635d63c81a17"><td class="memItemLeft" align="right" valign="top"><a id="afea8baccc13623417424635d63c81a17"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>ftell</b>&#160;&#160;&#160;m2mb_fs_ftell</td></tr>
+<tr class="separator:afea8baccc13623417424635d63c81a17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af05e2f178910c2e2804e573c883db868"><td class="memItemLeft" align="right" valign="top"><a id="af05e2f178910c2e2804e573c883db868"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>ftello</b>&#160;&#160;&#160;m2mb_fs_ftell</td></tr>
+<tr class="separator:af05e2f178910c2e2804e573c883db868"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4617791aa38bd95d380a00cd7a4fcea"><td class="memItemLeft" align="right" valign="top"><a id="aa4617791aa38bd95d380a00cd7a4fcea"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>fdopen</b>&#160;&#160;&#160;azx_gnu_fdopen</td></tr>
+<tr class="separator:aa4617791aa38bd95d380a00cd7a4fcea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab6e63106cf29e5160e5c2d63db86d27"><td class="memItemLeft" align="right" valign="top"><a id="aab6e63106cf29e5160e5c2d63db86d27"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>fprintf</b>&#160;&#160;&#160;<a class="el" href="azx__gnu__stdio_8h.html#aacad0e51d9ef10e0f6ef01b27ef13597">azx_gnu_fprintf</a></td></tr>
 <tr class="separator:aab6e63106cf29e5160e5c2d63db86d27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8fdc4bb69d2ce8fe042b88eae7160e6e"><td class="memItemLeft" align="right" valign="top"><a id="a8fdc4bb69d2ce8fe042b88eae7160e6e"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>vfprintf</b>&#160;&#160;&#160;<a class="el" href="azx__gnu__stdio_8h.html#a36ca63769b890c5d342f2d5c2b8c7409">azx_gnu_vfprintf</a></td></tr>
+<tr class="separator:a8fdc4bb69d2ce8fe042b88eae7160e6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a60afbd0a3b94d148cce45468b79c2c5a"><td class="memItemLeft" align="right" valign="top"><a id="a60afbd0a3b94d148cce45468b79c2c5a"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>truncate</b>&#160;&#160;&#160;<a class="el" href="azx__gnu__stdio_8h.html#adb8fdfcb8c8ca87a63653dcbc794a18a">azx_gnu_truncate</a></td></tr>
 <tr class="separator:a60afbd0a3b94d148cce45468b79c2c5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf2f2459784350a382dc0b3e23ea5d0c"><td class="memItemLeft" align="right" valign="top"><a id="abf2f2459784350a382dc0b3e23ea5d0c"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>feof</b>&#160;&#160;&#160;azx_gnu_feof</td></tr>
+<tr class="separator:abf2f2459784350a382dc0b3e23ea5d0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6e573736cd9ef39b18951a828848cb0"><td class="memItemLeft" align="right" valign="top"><a id="ac6e573736cd9ef39b18951a828848cb0"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>printf</b>(a...)&#160;&#160;&#160;fprintf(stdout, a)</td></tr>
+<tr class="separator:ac6e573736cd9ef39b18951a828848cb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7788703a92e79699b755a03486fcbc32"><td class="memItemLeft" align="right" valign="top"><a id="a7788703a92e79699b755a03486fcbc32"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>vprintf</b>(f,  a)&#160;&#160;&#160;vfprintf(stdout, f, a)</td></tr>
+<tr class="separator:a7788703a92e79699b755a03486fcbc32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a766fa3b828608b0e879acdf5ea23e2"><td class="memItemLeft" align="right" valign="top"><a id="a2a766fa3b828608b0e879acdf5ea23e2"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>ungetc</b>&#160;&#160;&#160;azx_gnu_ungetc</td></tr>
+<tr class="separator:a2a766fa3b828608b0e879acdf5ea23e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acce53a9a417da84eb9ae59b21c6c15c1"><td class="memItemLeft" align="right" valign="top"><a id="acce53a9a417da84eb9ae59b21c6c15c1"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>ferror</b>&#160;&#160;&#160;azx_gnu_ferror</td></tr>
+<tr class="separator:acce53a9a417da84eb9ae59b21c6c15c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:aacad0e51d9ef10e0f6ef01b27ef13597"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azx__gnu__stdio_8h.html#aacad0e51d9ef10e0f6ef01b27ef13597">azx_gnu_fprintf</a> (void *f, const char *format,...)</td></tr>
-<tr class="memdesc:aacad0e51d9ef10e0f6ef01b27ef13597"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints a autput.  <a href="azx__gnu__stdio_8h.html#aacad0e51d9ef10e0f6ef01b27ef13597">More...</a><br /></td></tr>
+<tr class="memdesc:aacad0e51d9ef10e0f6ef01b27ef13597"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints data in a file stream.  <a href="azx__gnu__stdio_8h.html#aacad0e51d9ef10e0f6ef01b27ef13597">More...</a><br /></td></tr>
 <tr class="separator:aacad0e51d9ef10e0f6ef01b27ef13597"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36ca63769b890c5d342f2d5c2b8c7409"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azx__gnu__stdio_8h.html#a36ca63769b890c5d342f2d5c2b8c7409">azx_gnu_vfprintf</a> (void *f, const char *format, va_list ap)</td></tr>
+<tr class="memdesc:a36ca63769b890c5d342f2d5c2b8c7409"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints data in a file stream. Requires a variadic list.  <a href="azx__gnu__stdio_8h.html#a36ca63769b890c5d342f2d5c2b8c7409">More...</a><br /></td></tr>
+<tr class="separator:a36ca63769b890c5d342f2d5c2b8c7409"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adb8fdfcb8c8ca87a63653dcbc794a18a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azx__gnu__stdio_8h.html#adb8fdfcb8c8ca87a63653dcbc794a18a">azx_gnu_truncate</a> (const char *path, off_t length)</td></tr>
 <tr class="memdesc:adb8fdfcb8c8ca87a63653dcbc794a18a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Truncate file.  <a href="azx__gnu__stdio_8h.html#adb8fdfcb8c8ca87a63653dcbc794a18a">More...</a><br /></td></tr>
 <tr class="separator:adb8fdfcb8c8ca87a63653dcbc794a18a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8cd2423ecfaf164ecad0814975ee79c"><td class="memItemLeft" align="right" valign="top"><a id="aa8cd2423ecfaf164ecad0814975ee79c"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>azx_gnu_ungetc</b> (void *f, int c)</td></tr>
+<tr class="separator:aa8cd2423ecfaf164ecad0814975ee79c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a516b3f99cda7b6eed193d959ebd9ca19"><td class="memItemLeft" align="right" valign="top"><a id="a516b3f99cda7b6eed193d959ebd9ca19"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>azx_gnu_ferror</b> (void *f)</td></tr>
+<tr class="separator:a516b3f99cda7b6eed193d959ebd9ca19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ad55f615f2aa547b19ac81cf0ae8435"><td class="memItemLeft" align="right" valign="top"><a id="a7ad55f615f2aa547b19ac81cf0ae8435"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>azx_gnu_feof</b> (void *f)</td></tr>
+<tr class="separator:a7ad55f615f2aa547b19ac81cf0ae8435"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a890a93bd563dd732c9016f51a11ab3a8"><td class="memItemLeft" align="right" valign="top"><a id="a890a93bd563dd732c9016f51a11ab3a8"></a>
+FILE *&#160;</td><td class="memItemRight" valign="bottom"><b>azx_gnu_fdopen</b> (int, const char *)</td></tr>
+<tr class="separator:a890a93bd563dd732c9016f51a11ab3a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf2c3a24e6c27141d9434a60e0b445f7"><td class="memItemLeft" align="right" valign="top"><a id="acf2c3a24e6c27141d9434a60e0b445f7"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>azx_gnu_clearerr</b> (FILE *)</td></tr>
+<tr class="separator:acf2c3a24e6c27141d9434a60e0b445f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>gnu definition </p>
@@ -177,7 +243,9 @@ Functions</h2></td></tr>
 <dl class="section note"><dt>Note</dt><dd>Dependencies: m2mb_types.h m2mb_os_api.h</dd></dl>
 <dl class="section author"><dt>Author</dt><dd>Moreno Floris </dd>
 <dd>
-Norman Argiolas</dd></dl>
+Norman Argiolas </dd>
+<dd>
+Fabio Pintus</dd></dl>
 <dl class="section date"><dt>Date</dt><dd>11/02/2020 </dd></dl>
 </div><h2 class="groupheader">Function Documentation</h2>
 <a id="aacad0e51d9ef10e0f6ef01b27ef13597"></a>
@@ -212,8 +280,8 @@ Norman Argiolas</dd></dl>
       </table>
 </div><div class="memdoc">
 
-<p>Prints a autput. </p>
-<p>Prints on the defined stream (UART or USB channel)</p>
+<p>Prints data in a file stream. </p>
+<p>Prints on the defined stream (If stderr or stdout are passed, will print on defined UART or USB channel )</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">f</td><td>void* pointer </td></tr>
@@ -263,6 +331,54 @@ Norman Argiolas</dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Upon successful completion returns 0. Otherwise, -1 is returned.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>&lt;Notes&gt;</dd></dl>
+<p><b>Example</b> </p><div class="fragment"><div class="line">&lt;C code example&gt;</div>
+</div><!-- fragment --> 
+</div>
+</div>
+<a id="a36ca63769b890c5d342f2d5c2b8c7409"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36ca63769b890c5d342f2d5c2b8c7409">&#9670;&nbsp;</a></span>azx_gnu_vfprintf()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int azx_gnu_vfprintf </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>f</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>format</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">va_list&#160;</td>
+          <td class="paramname"><em>ap</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Prints data in a file stream. Requires a variadic list. </p>
+<p>Prints on the defined stream (If stderr or stdout are passed, will print on defined UART or USB channel )</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">f</td><td>void* pointer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">format</td><td>const char* pointer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ap</td><td>variadic list retrieved with va_list()</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on SUCCESS -1 on FAILURE</dd></dl>
 <dl class="section note"><dt>Note</dt><dd>&lt;Notes&gt;</dd></dl>
 <p><b>Example</b> </p><div class="fragment"><div class="line">&lt;C code example&gt;</div>
 </div><!-- fragment --> 

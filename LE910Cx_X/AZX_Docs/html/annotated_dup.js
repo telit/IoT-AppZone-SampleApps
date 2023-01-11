@@ -1,5 +1,6 @@
 var annotated_dup =
 [
+    [ "addrinfo", "structaddrinfo.html", "structaddrinfo" ],
     [ "AZX_CJSON_TAG", "struct_a_z_x___c_j_s_o_n___t_a_g.html", "struct_a_z_x___c_j_s_o_n___t_a_g" ],
     [ "AZX_EASY_AT_ATCOMMAND_TAG", "struct_a_z_x___e_a_s_y___a_t___a_t_c_o_m_m_a_n_d___t_a_g.html", "struct_a_z_x___e_a_s_y___a_t___a_t_c_o_m_m_a_n_d___t_a_g" ],
     [ "AZX_EASY_AT_HANDLES_TAG", "struct_a_z_x___e_a_s_y___a_t___h_a_n_d_l_e_s___t_a_g.html", "struct_a_z_x___e_a_s_y___a_t___h_a_n_d_l_e_s___t_a_g" ],
@@ -12,7 +13,6 @@ var annotated_dup =
     [ "AZX_FTP_FILE_INFO_TAG", "struct_a_z_x___f_t_p___f_i_l_e___i_n_f_o___t_a_g.html", "struct_a_z_x___f_t_p___f_i_l_e___i_n_f_o___t_a_g" ],
     [ "AZX_FTP_NET_BUF_TAG", "struct_a_z_x___f_t_p___n_e_t___b_u_f___t_a_g.html", null ],
     [ "AZX_FTP_OPTIONS_TAG", "struct_a_z_x___f_t_p___o_p_t_i_o_n_s___t_a_g.html", "struct_a_z_x___f_t_p___o_p_t_i_o_n_s___t_a_g" ],
-    [ "AZX_FTP_XFER_TAG", "struct_a_z_x___f_t_p___x_f_e_r___t_a_g.html", "struct_a_z_x___f_t_p___x_f_e_r___t_a_g" ],
     [ "AZX_HTTP_HEADER", "struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html", "struct_a_z_x___h_t_t_p___h_e_a_d_e_r" ],
     [ "AZX_HTTP_INFO", "struct_a_z_x___h_t_t_p___i_n_f_o.html", "struct_a_z_x___h_t_t_p___i_n_f_o" ],
     [ "AZX_HTTP_OPTIONS", "struct_a_z_x___h_t_t_p___o_p_t_i_o_n_s.html", "struct_a_z_x___h_t_t_p___o_p_t_i_o_n_s" ],

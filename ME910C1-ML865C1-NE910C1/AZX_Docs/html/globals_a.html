@@ -34,7 +34,7 @@
   <td id="projectlogo"><img alt="Logo" src="telit-logo.png"/></td>
   <td id="projectalign" style="padding-left: 2em;">
    <div id="projectname">AZX (AppZone eXtensions) documentation
-   &#160;<span id="projectnumber">1.1.15-CxL</span>
+   &#160;<span id="projectnumber">1.1.17-CxL</span>
    </div>
    <div id="projectbrief">A set of companion utilities that make AZ development easier</div>
   </td>
@@ -400,11 +400,11 @@ $(document).ready(function(){initNavTree('globals_a.html','');});
 <li>AZX_FTP_BINARY
 : <a class="el" href="group___a_z_x___f_t_p___u_s_a_g_e.html#gad9c77d2d392c378a6d013c0cc9864d12">azx_ftp.h</a>
 </li>
-<li>azx_ftp_callback
-: <a class="el" href="group___a_z_x___f_t_p___c_o_n_f.html#gafe78f44e49db1f4dd17c32d3dc3b4cee">azx_ftp.h</a>
-</li>
 <li>AZX_FTP_CALLBACK
 : <a class="el" href="group___a_z_x___f_t_p___c_o_n_f.html#gabea09560fe008da81ae794c3dd0fc5c7">azx_ftp.h</a>
+</li>
+<li>azx_ftp_callback
+: <a class="el" href="group___a_z_x___f_t_p___c_o_n_f.html#gafe78f44e49db1f4dd17c32d3dc3b4cee">azx_ftp.h</a>
 </li>
 <li>AZX_FTP_CALLBACK_OPTIONS_T
 : <a class="el" href="azx__ftp_8h.html#a5211fd732f7053fedfe00b9332a3dad8">azx_ftp.h</a>
@@ -559,9 +559,6 @@ $(document).ready(function(){initNavTree('globals_a.html','');});
 <li>AZX_FTP_XFER_FILE
 : <a class="el" href="group___a_z_x___f_t_p___u_s_a_g_e.html#gga93677062f9160355dea103b8049695f2ac9f6fc2bf068a4a3f96e6eff260c3d27">azx_ftp.h</a>
 </li>
-<li>AZX_FTP_XFER_T
-: <a class="el" href="group___a_z_x___f_t_p___u_s_a_g_e.html#gad00a4ba26fa22811b61904e411bd1af2">azx_ftp.h</a>
-</li>
 <li>AZX_GET_ARRAY_ELEMENTS
 : <a class="el" href="group__array_usage.html#gafd983da7349623ac1be8d9926aaee1cd">azx_string_utils.h</a>
 </li>
@@ -571,11 +568,17 @@ $(document).ready(function(){initNavTree('globals_a.html','');});
 <li>azx_gnu_chown()
 : <a class="el" href="azx__gnu__unistd_8h.html#a0df411b3596f1d5f25031fce69c5f696">azx_gnu_unistd.h</a>
 </li>
+<li>azx_gnu_exit()
+: <a class="el" href="azx__gnu__stdlib_8h.html#afe18e5b043bc40b9f8c1da366de1a25c">azx_gnu_stdlib.h</a>
+</li>
 <li>azx_gnu_fprintf()
 : <a class="el" href="azx__gnu__stdio_8h.html#aacad0e51d9ef10e0f6ef01b27ef13597">azx_gnu_stdio.h</a>
 </li>
 <li>azx_gnu_free()
 : <a class="el" href="azx__gnu__stdlib_8h.html#adf00383f106b20e878a20d62fbe11101">azx_gnu_stdlib.h</a>
+</li>
+<li>azx_gnu_getaddrinfo()
+: <a class="el" href="azx__gnu__sys__socket_8h.html#a04c7fc7dc2b21c85617d9f7a896e08d7">azx_gnu_sys_socket.h</a>
 </li>
 <li>azx_gnu_getgCID()
 : <a class="el" href="azx__gnu__sys__socket_8h.html#abd732c8acd3db56ad887706f27ca5425">azx_gnu_sys_socket.h</a>
@@ -613,8 +616,14 @@ $(document).ready(function(){initNavTree('globals_a.html','');});
 <li>azx_gnu_strndup()
 : <a class="el" href="azx__gnu__string_8h.html#a26dca330619f975f18b71e62b7e3ac8c">azx_gnu_string.h</a>
 </li>
+<li>azx_gnu_time()
+: <a class="el" href="azx__gnu__time_8h.html#ab68282a0ebc9708c3f162008d1b6a0f9">azx_gnu_time.h</a>
+</li>
 <li>azx_gnu_truncate()
 : <a class="el" href="azx__gnu__stdio_8h.html#adb8fdfcb8c8ca87a63653dcbc794a18a">azx_gnu_stdio.h</a>
+</li>
+<li>azx_gnu_vfprintf()
+: <a class="el" href="azx__gnu__stdio_8h.html#a36ca63769b890c5d342f2d5c2b8c7409">azx_gnu_stdio.h</a>
 </li>
 <li>azx_hex_dump()
 : <a class="el" href="azx__utils_8h.html#a079fc61e9774e7c7b178ddcc67617a0f">azx_utils.h</a>
@@ -673,6 +682,9 @@ $(document).ready(function(){initNavTree('globals_a.html','');});
 <li>AZX_HTTP_POST
 : <a class="el" href="group__http_conf.html#gga30623080daf9875d7ef4a53282de1ac0adad15d80cb1335235d262de42ecf6fa6">azx_https.h</a>
 </li>
+<li>azx_http_post_file()
+: <a class="el" href="group__http_usage.html#ga296106c2ccb99b6c3f37cefe8bd75b2b">azx_https.h</a>
+</li>
 <li>azx_http_setCB()
 : <a class="el" href="group__http_conf.html#ga0e2abd820dff5b4f020b1b70d797b249">azx_https.h</a>
 </li>
@@ -683,7 +695,7 @@ $(document).ready(function(){initNavTree('globals_a.html','');});
 : <a class="el" href="group__http_conf.html#gae45c5ce7ad62c080a02504578c721840">azx_https.h</a>
 </li>
 <li>AZX_HTTPS_USER_CB
-: <a class="el" href="group__http_conf.html#gaaad9f441f95bdedecbd30f8145df2585">azx_https.h</a>
+: <a class="el" href="group__http_conf.html#gad57846e79605499b70bd0562684f4948">azx_https.h</a>
 </li>
 <li>AZX_LFS_CONTEXT_TYPE_E
 : <a class="el" href="azx__lfs__utils_8h.html#a110109540a1594564983f0d0d5e1ea27">azx_lfs_utils.h</a>
@@ -766,8 +778,23 @@ $(document).ready(function(){initNavTree('globals_a.html','');});
 <li>AZX_LOG_CANNOT_OPEN_USB_CHANNEL
 : <a class="el" href="group__log_usage.html#ggabe77e5a2f7b57b5029c6f7cdfa7e3dd0aadebfaa08c22d4ad0729e98b50ce880c">azx_log.h</a>
 </li>
+<li>AZX_LOG_CRITICAL
+: <a class="el" href="group__log_usage.html#ga4cbebf6589190814b5ee9adb22bb1d44">azx_log.h</a>
+</li>
+<li>AZX_LOG_DEBUG
+: <a class="el" href="group__log_usage.html#gacd61f6160b4cd02c2ec2259b5bc94670">azx_log.h</a>
+</li>
 <li>azx_log_deinit()
 : <a class="el" href="azx__log_8h.html#a1cff830ca498f89db8a6ba0882441231">azx_log.h</a>
+</li>
+<li>azx_log_disableUart()
+: <a class="el" href="azx__log_8h.html#a1118287cc32aed65c4ca32cccae47ebf">azx_log.h</a>
+</li>
+<li>azx_log_enableUart()
+: <a class="el" href="azx__log_8h.html#a9660d2ae041136d9cb99db1d38792d39">azx_log.h</a>
+</li>
+<li>AZX_LOG_ERROR
+: <a class="el" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">azx_log.h</a>
 </li>
 <li>AZX_LOG_ERRORS_E
 : <a class="el" href="group__log_usage.html#gabe77e5a2f7b57b5029c6f7cdfa7e3dd0">azx_log.h</a>
@@ -781,11 +808,14 @@ $(document).ready(function(){initNavTree('globals_a.html','');});
 <li>AZX_LOG_HANDLE_E
 : <a class="el" href="group__log_conf.html#ga03b618927cb5d884386832ab76781760">azx_log.h</a>
 </li>
-<li>AZX_LOG_INIT
-: <a class="el" href="azx__log_8h.html#a4af7b5c67a5df4ffbcafe9a91a4677bc">azx_log.h</a>
+<li>AZX_LOG_INFO
+: <a class="el" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">azx_log.h</a>
 </li>
 <li>azx_log_init()
 : <a class="el" href="group__log_conf.html#ga08e797515ecc2b71223a72c77c6dc6af">azx_log.h</a>
+</li>
+<li>AZX_LOG_INIT
+: <a class="el" href="azx__log_8h.html#a4af7b5c67a5df4ffbcafe9a91a4677bc">azx_log.h</a>
 </li>
 <li>AZX_LOG_LEVEL_CRITICAL
 : <a class="el" href="group__log_conf.html#ggae9fa7be40e4fcae6093707def57f82a5a51671d346b1e7d44f8993fa9d2ca174c">azx_log.h</a>
@@ -835,11 +865,17 @@ $(document).ready(function(){initNavTree('globals_a.html','');});
 <li>AZX_LOG_TO_USB1
 : <a class="el" href="group__log_conf.html#gga03b618927cb5d884386832ab76781760ab87a0049b27ce615b28ea77f51118286">azx_log.h</a>
 </li>
+<li>AZX_LOG_TRACE
+: <a class="el" href="group__log_usage.html#gaa85ac7254570a307564019c5dfb98d83">azx_log.h</a>
+</li>
 <li>AZX_LOG_UNEXPECTED_CHANNEL
 : <a class="el" href="group__log_usage.html#ggabe77e5a2f7b57b5029c6f7cdfa7e3dd0a90e600d320bbca44c2c869025835b1c7">azx_log.h</a>
 </li>
 <li>AZX_LOG_USB_CABLE_UNPLUGGED
 : <a class="el" href="group__log_usage.html#ggabe77e5a2f7b57b5029c6f7cdfa7e3dd0ab2beedfe225418d618c1d2e12410b72b">azx_log.h</a>
+</li>
+<li>AZX_LOG_WARN
+: <a class="el" href="group__log_usage.html#ga47bb701aa779a05aa34ed01fcfbbdd54">azx_log.h</a>
 </li>
 <li>azx_pdu_convertZeroPaddedHexIntoByte()
 : <a class="el" href="group__pdu_enc_usage.html#ga43f49411b4f11d9b77abed8036346cca">azx_pduEnc.h</a>
@@ -852,6 +888,9 @@ $(document).ready(function(){initNavTree('globals_a.html','');});
 </li>
 <li>azx_pdu_encode()
 : <a class="el" href="group__pdu_enc_usage.html#gacb79107f730c3a648b4033429d3cc8d8">azx_pduEnc.h</a>
+</li>
+<li>azx_pdu_encode_generic()
+: <a class="el" href="group__pdu_enc_usage.html#gaccb4e2ccee1b643e47dc243c5351883a">azx_pduEnc.h</a>
 </li>
 <li>azx_pdu_s_utf8_to_ascii()
 : <a class="el" href="group__pdu_dec_usage.html#ga883238aa220185561f08b9112ec96bfd">azx_pduDec.h</a>
@@ -980,7 +1019,7 @@ $(document).ready(function(){initNavTree('globals_a.html','');});
 : <a class="el" href="group__task_usage.html#gaec2329e432960a7d210982ebc379cd0c">azx_tasks.h</a>
 </li>
 <li>azx_tasks_destroyTask()
-: <a class="el" href="group__task_usage.html#ga1feb12b83b0e76cca5471d8720082708">azx_tasks.h</a>
+: <a class="el" href="group__task_usage.html#gaf71b24171beeda54b60e32687c4c7aa7">azx_tasks.h</a>
 </li>
 <li>AZX_TASKS_ERR_E
 : <a class="el" href="group__task_usage.html#ga5b29dff3d5b477adbbf73a1515983c6b">azx_tasks.h</a>
@@ -992,13 +1031,22 @@ $(document).ready(function(){initNavTree('globals_a.html','');});
 : <a class="el" href="group__task_usage.html#gaadfe1b6031c35086447241b51b39bfb6">azx_tasks.h</a>
 </li>
 <li>azx_tasks_getEnqueuedCount()
-: <a class="el" href="azx__tasks_8h.html#afba61203db27eb36059b90f658d7bb9a">azx_tasks.h</a>
+: <a class="el" href="azx__tasks_8h.html#a6312ad7011b5126ffac56a83909d1692">azx_tasks.h</a>
+</li>
+<li>azx_tasks_getM2MBTaskHandleById()
+: <a class="el" href="azx__tasks_8h.html#a030d42f594b13992e632c6206b0e0be2">azx_tasks.h</a>
 </li>
 <li>AZX_TASKS_ID_NOT_DEFINED_ERR
 : <a class="el" href="group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6baff0009833effaf091c786391904bff10">azx_tasks.h</a>
 </li>
 <li>azx_tasks_init()
 : <a class="el" href="group__task_usage.html#ga1fddaf02d721c17e85a1dd9997d296e2">azx_tasks.h</a>
+</li>
+<li>azx_tasks_initWithComplCB()
+: <a class="el" href="group__task_usage.html#ga28939001d8dac98ac818c9537641c8c4">azx_tasks.h</a>
+</li>
+<li>AZX_TASKS_INTERNAL_ERR
+: <a class="el" href="group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6bae406edbd410c18d740e1bd5a43f738f4">azx_tasks.h</a>
 </li>
 <li>AZX_TASKS_INVALID_ID_ERR
 : <a class="el" href="group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6ba671695a5dacb80dfa6d27451e9fe146b">azx_tasks.h</a>
@@ -1048,6 +1096,9 @@ $(document).ready(function(){initNavTree('globals_a.html','');});
 <li>AZX_TASKS_OK
 : <a class="el" href="group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6baf0fd3cefaa03e18813132ae02b6fb26c">azx_tasks.h</a>
 </li>
+<li>azx_tasks_onTaskComplCB
+: <a class="el" href="group__task_usage.html#ga90d9b7cdb04ee33e160a47f4dbd61e31">azx_tasks.h</a>
+</li>
 <li>AZX_TASKS_PRIORITY_MAX
 : <a class="el" href="group__task_usage.html#ga3fe3fea325c9badf3a7cf5e2aea7012e">azx_tasks.h</a>
 </li>
@@ -1063,8 +1114,11 @@ $(document).ready(function(){initNavTree('globals_a.html','');});
 <li>AZX_TASKS_QUEUE_MSG_SIZE
 : <a class="el" href="group__task_usage.html#ga146f8901751b1510a2d8add0cfafb8d6">azx_tasks.h</a>
 </li>
+<li>azx_tasks_resumeTask()
+: <a class="el" href="azx__tasks_8h.html#afd65f2f5d1853491c2170813738ed603">azx_tasks.h</a>
+</li>
 <li>azx_tasks_sendMessageToTask()
-: <a class="el" href="group__task_usage.html#ga8bb45f0fffe4cd52bf53cd00b83a2ee2">azx_tasks.h</a>
+: <a class="el" href="group__task_usage.html#ga72f845282b145dc667207c99c99a384f">azx_tasks.h</a>
 </li>
 <li>AZX_TASKS_STACK_L
 : <a class="el" href="group__task_usage.html#gga036b9cf9c298d9d53b608bf3942e3fb3a55c48feee3f1357cd3d4f8a4a89e2837">azx_tasks.h</a>
@@ -1083,6 +1137,12 @@ $(document).ready(function(){initNavTree('globals_a.html','');});
 </li>
 <li>AZX_TASKS_STACK_XL
 : <a class="el" href="group__task_usage.html#gga036b9cf9c298d9d53b608bf3942e3fb3a23b2068ca2a946f91a92d87c14dd9998">azx_tasks.h</a>
+</li>
+<li>AZX_TASKS_STACK_XXL
+: <a class="el" href="group__task_usage.html#gga036b9cf9c298d9d53b608bf3942e3fb3a935490df232896369ca03eee1ff5ae0c">azx_tasks.h</a>
+</li>
+<li>azx_tasks_suspendTask()
+: <a class="el" href="azx__tasks_8h.html#a17f284ef1cd9b9688ff337be930910f4">azx_tasks.h</a>
 </li>
 <li>AZX_TASKS_TASK_NAME_SIZE
 : <a class="el" href="group__task_usage.html#gad435a24bea52cb07521128b0b84b4afd">azx_tasks.h</a>

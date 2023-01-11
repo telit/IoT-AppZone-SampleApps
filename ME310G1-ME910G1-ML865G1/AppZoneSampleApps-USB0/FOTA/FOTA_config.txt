@@ -1,0 +1,10 @@
+web.omnitel.it,#APN
+,#APN_USER
+,#APN_PASS
+3,#PDP_CTX
+ftp.telit.com,#FTP_ADDR
+21,#FTP_PORT
+guest0181,#FTP_USER
+g2hs3tx6,#FTP_PASS
+file/remote/path/delta.bin,#FILE_URI
+/ota_done,#SESSION_FILE

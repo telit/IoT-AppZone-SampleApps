@@ -2,10 +2,10 @@ var struct_a_z_x___h_t_t_p___h_e_a_d_e_r =
 [
     [ "accept_type", "struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#ac194fd4b0f404aae7584e9e0055a953e", null ],
     [ "auth_type", "struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#ac565c09c8ffb02b02a1b044edd2ca85d", null ],
-    [ "boundary", "struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#ad930e846064b3e7383764980fa9a792d", null ],
     [ "chunked", "struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#a74c6b4d4a88c248ced6d6e2d905d0d38", null ],
     [ "close", "struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#add388494f00515ad4ae46b94d0856b1f", null ],
     [ "content_length", "struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#aeeb62bb853b0d76ce1c8c3bb8bdc4cea", null ],
+    [ "content_range", "struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#a9687233503e8c210a5fa8c84b990fb27", null ],
     [ "content_type", "struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#abdd2a59f7fbec36c210f292979a15ba5", null ],
     [ "cookie", "struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#aea075e8551f0d14674cd1a57d78c4c5b", null ],
     [ "custom_fields", "struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#a332a7525e2394bebb227969c2d3f15b2", null ],

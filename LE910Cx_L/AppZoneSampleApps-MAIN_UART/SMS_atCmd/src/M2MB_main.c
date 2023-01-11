@@ -41,13 +41,12 @@
 
 #include "azx_log.h"
 #include "azx_utils.h"
+#include "azx_tasks.h"
 
 #include "app_cfg.h"
 
 #include "azx_pduEnc.h"
 #include "azx_pduDec.h"
-
-#include "azx_tasks.h"
 
 #include "callbacks.h"
 
@@ -74,7 +73,7 @@ M2MB_OS_SEM_HANDLE taskSemHandle = NULL;
 
 extern M2MB_SMS_STORAGE_E memory;
 extern const CHAR *storage[];
-INT8 smsParsingTaskID;
+INT32 smsParsingTaskID;
 
 const CHAR *cnfVal[]={"DISABLED","ENABLED"};
 
@@ -103,8 +102,6 @@ void M2MB_main( int argc, char **argv )
   M2MB_OS_RESULT_E  osRes;
 
   M2MB_RESULT_E     retVal;
-
-  //char PhoneNumber[32];
 
   M2MB_OS_EV_ATTR_HANDLE  evAttrHandle;
   M2MB_OS_SEM_ATTR_HANDLE semAttrHandle;
@@ -135,18 +132,6 @@ void M2MB_main( int argc, char **argv )
   }
 
 
-#if 0 //moved to msgSMSparse
-  pdu_provv = (UINT8*) m2mb_os_malloc(SMS_PDU_MAX_SIZE * sizeof (UINT8));
-  pdu = (UINT8*) m2mb_os_malloc(SMS_PDU_MAX_SIZE * sizeof (UINT8));
-
-  sprintf(PhoneNumber, SENDER_NUMBER); //remember to store the phone number in international format
-
-  memset(pdu_provv, 0x00, SMS_PDU_MAX_SIZE);
-  pdulen = azx_pdu_encode(PhoneNumber, (CHAR*) MESSAGE, pdu_provv, PDU_DCS_7);
-  
-  /* pdulen will be changed after the pdu is converted into a binary stream */
-  pdulen = azx_pdu_convertZeroPaddedHexIntoByte(pdu_provv, pdu, pdulen);
-#endif
 
   //Init SMS
   retVal = m2mb_sms_init(&h_sms_handle, Sms_Callback, NULL);
@@ -197,9 +182,9 @@ void M2MB_main( int argc, char **argv )
 
 /*
   M2MB_SMS_DISCARD         -> incoming SMS will be discarded
-  M2MB_SMS_STORE_AND_ACK   -> incoming SMS will be stored and ack managed by Modem -> transactionID = -1
-  M2MB_SMS_FORWARD_AND_ACK -> incoming SMS will be forwarded to app and ack managed by Modem -> transactionID = -1
-  M2MB_SMS_FORWARD_ONLY    -> incoming SMS will be forwarded to app and ack NOT managed by Modem
+  M2MB_SMS_STORE_AND_ACK   -> incoming SMS will be stored and ack managed by Modem -> transactionID = -1, the SMS message will be stored
+  M2MB_SMS_FORWARD_AND_ACK -> incoming SMS will be forwarded to app and ack managed by Modem -> transactionID = -1, the SMS message will not be stored
+  M2MB_SMS_FORWARD_ONLY    -> incoming SMS will be forwarded to app and ack NOT managed by Modem, the SMS message will not be stored
                              -> transactionID >= 0 to demand ack management to application logic.
 */
 

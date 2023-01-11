@@ -30,13 +30,17 @@
       "firmwares": [
         "25.20.xx8",
         "25.20.xx9",
-        "25.21.xx0"
+        "25.21.xx0",
+        "25.21.xx2"
       ]
     },
     "LE910Cx-X": {
       "firmwares": [
         "25.30.xx1",
-        "25.30.xx2"
+        "25.30.xx2",
+        "25.30.xx3",
+        "25.30.xx4",
+        "25.30.xx5"
       ]
     }
   },
@@ -72,6 +76,6 @@
   "requires": {
     "core/azx_log": "master",
     "core/azx_utils": "master",
-	"core/azx_tasks": "master"
+    "core/azx_tasks": "master"
   }
 }

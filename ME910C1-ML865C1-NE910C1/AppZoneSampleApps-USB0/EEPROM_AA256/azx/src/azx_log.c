@@ -482,6 +482,37 @@ AZX_LOG_LEVEL_E azx_log_getLevel(void)
   return AZX_LOG_LEVEL_NONE;
 }
 
+INT32 azx_log_disableUart(void)
+{
+  INT32 res = -1;
+  if(log_cfg.isInit)
+  {
+
+     if(log_cfg.ch_fd != -1 && (log_cfg.channel == AZX_LOG_TO_MAIN_UART || log_cfg.channel == AZX_LOG_TO_AUX_UART ))
+     {
+       res = m2mb_uart_ioctl(log_cfg.ch_fd, M2MB_UART_IOCTL_SET_POWER_STATE, FALSE);
+     }
+  }
+
+  return res;
+}
+
+
+INT32 azx_log_enableUart(void)
+{
+  INT32 res = -1;
+  if(log_cfg.isInit)
+  {
+
+    if(log_cfg.ch_fd != -1 && (log_cfg.channel == AZX_LOG_TO_MAIN_UART || log_cfg.channel == AZX_LOG_TO_AUX_UART ))
+     {
+       res = m2mb_uart_ioctl(log_cfg.ch_fd, M2MB_UART_IOCTL_SET_POWER_STATE, TRUE);
+     }
+  }
+
+  return res;
+}
+
 /*----------------------------------------------------------------------------*/
 /*!
   \brief Prints on the requested log channel (USB, UART, AUX)

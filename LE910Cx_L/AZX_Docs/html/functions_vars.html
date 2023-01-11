@@ -34,7 +34,7 @@
   <td id="projectlogo"><img alt="Logo" src="telit-logo.png"/></td>
   <td id="projectalign" style="padding-left: 2em;">
    <div id="projectname">AZX (AppZone eXtensions) documentation
-   &#160;<span id="projectnumber">1.1.15-CxL</span>
+   &#160;<span id="projectnumber">1.1.17-CxL</span>
    </div>
    <div id="projectbrief">A set of companion utilities that make AZ development easier</div>
   </td>
@@ -113,9 +113,6 @@ $(document).ready(function(){initNavTree('functions_vars.html','');});
 
 
 <h3><a id="index_b"></a>- b -</h3><ul>
-<li>boundary
-: <a class="el" href="struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#ad930e846064b3e7383764980fa9a792d">AZX_HTTP_HEADER</a>
-</li>
 <li>buf_cb
 : <a class="el" href="struct_a_z_x___f_t_p___b_u_f_f_e_r___t_a_g.html#a0c6529dc3a1ce4a043ed36546f1368e6">AZX_FTP_BUFFER_TAG</a>
 </li>
@@ -124,9 +121,6 @@ $(document).ready(function(){initNavTree('functions_vars.html','');});
 </li>
 <li>bufferSize
 : <a class="el" href="struct_a_z_x___f_t_p___b_u_f_f_e_r___t_a_g.html#acd91017fde668bbf8ef18c1e04a6eedd">AZX_FTP_BUFFER_TAG</a>
-</li>
-<li>buffInfo
-: <a class="el" href="struct_a_z_x___f_t_p___x_f_e_r___t_a_g.html#aaed620e5108866012b9ac12a857b6227">AZX_FTP_XFER_TAG</a>
 </li>
 <li>bytesXferred
 : <a class="el" href="struct_a_z_x___f_t_p___c_a_l_l_b_a_c_k___o_p_t_i_o_n_s___t_a_g.html#ae10ab56c3513d3eb14bbab3ae2f24da6">AZX_FTP_CALLBACK_OPTIONS_TAG</a>
@@ -144,12 +138,10 @@ $(document).ready(function(){initNavTree('functions_vars.html','');});
 <li>cbArg
 : <a class="el" href="struct_a_z_x___f_t_p___c_a_l_l_b_a_c_k___o_p_t_i_o_n_s___t_a_g.html#aa3d4809192b6215b324b8b644678018b">AZX_FTP_CALLBACK_OPTIONS_TAG</a>
 , <a class="el" href="struct_a_z_x___f_t_p___o_p_t_i_o_n_s___t_a_g.html#ac060b40c8c9b433ecbf20a2c06735649">AZX_FTP_OPTIONS_TAG</a>
+, <a class="el" href="structazx__http_callback_options.html#ac79c8b6ed8ce8c47de5bfb2b4260994c">azx_httpCallbackOptions</a>
 </li>
 <li>cbData
 : <a class="el" href="structazx__http_callback_options.html#ad467e1a167c72ecb0b3fb027d191583b">azx_httpCallbackOptions</a>
-</li>
-<li>cbEvtFlag
-: <a class="el" href="structazx__http_callback_options.html#a194817cf069ae7e296a2cacf6c908db1">azx_httpCallbackOptions</a>
 </li>
 <li>cbFunc
 : <a class="el" href="struct_a_z_x___f_t_p___c_a_l_l_b_a_c_k___o_p_t_i_o_n_s___t_a_g.html#af2abca18c447e35b02e54afc1655148c">AZX_FTP_CALLBACK_OPTIONS_TAG</a>
@@ -181,6 +173,9 @@ $(document).ready(function(){initNavTree('functions_vars.html','');});
 <li>content_length
 : <a class="el" href="struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#aeeb62bb853b0d76ce1c8c3bb8bdc4cea">AZX_HTTP_HEADER</a>
 </li>
+<li>content_range
+: <a class="el" href="struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#a9687233503e8c210a5fa8c84b990fb27">AZX_HTTP_HEADER</a>
+</li>
 <li>content_type
 : <a class="el" href="struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#abdd2a59f7fbec36c210f292979a15ba5">AZX_HTTP_HEADER</a>
 </li>
@@ -204,9 +199,6 @@ $(document).ready(function(){initNavTree('functions_vars.html','');});
 
 
 <h3><a id="index_f"></a>- f -</h3><ul>
-<li>fileInfo
-: <a class="el" href="struct_a_z_x___f_t_p___x_f_e_r___t_a_g.html#a56a3937348cbbaa14b988ff3d50d39da">AZX_FTP_XFER_TAG</a>
-</li>
 <li>fileSize
 : <a class="el" href="struct_a_z_x___f_t_p___f_i_l_e___i_n_f_o___t_a_g.html#a4be4fd757122b5abebcfbd59ed9ca1df">AZX_FTP_FILE_INFO_TAG</a>
 </li>
@@ -320,9 +312,6 @@ $(document).ready(function(){initNavTree('functions_vars.html','');});
 : <a class="el" href="struct_a_z_x___f_t_p___f_i_l_e___i_n_f_o___t_a_g.html#a07d7fc9fc39327e4a14f70792889934b">AZX_FTP_FILE_INFO_TAG</a>
 , <a class="el" href="struct_a_z_x___h_t_t_p___u_r_l.html#aaf259b6e879aeabb86c582d65e25dd68">AZX_HTTP_URL</a>
 </li>
-<li>payload
-: <a class="el" href="struct_a_z_x___f_t_p___x_f_e_r___t_a_g.html#abdafe0fe61a0c3a2de0b3de8bb795a92">AZX_FTP_XFER_TAG</a>
-</li>
 <li>port
 : <a class="el" href="struct_a_z_x___h_t_t_p___u_r_l.html#a8c4b4d7776d5fc2d3762ae9d7a34411a">AZX_HTTP_URL</a>
 </li>
@@ -364,7 +353,6 @@ $(document).ready(function(){initNavTree('functions_vars.html','');});
 <h3><a id="index_t"></a>- t -</h3><ul>
 <li>type
 : <a class="el" href="struct_a_z_x___c_j_s_o_n___t_a_g.html#ae125d3fd935e29ae9a71f99134f9f43e">AZX_CJSON_TAG</a>
-, <a class="el" href="struct_a_z_x___f_t_p___x_f_e_r___t_a_g.html#af641d98bcb03ff5ecad1d40e870bd7b5">AZX_FTP_XFER_TAG</a>
 , <a class="el" href="struct_a_z_x___l_f_s___c_o_n_t_e_x_t.html#a8809225d58c6b2c59835114fb625c045">AZX_LFS_CONTEXT</a>
 , <a class="el" href="struct_a_z_x___t_a_s_k_s___m_e_s_s_a_g_e___t.html#a9110a674136a92f2eea7927877398f0e">AZX_TASKS_MESSAGE_T</a>
 </li>

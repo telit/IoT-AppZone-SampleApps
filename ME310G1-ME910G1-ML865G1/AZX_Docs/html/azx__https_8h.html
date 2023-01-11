@@ -34,7 +34,7 @@
   <td id="projectlogo"><img alt="Logo" src="telit-logo.png"/></td>
   <td id="projectalign" style="padding-left: 2em;">
    <div id="projectname">AZX (AppZone eXtensions) documentation
-   &#160;<span id="projectnumber">1.1.15-CxL</span>
+   &#160;<span id="projectnumber">1.1.17-CxL</span>
    </div>
    <div id="projectbrief">A set of companion utilities that make AZ development easier</div>
   </td>
@@ -93,6 +93,7 @@ $(document).ready(function(){initNavTree('azx__https_8h.html','');});
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Data Structures</a> &#124;
+<a href="#define-members">Macros</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a>  </div>
@@ -128,6 +129,12 @@ Data Structures</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
+<tr class="memitem:a7aaabb76612f8a55daa900cae6faa2a2"><td class="memItemLeft" align="right" valign="top"><a id="a7aaabb76612f8a55daa900cae6faa2a2"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>AZX_HTTP_OK</b>&#160;&#160;&#160;200</td></tr>
+<tr class="separator:a7aaabb76612f8a55daa900cae6faa2a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03446e974b457891ff3e6df6e90c7a53"><td class="memItemLeft" align="right" valign="top"><a id="a03446e974b457891ff3e6df6e90c7a53"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>AZX_HTTP_CLIENT_CLOSED_REQUEST</b>&#160;&#160;&#160;499</td></tr>
+<tr class="separator:a03446e974b457891ff3e6df6e90c7a53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Header defines</div></td></tr>
 <tr><td colspan="2"><div class="groupText"><p>These defines are related to HTTP header info </p>
 </div></td></tr>
@@ -148,9 +155,9 @@ typedef enum <a class="el" href="group__http_conf.html#ga30623080daf9875d7ef4a53
 typedef enum <a class="el" href="group__http_conf.html#ga91dcf453b00607b13fb25aa4fb9996d8">_HTTP_AUTH_SCHEMA</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_conf.html#gafb5cf49a7418b6b306a91aca97342df3">AZX_HTTP_AUTH_SCHEMA</a></td></tr>
 <tr class="memdesc:gafb5cf49a7418b6b306a91aca97342df3"><td class="mdescLeft">&#160;</td><td class="mdescRight">HTTP Supported authentication methods. <br /></td></tr>
 <tr class="separator:gafb5cf49a7418b6b306a91aca97342df3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaaad9f441f95bdedecbd30f8145df2585"><td class="memItemLeft" align="right" valign="top">typedef INT32(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_conf.html#gaaad9f441f95bdedecbd30f8145df2585">AZX_HTTPS_USER_CB</a>) (void *, UINT32, INT8 *)</td></tr>
-<tr class="memdesc:gaaad9f441f95bdedecbd30f8145df2585"><td class="mdescLeft">&#160;</td><td class="mdescRight">User callback prototype.  <a href="group__http_conf.html#gaaad9f441f95bdedecbd30f8145df2585">More...</a><br /></td></tr>
-<tr class="separator:gaaad9f441f95bdedecbd30f8145df2585"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad57846e79605499b70bd0562684f4948"><td class="memItemLeft" align="right" valign="top">typedef INT32(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_conf.html#gad57846e79605499b70bd0562684f4948">AZX_HTTPS_USER_CB</a>) (void *, UINT32, void *)</td></tr>
+<tr class="memdesc:gad57846e79605499b70bd0562684f4948"><td class="mdescLeft">&#160;</td><td class="mdescRight">User callback prototype.  <a href="group__http_conf.html#gad57846e79605499b70bd0562684f4948">More...</a><br /></td></tr>
+<tr class="separator:gad57846e79605499b70bd0562684f4948"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga3cb8375a9c231c36d41bcc6390f26890"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_conf.html#ga3cb8375a9c231c36d41bcc6390f26890">user_base64_encode</a>) (UINT8 *out, const UINT8 *in, int inlen)</td></tr>
 <tr class="memdesc:ga3cb8375a9c231c36d41bcc6390f26890"><td class="mdescLeft">&#160;</td><td class="mdescRight">User base 64 encoder function prototype.  <a href="group__http_conf.html#ga3cb8375a9c231c36d41bcc6390f26890">More...</a><br /></td></tr>
 <tr class="separator:ga3cb8375a9c231c36d41bcc6390f26890"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -197,6 +204,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ga468c6015a239492a88c0c530fe73d973"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_usage.html#ga468c6015a239492a88c0c530fe73d973">azx_http_post</a> (<a class="el" href="struct_a_z_x___h_t_t_p___i_n_f_o.html">AZX_HTTP_INFO</a> *hi, char *url)</td></tr>
 <tr class="memdesc:ga468c6015a239492a88c0c530fe73d973"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run a HTTP POST request.  <a href="group__http_usage.html#ga468c6015a239492a88c0c530fe73d973">More...</a><br /></td></tr>
 <tr class="separator:ga468c6015a239492a88c0c530fe73d973"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga296106c2ccb99b6c3f37cefe8bd75b2b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_usage.html#ga296106c2ccb99b6c3f37cefe8bd75b2b">azx_http_post_file</a> (<a class="el" href="struct_a_z_x___h_t_t_p___i_n_f_o.html">AZX_HTTP_INFO</a> *hi, char *url, char *filepath)</td></tr>
+<tr class="memdesc:ga296106c2ccb99b6c3f37cefe8bd75b2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run a HTTP POST request for a local file.  <a href="group__http_usage.html#ga296106c2ccb99b6c3f37cefe8bd75b2b">More...</a><br /></td></tr>
+<tr class="separator:ga296106c2ccb99b6c3f37cefe8bd75b2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga0e2abd820dff5b4f020b1b70d797b249"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_conf.html#ga0e2abd820dff5b4f020b1b70d797b249">azx_http_setCB</a> (<a class="el" href="struct_a_z_x___h_t_t_p___i_n_f_o.html">AZX_HTTP_INFO</a> *hi, <a class="el" href="structazx__http_callback_options.html">azx_httpCallbackOptions</a> http_cb)</td></tr>
 <tr class="memdesc:ga0e2abd820dff5b4f020b1b70d797b249"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets user callback.  <a href="group__http_conf.html#ga0e2abd820dff5b4f020b1b70d797b249">More...</a><br /></td></tr>
 <tr class="separator:ga0e2abd820dff5b4f020b1b70d797b249"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -206,11 +216,11 @@ Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>HTTPs client. </p>
-<dl class="section version"><dt>Version</dt><dd>1.1.1 </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>2.0.3 </dd></dl>
 <dl class="section user"><dt>Dependencies</dt><dd>azx_string_utils gnu azx_base64</dd></dl>
 <p>Porting of HTTPs client from <a href="https://github.com/HISONA/https_client">https://github.com/HISONA/https_client</a></p>
 <dl class="section note"><dt>Note</dt><dd>Dependencies: m2mb_types.h m2mb_socket.h m2mb_ssl.h</dd></dl>
-<dl class="section author"><dt>Author</dt><dd>Luca Boi Fabio Pintus (AZX conversion)</dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Luca Boi Fabio Pintus (AZX conversion and improvements)</dd></dl>
 <dl class="section date"><dt>Date</dt><dd>11/09/2020 </dd></dl>
 </div></div><!-- contents -->
 </div><!-- doc-content -->

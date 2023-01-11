@@ -1,4 +1,4 @@
-/*Copyright (C) 2020 Telit Communications S.p.A. Italy - All Rights Reserved.*/
+/*Copyright (C) 2022 Telit Communications S.p.A. Italy - All Rights Reserved.*/
 /*    See LICENSE file in the project root for full license information.     */
 
 /**
@@ -18,6 +18,7 @@
 
  @author Moreno Floris
  @author Norman Argiolas
+ @author Fabio Pintus
 
  @date
  11/02/2020
@@ -25,6 +26,9 @@
 
 #ifndef HDR_AZX_GNU_STDIO_H_
 #define HDR_AZX_GNU_STDIO_H_
+
+#include <stdarg.h>
+#include "m2mb_fs_stdio.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -70,9 +74,6 @@ typedef __gid_t gid_t;
 
 /* Global defines ================================================================================*/
 
-//XXX: Warning! Magic numbers ahead //TODO add doxygen description
-#define stdout (void*)(0x88888888)
-#define stderr (void*)(0x99999999)
 
 #ifndef APP_NAME /*Emulator*/
 #define	fopen		m2mb_fs_fopen
@@ -83,18 +84,55 @@ typedef __gid_t gid_t;
 #define	fgets		m2mb_fs_fgets
 #define	fflush		m2mb_fs_fflush
 #undef fileno
-#define fileno		m2mb_fs_fileno
-#define unlink		m2mb_fs_remove
+#define fileno	m2mb_fs_fileno
+
+#undef unlink
+#define unlink  m2mb_fs_remove
+
+
 #define FILE		M2MB_FILE_T
 
-#define m2m_fputc 	m2mb_fs_fputc
-#define m2m_fgetc 	m2mb_fs_fgetc
+
+#undef clearerr
+#define clearerr	azx_gnu_clearerr
+
+//XXX: Warning! Magic numbers ahead
+#define stdout (FILE*)(0x88888888)
+#define stderr (FILE*)(0x99999999)
+#define stdin (FILE*)(NULL)
+
+#undef fputc
+#define fputc 	m2mb_fs_fputc
+
+#undef fgetc
+#define fgetc 	m2mb_fs_fgetc
 
 #define fseek		m2mb_fs_fseek
+#define fseeko		m2mb_fs_fseek
+
 #define rewind(a)	(void)fseek(a, 0L, SEEK_SET)
 
+#define ftell		m2mb_fs_ftell
+#define ftello		m2mb_fs_ftell
+
+#define fdopen		azx_gnu_fdopen
 #define	fprintf		azx_gnu_fprintf
+#define	vfprintf	azx_gnu_vfprintf
 #define truncate	azx_gnu_truncate
+#undef feof
+#define feof azx_gnu_feof
+
+
+#undef printf
+#define printf(a...) fprintf(stdout, a)
+
+#undef vprintf
+#define vprintf(f, a) vfprintf(stdout, f, a)
+
+#define ungetc azx_gnu_ungetc
+
+#undef ferror
+#define ferror azx_gnu_ferror
 #else  //emulator
 
 #define fopen(x,y) (M2MB_FILE_T *)0xAAAAAAAA
@@ -124,10 +162,10 @@ typedef __gid_t gid_t;
 /**
 
  @brief
- Prints a autput
+ Prints data in a file stream.
 
  @details
- Prints on the defined stream (UART or USB channel)
+ Prints on the defined stream (If stderr or stdout are passed, will print on defined UART or USB channel )
 
  @param [in] f: void* pointer
  @param [in] format: const char* pointer
@@ -150,6 +188,34 @@ typedef __gid_t gid_t;
 /*-----------------------------------------------------------------------------------------------*/
 int azx_gnu_fprintf(void *f, const char *format, ...);
 
+/**
+
+ @brief
+ Prints data in a file stream. Requires a variadic list
+
+ @details
+ Prints on the defined stream (If stderr or stdout are passed, will print on defined UART or USB channel )
+
+ @param [in] f: void* pointer
+ @param [in] format: const char* pointer
+ @param [in] ap: variadic list retrieved with va_list()
+
+ @return
+ 0 on SUCCESS
+ -1 on FAILURE
+
+ @note
+ <Notes>
+
+ @b
+ Example
+ @code
+ <C code example>
+
+ @endcode
+
+ */
+int azx_gnu_vfprintf(void *f, const char *format, va_list ap);
 /*-----------------------------------------------------------------------------------------------*/
 /**
  @brief
@@ -178,6 +244,15 @@ int azx_gnu_fprintf(void *f, const char *format, ...);
 /*-----------------------------------------------------------------------------------------------*/
 int azx_gnu_truncate(const char* path, off_t length);
 
+/*TODO*/
+int azx_gnu_ungetc(void *f, int c);
+
+int azx_gnu_ferror(void* f);
+int azx_gnu_feof(void *f);
+
+FILE* azx_gnu_fdopen(int, const char *);
+
+void azx_gnu_clearerr(FILE* );
 #ifdef __cplusplus
 }
 #endif

@@ -34,7 +34,7 @@
   <td id="projectlogo"><img alt="Logo" src="telit-logo.png"/></td>
   <td id="projectalign" style="padding-left: 2em;">
    <div id="projectname">AZX (AppZone eXtensions) documentation
-   &#160;<span id="projectnumber">1.1.15-CxL</span>
+   &#160;<span id="projectnumber">1.1.17-CxL</span>
    </div>
    <div id="projectbrief">A set of companion utilities that make AZ development easier</div>
   </td>
@@ -114,148 +114,155 @@ $(document).ready(function(){initNavTree('azx_https_example_8c-example.html','')
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;INT8 cbEvt = 0;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keywordtype">int</span> CB_COUNT = 0;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;INT32 DATA_CB(<span class="keywordtype">void</span> *buffer, UINT32 size, INT8* flag)</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;{</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;INT32 g_cbArg = 0;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;INT32 DATA_CB(<span class="keywordtype">void</span> *buffer, UINT32 size, <span class="keywordtype">void</span> *cbArg)</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;{</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;  INT32 CB_COUNT = *(INT32*)cbArg;</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">  /**** Stop http donwload on a specific user event</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment">  CB_COUNT++;</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment">  if(CB_COUNT &gt;= 3)</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment">  {</span></div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="comment">    AZX_LOG_INFO(&quot;\r\nCB COUNT LIMIT REACHED\r\n&quot;);</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="comment">   *flag = 1;</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment">    return 0;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="comment">   </span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment">    return 1;</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment">  }</span></div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;  strcat((<span class="keywordtype">char</span>*) buffer,<span class="stringliteral">&quot;\0&quot;</span>);</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;  MYLOG(<span class="stringliteral">&quot;%s&quot;</span>,buffer);</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;  <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;}</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">static</span> <span class="keywordtype">int</span> http_debug_hk(<a class="code" href="group__http_conf.html#gab1e72fc6db9cd975e6ec9e222b131f67">AZX_HTTP_LOG_HOOK_LEVELS_E</a> level, <span class="keyword">const</span> <span class="keywordtype">char</span> *<span class="keyword">function</span>, <span class="keyword">const</span> <span class="keywordtype">char</span> *file, <span class="keywordtype">int</span> line, <span class="keyword">const</span> <span class="keywordtype">char</span> *fmt, ...)</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;{</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;  <span class="keywordtype">char</span> buf[512];</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;  <span class="keywordtype">int</span> bufSize = <span class="keyword">sizeof</span>(buf);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;  va_list arg;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;  INT32   offset = 0;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;  UINT32  now = (UINT32) ( m2mb_os_getSysTicks() * m2mb_os_getSysTickDuration_ms() );</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;  memset(buf,0,bufSize);</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;  <span class="keywordflow">switch</span>(level)</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;  {</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;  <span class="keywordflow">case</span> <a name="a0"></a><a class="code" href="group__http_conf.html#ggab1e72fc6db9cd975e6ec9e222b131f67a02f29bd2c3216bcf68db3795666a4bf6">AZX_HTTP_LOG_ERROR</a>:</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    offset = sprintf(buf, <span class="stringliteral">&quot;%5u.%03u %6s %32s:%-4d -  &quot;</span>,</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        now / 1000, now % 1000,</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="stringliteral">&quot;ERR - &quot;</span>,</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keyword">function</span>,</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        line</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    );</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;  <span class="keywordflow">case</span> <a name="a1"></a><a class="code" href="group__http_conf.html#ggab1e72fc6db9cd975e6ec9e222b131f67a1263ebd012612156ea9b291a2b64f793">AZX_HTTP_LOG_INFO</a>:</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    offset = 0;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;  <span class="keywordflow">case</span> <a name="a2"></a><a class="code" href="group__http_conf.html#ggab1e72fc6db9cd975e6ec9e222b131f67a97401ceafc13b3c7a046946fcabf1d42">AZX_HTTP_LOG_DEBUG</a>:</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    offset = sprintf(buf, <span class="stringliteral">&quot;%5u.%03u %6s %32s:%-4d - &quot;</span>,</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        now / 1000, now % 1000,</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="stringliteral">&quot;DBG - &quot;</span>,</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keyword">function</span>,</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        line</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    );</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;  }</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;  va_start(arg, fmt);</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;  vsnprintf(buf + offset, bufSize-offset, fmt, arg);</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;  va_end(arg);</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;  <span class="keywordflow">return</span> MYLOG(buf);</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;}</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="keywordtype">void</span> M2MB_main( <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> **argv )</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;{</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;  <span class="keywordtype">int</span> ret;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;  <a name="_a3"></a><a class="code" href="struct_a_z_x___h_t_t_p___o_p_t_i_o_n_s.html">AZX_HTTP_OPTIONS</a> opts;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;  <a name="_a4"></a><a class="code" href="struct_a_z_x___h_t_t_p___i_n_f_o.html">AZX_HTTP_INFO</a> hi;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;  <a name="_a5"></a><a class="code" href="struct_a_z_x___h_t_t_p___s_s_l.html">AZX_HTTP_SSL</a>  tls;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;  <a name="_a6"></a><a class="code" href="structazx__http_callback_options.html">azx_httpCallbackOptions</a> cbOpt;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;  <span class="comment">/*Initialize PDP context*/</span></div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;  opts.<a name="a7"></a><a class="code" href="struct_a_z_x___h_t_t_p___o_p_t_i_o_n_s.html#a1a061e1b6445742cfdbfbc69b129eeec">logFunc</a> = http_debug_hk;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;  opts.<a name="a8"></a><a class="code" href="struct_a_z_x___h_t_t_p___o_p_t_i_o_n_s.html#a781168041c2fd139fefa9c31de6d9c86">loglevel</a> = <a class="code" href="group__http_conf.html#ggab1e72fc6db9cd975e6ec9e222b131f67a1263ebd012612156ea9b291a2b64f793">AZX_HTTP_LOG_INFO</a>;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;  opts.<a name="a9"></a><a class="code" href="struct_a_z_x___h_t_t_p___o_p_t_i_o_n_s.html#af5d583d83b87d5336dca07024feedd50">cid</a> = _CID;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;  <a name="a10"></a><a class="code" href="group__http_conf.html#gae9912e7808e5d0674afa85487ec85387">azx_http_initialize</a>(&amp;opts);</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;  <span class="keywordflow">if</span>(buffer != NULL) <span class="comment">/*received data*/</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;  {</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    strcat((<span class="keywordtype">char</span>*) buffer,<span class="stringliteral">&quot;\0&quot;</span>);</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    MYLOG(<span class="stringliteral">&quot;%s&quot;</span>,buffer);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;  }</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;  <span class="keywordflow">else</span> <span class="comment">/*transmitted data*/</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;  {</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="comment">/*size will contain the amount of transmitted data*/</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;  }</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;  <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;}</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keyword">static</span> <span class="keywordtype">int</span> http_debug_hk(<a class="code" href="group__http_conf.html#gab1e72fc6db9cd975e6ec9e222b131f67">AZX_HTTP_LOG_HOOK_LEVELS_E</a> level, <span class="keyword">const</span> <span class="keywordtype">char</span> *<span class="keyword">function</span>, <span class="keyword">const</span> <span class="keywordtype">char</span> *file, <span class="keywordtype">int</span> line, <span class="keyword">const</span> <span class="keywordtype">char</span> *fmt, ...)</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;{</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;  <span class="keywordtype">char</span> buf[512];</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;  <span class="keywordtype">int</span> bufSize = <span class="keyword">sizeof</span>(buf);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;  va_list arg;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;  INT32   offset = 0;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;  UINT32  now = (UINT32) ( m2mb_os_getSysTicks() * m2mb_os_getSysTickDuration_ms() );</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;  memset(buf,0,bufSize);</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;  <span class="keywordflow">switch</span>(level)</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;  {</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;  <span class="keywordflow">case</span> <a name="a0"></a><a class="code" href="group__http_conf.html#ggab1e72fc6db9cd975e6ec9e222b131f67a02f29bd2c3216bcf68db3795666a4bf6">AZX_HTTP_LOG_ERROR</a>:</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    offset = sprintf(buf, <span class="stringliteral">&quot;%5u.%03u %6s %32s:%-4d -  &quot;</span>,</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        now / 1000, now % 1000,</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="stringliteral">&quot;ERR - &quot;</span>,</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keyword">function</span>,</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        line</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    );</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;  <span class="keywordflow">case</span> <a name="a1"></a><a class="code" href="group__http_conf.html#ggab1e72fc6db9cd975e6ec9e222b131f67a1263ebd012612156ea9b291a2b64f793">AZX_HTTP_LOG_INFO</a>:</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    offset = 0;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;  <span class="keywordflow">case</span> <a name="a2"></a><a class="code" href="group__http_conf.html#ggab1e72fc6db9cd975e6ec9e222b131f67a97401ceafc13b3c7a046946fcabf1d42">AZX_HTTP_LOG_DEBUG</a>:</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    offset = sprintf(buf, <span class="stringliteral">&quot;%5u.%03u %6s %32s:%-4d - &quot;</span>,</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        now / 1000, now % 1000,</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="stringliteral">&quot;DBG - &quot;</span>,</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keyword">function</span>,</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        line</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    );</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;  }</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;  va_start(arg, fmt);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;  vsnprintf(buf + offset, bufSize-offset, fmt, arg);</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;  va_end(arg);</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;  <span class="keywordflow">return</span> MYLOG(buf);</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;}</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="keywordtype">void</span> M2MB_main( <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> **argv )</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;{</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;  <span class="keywordtype">int</span> ret;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;  <a name="_a3"></a><a class="code" href="struct_a_z_x___h_t_t_p___o_p_t_i_o_n_s.html">AZX_HTTP_OPTIONS</a> opts;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;  <a name="_a4"></a><a class="code" href="struct_a_z_x___h_t_t_p___i_n_f_o.html">AZX_HTTP_INFO</a> hi;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;  <a name="_a5"></a><a class="code" href="struct_a_z_x___h_t_t_p___s_s_l.html">AZX_HTTP_SSL</a>  tls;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;  <a name="_a6"></a><a class="code" href="structazx__http_callback_options.html">azx_httpCallbackOptions</a> cbOpt;</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;  cbOpt.<a name="a11"></a><a class="code" href="structazx__http_callback_options.html#ae999de10c7ec41abc95949d9e3b90102">user_cb_bytes_size</a> = 1500;  <span class="comment">//call data callback every 1500 bytes</span></div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;  cbOpt.<a name="a12"></a><a class="code" href="structazx__http_callback_options.html#ad1867ec1a9d182c41114cd4cab164b65">cbFunc</a> = DATA_CB;</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;  cbOpt.<a name="a13"></a><a class="code" href="structazx__http_callback_options.html#ad467e1a167c72ecb0b3fb027d191583b">cbData</a> = m2mb_os_malloc(cbOpt.<a class="code" href="structazx__http_callback_options.html#ae999de10c7ec41abc95949d9e3b90102">user_cb_bytes_size</a> + 1); <span class="comment">//one more element for \0</span></div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;  cbOpt.<a name="a14"></a><a class="code" href="structazx__http_callback_options.html#a194817cf069ae7e296a2cacf6c908db1">cbEvtFlag</a> = &amp;cbEvt;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;  <a name="a15"></a><a class="code" href="group__http_conf.html#ga0e2abd820dff5b4f020b1b70d797b249">azx_http_setCB</a>(&amp;hi,cbOpt);</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;  <span class="comment">/*Initialize PDP context*/</span></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;  opts.<a name="a7"></a><a class="code" href="struct_a_z_x___h_t_t_p___o_p_t_i_o_n_s.html#a1a061e1b6445742cfdbfbc69b129eeec">logFunc</a> = http_debug_hk;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;  opts.<a name="a8"></a><a class="code" href="struct_a_z_x___h_t_t_p___o_p_t_i_o_n_s.html#a781168041c2fd139fefa9c31de6d9c86">loglevel</a> = <a class="code" href="group__http_conf.html#ggab1e72fc6db9cd975e6ec9e222b131f67a1263ebd012612156ea9b291a2b64f793">AZX_HTTP_LOG_INFO</a>;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;  opts.<a name="a9"></a><a class="code" href="struct_a_z_x___h_t_t_p___o_p_t_i_o_n_s.html#af5d583d83b87d5336dca07024feedd50">cid</a> = _CID;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;  <a name="a10"></a><a class="code" href="group__http_conf.html#gae9912e7808e5d0674afa85487ec85387">azx_http_initialize</a>(&amp;opts);</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;  <span class="keywordflow">if</span>(-1 == (ret = <a name="a16"></a><a class="code" href="group__http_conf.html#gae40751f148308705cd22ee69282afbe8">azx_http_SSLInit</a>(&amp;tls,M2MB_SSL_NO_AUTH)))</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;  {</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    MYLOG(<span class="stringliteral">&quot;SSL init error \r\n&quot;</span>);</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;  }</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;  cbOpt.<a name="a11"></a><a class="code" href="structazx__http_callback_options.html#ae999de10c7ec41abc95949d9e3b90102">user_cb_bytes_size</a> = 1500;  <span class="comment">//call data callback every 1500 bytes</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;  cbOpt.<a name="a12"></a><a class="code" href="structazx__http_callback_options.html#ad1867ec1a9d182c41114cd4cab164b65">cbFunc</a> = DATA_CB;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;  cbOpt.<a name="a13"></a><a class="code" href="structazx__http_callback_options.html#ad467e1a167c72ecb0b3fb027d191583b">cbData</a> = m2mb_os_malloc(cbOpt.<a class="code" href="structazx__http_callback_options.html#ae999de10c7ec41abc95949d9e3b90102">user_cb_bytes_size</a> + 1); <span class="comment">//one more element for \0</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;  cbOpt.<a name="a14"></a><a class="code" href="structazx__http_callback_options.html#ac79c8b6ed8ce8c47de5bfb2b4260994c">cbArg</a> = &amp;g_cbArg;</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;  hi.<a name="a17"></a>tls = tls;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;  <a name="a15"></a><a class="code" href="group__http_conf.html#ga0e2abd820dff5b4f020b1b70d797b249">azx_http_setCB</a>(&amp;hi,cbOpt);</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="comment">  /******* GET *****/</span></div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;  MYLOG(<span class="stringliteral">&quot;GET request \r\n&quot;</span>);</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;  <span class="comment">//ret = azx_http_get(&amp;hi,(char*) &quot;https://www.google.com&quot;);                             //HTTPS &amp; CHUNKED</span></div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;  <span class="comment">//ret = azx_http_get(&amp;hi,&quot;https://modules.telit.com&quot;, response, sizeof(response));    // HTTPS + SSL server auth</span></div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;  ret = <a name="a18"></a><a class="code" href="group__http_usage.html#ga5af72b34cc3de7e623f3c9240f6ec0d0">azx_http_get</a>(&amp;hi,(<span class="keywordtype">char</span>*) <span class="stringliteral">&quot;http://linux-ip.net&quot;</span>);                              <span class="comment">// HTTP only</span></div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;  <span class="comment">//hi.request.auth_type = azx_AuthSchemaBasic;</span></div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;  <span class="comment">//ret = azx_http_get(&amp;hi,&quot;http://guest:guest@jigsaw.w3.org/HTTP/Basic/&quot;);               //BASIC AUTH</span></div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="comment">  /******* HEAD *****/</span></div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;  <span class="comment">//MYLOG(&quot;HEAD request \r\n&quot;);</span></div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;  <span class="comment">//ret = azx_http_head(&amp;hi,(char*) &quot;https://www.google.com&quot;);</span></div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;  <span class="comment">/* RESET</span></div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="comment">        memset(&amp;hi, 0, sizeof(HTTP_INFO));</span></div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="comment">        memset(response, 0, sizeof(response));</span></div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="comment">      hi.tls = tls;</span></div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="comment">  /******* POST ****</span></div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="comment">        MYLOG(&quot;POST request \r\n&quot;);</span></div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="comment">        char* data = &quot;This is expected to be sent&quot;;</span></div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="comment">        hi.request.post_data = (char *)m2mb_os_malloc(sizeof(char)* (strlen(data) + 1));</span></div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="comment">        memset(hi.request.post_data, 0, sizeof(sizeof(char)* (strlen(data) + 1)));</span></div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="comment">        strcpy(hi.request.post_data,data);</span></div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="comment">        ret = azx_http_post(&amp;hi,(char *)&quot;http://postman-echo.com:80/post&quot;);</span></div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;}</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;  <span class="keywordflow">if</span>(-1 == (ret = <a name="a16"></a><a class="code" href="group__http_conf.html#gae40751f148308705cd22ee69282afbe8">azx_http_SSLInit</a>(&amp;tls,M2MB_SSL_NO_AUTH)))</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;  {</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    MYLOG(<span class="stringliteral">&quot;SSL init error \r\n&quot;</span>);</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;  }</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;  hi.<a name="a17"></a>tls = tls;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="comment">  /******* GET *****/</span></div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;  MYLOG(<span class="stringliteral">&quot;GET request \r\n&quot;</span>);</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;  <span class="comment">//ret = azx_http_get(&amp;hi,(char*) &quot;https://www.google.com&quot;);                             //HTTPS &amp; CHUNKED</span></div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;  <span class="comment">//ret = azx_http_get(&amp;hi,&quot;https://modules.telit.com&quot;, response, sizeof(response));    // HTTPS + SSL server auth</span></div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;  ret = <a name="a18"></a><a class="code" href="group__http_usage.html#ga5af72b34cc3de7e623f3c9240f6ec0d0">azx_http_get</a>(&amp;hi,(<span class="keywordtype">char</span>*) <span class="stringliteral">&quot;http://linux-ip.net&quot;</span>);                              <span class="comment">// HTTP only</span></div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;  <span class="comment">//hi.request.auth_type = azx_AuthSchemaBasic;</span></div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;  <span class="comment">//ret = azx_http_get(&amp;hi,&quot;http://guest:guest@jigsaw.w3.org/HTTP/Basic/&quot;);               //BASIC AUTH</span></div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="comment">  /******* HEAD *****/</span></div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;  <span class="comment">//MYLOG(&quot;HEAD request \r\n&quot;);</span></div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;  <span class="comment">//ret = azx_http_head(&amp;hi,(char*) &quot;https://www.google.com&quot;);</span></div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;  <span class="comment">/* RESET</span></div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="comment">        memset(&amp;hi, 0, sizeof(HTTP_INFO));</span></div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="comment">        memset(response, 0, sizeof(response));</span></div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="comment">      hi.tls = tls;</span></div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="comment">   */</span></div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160; </div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="comment">  /******* POST ****</span></div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="comment">        MYLOG(&quot;POST request \r\n&quot;);</span></div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<span class="comment">        char* data = &quot;This is expected to be sent&quot;;</span></div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="comment">        hi.request.post_data = (char *)m2mb_os_malloc(sizeof(char)* (strlen(data) + 1));</span></div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;<span class="comment">        memset(hi.request.post_data, 0, sizeof(sizeof(char)* (strlen(data) + 1)));</span></div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="comment">        strcpy(hi.request.post_data,data);</span></div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="comment">        ret = azx_http_post(&amp;hi,(char *)&quot;http://postman-echo.com:80/post&quot;);</span></div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;<span class="comment">   */</span></div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;}</div>
 </div><!-- fragment --> </div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="agroup__http_conf_html_ga0e2abd820dff5b4f020b1b70d797b249"><div class="ttname"><a href="group__http_conf.html#ga0e2abd820dff5b4f020b1b70d797b249">azx_http_setCB</a></div><div class="ttdeci">void azx_http_setCB(AZX_HTTP_INFO *hi, azx_httpCallbackOptions http_cb)</div><div class="ttdoc">Sets user callback.</div></div>
-<div class="ttc" id="astruct_a_z_x___h_t_t_p___o_p_t_i_o_n_s_html_a1a061e1b6445742cfdbfbc69b129eeec"><div class="ttname"><a href="struct_a_z_x___h_t_t_p___o_p_t_i_o_n_s.html#a1a061e1b6445742cfdbfbc69b129eeec">AZX_HTTP_OPTIONS::logFunc</a></div><div class="ttdeci">azx_httpDebugHook logFunc</div><div class="ttdef"><b>Definition:</b> azx_https.h:397</div></div>
-<div class="ttc" id="astruct_a_z_x___h_t_t_p___i_n_f_o_html"><div class="ttname"><a href="struct_a_z_x___h_t_t_p___i_n_f_o.html">AZX_HTTP_INFO</a></div><div class="ttdoc">The HTTP operation structure.</div><div class="ttdef"><b>Definition:</b> azx_https.h:258</div></div>
+<div class="ttc" id="astructazx__http_callback_options_html_ac79c8b6ed8ce8c47de5bfb2b4260994c"><div class="ttname"><a href="structazx__http_callback_options.html#ac79c8b6ed8ce8c47de5bfb2b4260994c">azx_httpCallbackOptions::cbArg</a></div><div class="ttdeci">void * cbArg</div><div class="ttdef"><b>Definition:</b> azx_https.h:242</div></div>
+<div class="ttc" id="astruct_a_z_x___h_t_t_p___o_p_t_i_o_n_s_html_a1a061e1b6445742cfdbfbc69b129eeec"><div class="ttname"><a href="struct_a_z_x___h_t_t_p___o_p_t_i_o_n_s.html#a1a061e1b6445742cfdbfbc69b129eeec">AZX_HTTP_OPTIONS::logFunc</a></div><div class="ttdeci">azx_httpDebugHook logFunc</div><div class="ttdef"><b>Definition:</b> azx_https.h:398</div></div>
+<div class="ttc" id="astruct_a_z_x___h_t_t_p___i_n_f_o_html"><div class="ttname"><a href="struct_a_z_x___h_t_t_p___i_n_f_o.html">AZX_HTTP_INFO</a></div><div class="ttdoc">The HTTP operation structure.</div><div class="ttdef"><b>Definition:</b> azx_https.h:259</div></div>
 <div class="ttc" id="agroup__http_conf_html_gae40751f148308705cd22ee69282afbe8"><div class="ttname"><a href="group__http_conf.html#gae40751f148308705cd22ee69282afbe8">azx_http_SSLInit</a></div><div class="ttdeci">int azx_http_SSLInit(AZX_HTTP_SSL *sslInfo)</div><div class="ttdoc">Initialize SSL data.</div></div>
-<div class="ttc" id="agroup__http_conf_html_ggab1e72fc6db9cd975e6ec9e222b131f67a97401ceafc13b3c7a046946fcabf1d42"><div class="ttname"><a href="group__http_conf.html#ggab1e72fc6db9cd975e6ec9e222b131f67a97401ceafc13b3c7a046946fcabf1d42">AZX_HTTP_LOG_DEBUG</a></div><div class="ttdef"><b>Definition:</b> azx_https.h:296</div></div>
-<div class="ttc" id="agroup__http_conf_html_ggab1e72fc6db9cd975e6ec9e222b131f67a02f29bd2c3216bcf68db3795666a4bf6"><div class="ttname"><a href="group__http_conf.html#ggab1e72fc6db9cd975e6ec9e222b131f67a02f29bd2c3216bcf68db3795666a4bf6">AZX_HTTP_LOG_ERROR</a></div><div class="ttdef"><b>Definition:</b> azx_https.h:294</div></div>
-<div class="ttc" id="astructazx__http_callback_options_html"><div class="ttname"><a href="structazx__http_callback_options.html">azx_httpCallbackOptions</a></div><div class="ttdoc">The HTTP callback options structure.</div><div class="ttdef"><b>Definition:</b> azx_https.h:234</div></div>
+<div class="ttc" id="agroup__http_conf_html_ggab1e72fc6db9cd975e6ec9e222b131f67a97401ceafc13b3c7a046946fcabf1d42"><div class="ttname"><a href="group__http_conf.html#ggab1e72fc6db9cd975e6ec9e222b131f67a97401ceafc13b3c7a046946fcabf1d42">AZX_HTTP_LOG_DEBUG</a></div><div class="ttdef"><b>Definition:</b> azx_https.h:297</div></div>
+<div class="ttc" id="agroup__http_conf_html_ggab1e72fc6db9cd975e6ec9e222b131f67a02f29bd2c3216bcf68db3795666a4bf6"><div class="ttname"><a href="group__http_conf.html#ggab1e72fc6db9cd975e6ec9e222b131f67a02f29bd2c3216bcf68db3795666a4bf6">AZX_HTTP_LOG_ERROR</a></div><div class="ttdef"><b>Definition:</b> azx_https.h:295</div></div>
+<div class="ttc" id="astructazx__http_callback_options_html"><div class="ttname"><a href="structazx__http_callback_options.html">azx_httpCallbackOptions</a></div><div class="ttdoc">The HTTP callback options structure.</div><div class="ttdef"><b>Definition:</b> azx_https.h:235</div></div>
 <div class="ttc" id="agroup__http_conf_html_gae9912e7808e5d0674afa85487ec85387"><div class="ttname"><a href="group__http_conf.html#gae9912e7808e5d0674afa85487ec85387">azx_http_initialize</a></div><div class="ttdeci">void azx_http_initialize(AZX_HTTP_OPTIONS *opts)</div><div class="ttdoc">Initialize HTTPs client parameters.</div></div>
-<div class="ttc" id="agroup__http_conf_html_ggab1e72fc6db9cd975e6ec9e222b131f67a1263ebd012612156ea9b291a2b64f793"><div class="ttname"><a href="group__http_conf.html#ggab1e72fc6db9cd975e6ec9e222b131f67a1263ebd012612156ea9b291a2b64f793">AZX_HTTP_LOG_INFO</a></div><div class="ttdef"><b>Definition:</b> azx_https.h:295</div></div>
-<div class="ttc" id="astructazx__http_callback_options_html_a194817cf069ae7e296a2cacf6c908db1"><div class="ttname"><a href="structazx__http_callback_options.html#a194817cf069ae7e296a2cacf6c908db1">azx_httpCallbackOptions::cbEvtFlag</a></div><div class="ttdeci">INT8 * cbEvtFlag</div><div class="ttdef"><b>Definition:</b> azx_https.h:241</div></div>
-<div class="ttc" id="astructazx__http_callback_options_html_ad467e1a167c72ecb0b3fb027d191583b"><div class="ttname"><a href="structazx__http_callback_options.html#ad467e1a167c72ecb0b3fb027d191583b">azx_httpCallbackOptions::cbData</a></div><div class="ttdeci">void * cbData</div><div class="ttdef"><b>Definition:</b> azx_https.h:239</div></div>
+<div class="ttc" id="agroup__http_conf_html_ggab1e72fc6db9cd975e6ec9e222b131f67a1263ebd012612156ea9b291a2b64f793"><div class="ttname"><a href="group__http_conf.html#ggab1e72fc6db9cd975e6ec9e222b131f67a1263ebd012612156ea9b291a2b64f793">AZX_HTTP_LOG_INFO</a></div><div class="ttdef"><b>Definition:</b> azx_https.h:296</div></div>
+<div class="ttc" id="astructazx__http_callback_options_html_ad467e1a167c72ecb0b3fb027d191583b"><div class="ttname"><a href="structazx__http_callback_options.html#ad467e1a167c72ecb0b3fb027d191583b">azx_httpCallbackOptions::cbData</a></div><div class="ttdeci">void * cbData</div><div class="ttdef"><b>Definition:</b> azx_https.h:240</div></div>
 <div class="ttc" id="aazx__https_8h_html"><div class="ttname"><a href="azx__https_8h.html">azx_https.h</a></div><div class="ttdoc">HTTPs client.</div></div>
-<div class="ttc" id="agroup__http_conf_html_gab1e72fc6db9cd975e6ec9e222b131f67"><div class="ttname"><a href="group__http_conf.html#gab1e72fc6db9cd975e6ec9e222b131f67">AZX_HTTP_LOG_HOOK_LEVELS_E</a></div><div class="ttdeci">AZX_HTTP_LOG_HOOK_LEVELS_E</div><div class="ttdoc">HTTP Log global level.</div><div class="ttdef"><b>Definition:</b> azx_https.h:291</div></div>
-<div class="ttc" id="astruct_a_z_x___h_t_t_p___o_p_t_i_o_n_s_html"><div class="ttname"><a href="struct_a_z_x___h_t_t_p___o_p_t_i_o_n_s.html">AZX_HTTP_OPTIONS</a></div><div class="ttdef"><b>Definition:</b> azx_https.h:393</div></div>
-<div class="ttc" id="astructazx__http_callback_options_html_ae999de10c7ec41abc95949d9e3b90102"><div class="ttname"><a href="structazx__http_callback_options.html#ae999de10c7ec41abc95949d9e3b90102">azx_httpCallbackOptions::user_cb_bytes_size</a></div><div class="ttdeci">UINT32 user_cb_bytes_size</div><div class="ttdef"><b>Definition:</b> azx_https.h:237</div></div>
-<div class="ttc" id="astruct_a_z_x___h_t_t_p___o_p_t_i_o_n_s_html_af5d583d83b87d5336dca07024feedd50"><div class="ttname"><a href="struct_a_z_x___h_t_t_p___o_p_t_i_o_n_s.html#af5d583d83b87d5336dca07024feedd50">AZX_HTTP_OPTIONS::cid</a></div><div class="ttdeci">unsigned char cid</div><div class="ttdef"><b>Definition:</b> azx_https.h:395</div></div>
+<div class="ttc" id="agroup__http_conf_html_gab1e72fc6db9cd975e6ec9e222b131f67"><div class="ttname"><a href="group__http_conf.html#gab1e72fc6db9cd975e6ec9e222b131f67">AZX_HTTP_LOG_HOOK_LEVELS_E</a></div><div class="ttdeci">AZX_HTTP_LOG_HOOK_LEVELS_E</div><div class="ttdoc">HTTP Log global level.</div><div class="ttdef"><b>Definition:</b> azx_https.h:292</div></div>
+<div class="ttc" id="astruct_a_z_x___h_t_t_p___o_p_t_i_o_n_s_html"><div class="ttname"><a href="struct_a_z_x___h_t_t_p___o_p_t_i_o_n_s.html">AZX_HTTP_OPTIONS</a></div><div class="ttdef"><b>Definition:</b> azx_https.h:394</div></div>
+<div class="ttc" id="astructazx__http_callback_options_html_ae999de10c7ec41abc95949d9e3b90102"><div class="ttname"><a href="structazx__http_callback_options.html#ae999de10c7ec41abc95949d9e3b90102">azx_httpCallbackOptions::user_cb_bytes_size</a></div><div class="ttdeci">UINT32 user_cb_bytes_size</div><div class="ttdef"><b>Definition:</b> azx_https.h:238</div></div>
+<div class="ttc" id="astruct_a_z_x___h_t_t_p___o_p_t_i_o_n_s_html_af5d583d83b87d5336dca07024feedd50"><div class="ttname"><a href="struct_a_z_x___h_t_t_p___o_p_t_i_o_n_s.html#af5d583d83b87d5336dca07024feedd50">AZX_HTTP_OPTIONS::cid</a></div><div class="ttdeci">unsigned char cid</div><div class="ttdef"><b>Definition:</b> azx_https.h:396</div></div>
 <div class="ttc" id="agroup__http_usage_html_ga5af72b34cc3de7e623f3c9240f6ec0d0"><div class="ttname"><a href="group__http_usage.html#ga5af72b34cc3de7e623f3c9240f6ec0d0">azx_http_get</a></div><div class="ttdeci">int azx_http_get(AZX_HTTP_INFO *hi, char *url)</div><div class="ttdoc">Run a HTTP GET request.</div></div>
-<div class="ttc" id="astruct_a_z_x___h_t_t_p___o_p_t_i_o_n_s_html_a781168041c2fd139fefa9c31de6d9c86"><div class="ttname"><a href="struct_a_z_x___h_t_t_p___o_p_t_i_o_n_s.html#a781168041c2fd139fefa9c31de6d9c86">AZX_HTTP_OPTIONS::loglevel</a></div><div class="ttdeci">AZX_HTTP_LOG_HOOK_LEVELS_E loglevel</div><div class="ttdef"><b>Definition:</b> azx_https.h:396</div></div>
-<div class="ttc" id="astruct_a_z_x___h_t_t_p___s_s_l_html"><div class="ttname"><a href="struct_a_z_x___h_t_t_p___s_s_l.html">AZX_HTTP_SSL</a></div><div class="ttdoc">HTTP SSL structure.</div><div class="ttdef"><b>Definition:</b> azx_https.h:132</div></div>
-<div class="ttc" id="astructazx__http_callback_options_html_ad1867ec1a9d182c41114cd4cab164b65"><div class="ttname"><a href="structazx__http_callback_options.html#ad1867ec1a9d182c41114cd4cab164b65">azx_httpCallbackOptions::cbFunc</a></div><div class="ttdeci">AZX_HTTPS_USER_CB cbFunc</div><div class="ttdef"><b>Definition:</b> azx_https.h:242</div></div>
+<div class="ttc" id="astruct_a_z_x___h_t_t_p___o_p_t_i_o_n_s_html_a781168041c2fd139fefa9c31de6d9c86"><div class="ttname"><a href="struct_a_z_x___h_t_t_p___o_p_t_i_o_n_s.html#a781168041c2fd139fefa9c31de6d9c86">AZX_HTTP_OPTIONS::loglevel</a></div><div class="ttdeci">AZX_HTTP_LOG_HOOK_LEVELS_E loglevel</div><div class="ttdef"><b>Definition:</b> azx_https.h:397</div></div>
+<div class="ttc" id="astruct_a_z_x___h_t_t_p___s_s_l_html"><div class="ttname"><a href="struct_a_z_x___h_t_t_p___s_s_l.html">AZX_HTTP_SSL</a></div><div class="ttdoc">HTTP SSL structure.</div><div class="ttdef"><b>Definition:</b> azx_https.h:133</div></div>
+<div class="ttc" id="astructazx__http_callback_options_html_ad1867ec1a9d182c41114cd4cab164b65"><div class="ttname"><a href="structazx__http_callback_options.html#ad1867ec1a9d182c41114cd4cab164b65">azx_httpCallbackOptions::cbFunc</a></div><div class="ttdeci">AZX_HTTPS_USER_CB cbFunc</div><div class="ttdef"><b>Definition:</b> azx_https.h:243</div></div>
 <!-- HTML footer for doxygen 1.8.15-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

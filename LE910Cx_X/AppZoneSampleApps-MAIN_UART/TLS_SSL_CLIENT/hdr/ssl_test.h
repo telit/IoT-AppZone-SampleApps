@@ -33,17 +33,17 @@
 
 /* Global typedefs ==============================================================================*/
 typedef enum {
-	INIT=0,
-	WAIT_FOR_REGISTRATION,
-	REGISTERED,
-	PDP_ACTIVATION,
-	SOCKET_CREATE,
-	SOCKET_CONNECT,
-	SSL_SECURE_SOCKET,     // SECURE_SOCKET
-	SSL_CONNECT,           // SSL_CONNECT
-	SSL_SEND_RECV,         // SSL_ENCODE_SEND, SSL_DECODE
-	SSL_DISCONNECT,
-	APPLICATION_EXIT
+  INIT=0,
+  WAIT_FOR_REGISTRATION,
+  REGISTERED,
+  PDP_ACTIVATION,
+  SOCKET_CREATE,
+  SOCKET_CONNECT,
+  SSL_SECURE_SOCKET,     // SECURE_SOCKET
+  SSL_CONNECT,           // SSL_CONNECT
+  SSL_SEND_RECV,         // SSL_ENCODE_SEND, SSL_DECODE
+  SSL_DISCONNECT,
+  APPLICATION_EXIT
 } APP_STATES;
 
 /* Global functions =============================================================================*/

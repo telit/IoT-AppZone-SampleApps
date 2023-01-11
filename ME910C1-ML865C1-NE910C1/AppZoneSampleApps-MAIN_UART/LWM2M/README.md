@@ -75,7 +75,7 @@ Depending on the Mobiler Network Operator and Access Technology, the APN might b
 
 **LWM2M resources demo** device profile must be imported to have a real-time update of resources values on the LWM2M browser. 
 
-To do so, import the file `lwm2m_resources_demo.json` on section `Developer` > `Device profiles` of OneEdge IoT portal:
+To do so, import the file `json/lwm2m_resources_demo.json` (provided with the sample files) on section `Developer` > `Device profiles` of OneEdge IoT portal:
 
 ![](../../pictures/samples/lwm2m_device_profile_bordered.png)
 
@@ -105,7 +105,7 @@ Copy the xml file content and paste it in the new Object form
 
 
 
-Also, the application requires the XML file `/xml/object_32010.xml` (provided with the sample files) to be stored in module's `/XML/` folder. 
+Also, the application requires the XML file `xml/object_32010.xml` (provided with the sample files) to be stored in module's `/XML/` folder. 
 It can be done with 
 
 `AT#M2MWRITE=/XML/object_32010.xml,<size_in_bytes>`
@@ -124,6 +124,46 @@ The file is successfully loaded on the module
 
 ![](../../pictures/samples/lwm2m_xml_7_done_bordered.png)
 
+#### Onboard the device
+
+**Get the Telit ID**
+
+To retrieve the Telit ID data, issue `AT#TID` to get the Telit ID. The command response will be similar to
+
+\#TID: **xxxxxxxxxxxxxxxxxxxxxxxxxxx**,1
+OK
+
+
+Take note of the Telit ID highlighted in **bold** above (or copy it on a text editor): this ID it will be needed for the onboarding process.
+
+**Create a new Thing**
+
+From the OneEdge portal, on **"Things"** section, click **"New Thing"** button in the top right corner.
+
+![](../../pictures/samples/lwm2m_new_thing_bordered.png)
+
+In the Create a new thing dialog, select "Telit Module"
+
+![](../../pictures/samples/lwm2m_telit_module_bordered.png)
+
+A dialog appears: select “Default” thing definition
+
+![](../../pictures/samples/lwm2m_fota_ack_default_thing_bordered.png)
+
+In the following screen, provide the Telit ID as “Identifier”
+Click on “Find” and make sure that model, firmware and the other details are properly
+populated.
+
+Click on lwm2m tab and set the device profile previously imported as shown in the screenshot below
+
+![](../../pictures/samples/lwm2m_demo_device_profile_bordered.png)
+
+Click **"Add"** to complete the new thing creation procedure.
+
+**If the Thing already exists, its device profile can be changed by following the steps shown in the picture below**
+
+![](../../pictures/samples/lwm2m_change_device_profile_bordered.png)
+
 
 #### Application execution example
 
@@ -139,7 +179,8 @@ The file is successfully loaded on the module
 ![](../../pictures/samples/lwm2m_2_7_bordered.png)
 
 
-After the Demo completes the initialization, it is possible to access the object resources from the Portal Object Browser
+After the Demo completes the initialization, it is possible to access the object resources from the section Things: 
+select your device, then "LwM2M" tab of OneEdge IoT portal:
 
 ![](../../pictures/samples/lwm2m_portal_object_browser_bordered.png)
 

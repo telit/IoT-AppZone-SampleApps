@@ -1,4 +1,4 @@
-/*Copyright (C) 2020 Telit Communications S.p.A. Italy - All Rights Reserved.*/
+/*Copyright (C) 2022 Telit Communications S.p.A. Italy - All Rights Reserved.*/
 /*    See LICENSE file in the project root for full license information.     */
 
 /**
@@ -23,18 +23,27 @@
 #ifndef HDR_AZX_GNU_UNISTD_H_
 #define HDR_AZX_GNU_UNISTD_H_
 
+/* Include files ================================================================================*/
 #ifdef __cplusplus
 extern "C"
 {
 #endif
-
-/* Include files ================================================================================*/
 #ifndef _ARMABI
+#ifndef M2M_M2MB_FS_STDIO_H
 #include <unistd.h>
 #endif
+#endif
+
+
+#undef S_ISUID
+#undef S_ISGID
+#undef S_ISVTX
+#include <sys/types.h>
 
 #include "m2mb_types.h"
+#include "m2mb_os_api.h"
 #include "m2mb_fs_posix.h"
+
 
 /* Global defines ================================================================================*/
 
@@ -45,11 +54,16 @@ extern "C"
 #undef chown
 #define chown azx_gnu_chown
 
+#ifndef M2M_M2MB_FS_STDIO_H
 #undef unlink
 #define unlink m2mb_fs_unlink
+#endif
 
 #undef lseek
 #define lseek m2mb_fs_lseek
+
+#undef sleep
+#define sleep azx_gnu_sleep
 
 /* Function prototypes ====================================================================*/
 
@@ -76,6 +90,8 @@ extern "C"
 */
 /*-----------------------------------------------------------------------------------------------*/
 int azx_gnu_chown(const char *__path, uid_t __owner, gid_t __group);
+
+unsigned azx_gnu_sleep(unsigned int seconds);
 
 #ifdef __cplusplus
 }

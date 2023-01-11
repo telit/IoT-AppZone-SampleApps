@@ -23,7 +23,7 @@
 /*===========================================================================*/
 /**
  * @file azx_ftp.h
- * @version 1.0.4
+ * @version 1.1.0
  * @dependencies
  *
  * @note
@@ -549,7 +549,7 @@ typedef enum
 
 */
 /*-----------------------------------------------------------------------------------------------*/
-typedef struct AZX_FTP_XFER_TAG
+typedef struct __attribute__((packed, aligned(4))) AZX_FTP_XFER_TAG
 {
 	AZX_FTP_XFER_E type;                     /**<The type of the transfer mode*/
   union

@@ -1,0 +1,6 @@
+web.omnitel.it,#APN
+,#APN_USER
+,#APN_PASS
+3,#PDP_CTX
+modules.telit.com,#SERVER
+10510,#SERVER_PORT

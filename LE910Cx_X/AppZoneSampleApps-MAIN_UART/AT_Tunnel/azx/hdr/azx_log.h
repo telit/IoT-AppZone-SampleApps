@@ -5,7 +5,7 @@
 #define HDR_AZX_LOG_H_
 /**
  * @file azx_log.h
- * @version 1.0.9
+ * @version 1.0.11
  * @dependencies 
  * @author Fabio Pintus
  * @author Ioannis Demetriou
@@ -210,6 +210,27 @@ void azx_log_setLevel(AZX_LOG_LEVEL_E level);
  */
 AZX_LOG_LEVEL_E azx_log_getLevel(void);
 
+
+/**
+ * @brief Puts the UART used for logs in power OFF mode
+ *
+ *
+ * @return 0 in case of success, -1 otherwise
+ *
+ * @see azx_log_init()
+ */
+INT32 azx_log_disableUart(void);
+
+/**
+ * @brief Puts the UART used for logs in power ON mode
+ *
+ *
+ * @return 0 in case of success, -1 otherwise
+ *
+ * @see azx_log_init()
+ */
+INT32 azx_log_enableUart(void);
+
 /**
  * @brief Gets the logging component to output to a file.
  *
@@ -254,7 +275,7 @@ void azx_log_flush_to_file(void);
  * If disabled, these messages will be printed using the internal
  * m2mb_trace.h API.
  */
-#ifdef AZX_LOG_ENABLE
+#ifndef AZX_LOG_DISABLE
 
 /** @cond DEV */
 #if AZX_LOG_ENABLE_COLOURS
@@ -306,7 +327,7 @@ void azx_log_flush_to_file(void);
 /** @} */
 /** @} */
 
-#else /* !AZX_LOG_ENABLE */
+#else /* AZX_LOG_DISABLE */
 
 #include "m2mb_types.h"
 #include "m2mb_trace.h"
@@ -326,6 +347,6 @@ void azx_log_flush_to_file(void);
 #define AZX_LOG_DEBUG(a...)    m2mb_trace_file_line_printf(__FILE__, __LINE__, M2MB_TC_M2M_USER, M2MB_TL_DEBUG, (CHAR*)a)
 #define AZX_LOG_TRACE(a...)
 
-#endif /* AZX_LOG_ENABLE */
+#endif /* AZX_LOG_DISABLE */
 /** @} */
 #endif /* HDR_AZX_LOG_H_ */

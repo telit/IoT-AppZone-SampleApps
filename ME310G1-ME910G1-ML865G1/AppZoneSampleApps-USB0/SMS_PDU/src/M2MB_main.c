@@ -9,12 +9,12 @@
     The file contains the main user entry point of Appzone
 
   @details
-  
+
   @description
     Sample application showcasing how to create and decode PDUs to be used with m2mb_sms_* API set. A SIM card and antenna must be present. Debug prints on USB0
 
-  @version 
-    1.0.5
+  @version
+    1.0.7
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -39,25 +39,18 @@
 
 #include "azx_log.h"
 #include "azx_utils.h"
+#include "azx_tasks.h"
 
 #include "app_cfg.h"
-
 
 #include "azx_pduEnc.h"
 #include "azx_pduDec.h"
 
 #include "callbacks.h"
 
-
+#include "read_parameters.h"
 
 /* Local defines ================================================================================*/
-
-
-
-#define SENDER_NUMBER "+391234567890"   //remember to store the phone number in international format
-
-#define MESSAGE "How are you?"
-
 
 /* Local typedefs ===============================================================================*/
 
@@ -77,6 +70,7 @@ extern M2MB_SMS_STORAGE_E memory;
 /* Local function prototypes ====================================================================*/
 
 /* Static functions =============================================================================*/
+
 
 /* Global functions =============================================================================*/
 
@@ -100,13 +94,23 @@ void M2MB_main( int argc, char **argv )
 
   char PhoneNumber[32];
 
+  INT32 smsDelTaskID;
+
   M2MB_OS_EV_ATTR_HANDLE  evAttrHandle;
 
   azx_sleep_ms(2000);
 
+  azx_tasks_init();  //Init tasks wrap subsystem
+
   AZX_LOG_INIT();
   AZX_LOG_INFO("Starting SMS PDU demo app. This is v%s built on %s %s.\r\n",
       VERSION, __DATE__, __TIME__);
+
+  AZX_LOG_DEBUG("INIT\r\n");
+
+  configureParameters(); /*set default values first*/
+  readConfigFromFile(); /*try to read configuration from file (if present)*/
+
 
   /* Init events handler */
   osRes  = m2mb_os_ev_setAttrItem( &evAttrHandle, CMDS_ARGS(M2MB_OS_EV_SEL_CMD_CREATE_ATTR, NULL, M2MB_OS_EV_SEL_CMD_NAME, "sms_ev"));
@@ -123,14 +127,18 @@ void M2MB_main( int argc, char **argv )
     AZX_LOG_DEBUG("m2mb_os_ev_init success\r\n");
   }
 
+
+
   pdu_provv = (UINT8*) m2mb_os_malloc(SMS_PDU_MAX_SIZE * sizeof (UINT8));
   pdu = (UINT8*) m2mb_os_malloc(SMS_PDU_MAX_SIZE * sizeof (UINT8));
 
-  sprintf(PhoneNumber, SENDER_NUMBER); //remember to store the phone number in international format
+  sprintf(PhoneNumber, gSENDER_NUMBER); //remember to store the phone number in international format
 
   memset(pdu_provv, 0x00, SMS_PDU_MAX_SIZE);
-  pdulen = azx_pdu_encode(PhoneNumber, (CHAR*) MESSAGE, pdu_provv, PDU_DCS_7);
-  
+
+  pdulen = azx_pdu_encode_generic(PDU_TYPE_INTERNATIONAL, PhoneNumber, (CHAR*) gMESSAGE, pdu_provv, PDU_DCS_7);
+  //pdulen = azx_pdu_encode(PhoneNumber, (CHAR*) gMESSAGE, pdu_provv, PDU_DCS_7);
+
   /* pdulen will be changed after the pdu is converted into a binary stream */
   pdulen = azx_pdu_convertZeroPaddedHexIntoByte(pdu_provv, pdu, pdulen);
 
@@ -143,6 +151,16 @@ void M2MB_main( int argc, char **argv )
   {
     AZX_LOG_ERROR("m2mb_sms_init()failed\r\n");
     return;
+  }
+
+  smsDelTaskID = azx_tasks_createTask((char*) "SMSDelTask", AZX_TASKS_STACK_S, 10, AZX_TASKS_MBOX_S, sms_delTaskCB);
+  if(-1 == smsDelTaskID)
+  {
+    AZX_LOG_ERROR("Cannot create sms delete task!!\r\n");
+  }
+  else
+  {
+    azx_tasks_sendMessageToTask(smsDelTaskID, (INT32) h_sms_handle,0,0);
   }
 
   retVal = m2mb_sms_enable_ind(h_sms_handle, M2MB_SMS_INCOMING_IND, 1);
@@ -179,9 +197,9 @@ void M2MB_main( int argc, char **argv )
 
 /*
   M2MB_SMS_DISCARD         -> incoming SMS will be discarded
-  M2MB_SMS_STORE_AND_ACK   -> incoming SMS will be stored and ack managed by Modem -> transactionID = -1
-  M2MB_SMS_FORWARD_AND_ACK -> incoming SMS will be forwarded to app and ack managed by Modem -> transactionID = -1
-  M2MB_SMS_FORWARD_ONLY    -> incoming SMS will be forwarded to app and ack NOT managed by Modem
+  M2MB_SMS_STORE_AND_ACK   -> incoming SMS will be stored and ack managed by Modem -> transactionID = -1, the SMS message will be stored
+  M2MB_SMS_FORWARD_AND_ACK -> incoming SMS will be forwarded to app and ack managed by Modem -> transactionID = -1, the SMS message will not be stored
+  M2MB_SMS_FORWARD_ONLY    -> incoming SMS will be forwarded to app and ack NOT managed by Modem, the SMS message will not be stored
                              -> transactionID >= 0 to demand ack management to application logic.
 */
 
@@ -215,7 +233,7 @@ void M2MB_main( int argc, char **argv )
     AZX_LOG_ERROR( "Set route for M2MB_SMS_CLASS_NONE setting failed!\r\n");
   }
 
-  AZX_LOG_INFO("\r\nSending message <%s>...\r\n", MESSAGE);
+  AZX_LOG_INFO("\r\nSending message <%s>...\r\n", gMESSAGE);
   retVal = m2mb_sms_send(h_sms_handle, pdulen, pdu);
   if (retVal == M2MB_RESULT_SUCCESS)
   {
@@ -246,7 +264,7 @@ void M2MB_main( int argc, char **argv )
 
 
 #ifdef LE910CXL
-  /* On Linux based LE910CX Linux, the end fo M2MB_main causes the return of the application. 
+  /* On Linux based LE910CX Linux, the end fo M2MB_main causes the return of the application.
   Add a loop to allow reception of messages*/
   while(1)
   {

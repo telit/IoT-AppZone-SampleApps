@@ -34,7 +34,7 @@
   <td id="projectlogo"><img alt="Logo" src="telit-logo.png"/></td>
   <td id="projectalign" style="padding-left: 2em;">
    <div id="projectname">AZX (AppZone eXtensions) documentation
-   &#160;<span id="projectnumber">1.1.15-CxL</span>
+   &#160;<span id="projectnumber">1.1.17-CxL</span>
    </div>
    <div id="projectbrief">A set of companion utilities that make AZ development easier</div>
   </td>
@@ -113,9 +113,14 @@ $(document).ready(function(){initNavTree('azx__pdu_enc_8h_source.html','');});
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="keywordtype">int</span> <a class="code" href="group__pdu_enc_usage.html#gacb79107f730c3a648b4033429d3cc8d8">azx_pdu_encode</a>(CHAR *number, CHAR *str, UINT8 *pdu, INT32 dcs);</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* HDR_PDU_PDU_ENC_H_ */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;INT32 <a class="code" href="group__pdu_enc_usage.html#gaccb4e2ccee1b643e47dc243c5351883a">azx_pdu_encode_generic</a>(AZX_SMS_ADDR_NUM_TYPE_E type, CHAR *number, CHAR *str, UINT8 *pdu, INT32 dcs);</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* HDR_PDU_PDU_ENC_H_ */</span><span class="preprocessor"></span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="agroup__pdu_enc_usage_html_gaccb4e2ccee1b643e47dc243c5351883a"><div class="ttname"><a href="group__pdu_enc_usage.html#gaccb4e2ccee1b643e47dc243c5351883a">azx_pdu_encode_generic</a></div><div class="ttdeci">INT32 azx_pdu_encode_generic(AZX_SMS_ADDR_NUM_TYPE_E type, CHAR *number, CHAR *str, UINT8 *pdu, INT32 dcs)</div><div class="ttdoc">Encode a PDU from the input parameters, allowing to select the number address type.</div></div>
 <div class="ttc" id="agroup__pdu_enc_usage_html_ga43f49411b4f11d9b77abed8036346cca"><div class="ttname"><a href="group__pdu_enc_usage.html#ga43f49411b4f11d9b77abed8036346cca">azx_pdu_convertZeroPaddedHexIntoByte</a></div><div class="ttdeci">INT32 azx_pdu_convertZeroPaddedHexIntoByte(UINT8 *dataset, UINT8 *bytearray, INT32 len)</div><div class="ttdoc">Converts an encoded dataset (created with PDUEncode()) into a binary bytearray.</div></div>
 <div class="ttc" id="agroup__pdu_enc_usage_html_gacb79107f730c3a648b4033429d3cc8d8"><div class="ttname"><a href="group__pdu_enc_usage.html#gacb79107f730c3a648b4033429d3cc8d8">azx_pdu_encode</a></div><div class="ttdeci">int azx_pdu_encode(CHAR *number, CHAR *str, UINT8 *pdu, INT32 dcs)</div><div class="ttdoc">Encode a PDU from the input parameters.</div></div>
 <!-- HTML footer for doxygen 1.8.15-->

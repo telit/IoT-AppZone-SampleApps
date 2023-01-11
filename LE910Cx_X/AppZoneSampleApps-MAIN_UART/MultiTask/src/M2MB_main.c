@@ -47,7 +47,7 @@
 /* Local statics ================================================================================*/
 static M2MB_OS_SEM_HANDLE taskSemHandle = NULL;
 
-static INT8 taskID1, taskID2, taskID3;
+static INT32 taskID1, taskID2, taskID3;
 
 /* Local function prototypes ====================================================================*/
 INT32 azx_msgTask1(INT32 type, INT32 param1, INT32 param2)

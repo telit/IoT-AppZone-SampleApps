@@ -34,7 +34,7 @@
   <td id="projectlogo"><img alt="Logo" src="telit-logo.png"/></td>
   <td id="projectalign" style="padding-left: 2em;">
    <div id="projectname">AZX (AppZone eXtensions) documentation
-   &#160;<span id="projectnumber">1.1.15-CxL</span>
+   &#160;<span id="projectnumber">1.1.17-CxL</span>
    </div>
    <div id="projectbrief">A set of companion utilities that make AZ development easier</div>
   </td>
@@ -95,7 +95,7 @@ $(document).ready(function(){initNavTree('azx__gnu__sys__socket_8h_source.html',
 <div class="title">azx_gnu_sys_socket.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="azx__gnu__sys__socket_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*Copyright (C) 2020 Telit Communications S.p.A. Italy - All Rights Reserved.*/</span></div>
+<a href="azx__gnu__sys__socket_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*Copyright (C) 2022 Telit Communications S.p.A. Italy - All Rights Reserved.*/</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">/*    See LICENSE file in the project root for full license information.     */</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#ifndef HDR_AZX_GNU_SYS_SOCKET_H_</span></div>
@@ -121,176 +121,226 @@ $(document).ready(function(){initNavTree('azx__gnu__sys__socket_8h_source.html',
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="preprocessor">#define in_addr           M2MB_SOCKET_BSD_IN_ADDR</span></div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="preprocessor">#define in6_addr          M2MB_SOCKET_BSD_IPV6_ADDR</span></div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor">#define s6_addr           addr8_s</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="azx__gnu__sys__socket_8h.html#aa8318fbee111c5bde5952c63e894c962">   50</a></span>&#160;<span class="preprocessor">#define socket            m2mb_socket_bsd_socket</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor">#define closesocket       m2mb_socket_bsd_close</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor">#define shutdown(a,b)     UNUSED_2(a,b) </span><span class="comment">/*dummy function*/</span><span class="preprocessor"></span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="preprocessor">#define ntohs             m2mb_socket_bsd_ntohs</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="preprocessor">#define ntohl             m2mb_socket_bsd_ntohl</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="preprocessor">#define htonl             m2mb_socket_bsd_htonl</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="preprocessor">#define htons             m2mb_socket_bsd_htons</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="preprocessor">#define setsockopt        m2mb_socket_bsd_set_sock_opt</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="preprocessor">#define inet_addr         m2mb_socket_bsd_inet_addr</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="preprocessor">#define inet_pton         m2mb_socket_bsd_inet_pton</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="preprocessor">#define recvfrom          m2mb_socket_bsd_recv_from</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="preprocessor">#define recv              m2mb_socket_bsd_recv</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="preprocessor">#define sendto            m2mb_socket_bsd_send_to</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor">#define send              m2mb_socket_bsd_send</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor">#define getsockname       m2mb_socket_bsd_get_sock_name</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="preprocessor">#define getsockopt        m2mb_socket_bsd_get_sock_opt</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="preprocessor">#define bind              m2mb_socket_bsd_bind</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="preprocessor">#define connect           m2mb_socket_bsd_connect</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor">#define listen            m2mb_socket_bsd_listen</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="preprocessor">#define accept            m2mb_socket_bsd_accept</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="preprocessor">#define inet_ntoa(a)      m2mb_socket_bsd_addr_str(a.s_addr)</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="preprocessor">#define select            azx_gnu_select</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="azx__gnu__sys__socket_8h.html#a313001ab5b0b2b81f4e90198d40f6c4a">   74</a></span>&#160;<span class="preprocessor">#define _SS_MAXSIZE       128  </span><span class="comment">/* Implementation specific max size */</span><span class="preprocessor"></span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="preprocessor">#define _SS_ALIGNSIZE     (sizeof (INT64)) </span><span class="comment">/* Implementation specific desired alignment */</span><span class="preprocessor"></span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="comment">   Definitions used for sockaddr_storage structure paddings design.</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="comment">*/</span></div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="preprocessor">#define _SS_PAD1SIZE   (_SS_ALIGNSIZE - sizeof (sa_family_t))</span></div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="preprocessor">#define _SS_PAD2SIZE   (_SS_MAXSIZE - (sizeof (sa_family_t)+ _SS_PAD1SIZE + _SS_ALIGNSIZE))</span></div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="preprocessor">#ifdef FD_SET</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="preprocessor">  #undef FD_SET</span></div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00087"></a><span class="lineno"><a class="line" href="azx__gnu__sys__socket_8h.html#ad97013c4b9982b36a8308917d5c22c52">   87</a></span>&#160;<span class="preprocessor">#define FD_SET(n, p)    m2mb_socket_bsd_fd_set_func(n, p)</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="preprocessor">#ifdef FD_CLR</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="preprocessor">  #undef FD_CLR</span></div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="preprocessor">#define FD_CLR(n, p)    m2mb_socket_bsd_fd_clr_func(n, p)</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="preprocessor">#ifdef FD_ISSET</span></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="preprocessor">  #undef FD_ISSET</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="preprocessor">#define FD_ISSET(n, p)  m2mb_socket_bsd_fd_isset_func(n, p)</span></div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="preprocessor">#ifdef FD_ZERO</span></div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="preprocessor">  #undef FD_ZERO</span></div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="preprocessor">#define FD_ZERO(p)    m2mb_socket_bsd_fd_zero_func(p)</span></div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
-<div class="line"><a name="l00107"></a><span class="lineno"><a class="line" href="azx__gnu__sys__socket_8h.html#a861113898f7e0855e1a08858b19b5a3d">  107</a></span>&#160;<span class="keyword">typedef</span> UINT32 <a class="code" href="azx__gnu__sys__socket_8h.html#a861113898f7e0855e1a08858b19b5a3d">in_addr_t</a>;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="keyword">typedef</span> <span class="keywordtype">char</span> *__caddr_t;</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="keyword">typedef</span> UINT8 uint8_t;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
-<div class="line"><a name="l00114"></a><span class="lineno"><a class="line" href="azx__gnu__sys__socket_8h.html#a9930604d0e32588eae76f43ca38e7826">  114</a></span>&#160;<span class="preprocessor">#define AF_INET         M2MB_SOCKET_BSD_AF_INET</span></div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="preprocessor">#define AF_INET6        M2MB_SOCKET_BSD_AF_INET6</span></div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="preprocessor">#define PF_INET         M2MB_SOCKET_BSD_PF_INET</span></div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="preprocessor">#define PF_INET6        AF_INET6</span></div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="preprocessor">#define IPPROTO_TCP     M2MB_SOCKET_BSD_IPPROTO_TCP</span></div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="preprocessor">#define IPPROTO_UDP     M2MB_SOCKET_BSD_IPPROTO_UDP</span></div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="preprocessor">#define SOCK_STREAM     M2MB_SOCKET_BSD_SOCK_STREAM</span></div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="preprocessor">#define SOCK_DGRAM      M2MB_SOCKET_BSD_SOCK_DGRAM</span></div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="preprocessor">#define SO_SNDBUF       M2MB_SOCKET_BSD_SO_SNDBUF</span></div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="preprocessor">#define SO_RCVBUF       M2MB_SOCKET_BSD_SO_RCVBUF</span></div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="preprocessor">#define SO_REUSEADDR    M2MB_SOCKET_BSD_SO_REUSEADDR</span></div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="preprocessor">#define SO_LINGER       M2MB_SOCKET_BSD_SO_LINGER</span></div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="preprocessor">#define INADDR_ANY      M2MB_SOCKET_BSD_INADDR_ANY</span></div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="preprocessor">#define SOL_SOCKET      M2MB_SOCKET_BSD_SOL_SOCKET</span></div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="preprocessor">#define SO_ERROR        M2MB_SOCKET_BSD_SO_ERROR</span></div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="preprocessor">#ifdef FD_SETSIZE</span></div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="preprocessor">  #undef FD_SETSIZE</span></div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="preprocessor">#define FD_SETSIZE      M2MB_SOCKET_BSD_FD_SETSIZE</span></div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160; </div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="comment">/* Possible values for `ai_flags&#39; field in `addrinfo&#39; structure.  */</span></div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="preprocessor">#ifndef AI_PASSIVE</span></div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="preprocessor">  #define AI_PASSIVE      0x0001  </span><span class="comment">/* Socket address is intended for `bind&#39;.  */</span><span class="preprocessor"></span></div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<span class="preprocessor">#ifndef AI_CANONNAME</span></div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="preprocessor">  #define AI_CANONNAME    0x0002  </span><span class="comment">/* Request for canonical name.  */</span><span class="preprocessor"></span></div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="preprocessor">#ifndef AI_NUMERICSERV</span></div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="preprocessor">  #define AI_NUMERICSERV  0x0400  </span><span class="comment">/* Don&#39;t use name resolution.  */</span><span class="preprocessor"></span></div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160; </div>
-<div class="line"><a name="l00147"></a><span class="lineno"><a class="line" href="azx__gnu__sys__socket_8h.html#a93b37007689284fd9c4bde1a8f4b9199">  147</a></span>&#160;<span class="preprocessor">#define INET_ADDRSTRLEN   16</span></div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;<span class="preprocessor">#define INET6_ADDRSTRLEN  46</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">#undef fd_set</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor">#define fd_set            M2MB_SOCKET_BSD_FD_SET_T</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="azx__gnu__sys__socket_8h.html#aa8318fbee111c5bde5952c63e894c962">   52</a></span>&#160;<span class="preprocessor">#define socket            m2mb_socket_bsd_socket</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="preprocessor">#define closesocket       m2mb_socket_bsd_close</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="preprocessor">#define shutdown(a,b)     UNUSED_2(a,b) </span><span class="comment">/*dummy function*/</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="preprocessor">#define ntohs             m2mb_socket_bsd_ntohs</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="preprocessor">#define ntohl             m2mb_socket_bsd_ntohl</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="preprocessor">#define htonl             m2mb_socket_bsd_htonl</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="preprocessor">#define htons             m2mb_socket_bsd_htons</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="preprocessor">#define setsockopt        m2mb_socket_bsd_set_sock_opt</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="preprocessor">#define inet_addr         m2mb_socket_bsd_inet_addr</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="preprocessor">#define inet_pton         m2mb_socket_bsd_inet_pton</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="preprocessor">#define recvfrom          m2mb_socket_bsd_recv_from</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor">#define recv              m2mb_socket_bsd_recv</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor">#define sendto            m2mb_socket_bsd_send_to</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="preprocessor">#define send              m2mb_socket_bsd_send</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="preprocessor">#define getsockname       m2mb_socket_bsd_get_sock_name</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="preprocessor">#define getsockopt        m2mb_socket_bsd_get_sock_opt</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor">#define bind              m2mb_socket_bsd_bind</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="preprocessor">#define connect           m2mb_socket_bsd_connect</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="preprocessor">#define listen            m2mb_socket_bsd_listen</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="preprocessor">#define accept            m2mb_socket_bsd_accept</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="preprocessor">#define inet_ntoa(a)      m2mb_socket_bsd_addr_str(a.s_addr)</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="preprocessor">#define select            azx_gnu_select</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="preprocessor">#undef  fd_set</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="preprocessor">#define fd_set      M2MB_SOCKET_BSD_FD_SET_T</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="preprocessor">#undef  fds_bits</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="preprocessor">#define fds_bits    fd_array</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="preprocessor">#undef getaddrinfo</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="preprocessor">#define getaddrinfo azx_gnu_getaddrinfo</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="preprocessor">#undef freeaddrinfo</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="preprocessor">#define freeaddrinfo azx_gnu_freeaddrinfo</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00088"></a><span class="lineno"><a class="line" href="azx__gnu__sys__socket_8h.html#a313001ab5b0b2b81f4e90198d40f6c4a">   88</a></span>&#160;<span class="preprocessor">#define _SS_MAXSIZE       128  </span><span class="comment">/* Implementation specific max size */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="preprocessor">#define _SS_ALIGNSIZE     (sizeof (INT64)) </span><span class="comment">/* Implementation specific desired alignment */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="comment">/*</span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="comment">   Definitions used for sockaddr_storage structure paddings design.</span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="comment">*/</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="preprocessor">#define _SS_PAD1SIZE   (_SS_ALIGNSIZE - sizeof (sa_family_t))</span></div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="preprocessor">#define _SS_PAD2SIZE   (_SS_MAXSIZE - (sizeof (sa_family_t)+ _SS_PAD1SIZE + _SS_ALIGNSIZE))</span></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="preprocessor">#ifdef FD_SET</span></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="preprocessor">  #undef FD_SET</span></div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00101"></a><span class="lineno"><a class="line" href="azx__gnu__sys__socket_8h.html#ad97013c4b9982b36a8308917d5c22c52">  101</a></span>&#160;<span class="preprocessor">#define FD_SET(n, p)    m2mb_socket_bsd_fd_set_func(n, p)</span></div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="preprocessor">#ifdef FD_CLR</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="preprocessor">  #undef FD_CLR</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="preprocessor">#define FD_CLR(n, p)    m2mb_socket_bsd_fd_clr_func(n, p)</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="preprocessor">#ifdef FD_ISSET</span></div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="preprocessor">  #undef FD_ISSET</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="preprocessor">#define FD_ISSET(n, p)  m2mb_socket_bsd_fd_isset_func(n, p)</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="preprocessor">#ifdef FD_ZERO</span></div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="preprocessor">  #undef FD_ZERO</span></div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="preprocessor">#define FD_ZERO(p)    m2mb_socket_bsd_fd_zero_func(p)</span></div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
+<div class="line"><a name="l00121"></a><span class="lineno"><a class="line" href="azx__gnu__sys__socket_8h.html#a861113898f7e0855e1a08858b19b5a3d">  121</a></span>&#160;<span class="keyword">typedef</span> UINT32 <a class="code" href="azx__gnu__sys__socket_8h.html#a861113898f7e0855e1a08858b19b5a3d">in_addr_t</a>;</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="keyword">typedef</span> <span class="keywordtype">char</span> *__caddr_t;</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="keyword">typedef</span> UINT8 uint8_t;</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
+<div class="line"><a name="l00128"></a><span class="lineno"><a class="line" href="azx__gnu__sys__socket_8h.html#a9930604d0e32588eae76f43ca38e7826">  128</a></span>&#160;<span class="preprocessor">#define AF_INET         M2MB_SOCKET_BSD_AF_INET</span></div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="preprocessor">#define AF_INET6        M2MB_SOCKET_BSD_AF_INET6</span></div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="preprocessor">#define PF_INET         M2MB_SOCKET_BSD_PF_INET</span></div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="preprocessor">#define PF_INET6        AF_INET6</span></div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="preprocessor">#define IPPROTO_TCP     M2MB_SOCKET_BSD_IPPROTO_TCP</span></div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="preprocessor">#define IPPROTO_UDP     M2MB_SOCKET_BSD_IPPROTO_UDP</span></div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="preprocessor">#define AF_UNSPEC       M2MB_SOCKET_BSD_AF_UNSPEC</span></div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="preprocessor">#define SOCK_STREAM     M2MB_SOCKET_BSD_SOCK_STREAM</span></div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="preprocessor">#define SOCK_DGRAM      M2MB_SOCKET_BSD_SOCK_DGRAM</span></div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="preprocessor">#define SO_SNDBUF       M2MB_SOCKET_BSD_SO_SNDBUF</span></div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="preprocessor">#define SO_RCVBUF       M2MB_SOCKET_BSD_SO_RCVBUF</span></div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<span class="preprocessor">#define SO_REUSEADDR    M2MB_SOCKET_BSD_SO_REUSEADDR</span></div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="preprocessor">#define SO_LINGER       M2MB_SOCKET_BSD_SO_LINGER</span></div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;<span class="preprocessor">#define INADDR_ANY      M2MB_SOCKET_BSD_INADDR_ANY</span></div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="preprocessor">#define SOL_SOCKET      M2MB_SOCKET_BSD_SOL_SOCKET</span></div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="preprocessor">#define SO_ERROR        M2MB_SOCKET_BSD_SO_ERROR</span></div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160; </div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;<span class="preprocessor">#ifdef FD_SETSIZE</span></div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;<span class="preprocessor">  #undef FD_SETSIZE</span></div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;<span class="preprocessor">#define FD_SETSIZE      M2MB_SOCKET_BSD_FD_SETSIZE</span></div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="comment">//struct in6_addr in6addr_any; //TODO: initialize this to the ipv6 wildcard address :: or 0:0:0:0:0:0:0:0</span></div>
-<div class="line"><a name="l00152"></a><span class="lineno"><a class="line" href="azx__gnu__sys__socket_8h.html#aedb93bcce9682d7644080b859849f59d">  152</a></span>&#160;<span class="comment"></span><span class="preprocessor">#define IF_NAMESIZE       16</span></div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160; </div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;<span class="comment">/* Utilities for M2MB*/</span></div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160; </div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;<span class="comment">/* Global definition =============================================================================*/</span></div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="comment">/* Possible values for `ai_flags&#39; field in `addrinfo&#39; structure.  */</span></div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="preprocessor">#ifndef AI_PASSIVE</span></div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;<span class="preprocessor">  #define AI_PASSIVE      0x0001  </span><span class="comment">/* Socket address is intended for `bind&#39;.  */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;<span class="preprocessor">#ifndef AI_CANONNAME</span></div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;<span class="preprocessor">  #define AI_CANONNAME    0x0002  </span><span class="comment">/* Request for canonical name.  */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;<span class="preprocessor">#ifndef AI_NUMERICSERV</span></div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="preprocessor">  #define AI_NUMERICSERV  0x0400  </span><span class="comment">/* Don&#39;t use name resolution.  */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160; </div>
-<div class="line"><a name="l00162"></a><span class="lineno"><a class="line" href="azx__gnu__sys__socket_8h.html#aae83a93236e01902b58ec3f197a17f7c">  162</a></span>&#160;<span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="azx__gnu__sys__socket_8h.html#aae83a93236e01902b58ec3f197a17f7c">socklen_t</a>;</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="keyword">typedef</span> UINT8 sa_family_t;</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160; </div>
-<div class="line"><a name="l00165"></a><span class="lineno"><a class="line" href="structsockaddr__storage.html">  165</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structsockaddr__storage.html">sockaddr_storage</a></div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;{</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;  sa_family_t __ss_family; <span class="comment">/* address family */</span></div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;  <span class="comment">/* Following fields are implementation specific */</span></div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;  <span class="keywordtype">char</span> __ss_pad1[_SS_PAD1SIZE];</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;  <span class="comment">/* 6 byte pad, this is to make implementation */</span></div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;  <span class="comment">/* specific pad up to alignment field that */</span></div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;  <span class="comment">/* follows explicit in the data structure */</span></div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;  INT64 __ss_align; <span class="comment">/* field to force desired structure */</span></div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;  <span class="comment">/* storage alignment */</span></div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;  <span class="keywordtype">char</span> __ss_pad2[_SS_PAD2SIZE];</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;  <span class="comment">/* 112 byte pad to achieve desired size, */</span></div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;  <span class="comment">/* _SS_MAXSIZE value minus size of ss_family */</span></div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;  <span class="comment">/* __ss_pad1, __ss_align fields is 112 */</span></div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;};</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160; </div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;<span class="comment">/* Function prototypes ====================================================================*/</span></div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160; </div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;<span class="preprocessor">#ifndef __MINGW32__</span></div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160; </div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;<span class="keyword">struct </span>M2MB_SOCKET_BSD_HOSTENT *<a class="code" href="azx__gnu__sys__socket_8h.html#a99d8ac30b262f970760ab1b012d9eabe">azx_gnu_gethostbyname</a>( <span class="keyword">const</span> <span class="keywordtype">char</span> *name );</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;<span class="keywordtype">int</span> <a class="code" href="azx__gnu__sys__socket_8h.html#a3466eaed96749995e030404f31f7c5f8">azx_gnu_gethostbyname_r</a>( <span class="keywordtype">char</span> *name, <span class="keyword">struct</span> M2MB_SOCKET_BSD_HOSTENT *he,</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;                           CHAR *buf, SIZE_T buflen, <span class="keyword">struct</span> M2MB_SOCKET_BSD_HOSTENT **result,</div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;                           <span class="keywordtype">int</span> *h_errnop );</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160; </div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;<span class="keywordtype">int</span> <a class="code" href="azx__gnu__sys__socket_8h.html#ace5573e8929fe9c2531732b4fc836f6b">azx_gnu_socket_bsd_socket_global_cid</a>( INT32 domain, INT32 type, INT32 protocol );</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160; </div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;INT32 azx_gnu_socket_bsd_get_sock_name( M2MB_SOCKET_BSD_SOCKET s,</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;                                        <span class="keyword">struct</span> M2MB_SOCKET_BSD_SOCKADDR *name, INT32 *namelen );</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160; </div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;<span class="keywordtype">int</span> <a class="code" href="azx__gnu__sys__socket_8h.html#a8e77af6cdbb141c528c8a462a89297d6">azx_gnu_select</a>( <span class="keywordtype">int</span> nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds,</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;                    <span class="keyword">const</span> <span class="keyword">struct</span> timeval *timeout );</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160; </div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;<span class="keywordtype">void</span> <a class="code" href="azx__gnu__sys__socket_8h.html#ab749c7b21efdc2adf4b2abc6c2291598">azx_gnu_setgCID</a>( UINT8 c );</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160; </div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;UINT8 <a class="code" href="azx__gnu__sys__socket_8h.html#abd732c8acd3db56ad887706f27ca5425">azx_gnu_getgCID</a>( <span class="keywordtype">void</span> );</div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160; </div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;<span class="keyword">extern</span> INT32 <a class="code" href="azx__gnu__sys__socket_8h.html#ac668a8297fe60a7d6d0c4056b76a5d1b">azx_gnu_h_errno</a>;</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160; </div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
-<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;<span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="azx__gnu__sys__socket_8h.html#a703b07485e9fba31deda448ada8ec91b">azx_gnu_hstrerror</a>( <span class="keywordtype">int</span> err );</div>
-<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;<span class="preprocessor">#define hstrerror azx_gnu_hstrerror</span></div>
-<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160; </div>
-<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* HDR_AZX_GNU_SYS_SOCKET_H_ */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160; </div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="preprocessor">#ifndef EAI_FAIL</span></div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="preprocessor">#define EAI_FAIL         4  </span><span class="comment">/* non-recoverable failure in name resolution */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<span class="preprocessor">#ifndef EAI_MEMORY</span></div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<span class="preprocessor">#define EAI_MEMORY       6  </span><span class="comment">/* memory allocation failure */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;<span class="preprocessor">#ifndef EAI_NODATA</span></div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="preprocessor">#define EAI_NODATA       7  </span><span class="comment">/* no address associated with host */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;<span class="preprocessor">#ifndef EAI_NONAME</span></div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;<span class="preprocessor">#define EAI_NONAME       8  </span><span class="comment">/* host nor service provided, or not known */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;<span class="preprocessor">#ifndef EAI_SYSTEM</span></div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;<span class="preprocessor">#define EAI_SYSTEM      11  </span><span class="comment">/* system error returned in errno */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160; </div>
+<div class="line"><a name="l00179"></a><span class="lineno"><a class="line" href="azx__gnu__sys__socket_8h.html#a93b37007689284fd9c4bde1a8f4b9199">  179</a></span>&#160;<span class="preprocessor">#define INET_ADDRSTRLEN   16</span></div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;<span class="preprocessor">#define INET6_ADDRSTRLEN  46</span></div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160; </div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;<span class="comment">//struct in6_addr in6addr_any; //TODO: initialize this to the ipv6 wildcard address :: or 0:0:0:0:0:0:0:0</span></div>
+<div class="line"><a name="l00184"></a><span class="lineno"><a class="line" href="azx__gnu__sys__socket_8h.html#aedb93bcce9682d7644080b859849f59d">  184</a></span>&#160;<span class="comment"></span><span class="preprocessor">#define IF_NAMESIZE       16</span></div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160; </div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="comment">/* Utilities for M2MB*/</span></div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160; </div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="comment">/* Global definition =============================================================================*/</span></div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160; </div>
+<div class="line"><a name="l00194"></a><span class="lineno"><a class="line" href="azx__gnu__sys__socket_8h.html#aae83a93236e01902b58ec3f197a17f7c">  194</a></span>&#160;<span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="azx__gnu__sys__socket_8h.html#aae83a93236e01902b58ec3f197a17f7c">socklen_t</a>;</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;<span class="keyword">typedef</span> UINT8 sa_family_t;</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160; </div>
+<div class="line"><a name="l00197"></a><span class="lineno"><a class="line" href="structsockaddr__storage.html">  197</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structsockaddr__storage.html">sockaddr_storage</a></div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;{</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;  sa_family_t __ss_family; <span class="comment">/* address family */</span></div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;  <span class="comment">/* Following fields are implementation specific */</span></div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;  <span class="keywordtype">char</span> __ss_pad1[_SS_PAD1SIZE];</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;  <span class="comment">/* 6 byte pad, this is to make implementation */</span></div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;  <span class="comment">/* specific pad up to alignment field that */</span></div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;  <span class="comment">/* follows explicit in the data structure */</span></div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;  INT64 __ss_align; <span class="comment">/* field to force desired structure */</span></div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;  <span class="comment">/* storage alignment */</span></div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;  <span class="keywordtype">char</span> __ss_pad2[_SS_PAD2SIZE];</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;  <span class="comment">/* 112 byte pad to achieve desired size, */</span></div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;  <span class="comment">/* _SS_MAXSIZE value minus size of ss_family */</span></div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;  <span class="comment">/* __ss_pad1, __ss_align fields is 112 */</span></div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;};</div>
+<div class="line"><a name="l00212"></a><span class="lineno"><a class="line" href="structaddrinfo.html">  212</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structaddrinfo.html">addrinfo</a> {</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;               <span class="keywordtype">int</span>              ai_flags;</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;               <span class="keywordtype">int</span>              ai_family;</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;               <span class="keywordtype">int</span>              ai_socktype;</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;               <span class="keywordtype">int</span>              ai_protocol;</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;               <a class="code" href="azx__gnu__sys__socket_8h.html#aae83a93236e01902b58ec3f197a17f7c">socklen_t</a>        ai_addrlen;</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;               <span class="keyword">struct </span>M2MB_SOCKET_BSD_SOCKADDR *ai_addr;</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;               <span class="keywordtype">char</span>            *ai_canonname;</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;               <span class="keyword">struct </span><a class="code" href="structaddrinfo.html">addrinfo</a> *ai_next;</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;           };</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160; </div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;<span class="preprocessor">#define INET6_ADDRSTRLEN 46</span></div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160; </div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;<span class="comment">/* Function prototypes ====================================================================*/</span></div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160; </div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;<span class="preprocessor">#ifndef __MINGW32__</span></div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160; </div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;<span class="keyword">struct </span>M2MB_SOCKET_BSD_HOSTENT *<a class="code" href="azx__gnu__sys__socket_8h.html#a99d8ac30b262f970760ab1b012d9eabe">azx_gnu_gethostbyname</a>( <span class="keyword">const</span> <span class="keywordtype">char</span> *name );</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;<span class="keywordtype">int</span> <a class="code" href="azx__gnu__sys__socket_8h.html#a3466eaed96749995e030404f31f7c5f8">azx_gnu_gethostbyname_r</a>( <span class="keywordtype">char</span> *name, <span class="keyword">struct</span> M2MB_SOCKET_BSD_HOSTENT *he,</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;                           CHAR *buf, SIZE_T buflen, <span class="keyword">struct</span> M2MB_SOCKET_BSD_HOSTENT **result,</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;                           <span class="keywordtype">int</span> *h_errnop );</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160; </div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;<span class="keywordtype">int</span> <a class="code" href="azx__gnu__sys__socket_8h.html#ace5573e8929fe9c2531732b4fc836f6b">azx_gnu_socket_bsd_socket_global_cid</a>( INT32 domain, INT32 type, INT32 protocol );</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160; </div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;INT32 azx_gnu_socket_bsd_get_sock_name( M2MB_SOCKET_BSD_SOCKET s,</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;                                        <span class="keyword">struct</span> M2MB_SOCKET_BSD_SOCKADDR *name, INT32 *namelen );</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160; </div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;<span class="keywordtype">int</span> <a class="code" href="azx__gnu__sys__socket_8h.html#a8e77af6cdbb141c528c8a462a89297d6">azx_gnu_select</a>( <span class="keywordtype">int</span> nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds,</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;                    <span class="keyword">const</span> <span class="keyword">struct</span> timeval *timeout );</div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160; </div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;<span class="keywordtype">void</span> <a class="code" href="azx__gnu__sys__socket_8h.html#ab749c7b21efdc2adf4b2abc6c2291598">azx_gnu_setgCID</a>( UINT8 c );</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160; </div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;UINT8 <a class="code" href="azx__gnu__sys__socket_8h.html#abd732c8acd3db56ad887706f27ca5425">azx_gnu_getgCID</a>( <span class="keywordtype">void</span> );</div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160; </div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;<span class="keyword">extern</span> INT32 <a class="code" href="azx__gnu__sys__socket_8h.html#ac668a8297fe60a7d6d0c4056b76a5d1b">azx_gnu_h_errno</a>;</div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160; </div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
+<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
+<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;<span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="azx__gnu__sys__socket_8h.html#a703b07485e9fba31deda448ada8ec91b">azx_gnu_hstrerror</a>( <span class="keywordtype">int</span> err );</div>
+<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;<span class="preprocessor">#define hstrerror azx_gnu_hstrerror</span></div>
+<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160; </div>
+<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;<span class="keywordtype">int</span> <a class="code" href="azx__gnu__sys__socket_8h.html#a04c7fc7dc2b21c85617d9f7a896e08d7">azx_gnu_getaddrinfo</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *node, <span class="keyword">const</span> <span class="keywordtype">char</span> *service, <span class="keyword">const</span> <span class="keyword">struct</span> <a class="code" href="structaddrinfo.html">addrinfo</a> *hints, <span class="keyword">struct</span> <a class="code" href="structaddrinfo.html">addrinfo</a> **res);</div>
+<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160; </div>
+<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;<span class="keywordtype">void</span> azx_gnu_freeaddrinfo (<span class="keyword">struct</span> <a class="code" href="structaddrinfo.html">addrinfo</a> *ai);</div>
+<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160; </div>
+<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* HDR_AZX_GNU_SYS_SOCKET_H_ */</span><span class="preprocessor"></span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aazx__gnu__sys__socket_8h_html_aae83a93236e01902b58ec3f197a17f7c"><div class="ttname"><a href="azx__gnu__sys__socket_8h.html#aae83a93236e01902b58ec3f197a17f7c">socklen_t</a></div><div class="ttdeci">unsigned int socklen_t</div><div class="ttdef"><b>Definition:</b> azx_gnu_sys_socket.h:162</div></div>
-<div class="ttc" id="astructsockaddr__storage_html"><div class="ttname"><a href="structsockaddr__storage.html">sockaddr_storage</a></div><div class="ttdef"><b>Definition:</b> azx_gnu_sys_socket.h:165</div></div>
+<div class="ttc" id="aazx__gnu__sys__socket_8h_html_aae83a93236e01902b58ec3f197a17f7c"><div class="ttname"><a href="azx__gnu__sys__socket_8h.html#aae83a93236e01902b58ec3f197a17f7c">socklen_t</a></div><div class="ttdeci">unsigned int socklen_t</div><div class="ttdef"><b>Definition:</b> azx_gnu_sys_socket.h:194</div></div>
+<div class="ttc" id="astructsockaddr__storage_html"><div class="ttname"><a href="structsockaddr__storage.html">sockaddr_storage</a></div><div class="ttdef"><b>Definition:</b> azx_gnu_sys_socket.h:197</div></div>
 <div class="ttc" id="aazx__gnu__sys__socket_8h_html_abd732c8acd3db56ad887706f27ca5425"><div class="ttname"><a href="azx__gnu__sys__socket_8h.html#abd732c8acd3db56ad887706f27ca5425">azx_gnu_getgCID</a></div><div class="ttdeci">UINT8 azx_gnu_getgCID(void)</div><div class="ttdoc">Returns CID.</div></div>
 <div class="ttc" id="aazx__gnu__sys__socket_8h_html_ab749c7b21efdc2adf4b2abc6c2291598"><div class="ttname"><a href="azx__gnu__sys__socket_8h.html#ab749c7b21efdc2adf4b2abc6c2291598">azx_gnu_setgCID</a></div><div class="ttdeci">void azx_gnu_setgCID(UINT8 c)</div><div class="ttdoc">Sets CID.</div></div>
-<div class="ttc" id="aazx__gnu__sys__socket_8h_html_a861113898f7e0855e1a08858b19b5a3d"><div class="ttname"><a href="azx__gnu__sys__socket_8h.html#a861113898f7e0855e1a08858b19b5a3d">in_addr_t</a></div><div class="ttdeci">UINT32 in_addr_t</div><div class="ttdef"><b>Definition:</b> azx_gnu_sys_socket.h:107</div></div>
+<div class="ttc" id="aazx__gnu__sys__socket_8h_html_a04c7fc7dc2b21c85617d9f7a896e08d7"><div class="ttname"><a href="azx__gnu__sys__socket_8h.html#a04c7fc7dc2b21c85617d9f7a896e08d7">azx_gnu_getaddrinfo</a></div><div class="ttdeci">int azx_gnu_getaddrinfo(const char *node, const char *service, const struct addrinfo *hints, struct addrinfo **res)</div></div>
+<div class="ttc" id="aazx__gnu__sys__socket_8h_html_a861113898f7e0855e1a08858b19b5a3d"><div class="ttname"><a href="azx__gnu__sys__socket_8h.html#a861113898f7e0855e1a08858b19b5a3d">in_addr_t</a></div><div class="ttdeci">UINT32 in_addr_t</div><div class="ttdef"><b>Definition:</b> azx_gnu_sys_socket.h:121</div></div>
 <div class="ttc" id="aazx__gnu__sys__socket_8h_html_a3466eaed96749995e030404f31f7c5f8"><div class="ttname"><a href="azx__gnu__sys__socket_8h.html#a3466eaed96749995e030404f31f7c5f8">azx_gnu_gethostbyname_r</a></div><div class="ttdeci">int azx_gnu_gethostbyname_r(char *name, struct M2MB_SOCKET_BSD_HOSTENT *he, CHAR *buf, SIZE_T buflen, struct M2MB_SOCKET_BSD_HOSTENT **result, int *h_errnop)</div><div class="ttdoc">get network host entry</div></div>
 <div class="ttc" id="aazx__gnu__sys__socket_8h_html_a8e77af6cdbb141c528c8a462a89297d6"><div class="ttname"><a href="azx__gnu__sys__socket_8h.html#a8e77af6cdbb141c528c8a462a89297d6">azx_gnu_select</a></div><div class="ttdeci">int azx_gnu_select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, const struct timeval *timeout)</div><div class="ttdoc">synchronous I/O multiplexing</div></div>
 <div class="ttc" id="aazx__gnu__sys__socket_8h_html_ac668a8297fe60a7d6d0c4056b76a5d1b"><div class="ttname"><a href="azx__gnu__sys__socket_8h.html#ac668a8297fe60a7d6d0c4056b76a5d1b">azx_gnu_h_errno</a></div><div class="ttdeci">INT32 azx_gnu_h_errno</div></div>
 <div class="ttc" id="aazx__gnu__sys__socket_8h_html_a703b07485e9fba31deda448ada8ec91b"><div class="ttname"><a href="azx__gnu__sys__socket_8h.html#a703b07485e9fba31deda448ada8ec91b">azx_gnu_hstrerror</a></div><div class="ttdeci">const char * azx_gnu_hstrerror(int err)</div><div class="ttdoc">Return information after a host name or address lookup error.</div></div>
 <div class="ttc" id="aazx__gnu__sys__socket_8h_html_ace5573e8929fe9c2531732b4fc836f6b"><div class="ttname"><a href="azx__gnu__sys__socket_8h.html#ace5573e8929fe9c2531732b4fc836f6b">azx_gnu_socket_bsd_socket_global_cid</a></div><div class="ttdeci">int azx_gnu_socket_bsd_socket_global_cid(INT32 domain, INT32 type, INT32 protocol)</div><div class="ttdoc">create an endpoint for communication</div></div>
+<div class="ttc" id="astructaddrinfo_html"><div class="ttname"><a href="structaddrinfo.html">addrinfo</a></div><div class="ttdef"><b>Definition:</b> azx_gnu_sys_socket.h:212</div></div>
 <div class="ttc" id="aazx__gnu__sys__socket_8h_html_a99d8ac30b262f970760ab1b012d9eabe"><div class="ttname"><a href="azx__gnu__sys__socket_8h.html#a99d8ac30b262f970760ab1b012d9eabe">azx_gnu_gethostbyname</a></div><div class="ttdeci">struct M2MB_SOCKET_BSD_HOSTENT * azx_gnu_gethostbyname(const char *name)</div><div class="ttdoc">get network host entry</div></div>
 <!-- HTML footer for doxygen 1.8.15-->
 <!-- start footer part -->

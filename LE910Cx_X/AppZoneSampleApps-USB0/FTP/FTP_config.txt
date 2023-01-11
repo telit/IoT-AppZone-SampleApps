@@ -1,0 +1,11 @@
+web.omnitel.it,#APN
+,#APN_USERNAME
+,#APN_PASSWORD
+3,#PDP_CDX
+ftp.telit.com,#FTP_ADDR
+21,#FTP_PORT
+guest0181,#FTP_USER
+g2hs3tx6,#FTP_PASS
+/samples,#REMOTE_FOLDER
+pattern_big.txt,#DLFILE
+pattern.txt,#DLTOBUF_FILE

@@ -1,0 +1,3 @@
+@brief smtp client implementation
+@version 1.0.0
+@dependencies core/azx_log libraries/gnu 

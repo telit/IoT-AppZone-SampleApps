@@ -1,11 +1,5 @@
 var group___a_z_x___f_t_p___u_s_a_g_e =
 [
-    [ "AZX_FTP_XFER_TAG", "struct_a_z_x___f_t_p___x_f_e_r___t_a_g.html", [
-      [ "buffInfo", "struct_a_z_x___f_t_p___x_f_e_r___t_a_g.html#aaed620e5108866012b9ac12a857b6227", null ],
-      [ "fileInfo", "struct_a_z_x___f_t_p___x_f_e_r___t_a_g.html#a56a3937348cbbaa14b988ff3d50d39da", null ],
-      [ "payload", "struct_a_z_x___f_t_p___x_f_e_r___t_a_g.html#abdafe0fe61a0c3a2de0b3de8bb795a92", null ],
-      [ "type", "struct_a_z_x___f_t_p___x_f_e_r___t_a_g.html#af641d98bcb03ff5ecad1d40e870bd7b5", null ]
-    ] ],
     [ "AZX_FTP_NET_BUF_TAG", "struct_a_z_x___f_t_p___n_e_t___b_u_f___t_a_g.html", null ],
     [ "AZX_FTP_FILE_INFO", "struct_a_z_x___f_t_p___f_i_l_e___i_n_f_o.html", null ],
     [ "AZX_FTP_ASCII", "group___a_z_x___f_t_p___u_s_a_g_e.html#gad075d72a44e0ede76fcb83fc3beaa7a3", null ],
@@ -20,7 +14,6 @@ var group___a_z_x___f_t_p___u_s_a_g_e =
     [ "AZX_FTP_PORT", "group___a_z_x___f_t_p___u_s_a_g_e.html#ga2a3abdbfd150910c90dcce00d1f07071", null ],
     [ "AZX_FTP_TEXT", "group___a_z_x___f_t_p___u_s_a_g_e.html#ga64b46a4e80ec272e24727c736df33cd1", null ],
     [ "azx_ftp_dataCallback", "group___a_z_x___f_t_p___u_s_a_g_e.html#ga589a9c6cc78985dfbd0dd5fa787f6a1c", null ],
-    [ "AZX_FTP_XFER_T", "group___a_z_x___f_t_p___u_s_a_g_e.html#gad00a4ba26fa22811b61904e411bd1af2", null ],
     [ "AZX_FTP_USER_CB_EV_E", "group___a_z_x___f_t_p___u_s_a_g_e.html#gadbdffe015f1f2c5125641399bf181029", [
       [ "DATA_CB_START", "group___a_z_x___f_t_p___u_s_a_g_e.html#ggadbdffe015f1f2c5125641399bf181029a310f681a436283e67f5752dc6fb81e65", null ],
       [ "DATA_CB_DATA", "group___a_z_x___f_t_p___u_s_a_g_e.html#ggadbdffe015f1f2c5125641399bf181029a576d5504422b3b4ca16d012d5140420e", null ],
@@ -30,6 +23,7 @@ var group___a_z_x___f_t_p___u_s_a_g_e =
       [ "AZX_FTP_XFER_FILE", "group___a_z_x___f_t_p___u_s_a_g_e.html#gga93677062f9160355dea103b8049695f2ac9f6fc2bf068a4a3f96e6eff260c3d27", null ],
       [ "AZX_FTP_XFER_BUFF", "group___a_z_x___f_t_p___u_s_a_g_e.html#gga93677062f9160355dea103b8049695f2a5902786cfaa7660a0a2f89d084ce22ff", null ]
     ] ],
+    [ "__attribute__", "group___a_z_x___f_t_p___u_s_a_g_e.html#ga298686c18b407b998e5ea002bd65bdd4", null ],
     [ "azx_ftp_cdUp", "group___a_z_x___f_t_p___u_s_a_g_e.html#ga14bdbe2e63b0c3a7eaf7d2ede2befa11", null ],
     [ "azx_ftp_chdir", "group___a_z_x___f_t_p___u_s_a_g_e.html#gaf9617c8c28b79495063d2259ee56e10f", null ],
     [ "azx_ftp_clearCallback", "group___a_z_x___f_t_p___u_s_a_g_e.html#ga697c4239a8a778e3ca876c1e06f69549", null ],

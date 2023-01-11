@@ -14,7 +14,7 @@
     Sample application that shows how to set and implement a watchdog. Task has been locked waitng for an event with a timeout longer than wd inactivity timeout. If no wd kick or no actions 
     are executed during system timeout a system reboot is performed. Debug prints on MAIN UART
   @version 
-    1.0.0
+    1.0.1
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -27,39 +27,37 @@
 */
 
 /* Include files ================================================================================*/
+#include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+
 #include "m2mb_types.h"
+
 #include "m2mb_os_types.h"
 #include "m2mb_os_api.h"
 #include "m2mb_os.h"
+#include "m2mb_os_tmr.h"
+
 #include "m2mb_gpio.h"
 #include "m2mb_wDog.h"
 #include "m2mb_rtc.h"
-#include "m2mb_os_tmr.h"
+
+#include "m2mb_fs_posix.h"
 
 #include "azx_log.h"
 #include "azx_utils.h"
-
 #include "azx_tasks.h"
-
-#include "app_cfg.h"
 
 #include "WatchDog.h"
 
-
-
+#include "read_parameters.h"
 
 /* Local defines ================================================================================*/
-#define WAKE_UP_TICKS 20       //to be used in m2mb_wDog_enable
-#define CTRL_TICKS_TO_REBOOT 6 //to be used in m2mb_wDog_enable
-#define WD_TOUT_COUNT 3        //to be used in m2mb_wDog_addTask
-
-#define TIMER_TOUT 5000
 
 /* Local typedefs ===============================================================================*/
 /* Local statics ================================================================================*/
 M2MB_OS_TASK_HANDLE Task1_H = NULL;
-INT8 taskID_1;
+INT32 taskID_1;
 M2MB_WDOG_HANDLE h_wDog;
 M2MB_OS_EV_HANDLE evHandle;
 
@@ -72,11 +70,14 @@ UINT32 wd_tick_s;
 /* Local function prototypes ====================================================================*/
 void WDog_Init(void);
 
+
 /* Static functions =============================================================================*/
+
+
 /* Global functions =============================================================================*/
 static void TimerCb(M2MB_OS_TMR_HANDLE tHandle, void *argCb )
 {
-static unsigned int Count = 0;
+	static unsigned int Count = 0;
 
 	(void)tHandle;
 	(void)argCb;
@@ -97,21 +98,21 @@ static unsigned int Count = 0;
 
 void timer_Init(void)
 {
-M2MB_OS_RESULT_E res;
+	M2MB_OS_RESULT_E res;
 
 	res = m2mb_os_tmr_setAttrItem( &tmrAttrHandle,
-	                                   CMDS_ARGS
-	                                   (
-	                                     M2MB_OS_TMR_SEL_CMD_CREATE_ATTR,  NULL,
-	                                     M2MB_OS_TMR_SEL_CMD_NAME, "mytmr",
-	                                     M2MB_OS_TMR_SEL_CMD_USRNAME, "myUsrtmr",
-	                                     M2MB_OS_TMR_SEL_CMD_CB_FUNC, &TimerCb,
-	                                     M2MB_OS_TMR_SEL_CMD_ARG_CB, &tmrHandle,
-	                                     M2MB_OS_TMR_SEL_CMD_TICKS_PERIOD, M2MB_OS_MS2TICKS(TIMER_TOUT),
-										 M2MB_OS_TMR_SEL_CMD_PERIODIC, M2MB_OS_TMR_PERIODIC_TMR
-	                                   )
-	                                 );
-									 
+			CMDS_ARGS
+			(
+					M2MB_OS_TMR_SEL_CMD_CREATE_ATTR,  NULL,
+					M2MB_OS_TMR_SEL_CMD_NAME, "mytmr",
+					M2MB_OS_TMR_SEL_CMD_USRNAME, "myUsrtmr",
+					M2MB_OS_TMR_SEL_CMD_CB_FUNC, &TimerCb,
+					M2MB_OS_TMR_SEL_CMD_ARG_CB, &tmrHandle,
+					M2MB_OS_TMR_SEL_CMD_TICKS_PERIOD, M2MB_OS_MS2TICKS(gTIMER_TOUT),
+					M2MB_OS_TMR_SEL_CMD_PERIODIC, M2MB_OS_TMR_PERIODIC_TMR
+			)
+	);
+
 	if( res != M2MB_OS_SUCCESS )
 	{
 		AZX_LOG_ERROR("Timer attribute creation fail, error: %d\r\n", res);
@@ -138,8 +139,8 @@ M2MB_OS_RESULT_E res;
 
 INT32 get_timeval(UINT32 *pOutTime)
 {
-INT32 fd;
-M2MB_RTC_TIMEVAL_T timeval;
+	INT32 fd;
+	M2MB_RTC_TIMEVAL_T timeval;
 
 	fd = m2mb_rtc_open("/dev/rtc0", 0);
 	/* protection from invalid handle */
@@ -164,27 +165,27 @@ void WDcallback(M2MB_WDOG_HANDLE hDog, M2MB_WDOG_IND_E wDog_event,UINT16 resp_si
 	(void)resp_size;
 	(void)resp_struct;
 	(void)userdata;
-	
+
 	switch (wDog_event)
 	{
-		case M2MB_WDOG_TIMEOUT_IND:
-		{
-			AZX_LOG_INFO("Watchdog expired!\r\n");
-			/*release the event to unlock the task*/
-			get_timeval(&timeval2);
-			m2mb_os_ev_set(evHandle, EV_WDOG_TEST, M2MB_OS_EV_SET);
-		}
+	case M2MB_WDOG_TIMEOUT_IND:
+	{
+		AZX_LOG_INFO("Watchdog expired!\r\n");
+		/*release the event to unlock the task*/
+		get_timeval(&timeval2);
+		m2mb_os_ev_set(evHandle, EV_WDOG_TEST, M2MB_OS_EV_SET);
+	}
+	break;
+
+	default:
 		break;
-		
-		default:
-			break;
 	}
 }
 
 void WDog_Init(void)
 {
-M2MB_RESULT_E res;
-MEM_W time_ms;
+	M2MB_RESULT_E res;
+	MEM_W time_ms;
 
 	AZX_LOG_INFO("\r\nInit WatchDog\r\n");
 	res = m2mb_wDog_init(&h_wDog, WDcallback, 0);
@@ -211,13 +212,13 @@ MEM_W time_ms;
 	}
 
 
-	AZX_LOG_INFO("Adding Task under WD control with inactivity timeout of %ds\r\n", WD_TOUT_COUNT * WAKE_UP_TICKS * wd_tick_s);
+	AZX_LOG_INFO("Adding Task under WD control with inactivity timeout of %ds\r\n", gWD_TOUT_COUNT * gWAKE_UP_TICKS * wd_tick_s);
 	/* wdTimeout (inactivity timeout of the task) is set to WD_TOUT_COUNT (3 in this case).
 	 * This counter is decreased every time a control is done and no kick have been received. Control is done every WAKE_UP_TICKS.
 	 * When the counter reaches 0 a further control is done and if it's still 0 then callback is called,
 	 * so task inactivity timeout will be more or less  WD_TOUT_COUNT * WAKE_UP_TICKS * 1s
-	*/
-	res = m2mb_wDog_addTask(h_wDog, Task1_H, WD_TOUT_COUNT);
+	 */
+	res = m2mb_wDog_addTask(h_wDog, Task1_H, gWD_TOUT_COUNT);
 
 	if (res == M2MB_RESULT_SUCCESS)
 	{
@@ -233,7 +234,7 @@ MEM_W time_ms;
 	 * CTRL_TICKS_TO_REBOOT this defines the number of controls the wd does before rebooting the app if no kick are received (or no action is done in watchdog callback )
 	 * so timeout to reboot is  WAKE_UP_TICKS * CTRL_TICKS_TO_REBOOT * 1s
 	 */
-	res = m2mb_wDog_enable(h_wDog, WAKE_UP_TICKS, CTRL_TICKS_TO_REBOOT);
+	res = m2mb_wDog_enable(h_wDog, gWAKE_UP_TICKS, gCTRL_TICKS_TO_REBOOT);
 	if (res == M2MB_RESULT_SUCCESS)
 	{
 		AZX_LOG_INFO("m2mb_wDog_enable OK\r\n");
@@ -248,12 +249,16 @@ MEM_W time_ms;
 
 INT32 M2MB_msgTask1(INT32 type, INT32 param1, INT32 param2)
 {
-M2MB_OS_RESULT_E osRes;
-UINT32 ev_bits;
+	M2MB_OS_RESULT_E osRes;
+	UINT32 ev_bits;
 
 	(void)param1;
 	(void)param2;
 	//AZX_LOG_INFO(".\r\n");
+	configureParameters(); /*set default values first*/
+	readConfigFromFile(); /*try to read configuration from file (if present)*/
+
+
 	switch (type)
 	{
 	case TASK_START:
@@ -263,7 +268,7 @@ UINT32 ev_bits;
 		WDog_Init();
 		timer_Init();
 
-		AZX_LOG_INFO("\r\nStart WD kick every %ds...\r\n", TIMER_TOUT/1000);
+		AZX_LOG_INFO("\r\nStart WD kick every %ds...\r\n", gTIMER_TOUT/1000);
 		m2mb_os_tmr_start(tmrHandle);
 
 		break;
@@ -271,7 +276,7 @@ UINT32 ev_bits;
 	case LOOP:
 		/*
 		 * Simulate an infinite loop waiting an event for WDOG_WAIT_TO that should be bigger than WD_TOUT_COUNT * WAKE_UP_TICKS * 1s
-		*/
+		 */
 		AZX_LOG_INFO("Waiting for EV_WDOG_TEST event to simulate task lock\r\n");
 		get_timeval(&timeval1);
 		osRes = m2mb_os_ev_get(evHandle, EV_WDOG_TEST,
@@ -286,7 +291,7 @@ UINT32 ev_bits;
 			AZX_LOG_ERROR("Event EV_WDOG_TEST not received in time %d, code %d\r\n",
 					WDOG_WAIT_TO, osRes);
 		}
-		AZX_LOG_INFO("Task doing nothing and no kicks, waiting for app restart in %ds", CTRL_TICKS_TO_REBOOT * WAKE_UP_TICKS * wd_tick_s);
+		AZX_LOG_INFO("Task doing nothing and no kicks, waiting for app restart in %ds", gCTRL_TICKS_TO_REBOOT * gWAKE_UP_TICKS * wd_tick_s);
 		break;
 
 	case WD_KICK:
@@ -311,8 +316,8 @@ UINT32 ev_bits;
 **************************************************************************************************/
 void M2MB_main( int argc, char **argv )
 {
-M2MB_OS_RESULT_E os_res;
-M2MB_OS_EV_ATTR_HANDLE evAttrHandle;
+	M2MB_OS_RESULT_E os_res;
+	M2MB_OS_EV_ATTR_HANDLE evAttrHandle;
 
 	(void)argc;
 	(void)argv;

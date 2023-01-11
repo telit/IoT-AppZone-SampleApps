@@ -11,7 +11,7 @@
   @details
 
   @version 
-    1.0.2
+    1.0.3
 
   @note
 
@@ -42,13 +42,10 @@
 
 #include "m2m_tcp_test.h"
 
+#include "read_parameters.h"
+/* Macro =============================================================================*/
 
 /* Local defines ================================================================================*/
-#define SERVER "modules.telit.com"
-#define SERVER_PORT 80
-
-#define APN      "web.omnitel.it"
-#define PDP_CTX   (UINT8)3
 
 
 static M2MB_OS_EV_HANDLE net_pdp_evHandle = NULL;
@@ -61,8 +58,12 @@ M2MB_SOCKET_BSD_SOCKET sock_client = M2MB_SOCKET_BSD_INVALID_SOCKET;
 /* Local typedefs ===============================================================================*/
 
 /* Local statics ================================================================================*/
+
 /* Local function prototypes ====================================================================*/
+
 /* Static functions =============================================================================*/
+
+
 /* Global functions =============================================================================*/
 
 
@@ -199,8 +200,8 @@ int get_host_ip_by_name(const CHAR* host)
   struct M2MB_SOCKET_BSD_HOSTENT he;
   char tmpbuf[1024];
   int herr;
-  if ( ( ( m2mb_socket_bsd_get_host_by_name_2_r_cid( host, M2MB_SOCKET_BSD_AF_INET,  &he, tmpbuf, (SIZE_T) 1024, &phe, (INT32*) &herr, PDP_CTX) ) != 0 ) ||
-      ( phe == NULL ) )
+  if ( ( ( m2mb_socket_bsd_get_host_by_name_2_r_cid( host, M2MB_SOCKET_BSD_AF_INET,  &he, tmpbuf, (SIZE_T) 1024, &phe, (INT32*) &herr, gPDP_CTX) ) != 0 ) ||
+          ( phe == NULL ) )
   {
     return 0;
   }
@@ -239,29 +240,29 @@ void NetCallback(M2MB_NET_HANDLE h, M2MB_NET_IND_E net_event, UINT16 resp_size, 
   {
 
 #if 0
-  case M2MB_NET_REG_STATUS_IND:
-    AZX_LOG_DEBUG("Network change event!\r\n");
-    m2mb_net_get_reg_status_info(h);
-    break;
+    case M2MB_NET_REG_STATUS_IND:
+      AZX_LOG_DEBUG("Network change event!\r\n");
+      m2mb_net_get_reg_status_info(h);
+      break;
 #endif
 
-  case M2MB_NET_GET_REG_STATUS_INFO_RESP:
-    stat_info = (M2MB_NET_REG_STATUS_T*)resp_struct;
-    if  (stat_info->stat == 1 || stat_info->stat == 5)
-    {
-      AZX_LOG_TRACE("Module is registered to cell 0x%X!\r\n", stat_info->cellID);
-      m2mb_os_ev_set(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_SET);
-    }
-    else
-    {
-      m2mb_net_get_reg_status_info(h); //call it again
-    }
-    break;
+    case M2MB_NET_GET_REG_STATUS_INFO_RESP:
+      stat_info = (M2MB_NET_REG_STATUS_T*)resp_struct;
+      if  (stat_info->stat == 1 || stat_info->stat == 5)
+      {
+        AZX_LOG_TRACE("Module is registered to cell 0x%X!\r\n", stat_info->cellID);
+        m2mb_os_ev_set(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_SET);
+      }
+      else
+      {
+        m2mb_net_get_reg_status_info(h); //call it again
+      }
+      break;
 
 
-  default:
-    AZX_LOG_DEBUG("unexpected net_event: %d\r\n", net_event);
-    break;
+    default:
+      AZX_LOG_DEBUG("unexpected net_event: %d\r\n", net_event);
+      break;
 
   }
 }
@@ -275,21 +276,21 @@ void PdpCallback(M2MB_PDP_HANDLE h, M2MB_PDP_IND_E pdp_event, UINT8 cid, void *u
 
   switch (pdp_event)
   {
-  case M2MB_PDP_UP:
-    AZX_LOG_DEBUG ("Context activated!\r\n");
-    m2mb_pdp_get_my_ip(h, cid, M2MB_PDP_IPV4, &CBtmpAddress.sin_addr.s_addr);
-    m2mb_socket_bsd_inet_ntop( M2MB_SOCKET_BSD_AF_INET, &CBtmpAddress.sin_addr.s_addr, ( CHAR * )&( CBtmpIPaddr ), sizeof( CBtmpIPaddr ) );
-    AZX_LOG_DEBUG( "IP address: %s\r\n", CBtmpIPaddr);
+    case M2MB_PDP_UP:
+      AZX_LOG_DEBUG ("Context activated!\r\n");
+      m2mb_pdp_get_my_ip(h, cid, M2MB_PDP_IPV4, &CBtmpAddress.sin_addr.s_addr);
+      m2mb_socket_bsd_inet_ntop( M2MB_SOCKET_BSD_AF_INET, &CBtmpAddress.sin_addr.s_addr, ( CHAR * )&( CBtmpIPaddr ), sizeof( CBtmpIPaddr ) );
+      AZX_LOG_DEBUG( "IP address: %s\r\n", CBtmpIPaddr);
 
-    m2mb_os_ev_set(net_pdp_evHandle, EV_PDP_BIT, M2MB_OS_EV_SET);
-    break;
+      m2mb_os_ev_set(net_pdp_evHandle, EV_PDP_BIT, M2MB_OS_EV_SET);
+      break;
 
-  case M2MB_PDP_DOWN:
-    AZX_LOG_DEBUG ("Context successfully deactivated!\r\n");
-    break;
-  default:
-    AZX_LOG_DEBUG("unexpected pdp_event: %d\r\n", pdp_event);
-    break;
+    case M2MB_PDP_DOWN:
+      AZX_LOG_DEBUG ("Context successfully deactivated!\r\n");
+      break;
+    default:
+      AZX_LOG_DEBUG("unexpected pdp_event: %d\r\n", pdp_event);
+      break;
 
   }
 }
@@ -320,6 +321,10 @@ INT32 M2M_msgTCPTask(INT32 type, INT32 param1, INT32 param2)
   do
   {
     AZX_LOG_DEBUG("INIT\r\n");
+
+
+    configureParameters(); /*set default values first*/
+    readConfigFromFile(); /*try to read configuration from file (if present)*/
 
     /* Init events handler */
     osRes  = m2mb_os_ev_setAttrItem( &evAttrHandle, CMDS_ARGS(M2MB_OS_EV_SEL_CMD_CREATE_ATTR, NULL, M2MB_OS_EV_SEL_CMD_NAME, "net_pdp_ev"));
@@ -377,10 +382,12 @@ INT32 M2M_msgTCPTask(INT32 type, INT32 param1, INT32 param2)
     memset( apnUser, 0x00, sizeof(apnUser) );
     memset( apnPwd, 0x00, sizeof(apnPwd) );
 
-    strcat( apn, APN );
+    strcat(apn, gAPN);
+    strcat(apnUser, gAPN_UserName);
+    strcat(apnPwd, gAPN_Password);
 
     AZX_LOG_DEBUG("Activate PDP with APN %s....\r\n", apn);
-    retVal = m2mb_pdp_activate(pdpHandle, PDP_CTX, apn, apnUser, apnPwd, M2MB_PDP_IPV4); //activates cid 3 with APN "internet.wind.biz" and IP type IPV4
+    retVal = m2mb_pdp_activate(pdpHandle, gPDP_CTX, apn, apnUser, apnPwd, M2MB_PDP_IPV4); //activates cid 3 with APN "internet.wind.biz" and IP type IPV4
     if ( retVal != M2MB_RESULT_SUCCESS )
     {
       AZX_LOG_ERROR("cannot activate pdp context.\r\n");
@@ -404,17 +411,17 @@ INT32 M2M_msgTCPTask(INT32 type, INT32 param1, INT32 param2)
     }
 
 
-    if ( m2mb_socket_set_cid( sock_client, PDP_CTX ) != 0 )
+    if ( m2mb_socket_set_cid( sock_client, gPDP_CTX ) != 0 )
     {
-      AZX_LOG_ERROR( "Socket not set to ctx: %d\r\n", PDP_CTX );
+      AZX_LOG_ERROR( "Socket not set to ctx: %d\r\n", gPDP_CTX );
       return -1;
     }
 
-    AZX_LOG_DEBUG( "Socket ctx set to %d\r\n", PDP_CTX );
+    AZX_LOG_DEBUG( "Socket ctx set to %d\r\n", gPDP_CTX );
 
     memset(&stSockAddr, 0, sizeof(struct M2MB_SOCKET_BSD_SOCKADDR_IN));
 
-    if (0 == (stSockAddr.sin_addr.s_addr= get_host_ip_by_name(SERVER)))
+    if (0 == (stSockAddr.sin_addr.s_addr= get_host_ip_by_name(gServer)))
     {
       AZX_LOG_ERROR("Cannot retrieve IP\r\n");
       task_status = APPLICATION_EXIT;
@@ -427,10 +434,10 @@ INT32 M2M_msgTCPTask(INT32 type, INT32 param1, INT32 param2)
     }
 
     stSockAddr.sin_family = M2MB_SOCKET_BSD_PF_INET;
-    stSockAddr.sin_port = m2mb_socket_bsd_htons(SERVER_PORT);
+    stSockAddr.sin_port = m2mb_socket_bsd_htons(gServer_Port);
 
     if( 0 != m2mb_socket_bsd_connect(sock_client, (struct M2MB_SOCKET_BSD_SOCKADDR*)&stSockAddr,
-        sizeof(struct M2MB_SOCKET_BSD_SOCKADDR_IN)))
+            sizeof(struct M2MB_SOCKET_BSD_SOCKADDR_IN)))
     {
       AZX_LOG_ERROR("Cannot connect socket!\r\n");
       task_status = APPLICATION_EXIT;
@@ -493,7 +500,7 @@ INT32 M2M_msgTCPTask(INT32 type, INT32 param1, INT32 param2)
 
     m2mb_socket_bsd_close( sock_client );
 
-    ret = m2mb_pdp_deactivate(pdpHandle, PDP_CTX);
+    ret = m2mb_pdp_deactivate(pdpHandle, gPDP_CTX);
     if(ret != M2MB_RESULT_SUCCESS)
     {
       AZX_LOG_ERROR("CANNOT DEACTIVATE PDP\r\n");

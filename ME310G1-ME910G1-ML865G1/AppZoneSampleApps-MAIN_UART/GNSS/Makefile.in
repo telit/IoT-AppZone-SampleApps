@@ -15,7 +15,7 @@ LOGS_COLOUR = 0
 
 ## ---- do not touch below this line
 
-SW_VER = 1.1.15
+SW_VER = 1.1.17
 
 CLEAN_BEFORE_BUILD = clean
 
@@ -24,12 +24,11 @@ CPPFLAGS += -DVERSION=\"$(SW_VER)\"
 
 
 ifeq ($(strip $(LOGS_ENABLE)),1)
-CPPFLAGS += -DAZX_LOG_ENABLE
 CPPFLAGS += -DLOG_CHANNEL=$(LOGS_CHANNEL)
 CPPFLAGS += -DAZX_LOG_LEVEL=AZX_LOG_LEVEL_$(LOGS_LEVEL)
-
 CPPFLAGS += -DAZX_LOG_ENABLE_COLOURS=$(LOGS_COLOUR)
-
+else
+CPPFLAGS += -DAZX_LOG_DISABLE
 endif
 
 
@@ -48,3 +47,9 @@ endif
 
 CPPFLAGS += -I azx/hdr
 OBJS += $(patsubst %.c,%.o,$(wildcard azx/src/*.c))
+
+# from prod_tool.in file
+ifeq ($(AZ_MODEL), ME910G1)
+  CPPFLAGS += -DM2MB_WWAN_GNSS_SWITCH_AVAILABLE
+endif
+

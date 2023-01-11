@@ -41,9 +41,9 @@ var azx__spi__flash__jsc_8h =
     [ "SPI_FLASH_WAITING_TIMEOUT", "azx__spi__flash__jsc_8h.html#a56386e80f801a39d557cf9977ee9f757", null ],
     [ "AZX_SPI_FLASH_CLBK_FUNCTION", "azx__spi__flash__jsc_8h.html#a8fa51bf0f0afd1fb3923852d74a1f71a", null ],
     [ "AZX_SPI_FLASH_JSC_HANDLE", "azx__spi__flash__jsc_8h.html#a6097029ad73f4786cac5179724bfedae", null ],
-    [ "MTD_OPS_PLACE_OOB", "azx__spi__flash__jsc_8h.html#a0411cd49bb5b71852cecd93bcbf0ca2da56927300333604a220d08bde6252c7b4", null ],
-    [ "MTD_OPS_AUTO_OOB", "azx__spi__flash__jsc_8h.html#a0411cd49bb5b71852cecd93bcbf0ca2daa73712d2a90bddf732f129471e41740c", null ],
-    [ "MTD_OPS_RAW", "azx__spi__flash__jsc_8h.html#a0411cd49bb5b71852cecd93bcbf0ca2da911e854f3baea378f4556a02ae63a1e7", null ],
+    [ "MTD_OPS_PLACE_OOB", "azx__spi__flash__jsc_8h.html#a61dadd085c1777f559549e05962b2c9ea56927300333604a220d08bde6252c7b4", null ],
+    [ "MTD_OPS_AUTO_OOB", "azx__spi__flash__jsc_8h.html#a61dadd085c1777f559549e05962b2c9eaa73712d2a90bddf732f129471e41740c", null ],
+    [ "MTD_OPS_RAW", "azx__spi__flash__jsc_8h.html#a61dadd085c1777f559549e05962b2c9ea911e854f3baea378f4556a02ae63a1e7", null ],
     [ "AZX_SPI_FLASH_JSC_EVENT_E", "azx__spi__flash__jsc_8h.html#a04f24c0d905e06c83c3ab2a6f509d73d", [
       [ "AZX_SPI_FLASH_INITIALIZED", "azx__spi__flash__jsc_8h.html#a04f24c0d905e06c83c3ab2a6f509d73daa6391a9fb711de60b63e0b35f7945192", null ],
       [ "AZX_SPI_FLASH_SPI_INITIALIZED", "azx__spi__flash__jsc_8h.html#a04f24c0d905e06c83c3ab2a6f509d73da8ab89f36072b323837230fb4ea0b261e", null ],

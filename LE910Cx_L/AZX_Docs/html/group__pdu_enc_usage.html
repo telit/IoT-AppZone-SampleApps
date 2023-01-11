@@ -34,7 +34,7 @@
   <td id="projectlogo"><img alt="Logo" src="telit-logo.png"/></td>
   <td id="projectalign" style="padding-left: 2em;">
    <div id="projectname">AZX (AppZone eXtensions) documentation
-   &#160;<span id="projectnumber">1.1.15-CxL</span>
+   &#160;<span id="projectnumber">1.1.17-CxL</span>
    </div>
    <div id="projectbrief">A set of companion utilities that make AZ development easier</div>
   </td>
@@ -109,6 +109,9 @@ Functions</h2></td></tr>
 <tr class="memitem:gacb79107f730c3a648b4033429d3cc8d8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pdu_enc_usage.html#gacb79107f730c3a648b4033429d3cc8d8">azx_pdu_encode</a> (CHAR *number, CHAR *str, UINT8 *pdu, INT32 dcs)</td></tr>
 <tr class="memdesc:gacb79107f730c3a648b4033429d3cc8d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encode a PDU from the input parameters.  <a href="group__pdu_enc_usage.html#gacb79107f730c3a648b4033429d3cc8d8">More...</a><br /></td></tr>
 <tr class="separator:gacb79107f730c3a648b4033429d3cc8d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaccb4e2ccee1b643e47dc243c5351883a"><td class="memItemLeft" align="right" valign="top">INT32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pdu_enc_usage.html#gaccb4e2ccee1b643e47dc243c5351883a">azx_pdu_encode_generic</a> (AZX_SMS_ADDR_NUM_TYPE_E type, CHAR *number, CHAR *str, UINT8 *pdu, INT32 dcs)</td></tr>
+<tr class="memdesc:gaccb4e2ccee1b643e47dc243c5351883a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encode a PDU from the input parameters, allowing to select the number address type.  <a href="group__pdu_enc_usage.html#gaccb4e2ccee1b643e47dc243c5351883a">More...</a><br /></td></tr>
+<tr class="separator:gaccb4e2ccee1b643e47dc243c5351883a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Functions usable to create a PDU message from a string text. </p>
@@ -215,6 +218,67 @@ Functions</h2></td></tr>
 <p><b>Refer to</b> azx_pdu_Decoder() </p>
 <dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_pdu_enc_example_8c-example.html#a0">azx_pduEnc_example.c</a>.</dd>
 </dl>
+
+</div>
+</div>
+<a id="gaccb4e2ccee1b643e47dc243c5351883a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaccb4e2ccee1b643e47dc243c5351883a">&#9670;&nbsp;</a></span>azx_pdu_encode_generic()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">INT32 azx_pdu_encode_generic </td>
+          <td>(</td>
+          <td class="paramtype">AZX_SMS_ADDR_NUM_TYPE_E&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">CHAR *&#160;</td>
+          <td class="paramname"><em>number</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">CHAR *&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">UINT8 *&#160;</td>
+          <td class="paramname"><em>pdu</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">INT32&#160;</td>
+          <td class="paramname"><em>dcs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Encode a PDU from the input parameters, allowing to select the number address type. </p>
+<p>This function encodes the PDU (in binary stream format) using the encoding, number and message provided</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">type</td><td>Address number type (national/international), refer to AZX_SMS_ADDR_NUM_TYPE_E enum. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">number</td><td>string containig the sender number </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>string containing the text message </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdu</td><td>pointer to the pdu buffer that will be filled with the encoded data </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dcs</td><td>data coding scheme, can bee GSM Standard (PDU_DCS_7), 8bits (PDU_DCS_8) or UCS2 (PDU_DCS_UCS2)</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The length of the encoded pdu</dd></dl>
+<p><b>Refer to</b> azx_pdu_Decoder() </p>
 
 </div>
 </div>

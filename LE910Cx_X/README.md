@@ -4,7 +4,7 @@
 
 
 
-Package Version: **1.1.15-CxX**
+Package Version: **1.1.17-CxX**
 
 Minimum Firmware Version: **25.30.222.3**
 
@@ -113,6 +113,30 @@ On IDE, create a new project: "File"-> "New" -> "Telit Project"
 Select the preferred firmware version (e.g. 30.00.xx7) and create an empty project.
 
 in the samples package, go in the HelloWorld folder (e.g. `AppZoneSampleApps-MAIN_UART\HelloWorld` ), copy all the files and folders in it (as `src`, `hdr`, `azx` ) and paste them in the root of the newly created IDE project. You are now ready tyo build and try the sample app on your device.
+
+## Heap and starting address
+
+By default, every application defines a memory HEAP size and its start address in memory. 
+
+They are usually provided by the linking phase of the build process:
+
+```
+"[...]arm-none-eabi-ld" --defsym __ROM=0x40000000 --defsym __HEAP_PUB_SIZE=0x40000 --defsym 
+```
+
+`__ROM` is the default starting address, `__HEAP_PUB_SIZE` is the default HEAP size in bytes. Both are expressed  in hexadecimal format.
+
+These values can be customized through makefile variables:
+
+```
+HEAP=<new size in bytes>
+```
+
+```
+ROM_START=<new address>
+```
+
+**IMPORTANT** allowed address range is 0x40000000 - 0x4FFFF000. 
 
 
 
@@ -814,8 +838,19 @@ Sample application showcasing Easy AT functionalities. Debug prints on **AUX UAR
 - Shows how to register custom commands
 
 
+The application adds two custom commands to the list of available ones:
+
+- AT#MYCMD
+- AT#MYINPUT
 
 
+#### AT#MYCMD
+
+This is a simple parameter-waiting command. It expects one string parameter, and will print it on the logging interface once received. The command simply returns OK 
+
+#### AT#MYINPUT
+
+This command expects a numeric parameter, which indicates how many bytes will be received over the interface at most (the command will provide a prompt indicating it is waiting data). Then the data management callback will print when data is received, and if CTRL+Z (0x1A in hex) is received, it will complete the process, printing in the log interface what was received. sending ESC will terminate the process discarding any pending data.
 
 ### Events
 
@@ -927,6 +962,44 @@ Sample application showcasing FOTA usage with M2MB API. Debug prints on **AUX UA
 
 
 ![](pictures/samples/fota_bordered.png)
+
+---------------------
+
+
+
+### FOTA from Local File example 
+
+Sample application that shows how perform FOTA upgrade using a delta file stored into file system. Debug prints on **AUX UART**
+
+
+**Features**
+
+
+- How to store and get FOTA upgrade information to/from a file
+- How to get delta file from module file system
+- How to apply the delta and update module firmware
+
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Check if module has been already upgraded or needs to be upgraded reading FOTA upgrade status from a file
+- Create a fota task to manage FOTA and start it with INIT option
+
+**smartFotaTask()**
+- Initialize FOTA system then reset parameters.
+- Get FOTA partiton size and block size
+- Copy delta file from file system to FOTA paartition. when it is completed, FOTADownloadCallback is called.
+- If delta file is correct, apply it. Once complete, write FOTA status flag and current fw version to a file, restart the module.
+
+
+![](pictures/samples/Fota_from_file_app_bordered.png)
 
 ---------------------
 
@@ -1121,7 +1194,7 @@ Sample application showing how to use HTTPs client functionalities. Debug prints
 
 - How to check module registration and activate PDP context
 - How to initialize the http client, set the debug hook function and the data callback to manage incoming data
-- How to perform GET, HEAD or POST operations
+- How to perform GET, HEAD or POST operations (GET also with single range support)
 
 NOTE: the sample app has an optional dependency on azx_base64.h if basic authentication is required (refer to `HTTP_BASIC_AUTH_GET` define in `M2MB_main.c` for further details)
 
@@ -1615,6 +1688,49 @@ AT#M2MWRITE="/mod/sms_config.txt",138
 - When SMS has been received, content is decoded and printed. If there is an AT command inside, command is executed and answer printed and sent back to sender as an SMS (depending on sms_config.txt setting)
 
 ![](pictures/samples/sms_atCmd_bordered.png)
+
+---------------------
+
+
+
+### SMTP Client 
+
+Sample application showing SMTP echo demo with M2MB API. Debug prints on **AUX UART**
+
+
+**Features**
+
+
+- How to check module registration and activate PDP context
+- How to open a SMTP client
+- How to send a mail
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Create a task to manage SMTP client and start it
+
+**`M2MB_main.c`**
+
+- Initialize Network structure and check registration
+
+- Initialize PDP structure and start PDP context
+
+- Initialize SMTP client and connect to SMTP server
+
+- Prepare email and send it
+
+- Close SMTP client
+
+- Disable PDP context
+
+![](pictures/samples/smtp_client_bordered.png)
 
 ---------------------
 
@@ -2472,8 +2588,19 @@ Sample application showcasing Easy AT functionalities. Debug prints on **USB0**
 - Shows how to register custom commands
 
 
+The application adds two custom commands to the list of available ones:
+
+- AT#MYCMD
+- AT#MYINPUT
 
 
+#### AT#MYCMD
+
+This is a simple parameter-waiting command. It expects one string parameter, and will print it on the logging interface once received. The command simply returns OK 
+
+#### AT#MYINPUT
+
+This command expects a numeric parameter, which indicates how many bytes will be received over the interface at most (the command will provide a prompt indicating it is waiting data). Then the data management callback will print when data is received, and if CTRL+Z (0x1A in hex) is received, it will complete the process, printing in the log interface what was received. sending ESC will terminate the process discarding any pending data.
 
 ### Events
 
@@ -2585,6 +2712,44 @@ Sample application showcasing FOTA usage with M2MB API. Debug prints on **USB0**
 
 
 ![](pictures/samples/fota_bordered.png)
+
+---------------------
+
+
+
+### FOTA from Local File example 
+
+Sample application that shows how perform FOTA upgrade using a delta file stored into file system. Debug prints on **USB0**
+
+
+**Features**
+
+
+- How to store and get FOTA upgrade information to/from a file
+- How to get delta file from module file system
+- How to apply the delta and update module firmware
+
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Check if module has been already upgraded or needs to be upgraded reading FOTA upgrade status from a file
+- Create a fota task to manage FOTA and start it with INIT option
+
+**smartFotaTask()**
+- Initialize FOTA system then reset parameters.
+- Get FOTA partiton size and block size
+- Copy delta file from file system to FOTA paartition. when it is completed, FOTADownloadCallback is called.
+- If delta file is correct, apply it. Once complete, write FOTA status flag and current fw version to a file, restart the module.
+
+
+![](pictures/samples/Fota_from_file_app_bordered.png)
 
 ---------------------
 
@@ -2779,7 +2944,7 @@ Sample application showing how to use HTTPs client functionalities. Debug prints
 
 - How to check module registration and activate PDP context
 - How to initialize the http client, set the debug hook function and the data callback to manage incoming data
-- How to perform GET, HEAD or POST operations
+- How to perform GET, HEAD or POST operations (GET also with single range support)
 
 NOTE: the sample app has an optional dependency on azx_base64.h if basic authentication is required (refer to `HTTP_BASIC_AUTH_GET` define in `M2MB_main.c` for further details)
 
@@ -3341,6 +3506,49 @@ AT#M2MWRITE="/mod/sms_config.txt",138
 
 
 
+### SMTP Client 
+
+Sample application showing SMTP echo demo with M2MB API. Debug prints on **USB0**
+
+
+**Features**
+
+
+- How to check module registration and activate PDP context
+- How to open a SMTP client
+- How to send a mail
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Create a task to manage SMTP client and start it
+
+**`M2MB_main.c`**
+
+- Initialize Network structure and check registration
+
+- Initialize PDP structure and start PDP context
+
+- Initialize SMTP client and connect to SMTP server
+
+- Prepare email and send it
+
+- Close SMTP client
+
+- Disable PDP context
+
+![](pictures/samples/smtp_client_bordered.png)
+
+---------------------
+
+
+
 ### SPI Echo
 
 Sample application showing how to communicate over SPI with m2mb API. Debug prints on **USB0**
@@ -3536,6 +3744,51 @@ Sample application showcasing TCP echo demo with M2MB API. Debug prints on **USB
 - Disable PDP context
 
 ![](pictures/samples/tcp_ip_bordered.png)
+
+---------------------
+
+
+
+### TCP non blocking example 
+
+Sample application that shows how to configure and connect a TCP-IP non blocking socket. Debug prints on **USB0**
+
+
+**Features**
+
+
+- How to check module registration and activate PDP context
+- How to open a TCP client non Blocking socket 
+- How to communicate over the socket
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Create a task to manage socket and start it
+
+**`m2m_tcp_test.c`**
+
+- Initialize Network structure and check registration
+
+- Initialize PDP structure and start PDP context
+
+- Create socket and link it to the PDP context id
+
+- Set the socket as non Blocking and connect to server. Uses m2mb_socket_bsd_select, m2mb_socket_bsd_fd_isset_func to check when socket is connected.
+
+- Send data and receive response
+
+- Close socket
+
+- Disable PDP context
+
+![](pictures/samples/TCP_non_lock_output_bordered.png)
 
 ---------------------
 
@@ -3756,6 +4009,43 @@ Sample application showcasing UDP echo demo with M2MB API. Debug prints on **USB
 - Disable PDP context
 
 ![](pictures/samples/udp_bordered.png)
+
+---------------------
+
+
+
+### UDP_Server example 
+
+Sample application that shows UDP listening socket demo with m2mb apis. Debug prints on **USB0**
+
+
+**Features**
+
+
+- How to configure an UDP socket into listen mode 
+- How to receive data using m2mb_socket_bsd_select  
+- How to read data received and send data to client
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Print welcome message
+- Init task apis and create M2M_msgUDPTask to handle UDP socket
+
+
+**`m2mb_udp_test.c`**
+
+**`M2M_msgUDPTask`**
+
+- Wait for module registration
+- Activate PDP context
+- Create UDP listen socket
+- Wait for incoming data from client using m2mb_socket_bsd_select
+- When there are data on socket, read them and send some data back to client
+
+![](pictures/samples/UDP_Server_output_bordered.png)
 
 ---------------------
 
@@ -4260,8 +4550,19 @@ Sample application showcasing Easy AT functionalities. Debug prints on **MAIN UA
 - Shows how to register custom commands
 
 
+The application adds two custom commands to the list of available ones:
+
+- AT#MYCMD
+- AT#MYINPUT
 
 
+#### AT#MYCMD
+
+This is a simple parameter-waiting command. It expects one string parameter, and will print it on the logging interface once received. The command simply returns OK 
+
+#### AT#MYINPUT
+
+This command expects a numeric parameter, which indicates how many bytes will be received over the interface at most (the command will provide a prompt indicating it is waiting data). Then the data management callback will print when data is received, and if CTRL+Z (0x1A in hex) is received, it will complete the process, printing in the log interface what was received. sending ESC will terminate the process discarding any pending data.
 
 ### Events
 
@@ -4373,6 +4674,44 @@ Sample application showcasing FOTA usage with M2MB API. Debug prints on **MAIN U
 
 
 ![](pictures/samples/fota_bordered.png)
+
+---------------------
+
+
+
+### FOTA from Local File example 
+
+Sample application that shows how perform FOTA upgrade using a delta file stored into file system. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- How to store and get FOTA upgrade information to/from a file
+- How to get delta file from module file system
+- How to apply the delta and update module firmware
+
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Check if module has been already upgraded or needs to be upgraded reading FOTA upgrade status from a file
+- Create a fota task to manage FOTA and start it with INIT option
+
+**smartFotaTask()**
+- Initialize FOTA system then reset parameters.
+- Get FOTA partiton size and block size
+- Copy delta file from file system to FOTA paartition. when it is completed, FOTADownloadCallback is called.
+- If delta file is correct, apply it. Once complete, write FOTA status flag and current fw version to a file, restart the module.
+
+
+![](pictures/samples/Fota_from_file_app_bordered.png)
 
 ---------------------
 
@@ -4567,7 +4906,7 @@ Sample application showing how to use HTTPs client functionalities. Debug prints
 
 - How to check module registration and activate PDP context
 - How to initialize the http client, set the debug hook function and the data callback to manage incoming data
-- How to perform GET, HEAD or POST operations
+- How to perform GET, HEAD or POST operations (GET also with single range support)
 
 NOTE: the sample app has an optional dependency on azx_base64.h if basic authentication is required (refer to `HTTP_BASIC_AUTH_GET` define in `M2MB_main.c` for further details)
 
@@ -5129,6 +5468,49 @@ AT#M2MWRITE="/mod/sms_config.txt",138
 
 
 
+### SMTP Client 
+
+Sample application showing SMTP echo demo with M2MB API. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- How to check module registration and activate PDP context
+- How to open a SMTP client
+- How to send a mail
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Create a task to manage SMTP client and start it
+
+**`M2MB_main.c`**
+
+- Initialize Network structure and check registration
+
+- Initialize PDP structure and start PDP context
+
+- Initialize SMTP client and connect to SMTP server
+
+- Prepare email and send it
+
+- Close SMTP client
+
+- Disable PDP context
+
+![](pictures/samples/smtp_client_bordered.png)
+
+---------------------
+
+
+
 ### SPI Echo
 
 Sample application showing how to communicate over SPI with m2mb API. Debug prints on **MAIN UART**
@@ -5324,6 +5706,51 @@ Sample application showcasing TCP echo demo with M2MB API. Debug prints on **MAI
 - Disable PDP context
 
 ![](pictures/samples/tcp_ip_bordered.png)
+
+---------------------
+
+
+
+### TCP non blocking example 
+
+Sample application that shows how to configure and connect a TCP-IP non blocking socket. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- How to check module registration and activate PDP context
+- How to open a TCP client non Blocking socket 
+- How to communicate over the socket
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Create a task to manage socket and start it
+
+**`m2m_tcp_test.c`**
+
+- Initialize Network structure and check registration
+
+- Initialize PDP structure and start PDP context
+
+- Create socket and link it to the PDP context id
+
+- Set the socket as non Blocking and connect to server. Uses m2mb_socket_bsd_select, m2mb_socket_bsd_fd_isset_func to check when socket is connected.
+
+- Send data and receive response
+
+- Close socket
+
+- Disable PDP context
+
+![](pictures/samples/TCP_non_lock_output_bordered.png)
 
 ---------------------
 
@@ -5580,6 +6007,43 @@ Sample application showcasing UDP echo demo with M2MB API. Debug prints on **MAI
 - Disable PDP context
 
 ![](pictures/samples/udp_bordered.png)
+
+---------------------
+
+
+
+### UDP_Server example 
+
+Sample application that shows UDP listening socket demo with m2mb apis. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- How to configure an UDP socket into listen mode 
+- How to receive data using m2mb_socket_bsd_select  
+- How to read data received and send data to client
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Print welcome message
+- Init task apis and create M2M_msgUDPTask to handle UDP socket
+
+
+**`m2mb_udp_test.c`**
+
+**`M2M_msgUDPTask`**
+
+- Wait for module registration
+- Activate PDP context
+- Create UDP listen socket
+- Wait for incoming data from client using m2mb_socket_bsd_select
+- When there are data on socket, read them and send some data back to client
+
+![](pictures/samples/UDP_Server_output_bordered.png)
 
 ---------------------
 

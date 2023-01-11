@@ -29,7 +29,6 @@ var azx__ftp_8h =
     [ "azx_ftp_fsz_t", "azx__ftp_8h.html#a883a8abfcc8f9e553ae3843253dda83a", null ],
     [ "AZX_FTP_NET_BUF_T", "azx__ftp_8h.html#a60ff811724b199da009e4ec755ed3d21", null ],
     [ "AZX_FTP_OPTIONS_T", "azx__ftp_8h.html#a7fbf57a86231e6b24bc47aefbd819ac6", null ],
-    [ "AZX_FTP_XFER_T", "group___a_z_x___f_t_p___u_s_a_g_e.html#gad00a4ba26fa22811b61904e411bd1af2", null ],
     [ "AZX_FTP_DEBUG_HOOK_LEVELS_E", "group___a_z_x___f_t_p___c_o_n_f.html#ga5b2d4554c8d26b5ad29aa165b17adf19", [
       [ "AZX_FTP_DEBUG_HOOK_NONE", "group___a_z_x___f_t_p___c_o_n_f.html#gga5b2d4554c8d26b5ad29aa165b17adf19a080dc84c20af83589e186c1102724665", null ],
       [ "AZX_FTP_DEBUG_HOOK_ERROR", "group___a_z_x___f_t_p___c_o_n_f.html#gga5b2d4554c8d26b5ad29aa165b17adf19adf82f3622ed1c2f86322033e98fa82d1", null ],
@@ -45,6 +44,7 @@ var azx__ftp_8h =
       [ "AZX_FTP_XFER_FILE", "group___a_z_x___f_t_p___u_s_a_g_e.html#gga93677062f9160355dea103b8049695f2ac9f6fc2bf068a4a3f96e6eff260c3d27", null ],
       [ "AZX_FTP_XFER_BUFF", "group___a_z_x___f_t_p___u_s_a_g_e.html#gga93677062f9160355dea103b8049695f2a5902786cfaa7660a0a2f89d084ce22ff", null ]
     ] ],
+    [ "__attribute__", "group___a_z_x___f_t_p___u_s_a_g_e.html#ga298686c18b407b998e5ea002bd65bdd4", null ],
     [ "azx_ftp_cdUp", "group___a_z_x___f_t_p___u_s_a_g_e.html#ga14bdbe2e63b0c3a7eaf7d2ede2befa11", null ],
     [ "azx_ftp_chdir", "group___a_z_x___f_t_p___u_s_a_g_e.html#gaf9617c8c28b79495063d2259ee56e10f", null ],
     [ "azx_ftp_clearCallback", "group___a_z_x___f_t_p___u_s_a_g_e.html#ga697c4239a8a778e3ca876c1e06f69549", null ],
@@ -67,5 +67,6 @@ var azx__ftp_8h =
     [ "azx_ftp_setCallback", "group___a_z_x___f_t_p___u_s_a_g_e.html#ga83324a297a9eb71c4c3003b81b8f7f61", null ],
     [ "azx_ftp_site", "group___a_z_x___f_t_p___u_s_a_g_e.html#gab0392507e7a32bed1915c2bac2f343ec", null ],
     [ "azx_ftp_size", "group___a_z_x___f_t_p___u_s_a_g_e.html#ga71aa36b0717a844334e0cc3beea3046f", null ],
-    [ "azx_ftp_sysType", "group___a_z_x___f_t_p___u_s_a_g_e.html#ga5bdeda3a38f9208ee690f9bc5e96e5d5", null ]
+    [ "azx_ftp_sysType", "group___a_z_x___f_t_p___u_s_a_g_e.html#ga5bdeda3a38f9208ee690f9bc5e96e5d5", null ],
+    [ "AZX_FTP_XFER_T", "azx__ftp_8h.html#aeb7cc3f403176125bff7b871848ad40e", null ]
 ];
