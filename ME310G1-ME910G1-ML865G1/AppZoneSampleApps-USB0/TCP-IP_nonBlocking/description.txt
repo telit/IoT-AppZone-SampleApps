@@ -1,0 +1,1 @@
+Sample application that shows how to configure and connect a TCP-IP non blocking socket. Debug prints on USB0

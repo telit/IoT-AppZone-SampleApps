@@ -84,9 +84,9 @@ void M2MB_main( int argc, char **argv )
 
   AZX_LOG_TRACE("Task ID: %d.\r\n", main_task_id);
   AZX_LOG_TRACE("Fota Task ID: %d.\r\n", fota_task_id);
-  
+
   azx_sleep_ms(5000);
-  
+
   if(fota_task_id > 0)
   {
     azx_tasks_sendMessageToTask( fota_task_id, INITFOTA, 0, 0);

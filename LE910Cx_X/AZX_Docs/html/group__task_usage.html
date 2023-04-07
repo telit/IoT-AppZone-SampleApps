@@ -34,7 +34,7 @@
   <td id="projectlogo"><img alt="Logo" src="telit-logo.png"/></td>
   <td id="projectalign" style="padding-left: 2em;">
    <div id="projectname">AZX (AppZone eXtensions) documentation
-   &#160;<span id="projectnumber">1.1.15-CxL</span>
+   &#160;<span id="projectnumber">1.1.18-CxL</span>
    </div>
    <div id="projectbrief">A set of companion utilities that make AZ development easier</div>
   </td>
@@ -115,6 +115,9 @@ Typedefs</h2></td></tr>
 <tr class="memitem:gaf5abdb36b530c6d64d58a14555a68416"><td class="memItemLeft" align="right" valign="top">typedef INT32(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__task_usage.html#gaf5abdb36b530c6d64d58a14555a68416">USER_TASK_CB</a>) (INT32, INT32, INT32)</td></tr>
 <tr class="memdesc:gaf5abdb36b530c6d64d58a14555a68416"><td class="mdescLeft">&#160;</td><td class="mdescRight">Task user callback signature.  <a href="group__task_usage.html#gaf5abdb36b530c6d64d58a14555a68416">More...</a><br /></td></tr>
 <tr class="separator:gaf5abdb36b530c6d64d58a14555a68416"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga90d9b7cdb04ee33e160a47f4dbd61e31"><td class="memItemLeft" align="right" valign="top">typedef INT32(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__task_usage.html#ga90d9b7cdb04ee33e160a47f4dbd61e31">azx_tasks_onTaskComplCB</a>) (INT32, INT32, INT32)</td></tr>
+<tr class="memdesc:ga90d9b7cdb04ee33e160a47f4dbd61e31"><td class="mdescLeft">&#160;</td><td class="mdescRight">task complete return user function  <a href="group__task_usage.html#ga90d9b7cdb04ee33e160a47f4dbd61e31">More...</a><br /></td></tr>
+<tr class="separator:ga90d9b7cdb04ee33e160a47f4dbd61e31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -135,7 +138,8 @@ Enumerations</h2></td></tr>
 <a class="el" href="group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6ba671695a5dacb80dfa6d27451e9fe146b">AZX_TASKS_INVALID_ID_ERR</a> = -20, 
 <br />
 &#160;&#160;<a class="el" href="group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6baff0009833effaf091c786391904bff10">AZX_TASKS_ID_NOT_DEFINED_ERR</a> = -21, 
-<a class="el" href="group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6bae659d2da10c13fa8459f28743671970b">AZX_TASKS_MSG_SEND_ERR</a> = -22
+<a class="el" href="group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6bae659d2da10c13fa8459f28743671970b">AZX_TASKS_MSG_SEND_ERR</a> = -22, 
+<a class="el" href="group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6bae406edbd410c18d740e1bd5a43f738f4">AZX_TASKS_INTERNAL_ERR</a> = -30
 <br />
  }</td></tr>
 <tr class="memdesc:ga5b29dff3d5b477adbbf73a1515983c6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Task related return codes.  <a href="group__task_usage.html#ga5b29dff3d5b477adbbf73a1515983c6b">More...</a><br /></td></tr>
@@ -146,7 +150,8 @@ Enumerations</h2></td></tr>
 <a class="el" href="group__task_usage.html#gga036b9cf9c298d9d53b608bf3942e3fb3a55c48feee3f1357cd3d4f8a4a89e2837">AZX_TASKS_STACK_L</a> = 8192, 
 <a class="el" href="group__task_usage.html#gga036b9cf9c298d9d53b608bf3942e3fb3a23b2068ca2a946f91a92d87c14dd9998">AZX_TASKS_STACK_XL</a> = 16384, 
 <br />
-&#160;&#160;<a class="el" href="group__task_usage.html#gga036b9cf9c298d9d53b608bf3942e3fb3ab517d507287a275651ea4c6bb28320aa">M2M_OS_TASK_STACK_LIMIT</a> = 32768
+&#160;&#160;<a class="el" href="group__task_usage.html#gga036b9cf9c298d9d53b608bf3942e3fb3a935490df232896369ca03eee1ff5ae0c">AZX_TASKS_STACK_XXL</a> = 32768, 
+<a class="el" href="group__task_usage.html#gga036b9cf9c298d9d53b608bf3942e3fb3ab517d507287a275651ea4c6bb28320aa">M2M_OS_TASK_STACK_LIMIT</a> = 65536
 <br />
  }</td></tr>
 <tr class="memdesc:ga036b9cf9c298d9d53b608bf3942e3fb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Task convenient task size values.  <a href="group__task_usage.html#ga036b9cf9c298d9d53b608bf3942e3fb3">More...</a><br /></td></tr>
@@ -164,15 +169,18 @@ Functions</h2></td></tr>
 <tr class="memitem:ga1fddaf02d721c17e85a1dd9997d296e2"><td class="memItemLeft" align="right" valign="top">INT32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__task_usage.html#ga1fddaf02d721c17e85a1dd9997d296e2">azx_tasks_init</a> (void)</td></tr>
 <tr class="memdesc:ga1fddaf02d721c17e85a1dd9997d296e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the parameters needed to use tasks.  <a href="group__task_usage.html#ga1fddaf02d721c17e85a1dd9997d296e2">More...</a><br /></td></tr>
 <tr class="separator:ga1fddaf02d721c17e85a1dd9997d296e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga28939001d8dac98ac818c9537641c8c4"><td class="memItemLeft" align="right" valign="top">INT32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__task_usage.html#ga28939001d8dac98ac818c9537641c8c4">azx_tasks_initWithComplCB</a> (<a class="el" href="group__task_usage.html#ga90d9b7cdb04ee33e160a47f4dbd61e31">azx_tasks_onTaskComplCB</a> cb)</td></tr>
+<tr class="memdesc:ga28939001d8dac98ac818c9537641c8c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the callback with all parameters needed to use tasks and monitoring the execution end.  <a href="group__task_usage.html#ga28939001d8dac98ac818c9537641c8c4">More...</a><br /></td></tr>
+<tr class="separator:ga28939001d8dac98ac818c9537641c8c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaec2329e432960a7d210982ebc379cd0c"><td class="memItemLeft" align="right" valign="top">INT32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__task_usage.html#gaec2329e432960a7d210982ebc379cd0c">azx_tasks_createTask</a> (CHAR *task_name, INT32 stack_size, INT32 priority, INT32 msg_q_size, <a class="el" href="group__task_usage.html#gaf5abdb36b530c6d64d58a14555a68416">USER_TASK_CB</a> cb)</td></tr>
 <tr class="memdesc:gaec2329e432960a7d210982ebc379cd0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new user task.  <a href="group__task_usage.html#gaec2329e432960a7d210982ebc379cd0c">More...</a><br /></td></tr>
 <tr class="separator:gaec2329e432960a7d210982ebc379cd0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga1feb12b83b0e76cca5471d8720082708"><td class="memItemLeft" align="right" valign="top">INT32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__task_usage.html#ga1feb12b83b0e76cca5471d8720082708">azx_tasks_destroyTask</a> (INT8 task_id)</td></tr>
-<tr class="memdesc:ga1feb12b83b0e76cca5471d8720082708"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys an user task.  <a href="group__task_usage.html#ga1feb12b83b0e76cca5471d8720082708">More...</a><br /></td></tr>
-<tr class="separator:ga1feb12b83b0e76cca5471d8720082708"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga8bb45f0fffe4cd52bf53cd00b83a2ee2"><td class="memItemLeft" align="right" valign="top">INT32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__task_usage.html#ga8bb45f0fffe4cd52bf53cd00b83a2ee2">azx_tasks_sendMessageToTask</a> (INT8 task_id, INT32 type, INT32 param1, INT32 param2)</td></tr>
-<tr class="memdesc:ga8bb45f0fffe4cd52bf53cd00b83a2ee2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends a message to a task.  <a href="group__task_usage.html#ga8bb45f0fffe4cd52bf53cd00b83a2ee2">More...</a><br /></td></tr>
-<tr class="separator:ga8bb45f0fffe4cd52bf53cd00b83a2ee2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf71b24171beeda54b60e32687c4c7aa7"><td class="memItemLeft" align="right" valign="top">INT32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__task_usage.html#gaf71b24171beeda54b60e32687c4c7aa7">azx_tasks_destroyTask</a> (INT32 task_id)</td></tr>
+<tr class="memdesc:gaf71b24171beeda54b60e32687c4c7aa7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys an user task.  <a href="group__task_usage.html#gaf71b24171beeda54b60e32687c4c7aa7">More...</a><br /></td></tr>
+<tr class="separator:gaf71b24171beeda54b60e32687c4c7aa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga72f845282b145dc667207c99c99a384f"><td class="memItemLeft" align="right" valign="top">INT32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__task_usage.html#ga72f845282b145dc667207c99c99a384f">azx_tasks_sendMessageToTask</a> (INT32 task_id, INT32 type, INT32 param1, INT32 param2)</td></tr>
+<tr class="memdesc:ga72f845282b145dc667207c99c99a384f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends a message to a task.  <a href="group__task_usage.html#ga72f845282b145dc667207c99c99a384f">More...</a><br /></td></tr>
+<tr class="separator:ga72f845282b145dc667207c99c99a384f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gad1da66a5e55a1b33471d1eec1bfd6623"><td class="memItemLeft" align="right" valign="top">INT32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__task_usage.html#gad1da66a5e55a1b33471d1eec1bfd6623">azx_tasks_getCurrentTaskId</a> (void)</td></tr>
 <tr class="memdesc:gad1da66a5e55a1b33471d1eec1bfd6623"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the current task ID value.  <a href="group__task_usage.html#gad1da66a5e55a1b33471d1eec1bfd6623">More...</a><br /></td></tr>
 <tr class="separator:gad1da66a5e55a1b33471d1eec1bfd6623"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -186,7 +194,7 @@ Stack defines</h2></td></tr>
 </td></tr>
 <tr class="memitem:gaf2e2b6cef11a0e0c0f24ca2253a22e1e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__task_usage.html#gaf2e2b6cef11a0e0c0f24ca2253a22e1e">AZX_TASKS_MIN_STACK_SIZE</a>&#160;&#160;&#160;1024</td></tr>
 <tr class="separator:gaf2e2b6cef11a0e0c0f24ca2253a22e1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaca58a3aeea96e8ce05bb432bb30164da"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__task_usage.html#gaca58a3aeea96e8ce05bb432bb30164da">AZX_TASKS_MAX_STACK_SIZE</a>&#160;&#160;&#160;32768</td></tr>
+<tr class="memitem:gaca58a3aeea96e8ce05bb432bb30164da"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__task_usage.html#gaca58a3aeea96e8ce05bb432bb30164da">AZX_TASKS_MAX_STACK_SIZE</a>&#160;&#160;&#160;65536</td></tr>
 <tr class="separator:gaca58a3aeea96e8ce05bb432bb30164da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga8f4f0e001d405f9c499b8f1d9fb78196"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__task_usage.html#ga8f4f0e001d405f9c499b8f1d9fb78196">AZX_TASKS_MIN_QUEUE_SIZE</a>&#160;&#160;&#160;1</td></tr>
 <tr class="separator:ga8f4f0e001d405f9c499b8f1d9fb78196"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -194,7 +202,7 @@ Stack defines</h2></td></tr>
 <tr class="separator:ga56dfe0df57f53da981c1b7ec7ff782fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga3fe3fea325c9badf3a7cf5e2aea7012e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__task_usage.html#ga3fe3fea325c9badf3a7cf5e2aea7012e">AZX_TASKS_PRIORITY_MAX</a>&#160;&#160;&#160;1</td></tr>
 <tr class="separator:ga3fe3fea325c9badf3a7cf5e2aea7012e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga8c8cb01a85069a084d2e1dd17e299722"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__task_usage.html#ga8c8cb01a85069a084d2e1dd17e299722">AZX_TASKS_PRIORITY_MIN</a>&#160;&#160;&#160;32</td></tr>
+<tr class="memitem:ga8c8cb01a85069a084d2e1dd17e299722"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__task_usage.html#ga8c8cb01a85069a084d2e1dd17e299722">AZX_TASKS_PRIORITY_MIN</a>&#160;&#160;&#160;50</td></tr>
 <tr class="separator:ga8c8cb01a85069a084d2e1dd17e299722"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gac5f0a50ac4788640701c1c1221d64a94"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__task_usage.html#gac5f0a50ac4788640701c1c1221d64a94">AZX_TASKS_MAX_TASKS</a>&#160;&#160;&#160;32</td></tr>
 <tr class="separator:gac5f0a50ac4788640701c1c1221d64a94"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -228,7 +236,7 @@ Stack defines</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define AZX_TASKS_MAX_STACK_SIZE&#160;&#160;&#160;32768</td>
+          <td class="memname">#define AZX_TASKS_MAX_STACK_SIZE&#160;&#160;&#160;65536</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -303,7 +311,7 @@ Stack defines</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define AZX_TASKS_PRIORITY_MIN&#160;&#160;&#160;32</td>
+          <td class="memname">#define AZX_TASKS_PRIORITY_MIN&#160;&#160;&#160;50</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -342,6 +350,24 @@ Stack defines</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Typedef Documentation</h2>
+<a id="ga90d9b7cdb04ee33e160a47f4dbd61e31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga90d9b7cdb04ee33e160a47f4dbd61e31">&#9670;&nbsp;</a></span>azx_tasks_onTaskComplCB</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef INT32(* azx_tasks_onTaskComplCB) (INT32, INT32, INT32)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>task complete return user function </p>
+<p>If registered, this function is executed when a task user callback function exits, reporting the Task ID, input "type" parameter and result code.</p>
+<p>refer to azx_tasks_init_with_compl() </p>
+
+</div>
+</div>
 <a id="gaf5abdb36b530c6d64d58a14555a68416"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gaf5abdb36b530c6d64d58a14555a68416">&#9670;&nbsp;</a></span>USER_TASK_CB</h2>
 
@@ -404,6 +430,8 @@ Stack defines</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="gga5b29dff3d5b477adbbf73a1515983c6bae659d2da10c13fa8459f28743671970b"></a>AZX_TASKS_MSG_SEND_ERR&#160;</td><td class="fielddoc"><p>Error when sending a message to task queue </p>
 </td></tr>
+<tr><td class="fieldname"><a id="gga5b29dff3d5b477adbbf73a1515983c6bae406edbd410c18d740e1bd5a43f738f4"></a>AZX_TASKS_INTERNAL_ERR&#160;</td><td class="fielddoc"><p>Internal OS task error </p>
+</td></tr>
 </table>
 
 </div>
@@ -456,7 +484,9 @@ Stack defines</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="gga036b9cf9c298d9d53b608bf3942e3fb3a23b2068ca2a946f91a92d87c14dd9998"></a>AZX_TASKS_STACK_XL&#160;</td><td class="fielddoc"><p>16KB of stack size </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga036b9cf9c298d9d53b608bf3942e3fb3ab517d507287a275651ea4c6bb28320aa"></a>M2M_OS_TASK_STACK_LIMIT&#160;</td><td class="fielddoc"><p>32K of stack size. Consider this as a max limit </p>
+<tr><td class="fieldname"><a id="gga036b9cf9c298d9d53b608bf3942e3fb3a935490df232896369ca03eee1ff5ae0c"></a>AZX_TASKS_STACK_XXL&#160;</td><td class="fielddoc"><p>32KB of stack size </p>
+</td></tr>
+<tr><td class="fieldname"><a id="gga036b9cf9c298d9d53b608bf3942e3fb3ab517d507287a275651ea4c6bb28320aa"></a>M2M_OS_TASK_STACK_LIMIT&#160;</td><td class="fielddoc"><p>64K of stack size. Consider this as a max limit </p>
 </td></tr>
 </table>
 
@@ -522,13 +552,13 @@ Stack defines</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>One of Task id number from 1 to 32 on success <a class="el" href="group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6ba671695a5dacb80dfa6d27451e9fe146b">AZX_TASKS_INVALID_ID_ERR</a> <a class="el" href="group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6baff0009833effaf091c786391904bff10">AZX_TASKS_ID_NOT_DEFINED_ERR</a> <a class="el" href="group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6ba9b72007e8acc9145ebc512e144e5b836">AZX_TASKS_WRONG_PRIO_ERR</a> <a class="el" href="group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6ba361acaceb888ed48b248ca7f63e82f3d">AZX_TASKS_STACK_SIZE_ERR</a> <a class="el" href="group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6bac30b652879c433e8b861f0efb37e7c9b">AZX_TASKS_MSG_Q_SIZE_ERR</a> <a class="el" href="group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6bac51d2e655c0ba38ad63d8143e782b42f">AZX_TASKS_NO_FREE_SLOTS_ERR</a> <a class="el" href="group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6ba3349a0eb5bc758b0d352c74ed6544994">AZX_TASKS_ALLOC_ERR</a> <a class="el" href="group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6bac9d57051c665eaee27c1c5644bc9c1b7">AZX_TASKS_Q_ATTRIB_SET_ERR</a> <a class="el" href="group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6bad46a06307a59a1bc9c8940a7777c827e">AZX_TASKS_Q_INIT_ERR</a> <a class="el" href="group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6ba7613e94662a1b9b4f834e8c3571c595e">AZX_TASKS_ATTRIB_SET_ERR</a> <a class="el" href="group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6ba7b2631b8fb7565c607a86f9555e35457">AZX_TASKS_CREATE_ERR</a> -1 on internal failure.</dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="group__task_usage.html#ga1fddaf02d721c17e85a1dd9997d296e2" title="Initializes the parameters needed to use tasks.">azx_tasks_init()</a> </dd></dl>
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_tasks_example_8c-example.html#a1">azx_tasks_example.c</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_tasks_example_8c-example.html#a2">azx_tasks_example.c</a>.</dd>
 </dl>
 
 </div>
 </div>
-<a id="ga1feb12b83b0e76cca5471d8720082708"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga1feb12b83b0e76cca5471d8720082708">&#9670;&nbsp;</a></span>azx_tasks_destroyTask()</h2>
+<a id="gaf71b24171beeda54b60e32687c4c7aa7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaf71b24171beeda54b60e32687c4c7aa7">&#9670;&nbsp;</a></span>azx_tasks_destroyTask()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -536,7 +566,7 @@ Stack defines</h2></td></tr>
         <tr>
           <td class="memname">INT32 azx_tasks_destroyTask </td>
           <td>(</td>
-          <td class="paramtype">INT8&#160;</td>
+          <td class="paramtype">INT32&#160;</td>
           <td class="paramname"><em>task_id</em></td><td>)</td>
           <td></td>
         </tr>
@@ -553,7 +583,7 @@ Stack defines</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>One of: <a class="el" href="group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6baf0fd3cefaa03e18813132ae02b6fb26c">AZX_TASKS_OK</a> <a class="el" href="group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6ba671695a5dacb80dfa6d27451e9fe146b">AZX_TASKS_INVALID_ID_ERR</a> <a class="el" href="group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6baff0009833effaf091c786391904bff10">AZX_TASKS_ID_NOT_DEFINED_ERR</a> One of M2MB_OS_RESULT_E values</dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="group__task_usage.html#ga1fddaf02d721c17e85a1dd9997d296e2" title="Initializes the parameters needed to use tasks.">azx_tasks_init()</a> </dd></dl>
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_tasks_example_8c-example.html#a5">azx_tasks_example.c</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_tasks_example_8c-example.html#a6">azx_tasks_example.c</a>.</dd>
 </dl>
 
 </div>
@@ -631,13 +661,34 @@ Stack defines</h2></td></tr>
 
 <p>Initializes the parameters needed to use tasks. </p>
 <dl class="section return"><dt>Returns</dt><dd>AZX_TASKS_OK </dd></dl>
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_tasks_example_8c-example.html#a0">azx_tasks_example.c</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_tasks_example_8c-example.html#a1">azx_tasks_example.c</a>.</dd>
 </dl>
 
 </div>
 </div>
-<a id="ga8bb45f0fffe4cd52bf53cd00b83a2ee2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga8bb45f0fffe4cd52bf53cd00b83a2ee2">&#9670;&nbsp;</a></span>azx_tasks_sendMessageToTask()</h2>
+<a id="ga28939001d8dac98ac818c9537641c8c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga28939001d8dac98ac818c9537641c8c4">&#9670;&nbsp;</a></span>azx_tasks_initWithComplCB()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">INT32 azx_tasks_initWithComplCB </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__task_usage.html#ga90d9b7cdb04ee33e160a47f4dbd61e31">azx_tasks_onTaskComplCB</a>&#160;</td>
+          <td class="paramname"><em>cb</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initializes the callback with all parameters needed to use tasks and monitoring the execution end. </p>
+<dl class="section return"><dt>Returns</dt><dd>AZX_TASKS_OK </dd></dl>
+
+</div>
+</div>
+<a id="ga72f845282b145dc667207c99c99a384f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga72f845282b145dc667207c99c99a384f">&#9670;&nbsp;</a></span>azx_tasks_sendMessageToTask()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -645,7 +696,7 @@ Stack defines</h2></td></tr>
         <tr>
           <td class="memname">INT32 azx_tasks_sendMessageToTask </td>
           <td>(</td>
-          <td class="paramtype">INT8&#160;</td>
+          <td class="paramtype">INT32&#160;</td>
           <td class="paramname"><em>task_id</em>, </td>
         </tr>
         <tr>
@@ -687,7 +738,7 @@ Stack defines</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>One of <a class="el" href="group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6baf0fd3cefaa03e18813132ae02b6fb26c">AZX_TASKS_OK</a> <a class="el" href="group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6ba671695a5dacb80dfa6d27451e9fe146b">AZX_TASKS_INVALID_ID_ERR</a> <a class="el" href="group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6baff0009833effaf091c786391904bff10">AZX_TASKS_ID_NOT_DEFINED_ERR</a> <a class="el" href="group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6bae659d2da10c13fa8459f28743671970b">AZX_TASKS_MSG_SEND_ERR</a></dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="group__task_usage.html#ga1fddaf02d721c17e85a1dd9997d296e2" title="Initializes the parameters needed to use tasks.">azx_tasks_init()</a> </dd></dl>
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_tasks_example_8c-example.html#a4">azx_tasks_example.c</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_tasks_example_8c-example.html#a5">azx_tasks_example.c</a>.</dd>
 </dl>
 
 </div>

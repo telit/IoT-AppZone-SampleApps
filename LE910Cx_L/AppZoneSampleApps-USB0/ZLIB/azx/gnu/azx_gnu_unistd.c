@@ -1,4 +1,4 @@
-/*Copyright (C) 2020 Telit Communications S.p.A. Italy - All Rights Reserved.*/
+/*Copyright (C) 2022 Telit Communications S.p.A. Italy - All Rights Reserved.*/
 /*    See LICENSE file in the project root for full license information.     */
 
 /**
@@ -24,9 +24,9 @@
 */
 
 /* Include files ================================================================================*/
-#ifndef _STDIO_H_
+
 #include <stdio.h>
-#endif
+
 #include <stddef.h>
 #include <string.h>
 
@@ -34,6 +34,7 @@
 #include "m2mb_os_types.h"
 #include "m2mb_os_api.h"
 #include "m2mb_os.h"
+#include "m2mb_fs_stdio.h"
 
 #include "azx_gnu_stdio.h"
 
@@ -72,4 +73,11 @@ int azx_gnu_chown(const char *__path, uid_t __owner, gid_t __group )
 
 	return 0; /*chown not supported. */
 }
+
+unsigned azx_gnu_sleep(unsigned int seconds)
+{
+  m2mb_os_taskSleep(M2MB_OS_MS2TICKS(seconds * 1000));
+  return seconds;
+}
+
 

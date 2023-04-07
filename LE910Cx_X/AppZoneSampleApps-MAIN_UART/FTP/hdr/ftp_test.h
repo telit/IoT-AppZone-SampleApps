@@ -32,7 +32,7 @@
 
 /* Global typedefs ==============================================================================*/
 typedef enum {
-	INIT=0,
+  INIT=0,
   APPLICATION_EXIT
 } APP_STATES;
 

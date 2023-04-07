@@ -34,7 +34,7 @@
   <td id="projectlogo"><img alt="Logo" src="telit-logo.png"/></td>
   <td id="projectalign" style="padding-left: 2em;">
    <div id="projectname">AZX (AppZone eXtensions) documentation
-   &#160;<span id="projectnumber">1.1.15-CxL</span>
+   &#160;<span id="projectnumber">1.1.18-CxL</span>
    </div>
    <div id="projectbrief">A set of companion utilities that make AZ development easier</div>
   </td>
@@ -100,7 +100,23 @@ $(document).ready(function(){initNavTree('structpdu__struct.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
-<tr class="memitem:a238650e82cb1cb7b3a590a03b4ecd18f"><td class="memItemLeft" ><a id="a238650e82cb1cb7b3a590a03b4ecd18f"></a>
+<tr class="memitem:a8989e8d787859c5d3970e8eec13167b7"><td class="memItemLeft" ><a id="a8989e8d787859c5d3970e8eec13167b7"></a>
+struct {</td></tr>
+<tr class="memitem:a00e647d624dece8304b15b33c55c9a33"><td class="memItemLeft" >
+&#160;&#160;&#160;uint8_t&#160;&#160;&#160;<b>len</b></td></tr>
+<tr class="separator:a00e647d624dece8304b15b33c55c9a33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbd9704a7ca7470be31e6252ad6e629d"><td class="memItemLeft" >
+&#160;&#160;&#160;uint8_t&#160;&#160;&#160;<b>bytes</b></td></tr>
+<tr class="separator:acbd9704a7ca7470be31e6252ad6e629d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89389dc286b4321f503513a5aaee55ad"><td class="memItemLeft" >
+&#160;&#160;&#160;uint8_t&#160;&#160;&#160;<b>type</b></td></tr>
+<tr class="separator:a89389dc286b4321f503513a5aaee55ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add9c7428ebb36273aa099477842c981a"><td class="memItemLeft" >
+&#160;&#160;&#160;uint8_t&#160;&#160;&#160;<b>data</b> [14]</td></tr>
+<tr class="separator:add9c7428ebb36273aa099477842c981a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8989e8d787859c5d3970e8eec13167b7"><td class="memItemLeft" valign="top">}&#160;</td><td class="memItemRight" valign="bottom"><b>smsc</b></td></tr>
+<tr class="separator:a8989e8d787859c5d3970e8eec13167b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8ca7bc4629820cd98db5435af74b3bf"><td class="memItemLeft" ><a id="ae8ca7bc4629820cd98db5435af74b3bf"></a>
 struct {</td></tr>
 <tr class="memitem:aded57b540031f584ca0fa566f0e612ba"><td class="memItemLeft" >
 &#160;&#160;&#160;uint8_t&#160;&#160;&#160;<b>len</b></td></tr>
@@ -114,37 +130,21 @@ struct {</td></tr>
 <tr class="memitem:a9b83a5ba16de3a543c5c7ddf728a3f9e"><td class="memItemLeft" >
 &#160;&#160;&#160;uint8_t&#160;&#160;&#160;<b>data</b> [14]</td></tr>
 <tr class="separator:a9b83a5ba16de3a543c5c7ddf728a3f9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a238650e82cb1cb7b3a590a03b4ecd18f"><td class="memItemLeft" valign="top">}&#160;</td><td class="memItemRight" valign="bottom"><b>smsc</b></td></tr>
-<tr class="separator:a238650e82cb1cb7b3a590a03b4ecd18f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e7befe7ddaf3376d8637e8ab8d59626"><td class="memItemLeft" ><a id="a2e7befe7ddaf3376d8637e8ab8d59626"></a>
+<tr class="memitem:ae8ca7bc4629820cd98db5435af74b3bf"><td class="memItemLeft" valign="top">}&#160;</td><td class="memItemRight" valign="bottom"><b>sender</b></td></tr>
+<tr class="separator:ae8ca7bc4629820cd98db5435af74b3bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab711a0633186687cb0d5eea605791819"><td class="memItemLeft" ><a id="ab711a0633186687cb0d5eea605791819"></a>
 struct {</td></tr>
-<tr class="memitem:a443e9043548dd994ed26562e5f56842f"><td class="memItemLeft" >
-&#160;&#160;&#160;uint8_t&#160;&#160;&#160;<b>len</b></td></tr>
-<tr class="separator:a443e9043548dd994ed26562e5f56842f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae48ea6d04a4ab50e48c0658c7aca23ce"><td class="memItemLeft" >
-&#160;&#160;&#160;uint8_t&#160;&#160;&#160;<b>bytes</b></td></tr>
-<tr class="separator:ae48ea6d04a4ab50e48c0658c7aca23ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a79d6a8eccc35099b20fa451a2c792406"><td class="memItemLeft" >
-&#160;&#160;&#160;uint8_t&#160;&#160;&#160;<b>type</b></td></tr>
-<tr class="separator:a79d6a8eccc35099b20fa451a2c792406"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a720eacaf48584d2f1c5c047c6b2ddbee"><td class="memItemLeft" >
-&#160;&#160;&#160;uint8_t&#160;&#160;&#160;<b>data</b> [14]</td></tr>
-<tr class="separator:a720eacaf48584d2f1c5c047c6b2ddbee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e7befe7ddaf3376d8637e8ab8d59626"><td class="memItemLeft" valign="top">}&#160;</td><td class="memItemRight" valign="bottom"><b>sender</b></td></tr>
-<tr class="separator:a2e7befe7ddaf3376d8637e8ab8d59626"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a974cedf335bea5005cf127dc450da970"><td class="memItemLeft" ><a id="a974cedf335bea5005cf127dc450da970"></a>
-struct {</td></tr>
-<tr class="memitem:af086a958479ee5f8668fb28b9894f49f"><td class="memItemLeft" >
+<tr class="memitem:a44346cc5696c3c4217087e237f2605fb"><td class="memItemLeft" >
 &#160;&#160;&#160;uint16_t&#160;&#160;&#160;<b>len</b></td></tr>
-<tr class="separator:af086a958479ee5f8668fb28b9894f49f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a94629901f2ea0484006dc2f07c3bf5a6"><td class="memItemLeft" >
+<tr class="separator:a44346cc5696c3c4217087e237f2605fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99ddfb2f43dd6e43b9880fce84822139"><td class="memItemLeft" >
 &#160;&#160;&#160;uint16_t&#160;&#160;&#160;<b>bytes</b></td></tr>
-<tr class="separator:a94629901f2ea0484006dc2f07c3bf5a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af4226688137bdef0d5b8b9b4dc555ce7"><td class="memItemLeft" >
+<tr class="separator:a99ddfb2f43dd6e43b9880fce84822139"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08eeab32274b587ca93f8d5bc1baa199"><td class="memItemLeft" >
 &#160;&#160;&#160;uint8_t *&#160;&#160;&#160;<b>data</b></td></tr>
-<tr class="separator:af4226688137bdef0d5b8b9b4dc555ce7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a974cedf335bea5005cf127dc450da970"><td class="memItemLeft" valign="top">}&#160;</td><td class="memItemRight" valign="bottom"><b>msg</b></td></tr>
-<tr class="separator:a974cedf335bea5005cf127dc450da970"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a08eeab32274b587ca93f8d5bc1baa199"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab711a0633186687cb0d5eea605791819"><td class="memItemLeft" valign="top">}&#160;</td><td class="memItemRight" valign="bottom"><b>msg</b></td></tr>
+<tr class="separator:ab711a0633186687cb0d5eea605791819"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af399df2f9a3b51cddb264310fb5089a3"><td class="memItemLeft" align="right" valign="top"><a id="af399df2f9a3b51cddb264310fb5089a3"></a>
 uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>first</b></td></tr>
 <tr class="separator:af399df2f9a3b51cddb264310fb5089a3"><td class="memSeparator" colspan="2">&#160;</td></tr>

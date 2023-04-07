@@ -1,4 +1,4 @@
-/*Copyright (C) 2020 Telit Communications S.p.A. Italy - All Rights Reserved.*/
+/*Copyright (C) 2022 Telit Communications S.p.A. Italy - All Rights Reserved.*/
 /*    See LICENSE file in the project root for full license information.     */
 
 /**
@@ -56,6 +56,9 @@ extern "C"
 #ifndef realloc
 #define realloc(a,b) 	azx_gnu_realloc(a,b)
 #endif
+
+#undef exit
+#define exit azx_gnu_exit
 /* Function prototypes ====================================================================*/
 
 //azx_gnu_malloc etc etc  TODO add doxygen description
@@ -226,6 +229,22 @@ void azx_gnu_free(void *ptr);
 */
 /*-----------------------------------------------------------------------------------------------*/
 void * azx_gnu_realloc(void * ptr, size_t size);
+
+
+/**
+  @brief
+    exit process. remaps stdlib exit()
+
+  @details
+    quits the application
+
+  @param [in]: status
+    return code. dummy here
+
+
+
+*/
+void azx_gnu_exit(int status);
 
 #ifdef __cplusplus
 }

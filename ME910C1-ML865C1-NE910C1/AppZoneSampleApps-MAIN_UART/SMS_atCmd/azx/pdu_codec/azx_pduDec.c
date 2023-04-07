@@ -67,7 +67,9 @@ INT32 azx_pdu_decode(UINT8 *pdu, UINT32 pdu_len, pdu_struct *packet, CHAR *numbe
       packet);
 
   // check type SMS
-  if(packet->sender.type == PDU_TYPE_INTERNATIONAL)
+  if( (packet->sender.type == PDU_TYPE_INTERNATIONAL) ||
+      (packet->sender.type == PDU_TYPE_NATIONAL) ||
+      (packet->sender.type == PDU_TYPE_UNKNOWN) )
   {
     pdu_phone_unpack(&(packet->sender.data[0]),
         packet->sender.bytes,

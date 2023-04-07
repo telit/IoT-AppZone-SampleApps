@@ -34,7 +34,7 @@
   <td id="projectlogo"><img alt="Logo" src="telit-logo.png"/></td>
   <td id="projectalign" style="padding-left: 2em;">
    <div id="projectname">AZX (AppZone eXtensions) documentation
-   &#160;<span id="projectnumber">1.1.15-CxL</span>
+   &#160;<span id="projectnumber">1.1.18-CxL</span>
    </div>
    <div id="projectbrief">A set of companion utilities that make AZ development easier</div>
   </td>
@@ -111,6 +111,8 @@ $(document).ready(function(){initNavTree('azx__gnu__sys__socket_8h.html','');});
 Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structsockaddr__storage.html">sockaddr_storage</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structaddrinfo.html">addrinfo</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
@@ -140,6 +142,9 @@ Macros</h2></td></tr>
 <tr class="memitem:ac7f92897f00d3373bf818709dfb0724a"><td class="memItemLeft" align="right" valign="top"><a id="ac7f92897f00d3373bf818709dfb0724a"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>s6_addr</b>&#160;&#160;&#160;addr8_s</td></tr>
 <tr class="separator:ac7f92897f00d3373bf818709dfb0724a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7acea921b59df1dc48b89b21ecfa446b"><td class="memItemLeft" align="right" valign="top"><a id="a7acea921b59df1dc48b89b21ecfa446b"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>fd_set</b>&#160;&#160;&#160;M2MB_SOCKET_BSD_FD_SET_T</td></tr>
+<tr class="separator:a7acea921b59df1dc48b89b21ecfa446b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8318fbee111c5bde5952c63e894c962"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azx__gnu__sys__socket_8h.html#aa8318fbee111c5bde5952c63e894c962">socket</a>&#160;&#160;&#160;m2mb_socket_bsd_socket</td></tr>
 <tr class="separator:aa8318fbee111c5bde5952c63e894c962"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afdbb9d84bd17efd2ae7290e664992c48"><td class="memItemLeft" align="right" valign="top"><a id="afdbb9d84bd17efd2ae7290e664992c48"></a>
@@ -205,6 +210,18 @@ Macros</h2></td></tr>
 <tr class="memitem:a2b406456012f9f74aeb33de6f3df053c"><td class="memItemLeft" align="right" valign="top"><a id="a2b406456012f9f74aeb33de6f3df053c"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>select</b>&#160;&#160;&#160;<a class="el" href="azx__gnu__sys__socket_8h.html#a8e77af6cdbb141c528c8a462a89297d6">azx_gnu_select</a></td></tr>
 <tr class="separator:a2b406456012f9f74aeb33de6f3df053c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7acea921b59df1dc48b89b21ecfa446b"><td class="memItemLeft" align="right" valign="top"><a id="a7acea921b59df1dc48b89b21ecfa446b"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>fd_set</b>&#160;&#160;&#160;M2MB_SOCKET_BSD_FD_SET_T</td></tr>
+<tr class="separator:a7acea921b59df1dc48b89b21ecfa446b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc54b31687655b483505806432677ba5"><td class="memItemLeft" align="right" valign="top"><a id="adc54b31687655b483505806432677ba5"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>fds_bits</b>&#160;&#160;&#160;fd_array</td></tr>
+<tr class="separator:adc54b31687655b483505806432677ba5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78922d97b0249df72483a103338d2629"><td class="memItemLeft" align="right" valign="top"><a id="a78922d97b0249df72483a103338d2629"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>getaddrinfo</b>&#160;&#160;&#160;<a class="el" href="azx__gnu__sys__socket_8h.html#a04c7fc7dc2b21c85617d9f7a896e08d7">azx_gnu_getaddrinfo</a></td></tr>
+<tr class="separator:a78922d97b0249df72483a103338d2629"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adef9f0657cf2d7402f4a63fc37a2e5e9"><td class="memItemLeft" align="right" valign="top"><a id="adef9f0657cf2d7402f4a63fc37a2e5e9"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>freeaddrinfo</b>&#160;&#160;&#160;azx_gnu_freeaddrinfo</td></tr>
+<tr class="separator:adef9f0657cf2d7402f4a63fc37a2e5e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a313001ab5b0b2b81f4e90198d40f6c4a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azx__gnu__sys__socket_8h.html#a313001ab5b0b2b81f4e90198d40f6c4a">_SS_MAXSIZE</a>&#160;&#160;&#160;128  /* Implementation specific max size */</td></tr>
 <tr class="separator:a313001ab5b0b2b81f4e90198d40f6c4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a001a987f0cc1b04e5ebd01931028d45e"><td class="memItemLeft" align="right" valign="top"><a id="a001a987f0cc1b04e5ebd01931028d45e"></a>
@@ -244,6 +261,9 @@ Macros</h2></td></tr>
 <tr class="memitem:ab332d40b15142f33a88d4fcb1d6a5920"><td class="memItemLeft" align="right" valign="top"><a id="ab332d40b15142f33a88d4fcb1d6a5920"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>IPPROTO_UDP</b>&#160;&#160;&#160;M2MB_SOCKET_BSD_IPPROTO_UDP</td></tr>
 <tr class="separator:ab332d40b15142f33a88d4fcb1d6a5920"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae77ae24b14b7b7f294f3e04121173f12"><td class="memItemLeft" align="right" valign="top"><a id="ae77ae24b14b7b7f294f3e04121173f12"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>AF_UNSPEC</b>&#160;&#160;&#160;M2MB_SOCKET_BSD_AF_UNSPEC</td></tr>
+<tr class="separator:ae77ae24b14b7b7f294f3e04121173f12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a249394484f9410a2e3f8eba24657feb9"><td class="memItemLeft" align="right" valign="top"><a id="a249394484f9410a2e3f8eba24657feb9"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>SOCK_STREAM</b>&#160;&#160;&#160;M2MB_SOCKET_BSD_SOCK_STREAM</td></tr>
 <tr class="separator:a249394484f9410a2e3f8eba24657feb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -283,6 +303,21 @@ Macros</h2></td></tr>
 <tr class="memitem:a8739abe7bcb9470bcdb021e869b2a76f"><td class="memItemLeft" align="right" valign="top"><a id="a8739abe7bcb9470bcdb021e869b2a76f"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>AI_NUMERICSERV</b>&#160;&#160;&#160;0x0400  /* Don't use name resolution.  */</td></tr>
 <tr class="separator:a8739abe7bcb9470bcdb021e869b2a76f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acfc712115bf29357d33472da2209dc15"><td class="memItemLeft" align="right" valign="top"><a id="acfc712115bf29357d33472da2209dc15"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>EAI_FAIL</b>&#160;&#160;&#160;4	/* non-recoverable failure in name resolution */</td></tr>
+<tr class="separator:acfc712115bf29357d33472da2209dc15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33d8eb0c89167f95dcdaf23386631174"><td class="memItemLeft" align="right" valign="top"><a id="a33d8eb0c89167f95dcdaf23386631174"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>EAI_MEMORY</b>&#160;&#160;&#160;6	/* memory allocation failure */</td></tr>
+<tr class="separator:a33d8eb0c89167f95dcdaf23386631174"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae1a32f26ffbb7461251d7c4a7c3a0a2"><td class="memItemLeft" align="right" valign="top"><a id="aae1a32f26ffbb7461251d7c4a7c3a0a2"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>EAI_NODATA</b>&#160;&#160;&#160;7	/* no address associated with host */</td></tr>
+<tr class="separator:aae1a32f26ffbb7461251d7c4a7c3a0a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0bb00f48d6ba1e8c55b7d85c8e3a19a7"><td class="memItemLeft" align="right" valign="top"><a id="a0bb00f48d6ba1e8c55b7d85c8e3a19a7"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>EAI_NONAME</b>&#160;&#160;&#160;8	/* host nor service provided, or not known */</td></tr>
+<tr class="separator:a0bb00f48d6ba1e8c55b7d85c8e3a19a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e864fa95f26341c27127deb6237c88c"><td class="memItemLeft" align="right" valign="top"><a id="a8e864fa95f26341c27127deb6237c88c"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>EAI_SYSTEM</b>&#160;&#160;&#160;11	/* system error returned in errno */</td></tr>
+<tr class="separator:a8e864fa95f26341c27127deb6237c88c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a93b37007689284fd9c4bde1a8f4b9199"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azx__gnu__sys__socket_8h.html#a93b37007689284fd9c4bde1a8f4b9199">INET_ADDRSTRLEN</a>&#160;&#160;&#160;16</td></tr>
 <tr class="separator:a93b37007689284fd9c4bde1a8f4b9199"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af776b22a727aae7c9f4d869d50df47e8"><td class="memItemLeft" align="right" valign="top"><a id="af776b22a727aae7c9f4d869d50df47e8"></a>
@@ -290,6 +325,9 @@ Macros</h2></td></tr>
 <tr class="separator:af776b22a727aae7c9f4d869d50df47e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aedb93bcce9682d7644080b859849f59d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azx__gnu__sys__socket_8h.html#aedb93bcce9682d7644080b859849f59d">IF_NAMESIZE</a>&#160;&#160;&#160;16</td></tr>
 <tr class="separator:aedb93bcce9682d7644080b859849f59d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af776b22a727aae7c9f4d869d50df47e8"><td class="memItemLeft" align="right" valign="top"><a id="af776b22a727aae7c9f4d869d50df47e8"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>INET6_ADDRSTRLEN</b>&#160;&#160;&#160;46</td></tr>
+<tr class="separator:af776b22a727aae7c9f4d869d50df47e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf75b04eccfdf7076d1aa6a7af19bfff"><td class="memItemLeft" align="right" valign="top"><a id="abf75b04eccfdf7076d1aa6a7af19bfff"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>hstrerror</b>&#160;&#160;&#160;<a class="el" href="azx__gnu__sys__socket_8h.html#a703b07485e9fba31deda448ada8ec91b">azx_gnu_hstrerror</a></td></tr>
 <tr class="separator:abf75b04eccfdf7076d1aa6a7af19bfff"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -336,6 +374,11 @@ INT32&#160;</td><td class="memItemRight" valign="bottom"><b>azx_gnu_socket_bsd_g
 <tr class="memitem:a703b07485e9fba31deda448ada8ec91b"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azx__gnu__sys__socket_8h.html#a703b07485e9fba31deda448ada8ec91b">azx_gnu_hstrerror</a> (int err)</td></tr>
 <tr class="memdesc:a703b07485e9fba31deda448ada8ec91b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return information after a host name or address lookup error.  <a href="azx__gnu__sys__socket_8h.html#a703b07485e9fba31deda448ada8ec91b">More...</a><br /></td></tr>
 <tr class="separator:a703b07485e9fba31deda448ada8ec91b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04c7fc7dc2b21c85617d9f7a896e08d7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azx__gnu__sys__socket_8h.html#a04c7fc7dc2b21c85617d9f7a896e08d7">azx_gnu_getaddrinfo</a> (const char *node, const char *service, const struct <a class="el" href="structaddrinfo.html">addrinfo</a> *hints, struct <a class="el" href="structaddrinfo.html">addrinfo</a> **res)</td></tr>
+<tr class="separator:a04c7fc7dc2b21c85617d9f7a896e08d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a314ac9169c74c5694afbcbe054ff19ae"><td class="memItemLeft" align="right" valign="top"><a id="a314ac9169c74c5694afbcbe054ff19ae"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>azx_gnu_freeaddrinfo</b> (struct <a class="el" href="structaddrinfo.html">addrinfo</a> *ai)</td></tr>
+<tr class="separator:a314ac9169c74c5694afbcbe054ff19ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -512,6 +555,47 @@ Norman Argiolas</dd></dl>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="a04c7fc7dc2b21c85617d9f7a896e08d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a04c7fc7dc2b21c85617d9f7a896e08d7">&#9670;&nbsp;</a></span>azx_gnu_getaddrinfo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int azx_gnu_getaddrinfo </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>service</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const struct <a class="el" href="structaddrinfo.html">addrinfo</a> *&#160;</td>
+          <td class="paramname"><em>hints</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">struct <a class="el" href="structaddrinfo.html">addrinfo</a> **&#160;</td>
+          <td class="paramname"><em>res</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>&lt;&ndash; From netdb.h </p>
+
+</div>
+</div>
 <a id="abd732c8acd3db56ad887706f27ca5425"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abd732c8acd3db56ad887706f27ca5425">&#9670;&nbsp;</a></span>azx_gnu_getgCID()</h2>
 

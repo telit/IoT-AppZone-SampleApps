@@ -13,6 +13,18 @@
 
 #include "azx_tasks.h"
 
+/**
+* @brief On task complete return function
+* 
+* If user onComplete function is registered, this function is will call it when a task user callback function exits. 
+* @param[output] taskID the numeric ID of the task that whose callback function completed
+* @param[output] type   the input "type" parameter that was passed to the task CB
+* @param[output] res    the result value of the execution
+*
+* refer to azx_tasks_init_with_compl()
+* @ingroup taskUsage
+*/
+static INT32 azx_tasks_onTaskCompl(INT32 taskID, INT32 type, INT32 res);
 
 /* Global variables =============================================================================*/
 _AZX_TASKS_PARAMS m2mb_tasks;
@@ -30,6 +42,7 @@ INT32 azx_tasks_init(void)
   }
 
   m2mb_tasks.M2MMain_Handle = m2mb_os_taskGetId(); //store
+  m2mb_tasks.complCB = NULL;
   m2mb_tasks.isInit = 1;
 
   ret = M2MB_OS_SUCCESS;
@@ -37,7 +50,14 @@ INT32 azx_tasks_init(void)
   return ret;
 }
 
-static INT8 find_free_task_slot(void)
+INT32 azx_tasks_initWithComplCB(azx_tasks_onTaskComplCB cb)
+{
+  INT32 ret = azx_tasks_init();
+  m2mb_tasks.complCB = cb;
+  return ret;
+}
+
+static INT32 find_free_task_slot(void)
 {
   int i;
 
@@ -57,7 +77,7 @@ static INT8 find_free_task_slot(void)
   return -1;
 }
 
-static INT8 find_slot_by_handle(M2MB_OS_TASK_HANDLE h)
+static INT32 find_slot_by_handle(M2MB_OS_TASK_HANDLE h)
 {
   int i;
   for (i=0; i< AZX_TASKS_MAX_TASKS; i++)
@@ -105,13 +125,13 @@ INT32 azx_tasks_getCurrentTaskId(void)
 }
 
 
-INT32 azx_tasks_sendMessageToTask( INT8 TaskProcID, INT32 type, INT32 param1, INT32 param2 )
+INT32 azx_tasks_sendMessageToTask( INT32 TaskProcID, INT32 type, INT32 param1, INT32 param2 )
 {
   AZX_TASKS_MESSAGE_T tmpMsg;
   M2MB_OS_RESULT_E osRes;
   M2MB_OS_Q_HANDLE Queue_H;
 
-  INT8 slot = TaskProcID - 1;
+  INT32 slot = TaskProcID - 1;
 
   if (! m2mb_tasks.isInit)
   {
@@ -155,6 +175,17 @@ INT32 azx_tasks_sendMessageToTask( INT8 TaskProcID, INT32 type, INT32 param1, IN
 }
 
 
+static INT32 azx_tasks_onTaskCompl(INT32 taskID, INT32 type, INT32 res)
+{
+  /* Task ID  with type parameter returned value %res */
+  if(m2mb_tasks.complCB)
+  {
+    return m2mb_tasks.complCB(taskID, type, res);
+  }
+  return 0;
+}
+
+
 /*
  *  Task --> EntryFn
  */
@@ -166,6 +197,7 @@ void Task_EntryFn( void *arg )
   INT32 slot = (INT32)arg;
   MEM_W  task_name = 0;
 
+  INT32 res = 0;
   if (slot == -1)
   {
     AZX_LOG_ERROR("Cannot find slot for handle %d\r\n", taskHandle);
@@ -191,7 +223,8 @@ void Task_EntryFn( void *arg )
              "- param1 = %d\r\n"
              "- param2 = %d\r\n\r\n",
              (char*) task_name, inPars.type, inPars.param1, inPars.param2 );
-     m2mb_tasks.task_slots[slot].Task_UserCB( inPars.type, inPars.param1, inPars.param2 );
+     res = m2mb_tasks.task_slots[slot].Task_UserCB( inPars.type, inPars.param1, inPars.param2 );
+     azx_tasks_onTaskCompl(slot + 1, inPars.type, res);
    }
 
   AZX_LOG_TRACE("exiting entry function. \r\n");
@@ -207,7 +240,7 @@ INT32 azx_tasks_createTask( char *task_name, INT32 stack_size, INT32 priority, I
 
   INT32 task_prio;
   UINT32 queue_area_size;
-  INT8 slot;
+  INT32 slot;
 
 
 
@@ -217,17 +250,17 @@ INT32 azx_tasks_createTask( char *task_name, INT32 stack_size, INT32 priority, I
     return AZX_TASKS_NOTINIT_ERR;
   }
 
-  if (priority < 1 || priority > 32)
+  if (priority < AZX_TASKS_PRIORITY_MAX || priority > AZX_TASKS_PRIORITY_MIN)
   {
     AZX_LOG_ERROR("priority out of bounds\r\n");
     return AZX_TASKS_WRONG_PRIO_ERR;
   }
   else
   {
-    task_prio = priority + 200; //201 to 232
+    task_prio = priority + 200; //201 to 250
   }
 
-  if (stack_size < AZX_TASKS_MIN_STACK_SIZE || stack_size > AZX_TASKS_MAX_STACK_SIZE)  //1 to 32KB
+  if (stack_size < AZX_TASKS_MIN_STACK_SIZE || stack_size > AZX_TASKS_MAX_STACK_SIZE)  //1 to 64KB
   {
     AZX_LOG_ERROR("stack size out of bounds\r\n");
     return AZX_TASKS_STACK_SIZE_ERR;
@@ -358,9 +391,9 @@ INT32 azx_tasks_createTask( char *task_name, INT32 stack_size, INT32 priority, I
 
 
 
-INT32 azx_tasks_destroyTask(INT8 TaskProcID)
+INT32 azx_tasks_destroyTask(INT32 TaskProcID)
 {
-  INT8 slot = TaskProcID - 1;
+  INT32 slot = TaskProcID - 1;
   M2MB_OS_RESULT_E res;
   MEM_W  out = 0;
 
@@ -425,9 +458,9 @@ INT32 azx_tasks_destroyTask(INT8 TaskProcID)
   return 0;
 }
 
-INT32 azx_tasks_getEnqueuedCount( INT8 task_id )
+INT32 azx_tasks_getEnqueuedCount( INT32 TaskProcID )
 {
-  INT8 slot = task_id - 1;
+  INT32 slot = TaskProcID - 1;
   MEM_W  out = 0;
   M2MB_OS_Q_HANDLE queueHandle = m2mb_tasks.task_slots[slot].Task_Queue_H;
   M2MB_OS_RESULT_E result = m2mb_os_q_getItem( queueHandle, M2MB_OS_Q_SEL_CMD_ENQUEUED, &out, NULL );
@@ -438,4 +471,67 @@ INT32 azx_tasks_getEnqueuedCount( INT8 task_id )
   }
 
   return (INT32)out;
+}
+
+
+INT32 azx_tasks_suspendTask( INT32 TaskProcID )
+{
+  M2MB_OS_RESULT_E res;
+  INT32 slot = TaskProcID - 1;
+  if (! m2mb_tasks.isInit)
+  {
+    AZX_LOG_ERROR("m2m task first init not performed yet\r\n");
+    return AZX_TASKS_NOTINIT_ERR;
+  }
+  
+  res = m2mb_os_taskSuspend(m2mb_tasks.task_slots[slot].Task_H);
+  if (res != M2MB_OS_SUCCESS)
+  {
+    AZX_LOG_ERROR("Cannot suspend task %d\r\n", TaskProcID);
+    return AZX_TASKS_INTERNAL_ERR;
+  }
+  
+  return AZX_TASKS_OK;  // success
+}
+
+INT32 azx_tasks_resumeTask( INT32 TaskProcID )
+{
+  M2MB_OS_RESULT_E res;
+  INT32 slot = TaskProcID - 1;
+  if (! m2mb_tasks.isInit)
+  {
+    AZX_LOG_ERROR("m2m task first init not performed yet\r\n");
+    return AZX_TASKS_NOTINIT_ERR;
+  }
+  
+  res = m2mb_os_taskResume(m2mb_tasks.task_slots[slot].Task_H);
+  if (res != M2MB_OS_SUCCESS)
+  {
+    AZX_LOG_ERROR("Cannot resume task %d\r\n", TaskProcID);
+    return AZX_TASKS_INTERNAL_ERR;
+  }
+  return AZX_TASKS_OK;  // success
+}
+
+
+M2MB_OS_TASK_HANDLE azx_tasks_getM2MBTaskHandleById(INT32 TaskProcID)
+{
+  INT32 slot = TaskProcID - 1;
+  if (! m2mb_tasks.isInit)
+  {
+    AZX_LOG_ERROR("m2m task first init not performed yet\r\n");
+    return NULL;
+  }
+  
+  if (slot >= 0)
+  {
+    AZX_LOG_TRACE("Looking for task id: %d\r\n", TaskProcID);
+
+    if (m2mb_tasks.task_slots[slot].SlotInUse == 0)
+    {
+      return NULL;
+    }
+    return m2mb_tasks.task_slots[slot].Task_H;
+  }
+  return M2MB_OS_TASK_INVALID;
 }

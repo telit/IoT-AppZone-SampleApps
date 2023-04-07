@@ -1,7 +1,7 @@
 /**
   @file
     azx_base64.h
-  @version 1.1.0
+  @version 1.1.2
   @dependencies 
 
   @brief Base64 utilities

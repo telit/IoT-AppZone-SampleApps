@@ -1,0 +1,1 @@
+Sample application that shows how perform FOTA upgrade using a delta file stored into file system. Debug prints on USB0

@@ -208,7 +208,7 @@ INT32 EEPROM_i2c_write_byte(EEPROM_I2C_T *hi2c, UINT16 memAddress, UINT8 data)
 
   buf[0] = memAddress >> 8;
   buf[1] = memAddress & 0xFF;
-  buf[1] = data;
+  buf[2] = data;
 
 
   msgs[0].buf = (UINT8*)buf;

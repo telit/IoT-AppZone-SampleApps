@@ -277,13 +277,14 @@ typedef enum
 }SMS_TXT_OUT_FMT_E;
 
 // number format
-enum
+typedef enum
 {
-  PDU_TYPE_NATIONAL = 0xA1,
+  PDU_TYPE_UNKNOWN       = 0x81,
+  PDU_TYPE_NATIONAL      = 0xA1,
   PDU_TYPE_INTERNATIONAL = 0x91,
-  PDU_TYPE_ALPHADET = 0xD0,
-  PDU_TYPE_NETWORK = 0xB1
-};
+  PDU_TYPE_ALPHADET      = 0xD0,
+  PDU_TYPE_NETWORK       = 0xB1
+} AZX_SMS_ADDR_NUM_TYPE_E;
 
 typedef struct
 {
@@ -345,7 +346,7 @@ uint16_t pdu_in_decode_text(uint8_t *in, uint16_t in_bytes, uint8_t in_dcs, uint
 // encode outcoming PDU
 uint16_t pdu_out_encode(pdu_struct *in, uint8_t *out);
 // encode outcoming PDU, simple interface
-uint16_t pdu_out_encode_simple(pdu_struct *pdu, uint8_t *out, void *sender, void *msg, uint8_t tp_vp, int dsc);
+uint16_t pdu_out_encode_simple(pdu_struct *pdu, uint8_t *out, AZX_SMS_ADDR_NUM_TYPE_E type, void *sender, void *msg, uint8_t tp_vp, int dsc);
 
 // pack text phone number to bytes, returns number of packed digits (11/12), not including terminating F
 uint8_t pdu_phone_pack(uint8_t *in, uint8_t *out);

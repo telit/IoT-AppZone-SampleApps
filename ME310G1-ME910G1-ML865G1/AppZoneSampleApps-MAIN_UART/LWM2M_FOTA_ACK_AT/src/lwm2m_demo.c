@@ -11,7 +11,7 @@
   @details
 
   @version
-    1.0.0
+    1.0.2
   @note
 
 
@@ -108,7 +108,7 @@ const char *FOTA_FW_OBJ_STATE_STRING[] =
 };
 
 /*===== static variables for threads and events =====*/
-static INT8 lwm2m_taskID;
+static INT32 lwm2m_taskID;
 
 static M2MB_OS_EV_HANDLE update_evHandle = NULL;
 
@@ -132,7 +132,7 @@ static M2MB_LWM2M_OBJ_URI_T _obj_telit_service_uri          = { M2MB_LWM2M_URI_4
 /*===== AT instance related globals and defines =====*/
 
 #define AT_BUF_SIZE 4096
-static unsigned char g_at_rsp_buf[AT_BUF_SIZE];
+static char g_at_rsp_buf[AT_BUF_SIZE];
 static UINT16 buf_index = 0;
 
 
@@ -337,7 +337,7 @@ static void fotaring_urc_cb(const CHAR* msg)
 {
 
 
-  char *pURC = strstr(msg, ",");
+  char *pURC = strstr((char *)msg, ",");
   if (pURC)
   {
     pURC++;
@@ -417,7 +417,7 @@ static INT32 atTaskCB(INT32 len, INT32 h, INT32 param2)
     buf_index += rsp_len;
 
     AZX_LOG_TRACE("Buffer content (%d): <%s>\r\n", buf_index,  g_at_rsp_buf);
-    char *p = strstr((const char*)g_at_rsp_buf,"#OTAEV");
+    char *p = strstr(g_at_rsp_buf,"#OTAEV");
     if(p)
     {
       char *e = strstr(p, "\r\n");
@@ -432,7 +432,7 @@ static INT32 atTaskCB(INT32 len, INT32 h, INT32 param2)
     }
     else
     {
-      p = strstr((const char*)g_at_rsp_buf,"#LWM2MFOTARING");
+      p = strstr(g_at_rsp_buf,"#LWM2MFOTARING");
       if(p)
       {
         char *e = strstr(p, "\r\n");
@@ -655,6 +655,23 @@ static void lwm2mIndicationCB( M2MB_LWM2M_HANDLE h, M2MB_LWM2M_EVENT_E event, UI
     else
     {
       AZX_LOG_WARN( "Enable result %d\r\n", resp->result );
+      m2mb_os_ev_set(get_lwm2mEvents_handle(), EV_LWM2M_FAIL_RES_BIT, M2MB_OS_EV_SET);
+    }
+    break;
+  }
+
+  /* event in response to m2mb_lwm2m_disable() */
+  case M2MB_LWM2M_DISABLE_RES:
+  {
+    M2MB_LWM2M_DISABLE_RES_T *resp = ( M2MB_LWM2M_DISABLE_RES_T * ) resp_struct;
+    if(resp->result == M2MB_LWM2M_RES_SUCCESS)
+    {
+      AZX_LOG_INFO( "LWM2M disable result OK\r\n");
+      m2mb_os_ev_set(get_lwm2mEvents_handle(), EV_LWM2M_DISABLE_RES_BIT, M2MB_OS_EV_SET);
+    }
+    else
+    {
+      AZX_LOG_WARN( "Disable result %d\r\n", resp->result );
       m2mb_os_ev_set(get_lwm2mEvents_handle(), EV_LWM2M_FAIL_RES_BIT, M2MB_OS_EV_SET);
     }
     break;
@@ -1079,6 +1096,7 @@ UINT8 oneedge_init( void)
   {
     AZX_LOG_ERROR( "m2mb_lwm2m_fota_cfg request failed\r\n" );
     m2mb_lwm2m_deinit( lwm2mHandle );
+    lwm2mHandle = NULL;
     return 1;
   }
 
@@ -1095,6 +1113,7 @@ UINT8 oneedge_init( void)
 
     azx_sleep_ms(2000);
     m2mb_lwm2m_deinit(lwm2mHandle);
+    lwm2mHandle = NULL;
     return 1;
   }
 
@@ -1104,6 +1123,7 @@ UINT8 oneedge_init( void)
     AZX_LOG_ERROR( "m2mb_lwm2m_write returned error %d\r\n", retVal );
 
     m2mb_lwm2m_deinit( lwm2mHandle );
+    lwm2mHandle = NULL;
     return 1;
   }
 
@@ -1115,6 +1135,7 @@ UINT8 oneedge_init( void)
     AZX_LOG_ERROR("Cannot create lwm2m managing task!\r\n");
 
     m2mb_lwm2m_deinit( lwm2mHandle );
+    lwm2mHandle = NULL;
     return 1;
   }
 
@@ -1131,6 +1152,7 @@ UINT8 oneedge_init( void)
   {
     AZX_LOG_ERROR("LWM2M get status timeout!\r\n");
     m2mb_lwm2m_deinit( lwm2mHandle );
+    lwm2mHandle = NULL;
     return 2;
   }
 
@@ -1148,6 +1170,7 @@ UINT8 oneedge_init( void)
     {
       AZX_LOG_ERROR( "m2mb_lwm2m_enable returned error %d\r\n", retVal );
       m2mb_lwm2m_deinit( lwm2mHandle );
+      lwm2mHandle = NULL;
       return 1;
     }
     if(M2MB_OS_SUCCESS != m2mb_os_ev_get(
@@ -1163,6 +1186,7 @@ UINT8 oneedge_init( void)
 
       azx_sleep_ms(2000);
       m2mb_lwm2m_deinit(lwm2mHandle);
+      lwm2mHandle = NULL;
       return 1;
     }
   }
@@ -1207,8 +1231,19 @@ UINT8 oneedge_init( void)
 
 
       m2mb_lwm2m_disable(lwm2mHandle);
-      azx_sleep_ms(2000);
+      if(M2MB_OS_SUCCESS != m2mb_os_ev_get(
+          get_lwm2mEvents_handle(),
+          EV_LWM2M_DISABLE_RES_BIT,
+          M2MB_OS_EV_GET_ANY_AND_CLEAR,
+          &curEvBits,
+          M2MB_OS_MS2TICKS(10000) /*wait 10 seconds for the event to occur*/
+          )
+      )
+      {
+        AZX_LOG_ERROR("m2mb_lwm2m_disable timeout!\r\n");
+      }
       m2mb_lwm2m_deinit(lwm2mHandle);
+      lwm2mHandle = NULL;
       return 1;
     }
   }
@@ -1221,8 +1256,19 @@ UINT8 oneedge_init( void)
 
 
     m2mb_lwm2m_disable(lwm2mHandle);
-    azx_sleep_ms(2000);
+    if(M2MB_OS_SUCCESS != m2mb_os_ev_get(
+        get_lwm2mEvents_handle(),
+        EV_LWM2M_DISABLE_RES_BIT,
+        M2MB_OS_EV_GET_ANY_AND_CLEAR,
+        &curEvBits,
+        M2MB_OS_MS2TICKS(10000) /*wait 10 seconds for the event to occur*/
+        )
+    )
+    {
+      AZX_LOG_ERROR("m2mb_lwm2m_disable timeout!\r\n");
+    }
     m2mb_lwm2m_deinit(lwm2mHandle);
+    lwm2mHandle = NULL;
     return 1;
   }
 

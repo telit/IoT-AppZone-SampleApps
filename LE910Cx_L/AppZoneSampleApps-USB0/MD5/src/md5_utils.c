@@ -37,7 +37,6 @@
 #include <stdlib.h>
 
 
-
 #define MD5_DIGEST_LENGTH 16 /**< Default MD5 digest size in bytes */
 
 
@@ -163,17 +162,17 @@ INT32 md5_isMD5(CHAR *md5string)
 
   switch(strlen(md5string))
   {
-  case 33:
-    if('\r' != md5string[32])
-    {
-      return -1;
-    }
-    break;
-  case 34:
-    if('\r' != md5string[32] && '\n' != md5string[33])
-    {
-      return -2;
-    }
+    case 33:
+      if('\r' != md5string[32])
+      {
+        return -1;
+      }
+      break;
+    case 34:
+      if('\r' != md5string[32] && '\n' != md5string[33])
+      {
+        return -2;
+      }
   }
 
   for(i = 0; i < 32; i++)

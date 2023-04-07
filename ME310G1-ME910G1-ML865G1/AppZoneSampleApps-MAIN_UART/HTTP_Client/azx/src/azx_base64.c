@@ -7,6 +7,11 @@
 #include <ctype.h>
 #include "azx_base64.h"
 
+int cust_isascii(int c) { return !!((c >= 0) && (c <= 127)); }
+
+#ifndef isascii
+#define isascii cust_isascii
+#endif
 
 /* Local defines =============================================================*/
 // Base 64 Related
@@ -83,7 +88,7 @@ void azx_base64Encoder( UINT8 *out, const UINT8 *in, int inlen )
 int azx_base64Decoder( CHAR *out, const CHAR *in )
 {
   int len = 0;
-  register unsigned char digit1, digit2, digit3, digit4;
+  unsigned char digit1, digit2, digit3, digit4;
 
   if( in[0] == '+' && in[1] == ' ' )
   {

@@ -12,9 +12,9 @@ INT32 M2MB_msgTask1(INT32 type, INT32 param1, INT32 param2);
 INT32 M2MB_msgTask2(INT32 type, INT32 param1, INT32 param2);
 
 typedef enum {
-    TASK_START=0,
-	LOOP,
-	WD_KICK
+  TASK_START=0,
+  LOOP,
+  WD_KICK
 } STATES;
 
 /* EVENTS */

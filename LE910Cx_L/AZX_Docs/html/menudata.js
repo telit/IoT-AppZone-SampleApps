@@ -92,5 +92,6 @@ var menudata={children:[
 {text:"a",url:"globals_defs.html#index_a"},
 {text:"f",url:"globals_defs.html#index_f"},
 {text:"i",url:"globals_defs.html#index_i"},
+{text:"l",url:"globals_defs.html#index_l"},
 {text:"s",url:"globals_defs.html#index_s"}]}]}]},
 {text:"Examples",url:"examples.html"}]}

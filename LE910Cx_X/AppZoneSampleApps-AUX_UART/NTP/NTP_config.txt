@@ -1,0 +1,7 @@
+web.omnitel.it,#APN
+,#APN_USERNAME
+,#APN_PASSWORD
+3,#PDP_CDX
+0.pool.ntp.org, #NTP_SERVER
+123,#NTP_PORT
+5,#TIMEOUT

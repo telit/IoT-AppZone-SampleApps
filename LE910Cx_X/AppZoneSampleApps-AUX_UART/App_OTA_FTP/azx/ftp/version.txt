@@ -1,3 +1,6 @@
+1.0.1
+rvct compatibility
+-----------
 1.0.0
 azx library version, porting of https://nbpfaus.net/~pfau/ftplib/ 
 to use m2mb APIs for networking and system functionalities

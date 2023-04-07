@@ -19,7 +19,7 @@
 
   @date
     2020/02/05
-*/
+ */
 
 
 #ifndef HDR_MD5_UTILS_H_

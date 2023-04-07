@@ -23,7 +23,7 @@
 /*===========================================================================*/
 /**
  * @file azx_ftp.h
- * @version 1.0.4
+ * @version 1.1.1
  * @dependencies
  *
  * @note
@@ -38,15 +38,15 @@
  * This file contains all the functions for FTP operations. It is a porting of Thomas Pfau
  * work at https://nbpfaus.net/~pfau/ftplib/ (see disclaimer above)
  * renaming original functions and defines/ typedefs to use azx suffix
-*/
+ */
 
 /** \defgroup AZX_FTP_CONF FTP Client configuration
  *  Functions that can be used to configure the FTP client
-*/
+ */
 
 /** \defgroup AZX_FTP_USAGE FTP Client usage
  *  Functions that can be used to perform FTP operations
-*/
+ */
 
 /* Global declarations =======================================================*/
 
@@ -75,8 +75,8 @@
 #define __UINT64_MAX ULLONG_MAX
 #define _REENTRANT 0
 #if defined(__ARMCLIB_VERSION)
-	#undef memccpy
-	#define NEED_MEMCCPY
+#undef memccpy
+#define NEED_MEMCCPY
 #endif
 #endif
 /** \endcond */
@@ -87,36 +87,36 @@
 @{ */
 
 /**
-* \brief Type codes used in azx_ftp_access()
-*  @{ */
+ * \brief Type codes used in azx_ftp_access()
+ *  @{ */
 #define AZX_FTP_DIR 1                       /**< List directory (NLST)*/
 #define AZX_FTP_DIR_VERBOSE 2               /**< List directory verbose (LIST)*/
 #define AZX_FTP_FILE_READ 3                 /**< Read file (RETR)*/
 #define AZX_FTP_FILE_WRITE 4                /**< Write file (STOR)*/
-  /** @} */
+/** @} */
 
 
 
 /* azx_ftp_access() mode codes */
 /** \name azx_ftp_access mode codes
-* \brief Mode codes used in azx_ftp_access()
-*  @{ */
+ * \brief Mode codes used in azx_ftp_access()
+ *  @{ */
 #define AZX_FTP_ASCII 'A'                   /**< Use ASCII mode*/
 #define AZX_FTP_IMAGE 'I'                   /**< Use binary (image) mode*/
 #define AZX_FTP_TEXT AZX_FTP_ASCII          /**< Use ASCII mode*/
 #define AZX_FTP_BINARY AZX_FTP_IMAGE        /**< Use binary (image) mode*/
-  /** @} */
+/** @} */
 
 
 
 /* ftp connection modes */
 /** \name azx_ftp_access connection modes
-* \brief Connection modes used in azx_ftp_access()
-*  @{ */
+ * \brief Connection modes used in azx_ftp_access()
+ *  @{ */
 #define AZX_FTP_PASSIVE 1                   /**< Use passive mode*/
 #define AZX_FTP_PORT 2                      /**< Use active mode*/
 
-  /** @} */
+/** @} */
 /** @} */  //close addtogroup
 
 /** \addtogroup  AZX_FTP_CONF
@@ -124,14 +124,14 @@
 
 /* connection option names */
 /** \name azx_ftp_access connection options
-* \brief Connection options used with azx_ftp_options()
-*  @{ */
+ * \brief Connection options used with azx_ftp_options()
+ *  @{ */
 #define AZX_FTP_CONNMODE 1                  /**< set connection mode*/
 #define AZX_FTP_CALLBACK 2                  /**< set idle callback function*/
 #define AZX_FTP_IDLETIME 3                  /**< set idle callback timeout value (it will be called every time the timeout expires)*/
 #define AZX_FTP_CALLBACKARG 4               /**< set an user argument for the callback function*/
 #define AZX_FTP_CALLBACKBYTES 5             /**< set idle callback bytes amount (it will be called every time the amount is exchanged with the server)*/
-    /** @} */
+/** @} */
 /** @} */  //close addtogroup
 
 /** \cond PRIVATE */
@@ -149,16 +149,16 @@
 @{ */
 
 /** @name FTP max REST retries
-*  @brief
+ *  @brief
     Number of retries when using REST command during a RETR operation.
 
     @details
     When the RETR operation (file get) is performed, and an error occurs (e.g. server closes
     the connection due to slow transfer), the REST command is tried to restore the download from the point it reached.
     Up to 5 retries are attempted.
-*  @{ */
+ *  @{ */
 #define AZX_FTP_MAX_REST             5        /**< Maximum number of retries for REST during RETR operation*/
-  /** @} */
+/** @} */
 /** @} */  //close addtogroup
 
 
@@ -187,7 +187,7 @@ typedef uint32_t azx_ftp_fsz_t;               /**< unsigned long definition*/
 
   <b>Refer to</b>
       azx_ftp_connect()
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 typedef struct AZX_FTP_NET_BUF_TAG AZX_FTP_NET_BUF_T;  /**< Typedef of struct AZX_FTP_NET_BUF_TAG*/
 
@@ -198,55 +198,55 @@ typedef struct AZX_FTP_NET_BUF_TAG AZX_FTP_NET_BUF_T;  /**< Typedef of struct AZ
 /**
   @brief
     Callback function signature
-    
+
   @details
     This is the callback function signature (optional) that the client will call during data exchange with the remote server. 
     User callback must follow this format.
-    
+
   @param[in] nControl
         Pointer to the FTP client structure pointer         
    @param[in] xfered
         Indicates how much data bytes have been transferred until now
    @param[in] arg
         User parameter, set in azx_ftp_setCallback()
-        
+
   @return
 		1 if the FTP client must keep running
   @return
 		0 to force the FTP client to interrupt the current operation and close the data socket.
-        
+
   <b>Refer to</b>
     azx_ftp_setCallback() azx_ftp_clearCallback()
-    
+
   <b>Sample usage</b>
   @code
         AZX_FTP_NET_BUF_T *ftp_client;
-  
+
 		    FtpCallbackOptions opt;
         opt.cbFunc = log_progress;
         opt.cbArg = &f;
         opt.idleTime = 1000;  //call each second
         opt.bytesXferred = 1024;  //call each 1024 bytes
-        
+
         azx_ftp_setCallback(&opt,ftp_client);
   @endcode
   @ingroup AZX_FTP_CONF
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 typedef int (*azx_ftp_callback)(AZX_FTP_NET_BUF_T *nControl, azx_ftp_fsz_t xfered, void *arg);
 
 
 
 /**
-* \brief Logging levels for FTP logs
-* \ingroup AZX_FTP_CONF
-*/
+ * \brief Logging levels for FTP logs
+ * \ingroup AZX_FTP_CONF
+ */
 typedef enum
 {
-	AZX_FTP_DEBUG_HOOK_NONE = 0,    /**<Do not print any message*/
-	AZX_FTP_DEBUG_HOOK_ERROR = 1,   /**<Print an error message*/
-	AZX_FTP_DEBUG_HOOK_INFO = 2,    /**<Print an information message*/
-	AZX_FTP_DEBUG_HOOK_DEBUG = 3    /**<Print a debug message*/
+  AZX_FTP_DEBUG_HOOK_NONE = 0,    /**<Do not print any message*/
+  AZX_FTP_DEBUG_HOOK_ERROR = 1,   /**<Print an error message*/
+  AZX_FTP_DEBUG_HOOK_INFO = 2,    /**<Print an information message*/
+  AZX_FTP_DEBUG_HOOK_DEBUG = 3    /**<Print a debug message*/
 } AZX_FTP_DEBUG_HOOK_LEVELS_E;
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -258,7 +258,7 @@ typedef enum
     This function prototype can be registered by the user with the azx_ftp_init call.
 		It is user's responsibility to define the logic of all debug levels (see
 		FTP_DEBUG_HOOK_LEVELS_E enum above ) and how they are printed.
-        
+
 	@param[in] level
     Debug level, see FTP_DEBUG_HOOK_LEVELS
 	@param[in] function
@@ -273,10 +273,10 @@ typedef enum
 
   @return
     An integer value, not used at the moment
-  
+
   <b>Refer to</b>
     azx_ftp_setCallback() azx_ftp_clearCallback()
-  
+
   <b>Sample usage</b>
   @code
   	#include <stdarg.h>
@@ -315,9 +315,9 @@ typedef enum
 			return PRINT(buf); //NOTE: PRINT is a generic print function like printf
   	}
   @endcode
-  
+
   @ingroup AZX_FTP_CONF
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 
 typedef INT32 (*azx_ftp_debugHook)(AZX_FTP_DEBUG_HOOK_LEVELS_E level, const CHAR *function, const CHAR *file, INT32 line, const CHAR *fmt, ...);
@@ -334,19 +334,19 @@ typedef INT32 (*azx_ftp_debugHook)(AZX_FTP_DEBUG_HOOK_LEVELS_E level, const CHAR
     The CID to be used for the network operations (a PDP context must be already active to use the client)
     the debug level to be used.
     a callback argument (unused at the moment)
-    
+
   @return
         None
-  
+
   <b>Refer to</b>
     azx_ftp_init()
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 
 typedef struct AZX_FTP_OPTIONS_TAG{
-	azx_ftp_debugHook cbFunc;		             /**< Debug callback function to call for client logging*/
-	AZX_FTP_DEBUG_HOOK_LEVELS_E level;		   /**< Global debug Level to set */
-	unsigned char cid;                       /**< Context id used by active connection*/
+  azx_ftp_debugHook cbFunc;		             /**< Debug callback function to call for client logging*/
+  AZX_FTP_DEBUG_HOOK_LEVELS_E level;		   /**< Global debug Level to set */
+  unsigned char cid;                       /**< Context id used by active connection*/
   void *cbArg;                             /**< User defined parameter, not used*/
 } AZX_FTP_OPTIONS_T;
 
@@ -361,16 +361,16 @@ AZX_FTP_GLOBALREF AZX_FTP_OPTIONS_T ftp_opts;
 
 
 /**
-* \brief FTP user callback events. When data is received, one of the events is reported
-* \ingroup AZX_FTP_USAGE
-*/
+ * \brief FTP user callback events. When data is received, one of the events is reported
+ * \ingroup AZX_FTP_USAGE
+ */
 typedef enum
 {
-	DATA_CB_START,              /**< The FTP client is notifying that the connection with the server is ready and the data download will start shortly. In this case, data and datalen are meaningless.) */
-	DATA_CB_DATA,               /**< This event is called for each block of data received by the server. 
+  DATA_CB_START,              /**< The FTP client is notifying that the connection with the server is ready and the data download will start shortly. In this case, data and datalen are meaningless.) */
+  DATA_CB_DATA,               /**< This event is called for each block of data received by the server.
                                                 data variable will contain the block of data. 
                                                 datalen variable will be the length of the received block of data */
-	DATA_CB_END                 /**<  This event is called when the transfer is complete.
+  DATA_CB_END                 /**<  This event is called when the transfer is complete.
                                                 data variable is meaningless
                                                 datalen indicates the total received data (it can be compared with the file size on the server)*/
 } AZX_FTP_USER_CB_EV_E;
@@ -385,7 +385,7 @@ typedef enum
     If a callback is passed to the configuration structure, the provided buffer will be used to retrieve
     data from the FTP connection, and for each block of data the callback will be called to allow the user
     to manage the data.
-    
+
   @param[in] data
     The buffer with the received data
   @param[in] datalen
@@ -395,14 +395,14 @@ typedef enum
         DATA_CB_START
         DATA_CB_DATA    
         DATA_CB_END
-  
+
   @return
     an Integer number. unused for now
-    
-  
+
+
   <b>Refer to</b>
     AZX_FTP_BUFFER
-  
+
   <b>Sample usage</b>
   @code
 		int my_data_cb(char *data, uint32_t datalen, int ev)
@@ -421,30 +421,30 @@ typedef enum
 			}
 		  return 1;
 		}
-        
+
         main()
         {
-            
+
             //...//
             AZX_FTP_XFER local;
             AZX_FTP_NET_BUF_T *ftp_client;
             char remote_file_path[] = "myfile";
             char buffer[512];
-            
+
             // Init ftp client
-            
+
             local.type = AZX_FTP_XFER_BUFF;
             local.payload.buffInfo.buffer = (char*) buffer;
             local.payload.buffInfo.bufferSize = sizeof(buffer);
             local.payload.buffInfo.buf_cb = my_data_cb; //the data callback needed to manage the data.
-            
+
             azx_ftp_get(&(local), remote_file_path, AZX_FTP_BINARY, ftp_client);
 
         }
   @endcode
-  
+
   @ingroup AZX_FTP_USAGE
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 typedef INT32 (*azx_ftp_dataCallback)(CHAR *data, UINT32 datalen, INT32 ev);
 
@@ -459,24 +459,24 @@ typedef INT32 (*azx_ftp_dataCallback)(CHAR *data, UINT32 datalen, INT32 ev);
   @details
     This structure holds the information of a file to be downloaded or uploaded.
     It has the path of the file and its size in bytes
-    
+
   <b>Refer to</b>
     AZX_FTP_XFER
-    
+
   @ingroup AZX_FTP_USAGE
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 typedef struct AZX_FTP_FILE_INFO_TAG
 {
-	CHAR *path;                      /**<File path (local or remote)*/
-	UINT32 fileSize;                 /**<File size in bytes*/
+  CHAR *path;                      /**<File path (local or remote)*/
+  UINT32 fileSize;                 /**<File size in bytes*/
 } AZX_FTP_FILE_INFO_T;
 
 
 /*-----------------------------------------------------------------------------------------------*/
 /**
   @struct AZX_FTP_BUFFER
-  
+
   @brief
     Generic buffer information structure
 
@@ -485,20 +485,20 @@ typedef struct AZX_FTP_FILE_INFO_TAG
     from where data can be retrieved during a file put.
 
     It contains
-   
+
     the buffer size
-    
+
 
     <b>Refer to</b> 
     AZX_FTP_XFER azx_ftp_get() azx_ftp_put()
-    
+
     <b>Sample usage</b>
     @code
   	  char buffer[1500];
 
       AZX_FTP_BUFFER b = { buffer, 1500, my_data_cb};
     @endcode
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 typedef struct AZX_FTP_BUFFER_TAG
 {
@@ -509,17 +509,18 @@ typedef struct AZX_FTP_BUFFER_TAG
 
 
 /**
-* @brief FTP transfer type.   
+ * @brief FTP transfer type.
 
    <b>Refer to</b>
    AZX_FTP_XFER_T
 
-* @ingroup AZX_FTP_USAGE
-*/
+ * @ingroup AZX_FTP_USAGE
+ */
 typedef enum
 {
-	AZX_FTP_XFER_FILE,           /**<File will be transferred as a file stream*/
-	AZX_FTP_XFER_BUFF            /**<File transfer will be managed with a buffer*/
+  AZX_FTP_XFER_FILE,           /**< File will be transferred as a file stream*/
+  AZX_FTP_XFER_BUFF,           /**< File transfer will be managed with a buffer*/
+  AZX_FTP_XFER_MAX=0xFFFFFFFF  /**< max value, do not use*/
 } AZX_FTP_XFER_E;
 
 
@@ -531,10 +532,10 @@ typedef enum
   @details
     This structure holds the information what kind of transfer media to be used for the ftp get or put
     operations. It can be file or buffer then the payload can be either a AZX_FTP_FILE_INFO or AZX_FTP_BUFFER_INFO structure
-        
+
   <b>Refer to</b> 
     azx_ftp_get() azx_ftp_put()
-  
+
   <b>Sample usage</b>
  @code
   	char buffer[1500];
@@ -544,18 +545,18 @@ typedef enum
     x.type = AZX_FTP_XFER_BUFF;
     x.payload = b;
   @endcode
-  
+
   @ingroup AZX_FTP_USAGE
 
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
-typedef struct AZX_FTP_XFER_TAG
+typedef struct  AZX_FTP_XFER_TAG
 {
-	AZX_FTP_XFER_E type;                     /**<The type of the transfer mode*/
+  AZX_FTP_XFER_E type;                     /**<The type of the transfer mode*/
   union
   {
-		AZX_FTP_FILE_INFO_T fileInfo;          /**< If type is AZX_FTP_XFER_FILE, this will provide file information (path, size)*/
-		AZX_FTP_BUFFER_T buffInfo;             /**< If type is AZX_FTP_XFER_BUFF, this will provide buffer information (pointer, size, data callback if needed)*/
+    AZX_FTP_FILE_INFO_T fileInfo;          /**< If type is AZX_FTP_XFER_FILE, this will provide file information (path, size)*/
+    AZX_FTP_BUFFER_T buffInfo;             /**< If type is AZX_FTP_XFER_BUFF, this will provide buffer information (pointer, size, data callback if needed)*/
   } payload;                                      /**< Payload of the transfer operation*/
 } AZX_FTP_XFER_T;
 
@@ -563,7 +564,7 @@ typedef struct AZX_FTP_XFER_TAG
 /*-----------------------------------------------------------------------------------------------*/
 /**
   @struct FtpCallbackOptions
-  
+
   @brief
     Structure that holds status callback function parameters
 
@@ -575,14 +576,14 @@ typedef struct AZX_FTP_XFER_TAG
     azx_ftp_setCallback()  azx_ftp_clearCallback()
 
   @ingroup AZX_FTP_CONF
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 typedef struct AZX_FTP_CALLBACK_OPTIONS_TAG
 {
-    azx_ftp_callback cbFunc;		      /**< Callback Function to call */
-    void *cbArg;		                  /**< User argument to pass to function */
-    UINT32 bytesXferred;	            /**< Callback if this number of bytes transferred */
-    UINT32 idleTime;	                /**< Callback if this many milliseconds have elapsed */
+  azx_ftp_callback cbFunc;		      /**< Callback Function to call */
+  void *cbArg;		                  /**< User argument to pass to function */
+  UINT32 bytesXferred;	            /**< Callback if this number of bytes transferred */
+  UINT32 idleTime;	                /**< Callback if this many milliseconds have elapsed */
 } AZX_FTP_CALLBACK_OPTIONS_T;         /**< Typedef of struct AZX_FTP_CALLBACK_OPTIONS_TAG*/
 
 
@@ -594,20 +595,20 @@ typedef struct AZX_FTP_CALLBACK_OPTIONS_TAG
 
   @details
     This function must be called at the beginning of the code, to set the parameters required by the client.
-    
+
   @param[in] opt
     ftp_options struct holding the parameters
-  
+
   @return
     1 
 
   @ingroup AZX_FTP_CONF
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 INT32 azx_ftp_init(const AZX_FTP_OPTIONS_T *opt);
 /** \example{lineno} azx_ftp_example.c
-  * This is a detailed example of FTP client usage.
-  */
+ * This is a detailed example of FTP client usage.
+ */
 
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -617,19 +618,19 @@ INT32 azx_ftp_init(const AZX_FTP_OPTIONS_T *opt);
 
   @details
     This function will provide the last server response, helping the debugging in case of errors.
-    
+
   @param[in] nControl
     Structure pointer of the FTP client
-  
+
   @return
     The server response string
-    
-  
+
+
   <b>Refer to</b>
     azx_ftp_init() azx_ftp_login() azx_ftp_get() azx_ftp_put()
-    
+
   @ingroup AZX_FTP_USAGE
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 CHAR *azx_ftp_lastResponse(AZX_FTP_NET_BUF_T *nControl);
 
@@ -641,22 +642,22 @@ CHAR *azx_ftp_lastResponse(AZX_FTP_NET_BUF_T *nControl);
 
   @details
     This function will perform the network connection to the provided host.
-    
+
   @param[in] host
     String with the host name or IP address
   @param[inout] nControl
     Address of the pointer to the FTP client structure that will be initialized 
-  
+
   @return
     1 if Success
   @return 
     0 otherwise
-  
+
   <b>Refer to</b>
    azx_ftp_init()
-   
+
   @ingroup AZX_FTP_USAGE
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 INT32 azx_ftp_connect(const CHAR *host, AZX_FTP_NET_BUF_T **nControl);
 
@@ -668,7 +669,7 @@ INT32 azx_ftp_connect(const CHAR *host, AZX_FTP_NET_BUF_T **nControl);
 
   @details
     This function allows to set client related options, see azx_ftp_access connection options
-    
+
   @param[in] opt
        Option identifier
            AZX_FTP_CONNMODE
@@ -676,22 +677,22 @@ INT32 azx_ftp_connect(const CHAR *host, AZX_FTP_NET_BUF_T **nControl);
            AZX_FTP_IDLETIME
            AZX_FTP_CALLBACKARG
            AZX_FTP_CALLBACKBYTES
-           
+
   @param[in] val
         Option value
   @param[in] nControl
     Pointer to the FTP client structure
-  
+
   @return
     1 if Success
   @return 
     0 otherwise
-  
+
   <b>Refer to</b>
    azx_ftp_init()
-   
+
   @ingroup AZX_FTP_USAGE
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 INT32 azx_ftp_options(INT32 opt, INT32 val, AZX_FTP_NET_BUF_T *nControl);
 
@@ -702,20 +703,20 @@ INT32 azx_ftp_options(INT32 opt, INT32 val, AZX_FTP_NET_BUF_T *nControl);
 
   @details
     This function allows to set the idle callback function, that will be called when a defined event occurs
-    
+
   @param[in] opt
        pointer to the struct holding the parameters
   @param[in] nControl
     Pointer to the FTP client structure
-  
+
   @return
     1
-  
+
   <b>Refer to</b>
    azx_ftp_get() azx_ftp_put()
-   
+
   @ingroup AZX_FTP_USAGE
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 INT32 azx_ftp_setCallback(const AZX_FTP_CALLBACK_OPTIONS_T *opt, AZX_FTP_NET_BUF_T *nControl);
 
@@ -726,18 +727,18 @@ INT32 azx_ftp_setCallback(const AZX_FTP_CALLBACK_OPTIONS_T *opt, AZX_FTP_NET_BUF
 
   @details
     This function allows to unset a previously set idle callback function
-    
+
   @param[in] nControl
     Pointer to the FTP client structure
-  
+
   @return
     1
-  
+
   <b>Refer to</b>
    azx_ftp_get() azx_ftp_put()
-   
+
   @ingroup AZX_FTP_USAGE
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 INT32 azx_ftp_clearCallback(AZX_FTP_NET_BUF_T *nControl);
 
@@ -750,24 +751,24 @@ INT32 azx_ftp_clearCallback(AZX_FTP_NET_BUF_T *nControl);
 
   @details
     This function performs the FTP login to the remote host
-    
+
   @param[in] user
       FTP username 
   @param[in] pass
       FTP password
   @param[in] nControl
     Pointer to the FTP client structure
-  
+
   @return
     1 if Success
   @return 
     0 otherwise
-  
+
   <b>Refer to</b>
    azx_ftp_init() azx_ftp_connect() FtpQuit()
-   
+
   @ingroup AZX_FTP_USAGE
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 INT32 azx_ftp_login(const CHAR *user, const CHAR *pass, AZX_FTP_NET_BUF_T *nControl);
 
@@ -798,22 +799,22 @@ INT32 azx_ftp_login(const CHAR *user, const CHAR *pass, AZX_FTP_NET_BUF_T *nCont
     Address of the pointer to the FTP structure holding the data socket info, that will be initialized.
   @param[in] offset 
        Integer providing the initial offset of the file to be downloaded. Used in case of REST
-  
+
   @return
     1 if Success
   @return 
     0 otherwise
-  
+
   <b>Refer to</b>
    azx_ftp_init() azx_ftp_connect() azx_ftp_get() azx_ftp_put() azx_ftp_login()
-   
+
   @ingroup AZX_FTP_USAGE
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 INT32 azx_ftp_access(const CHAR *path, INT32 typ, INT32 mode, AZX_FTP_NET_BUF_T *nControl,
     AZX_FTP_NET_BUF_T **nData, INT32 offset);
-        
-       
+
+
 INT32 azx_ftp_read(void *buf, INT32 max, AZX_FTP_NET_BUF_T *nData);
 INT32 azx_ftp_write(const void *buf, INT32 len, AZX_FTP_NET_BUF_T *nData);
 INT32 azx_ftp_close(AZX_FTP_NET_BUF_T *nData);
@@ -828,7 +829,7 @@ INT32 azx_ftp_close(AZX_FTP_NET_BUF_T *nData);
   @details
     This function sends site specific commands to remote server (like SITE IDLE 60 or SITE UMASK 002 ). Inspect SITE HELP output for complete list of supported commands.
     use FtpLastResponse() to read the server reply
-    
+
   @param[in] cmd 
       String to be used as SITE parameter. 
   @param[in] nControl
@@ -838,12 +839,12 @@ INT32 azx_ftp_close(AZX_FTP_NET_BUF_T *nData);
     1 if Success
   @return 
     0 otherwise
-  
+
   <b>Refer to</b>
    azx_ftp_init() azx_ftp_connect() azx_ftp_login()
-   
+
   @ingroup AZX_FTP_USAGE
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 INT32 azx_ftp_site(const CHAR *cmd, AZX_FTP_NET_BUF_T *nControl);
 
@@ -858,7 +859,7 @@ INT32 azx_ftp_site(const CHAR *cmd, AZX_FTP_NET_BUF_T *nControl);
         >SYST
         <215 UNIX Type: L8
     The response will be "UNIX Type: L8"
-    
+
   @param[out] buf 
         Allocated buffer that will be used to contain the response
   @param[in] max
@@ -870,12 +871,12 @@ INT32 azx_ftp_site(const CHAR *cmd, AZX_FTP_NET_BUF_T *nControl);
     1 if Success
   @return 
     0 otherwise
-  
+
   <b>Refer to</b>
    azx_ftp_init() azx_ftp_connect() azx_ftp_login()
-   
+
   @ingroup AZX_FTP_USAGE
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 INT32 azx_ftp_sysType(CHAR *buf, INT32 max, AZX_FTP_NET_BUF_T *nControl);
 
@@ -886,7 +887,7 @@ INT32 azx_ftp_sysType(CHAR *buf, INT32 max, AZX_FTP_NET_BUF_T *nControl);
 
   @details
     This function asks remote server to create a directory.
-    
+
   @param[in] path 
             Path of the new directory. Can be absolute or relative to current remote directory.
   @param[in] nControl
@@ -896,12 +897,12 @@ INT32 azx_ftp_sysType(CHAR *buf, INT32 max, AZX_FTP_NET_BUF_T *nControl);
     1 if Success
   @return 
     0 otherwise
-  
+
   <b>Refer to</b>
    azx_ftp_init() azx_ftp_connect() azx_ftp_login()
-   
+
   @ingroup AZX_FTP_USAGE
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 INT32 azx_ftp_mkdir(const CHAR *path, AZX_FTP_NET_BUF_T *nControl);
 
@@ -912,7 +913,7 @@ INT32 azx_ftp_mkdir(const CHAR *path, AZX_FTP_NET_BUF_T *nControl);
 
   @details
     This function asks remote server to check provided path
-    
+
   @param[in] path 
             Path of the requested work directory. Can be absolute or relative to current remote directory.
   @param[in] nControl
@@ -922,12 +923,12 @@ INT32 azx_ftp_mkdir(const CHAR *path, AZX_FTP_NET_BUF_T *nControl);
     1 if Success
   @return 
     0 otherwise
-  
+
   <b>Refer to</b>
    azx_ftp_init() azx_ftp_connect() azx_ftp_login()
-   
+
   @ingroup AZX_FTP_USAGE
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 INT32 azx_ftp_chdir(const CHAR *path, AZX_FTP_NET_BUF_T *nControl);
 
@@ -938,7 +939,7 @@ INT32 azx_ftp_chdir(const CHAR *path, AZX_FTP_NET_BUF_T *nControl);
 
   @details
     This function asks remote server to go up to parent folder 
-    
+
   @param[in] nControl
       Pointer to the FTP client structure
 
@@ -946,12 +947,12 @@ INT32 azx_ftp_chdir(const CHAR *path, AZX_FTP_NET_BUF_T *nControl);
     1 if Success
   @return 
     0 otherwise
-  
+
   <b>Refer to</b>
    azx_ftp_init() azx_ftp_connect() azx_ftp_login()
-   
+
   @ingroup AZX_FTP_USAGE
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 INT32 azx_ftp_cdUp(AZX_FTP_NET_BUF_T *nControl);
 
@@ -963,7 +964,7 @@ INT32 azx_ftp_cdUp(AZX_FTP_NET_BUF_T *nControl);
 
   @details
     This function asks remote server to delete a directory.
-    
+
   @param[in] path 
             Path of the new directory. Can be absolute or relative to current remote directory. 
   @param[in] nControl
@@ -973,12 +974,12 @@ INT32 azx_ftp_cdUp(AZX_FTP_NET_BUF_T *nControl);
     1 if Success
   @return 
     0 otherwise
-  
+
   <b>Refer to</b>
    azx_ftp_init() azx_ftp_connect() azx_ftp_login()
-   
+
   @ingroup AZX_FTP_USAGE
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 INT32 azx_ftp_rmdir(const CHAR *path, AZX_FTP_NET_BUF_T *nControl);
 
@@ -989,7 +990,7 @@ INT32 azx_ftp_rmdir(const CHAR *path, AZX_FTP_NET_BUF_T *nControl);
 
   @details
     This function asks remote server the present working directory
-    
+
   @param[out] path 
         Allocated buffer that will contain the CWD string
   @param[in] max
@@ -1001,12 +1002,12 @@ INT32 azx_ftp_rmdir(const CHAR *path, AZX_FTP_NET_BUF_T *nControl);
     1 if Success
   @return 
     0 otherwise
-  
+
   <b>Refer to</b>
    azx_ftp_init() azx_ftp_connect() azx_ftp_login()
-   
+
   @ingroup AZX_FTP_USAGE
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 INT32 azx_ftp_pwd(CHAR *path, INT32 max, AZX_FTP_NET_BUF_T *nControl);
 
@@ -1017,7 +1018,7 @@ INT32 azx_ftp_pwd(CHAR *path, INT32 max, AZX_FTP_NET_BUF_T *nControl);
 
   @details
     This function asks remote server an NLST command and returns the response
-    
+
   @param[out] output
      AZX_FTP_XFER structure that will contain the NLST response
   @param[in] path
@@ -1029,12 +1030,12 @@ INT32 azx_ftp_pwd(CHAR *path, INT32 max, AZX_FTP_NET_BUF_T *nControl);
     1 if Success
   @return 
     0 otherwise
-  
+
   <b>Refer to</b>
    azx_ftp_init() azx_ftp_connect() azx_ftp_login()
-   
+
   @ingroup AZX_FTP_USAGE
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 INT32 azx_ftp_nlst(AZX_FTP_XFER_T *output, const CHAR *path, AZX_FTP_NET_BUF_T *nControl);
 
@@ -1045,7 +1046,7 @@ INT32 azx_ftp_nlst(AZX_FTP_XFER_T *output, const CHAR *path, AZX_FTP_NET_BUF_T *
 
   @details
     This function asks remote server an LIST command and returns the response
-    
+
   @param[out] output
      AZX_FTP_XFER structure that will contain the LIST response
   @param[in] path
@@ -1057,12 +1058,12 @@ INT32 azx_ftp_nlst(AZX_FTP_XFER_T *output, const CHAR *path, AZX_FTP_NET_BUF_T *
     1 if Success
   @return 
     0 otherwise
-  
+
   <b>Refer to</b>
    azx_ftp_init() azx_ftp_connect() azx_ftp_login()
-   
+
   @ingroup AZX_FTP_USAGE
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 INT32 azx_ftp_dir(AZX_FTP_XFER_T *output, const CHAR *path, AZX_FTP_NET_BUF_T *nControl);
 
@@ -1073,7 +1074,7 @@ INT32 azx_ftp_dir(AZX_FTP_XFER_T *output, const CHAR *path, AZX_FTP_NET_BUF_T *n
 
   @details
     This function asks remote server the size in bytes of a remote file
-    
+
   @param[in] path
      Path to be passed to the command. can be relative or absolute.
   @param[out] size
@@ -1087,12 +1088,12 @@ INT32 azx_ftp_dir(AZX_FTP_XFER_T *output, const CHAR *path, AZX_FTP_NET_BUF_T *n
     1 if Success
   @return 
     0 otherwise
-  
+
   <b>Refer to</b>
    azx_ftp_init() azx_ftp_connect() azx_ftp_login()
-   
+
   @ingroup AZX_FTP_USAGE
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 INT32 azx_ftp_size(const CHAR *path, UINT32 *size, CHAR mode, AZX_FTP_NET_BUF_T *nControl);
 
@@ -1105,7 +1106,7 @@ INT32 azx_ftp_size(const CHAR *path, UINT32 *size, CHAR mode, AZX_FTP_NET_BUF_T 
 
   @details
     This function asks remote server the size in bytes of a remote file. to be used for big files (UINT64 is used for file size)
-    
+
   @param[in] path
      Path to be passed to the command. can be relative or absolute.
   @param[out] size
@@ -1119,12 +1120,12 @@ INT32 azx_ftp_size(const CHAR *path, UINT32 *size, CHAR mode, AZX_FTP_NET_BUF_T 
     1 if Success
   @return 
     0 otherwise
-  
+
   <b>Refer to</b>
    azx_ftp_init() azx_ftp_connect() azx_ftp_login()
-   
+
   @ingroup AZX_FTP_USAGE
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 INT32 axz_ftp_sizeLong(const CHAR *path, azx_ftp_fsz_t *size, CHAR mode, AZX_FTP_NET_BUF_T *nControl);
 #endif
@@ -1136,7 +1137,7 @@ INT32 axz_ftp_sizeLong(const CHAR *path, azx_ftp_fsz_t *size, CHAR mode, AZX_FTP
 
   @details
     This function asks remote server the modification date of a remote file.
-    
+
   @param[in] path
      Path to be passed to the command. can be relative or absolute.
   @param[out] dt
@@ -1150,12 +1151,12 @@ INT32 axz_ftp_sizeLong(const CHAR *path, azx_ftp_fsz_t *size, CHAR mode, AZX_FTP
     1 if Success
   @return 
     0 otherwise
-  
+
   <b>Refer to</b>
    azx_ftp_init() azx_ftp_connect() azx_ftp_login()
-   
+
   @ingroup AZX_FTP_USAGE
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 INT32 azx_ftp_modDate(const CHAR *path, CHAR *dt, INT32 max, AZX_FTP_NET_BUF_T *nControl);
 
@@ -1166,7 +1167,7 @@ INT32 azx_ftp_modDate(const CHAR *path, CHAR *dt, INT32 max, AZX_FTP_NET_BUF_T *
 
   @details
     This function asks remote server to send a remote file
-    
+
   @param[out] output
      AZX_FTP_XFER structure that will hold the file content (can be a buffer or a file in the filesystem)
   @param[in] path
@@ -1180,16 +1181,16 @@ INT32 azx_ftp_modDate(const CHAR *path, CHAR *dt, INT32 max, AZX_FTP_NET_BUF_T *
     1 if Success
   @return 
     0 otherwise
-  
+
   <b>Refer to</b>
    azx_ftp_init() azx_ftp_connect() azx_ftp_login()
-   
+
   @ingroup AZX_FTP_USAGE
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 INT32 azx_ftp_get(AZX_FTP_XFER_T *output, const CHAR *path, CHAR mode,
-	AZX_FTP_NET_BUF_T *nControl);
-    
+    AZX_FTP_NET_BUF_T *nControl);
+
 /*-----------------------------------------------------------------------------------------------*/
 /**
   @brief
@@ -1197,7 +1198,7 @@ INT32 azx_ftp_get(AZX_FTP_XFER_T *output, const CHAR *path, CHAR mode,
 
   @details
     This function sends a local file to the remote server
-    
+
   @param[in] input
      AZX_FTP_XFER structure that will hold the file content (can be a buffer or a file in the filesystem)
   @param[in] path
@@ -1211,17 +1212,17 @@ INT32 azx_ftp_get(AZX_FTP_XFER_T *output, const CHAR *path, CHAR mode,
     1 if Success
   @return 
     0 otherwise
-  
+
   <b>Refer to</b>
    azx_ftp_init() azx_ftp_connect() azx_ftp_login()
-   
+
   @ingroup AZX_FTP_USAGE
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 INT32 azx_ftp_put(AZX_FTP_XFER_T *input, const CHAR *path, CHAR mode,
-	AZX_FTP_NET_BUF_T *nControl);
-    
-    
+    AZX_FTP_NET_BUF_T *nControl);
+
+
 /*-----------------------------------------------------------------------------------------------*/
 /**
   @brief
@@ -1229,7 +1230,7 @@ INT32 azx_ftp_put(AZX_FTP_XFER_T *input, const CHAR *path, CHAR mode,
 
   @details
     This function asks remote server to rename a file
-    
+
   @param[in] src
      Original file path
   @param[in] dst
@@ -1241,12 +1242,12 @@ INT32 azx_ftp_put(AZX_FTP_XFER_T *input, const CHAR *path, CHAR mode,
     1 if Success
   @return 
     0 otherwise
-  
+
   <b>Refer to</b>
    azx_ftp_init() azx_ftp_connect() azx_ftp_login()
-   
+
   @ingroup AZX_FTP_USAGE
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 INT32 azx_ftp_rename(const CHAR *src, const CHAR *dst, AZX_FTP_NET_BUF_T *nControl);
 
@@ -1257,7 +1258,7 @@ INT32 azx_ftp_rename(const CHAR *src, const CHAR *dst, AZX_FTP_NET_BUF_T *nContr
 
   @details
     This function asks remote server to delete a file
-    
+
   @param[in] fnm
      Remote file path to be deleted (can be relative or absolute)
   @param[in] nControl
@@ -1267,12 +1268,12 @@ INT32 azx_ftp_rename(const CHAR *src, const CHAR *dst, AZX_FTP_NET_BUF_T *nContr
     1 if Success
   @return 
     0 otherwise
-  
+
   <b>Refer to</b>
    azx_ftp_init() azx_ftp_connect() azx_ftp_login()
-   
+
   @ingroup AZX_FTP_USAGE
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 INT32 azx_ftp_delete(const CHAR *fnm, AZX_FTP_NET_BUF_T *nControl);
 
@@ -1283,7 +1284,7 @@ INT32 azx_ftp_delete(const CHAR *fnm, AZX_FTP_NET_BUF_T *nControl);
 
   @details
     This function asks remote server to close the session, and closes the communication socket
-    
+
   @param[in] nControl
       Pointer to the FTP client structure
 
@@ -1291,12 +1292,12 @@ INT32 azx_ftp_delete(const CHAR *fnm, AZX_FTP_NET_BUF_T *nControl);
     1 if Success
   @return 
     0 otherwise
-  
+
   <b>Refer to</b>
    azx_ftp_init() azx_ftp_connect() azx_ftp_login()
-   
+
   @ingroup AZX_FTP_USAGE
-*/
+ */
 /*-----------------------------------------------------------------------------------------------*/
 void azx_ftp_quit(AZX_FTP_NET_BUF_T *nControl);
 

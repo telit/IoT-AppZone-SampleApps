@@ -69,6 +69,20 @@ INT32 azx_pdu_encode(CHAR *number,CHAR *str, UINT8 *pdu, INT32 dcs)
 
   memset(&packet,0,sizeof(pdu_struct));
 
-  len = pdu_out_encode_simple(&packet, pdu, number, str, 0, dcs);
+  len = pdu_out_encode_simple(&packet, pdu, PDU_TYPE_INTERNATIONAL, number, str, 0, dcs);
+  return len;
+}
+
+
+
+INT32 azx_pdu_encode_generic(AZX_SMS_ADDR_NUM_TYPE_E type, CHAR *number, CHAR *str, UINT8 *pdu, INT32 dcs)
+{
+
+  pdu_struct packet;
+  INT32 len;
+
+  memset(&packet,0,sizeof(pdu_struct));
+
+  len = pdu_out_encode_simple(&packet, pdu, type, number, str, 0, dcs);
   return len;
 }

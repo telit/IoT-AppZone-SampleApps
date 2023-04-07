@@ -4,9 +4,9 @@
 
 
 
-Package Version: **1.1.15-CxX**
+Package Version: **1.1.18-CxX**
 
-Minimum Firmware Version: **25.30.222.3**
+Minimum Firmware Version: **25.30.006.0**
 
 
 ## Features
@@ -21,7 +21,7 @@ This package goal is to provide sample source code for common activities kicksta
 
 To manually deploy the Sample application on the devices perform the following steps:
 
-1. Have **25.30.222.3** FW version flashed (`AT#SWPKGV` will give you the FW version)
+1. Have **25.30.006.0** FW version flashed (`AT#SWPKGV` will give you the FW version)
 
 1. Copy _m2mapz.bin_ to _/mod/_
 	```
@@ -113,6 +113,30 @@ On IDE, create a new project: "File"-> "New" -> "Telit Project"
 Select the preferred firmware version (e.g. 30.00.xx7) and create an empty project.
 
 in the samples package, go in the HelloWorld folder (e.g. `AppZoneSampleApps-MAIN_UART\HelloWorld` ), copy all the files and folders in it (as `src`, `hdr`, `azx` ) and paste them in the root of the newly created IDE project. You are now ready tyo build and try the sample app on your device.
+
+## Heap and starting address
+
+By default, every application defines a memory HEAP size and its start address in memory. 
+
+They are usually provided by the linking phase of the build process:
+
+```
+"[...]arm-none-eabi-ld" --defsym __ROM=0x40000000 --defsym __HEAP_PUB_SIZE=0x40000 --defsym 
+```
+
+`__ROM` is the default starting address, `__HEAP_PUB_SIZE` is the default HEAP size in bytes. Both are expressed  in hexadecimal format.
+
+These values can be customized through makefile variables:
+
+```
+HEAP=<new size in bytes>
+```
+
+```
+ROM_START=<new address>
+```
+
+**IMPORTANT** allowed address range is 0x40000000 - 0x4FFFF000. 
 
 
 
@@ -814,8 +838,19 @@ Sample application showcasing Easy AT functionalities. Debug prints on **AUX UAR
 - Shows how to register custom commands
 
 
+The application adds two custom commands to the list of available ones:
+
+- AT#MYCMD
+- AT#MYINPUT
 
 
+#### AT#MYCMD
+
+This is a simple parameter-waiting command. It expects one string parameter, and will print it on the logging interface once received. The command simply returns OK 
+
+#### AT#MYINPUT
+
+This command expects a numeric parameter, which indicates how many bytes will be received over the interface at most (the command will provide a prompt indicating it is waiting data). Then the data management callback will print when data is received, and if CTRL+Z (0x1A in hex) is received, it will complete the process, printing in the log interface what was received. sending ESC will terminate the process discarding any pending data.
 
 ### Events
 
@@ -927,6 +962,44 @@ Sample application showcasing FOTA usage with M2MB API. Debug prints on **AUX UA
 
 
 ![](pictures/samples/fota_bordered.png)
+
+---------------------
+
+
+
+### FOTA from Local File example 
+
+Sample application that shows how perform FOTA upgrade using a delta file stored into file system. Debug prints on **AUX UART**
+
+
+**Features**
+
+
+- How to store and get FOTA upgrade information to/from a file
+- How to get delta file from module file system
+- How to apply the delta and update module firmware
+
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Check if module has been already upgraded or needs to be upgraded reading FOTA upgrade status from a file
+- Create a fota task to manage FOTA and start it with INIT option
+
+**smartFotaTask()**
+- Initialize FOTA system then reset parameters.
+- Get FOTA partiton size and block size
+- Copy delta file from file system to FOTA paartition. when it is completed, FOTADownloadCallback is called.
+- If delta file is correct, apply it. Once complete, write FOTA status flag and current fw version to a file, restart the module.
+
+
+![](pictures/samples/Fota_from_file_app_bordered.png)
 
 ---------------------
 
@@ -1121,7 +1194,7 @@ Sample application showing how to use HTTPs client functionalities. Debug prints
 
 - How to check module registration and activate PDP context
 - How to initialize the http client, set the debug hook function and the data callback to manage incoming data
-- How to perform GET, HEAD or POST operations
+- How to perform GET, HEAD or POST operations (GET also with single range support)
 
 NOTE: the sample app has an optional dependency on azx_base64.h if basic authentication is required (refer to `HTTP_BASIC_AUTH_GET` define in `M2MB_main.c` for further details)
 
@@ -1235,7 +1308,12 @@ Sample application showing how to communicate with an I2C slave device. Debug pr
 - How to open a communication channel with an I2C slave device
 - How to send and receive data to/from the slave device
 
+**Setup**
 
+- Connect sensor VDD to 1v8 supply (e.g. Vaux/PwrMon pin of the module)
+- Connect sensor GND to a GND pin of the module
+- Connect sensor SDA to module GPIO2
+- Connect sensor SCL to module GPIO3
 
 #### Application workflow
 
@@ -1265,7 +1343,12 @@ Sample application showing how to communicate with an I2C slave device with I2C 
 - How to open a communication channel with an I2C slave device
 - How to send and receive data to/from the slave device using raw mode API
 
+**Setup**
 
+- Connect sensor VDD to 1v8 supply (e.g. Vaux/PwrMon pin of the module)
+- Connect sensor GND to a GND pin of the module
+- Connect sensor SDA to module GPIO2
+- Connect sensor SCL to module GPIO3
 
 #### Application workflow
 
@@ -1279,6 +1362,681 @@ Sample application showing how to communicate with an I2C slave device with I2C 
 
 
 ![](pictures/samples/i2c_combined_bordered.png)
+
+---------------------
+
+
+
+### LWM2M
+
+Sample application showcasing LWM2M client usage with M2MB API. Debug prints on **AUX UART**
+
+
+**Features**
+
+
+- Configure LWM2M client and enable it
+
+- Create an instance of a custom object
+
+- Set an integer value on a read only resource
+
+- Set two integer values on a multi-instance read only resource
+
+- write a string on a read/write resource
+
+- Manage exec requests from the portal
+
+- Manage write, read and monitoring resources changed from the portal
+
+**Requirements**
+
+This application expects the user to configure the PDP context ID 1 with the proper APN.
+it can be done with the following AT command:
+
+`AT+CGDCONT=1,"IPV4V6","<user apn>"`
+
+Depending on the Mobiler Network Operator and Access Technology, the APN might be automatically set by the network itself. In this case, nothing must be done by the user.
+
+
+#### Application workflow
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Create a task to manage the LWM2M client and start it
+
+
+**`lwm2m_demo.c`**
+
+**`msgLWM2MTask`**
+- Check registration status
+
+- Initialize LWM2M client, 
+
+  - Check for XML file fo custom object
+  
+  - Enable unsolicited messages from client
+  
+  - Create a task \(lwm2m_taskCB is its callback function \)to manage events from Portal
+  
+  - Enable LwM2M client
+  
+  - Create a new instance for the custom object
+  
+  - Wait for client to register to Portal
+  
+  - Performs all operations (set, read, get, write) on the related resources
+
+  - Performs a set with notify ack enabled
+  
+  - Wait for events from server
+
+
+**`lwm2mIndicationCB`**
+
+- Manage events arriving from client \(operations completion status and unsolicited events\)
+- Run lwm2m_taskCB when a monitored resource changes, to manage the action to be done
+
+#### Device Profile upload
+
+**LWM2M resources demo** device profile must be imported to have a real-time update of resources values on the LWM2M browser. 
+
+To do so, import the file `json/lwm2m_resources_demo.json` (provided with the sample files) on section `Developer` > `Device profiles` of OneEdge IoT portal:
+
+![](pictures/samples/lwm2m_device_profile_bordered.png)
+
+
+#### Custom Object configuration
+
+The XML file content must be loaded on the Telit IoT Portal for the demo application to be fully executed.
+
+First, enter Developer section from the top menu
+
+![](pictures/samples/lwm2m_xml_1_developer_bordered.png)
+
+
+Choose Object Registry
+
+![](pictures/samples/lwm2m_xml_2_object_registry_bordered.png)
+
+
+Create a New Object
+
+![](pictures/samples/lwm2m_xml_3_new_object_bordered.png)
+
+
+Copy the xml file content and paste it in the new Object form
+
+![](pictures/samples/lwm2m_xml_4_paste_content_bordered.png)
+
+
+
+Also, the application requires the XML file `xml/object_32010.xml` (provided with the sample files) to be stored in module's `/XML/` folder. 
+It can be done with 
+
+`AT#M2MWRITE=/XML/object_32010.xml,<size_in_bytes>`
+
+To load the XML file in the module, Telit AT Controller (TATC) can be used. Once the command above is issued, press the load content button:
+
+![](pictures/samples/lwm2m_xml_5_load_xml_bordered.png)
+
+
+Select the file from your computer
+
+![](pictures/samples/lwm2m_xml_6_file_select_bordered.png)
+
+
+The file is successfully loaded on the module
+
+![](pictures/samples/lwm2m_xml_7_done_bordered.png)
+
+#### Onboard the device
+
+**Get the Telit ID**
+
+To retrieve the Telit ID data, issue `AT#TID` to get the Telit ID. The command response will be similar to
+
+\#TID: **xxxxxxxxxxxxxxxxxxxxxxxxxxx**,1
+OK
+
+
+Take note of the Telit ID highlighted in **bold** above (or copy it on a text editor): this ID it will be needed for the onboarding process.
+
+**Create a new Thing**
+
+From the OneEdge portal, on **"Things"** section, click **"New Thing"** button in the top right corner.
+
+![](pictures/samples/lwm2m_new_thing_bordered.png)
+
+In the Create a new thing dialog, select "Telit Module"
+
+![](pictures/samples/lwm2m_telit_module_bordered.png)
+
+A dialog appears: select “Default” thing definition
+
+![](pictures/samples/lwm2m_fota_ack_default_thing_bordered.png)
+
+In the following screen, provide the Telit ID as “Identifier”
+Click on “Find” and make sure that model, firmware and the other details are properly
+populated.
+
+Click on lwm2m tab and set the device profile previously imported as shown in the screenshot below
+
+![](pictures/samples/lwm2m_demo_device_profile_bordered.png)
+
+Click **"Add"** to complete the new thing creation procedure.
+
+**If the Thing already exists, its device profile can be changed by following the steps shown in the picture below**
+
+![](pictures/samples/lwm2m_change_device_profile_bordered.png)
+
+
+#### Application execution example
+
+![](pictures/samples/lwm2m_1_bordered.png)
+
+
+![](pictures/samples/lwm2m_2_1_bordered.png)
+![](pictures/samples/lwm2m_2_2_bordered.png)
+![](pictures/samples/lwm2m_2_3_bordered.png)
+![](pictures/samples/lwm2m_2_4_bordered.png)
+![](pictures/samples/lwm2m_2_5_bordered.png)
+![](pictures/samples/lwm2m_2_6_bordered.png)
+![](pictures/samples/lwm2m_2_7_bordered.png)
+
+
+After the Demo completes the initialization, it is possible to access the object resources from the section Things: 
+select your device, then "LwM2M" tab of OneEdge IoT portal:
+
+![](pictures/samples/lwm2m_portal_object_browser_bordered.png)
+
+An instance of the object will be present and the resources can be modified. 
+
+![](pictures/samples/lwm2m_portal_object_bordered.png)
+
+For example, executing the two Exec Resources at the bottom of the list, the application will react accordingly:
+
+![](pictures/samples/lwm2m_3_exec_bordered.png)
+
+Writing a string resource (id /32010/0/11 ), the application will notify the change
+
+![](pictures/samples/lwm2m_4_write_bordered.png)
+
+---------------------
+
+
+
+### LWM2M FOTA ACK management (AT URCs)
+
+Sample application showcasing LWM2M client FOTA events and ACKs management via AT URCs. Debug prints on **AUX UART**
+
+
+**Features**
+
+
+- Configure LWM2M client and enable it _(if not already running)_
+
+- Enable monitoring on object 5 (Firmware Update)
+
+- Configure lwm2m FOTA parameters to enable ACK requirement for each operation (Download, Update)
+
+- Wait for an externally generated FOTA request to handle the steps by sending the acknoledgements when needed
+
+
+Please refer to "80654NT11889A OneEdge Firmware Management Application Note" for further details about FOTA workflow. Get in touch with TS-OneEdge support to receive the document.
+
+**Requirements**
+
+This application expects the user to configure the PDP context ID 1 with the proper APN.
+it can be done with the following AT command:
+
+`AT+CGDCONT=1,"IPV4V6","<user apn>"`
+
+Depending on the Mobile Network Operator and Access Technology, the APN might be automatically set by the network itself. In this case, nothing must be done by the user.
+
+#### Device Profile upload
+
+**Minimal FOTA profile (short lifetime)** device profile must be imported and selected to improve the responsiveness of the FOTA operations
+
+To do so, import the file `json/lwm2m_fota_profile_short.json` (provided with the sample files) on section `Developer` > `Device profiles` of OneEdge IoT portal:
+
+![](pictures/samples/lwm2m_device_profile_bordered.png)
+
+#### Onboard the device
+
+**Get the Telit ID**
+
+To retrieve the Telit ID data, issue `AT#TID` to get the Telit ID. The command response will be similar to
+
+\#TID: **xxxxxxxxxxxxxxxxxxxxxxxxxxx**,1
+OK
+
+
+Take note of the Telit ID highlighted in **bold** above (or copy it on a text editor): this ID it will be needed for the onboarding process.
+
+**Create a new Thing**
+
+From the OneEdge portal, on **"Things"** section, click **"New Thing"** button in the top right corner.
+
+![](pictures/samples/lwm2m_new_thing_bordered.png)
+
+In the Create a new thing dialog, select "Telit Module"
+
+![](pictures/samples/lwm2m_telit_module_bordered.png)
+
+A dialog appears: select “Default” thing definition
+
+![](pictures/samples/lwm2m_fota_ack_default_thing_bordered.png)
+
+In the following screen, provide the Telit ID as “Identifier”
+Click on “Find” and make sure that model, firmware and the other details are properly
+populated.
+
+Click on lwm2m tab and set the device profile previously imported as shown in the screenshot below
+
+![](pictures/samples/lwm2m_fota_ack_device_profile_bordered.png)
+
+Click **"Add"** to complete the new thing creation procedure.
+
+#### Application workflow
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Create a task to manage the LWM2M client and start it
+
+
+**`lwm2m_demo.c`**
+
+**`msgLWM2MTask`**
+
+
+- Initialize LWM2M client,
+
+  - Enable unsolicited messages from client
+
+  - Enable FOTA ACK configuration
+
+  - Create a task \(lwm2m_taskCB is its callback function \)to manage events from Portal
+
+  - Check if LwM2M client is running, if not, enable it
+
+  - Wait for client to register to Portal
+
+  - Wait for FOTA events to arrive, and when the Update request arrives, notify the user that everything must stop before sending the last ACK (as the module will start updating and then reboot)
+
+
+**`lwm2mIndicationCB`**
+
+- Manage events arriving from client \(operations completion status and unsolicited events\)
+- Run lwm2m_taskCB when a monitored resource changes, to manage the action to be done
+
+
+
+
+#### Application execution example
+
+![](pictures/samples/lwm2m_fota_ack_at_1_bordered.png)
+
+![](pictures/samples/lwm2m_fota_ack_at_2_bordered.png)
+FOTA request arrives from server, ACK is sent for Download and Update. Device restarts with the new firmware version
+
+
+![](pictures/samples/lwm2m_fota_ack_at_3_restart_bordered.png)
+Application restarts and is ready for a new FOTA operation
+
+---------------------
+
+
+
+### LWM2M OBJ_GET AND OBJ_SET
+
+Sample application showcasing LWM2M client m2mb_lwm2m_objget and m2mb_lwm2m_objset M2MB APIs usage. Debug prints on **AUX UART**
+
+
+**Features**
+
+
+- Configure LWM2M client and enable it
+
+- Create an instance of a custom object
+
+- Create a Json string
+
+- Set string, integer, float, boolean, timestamp and opaque values with `m2mb_lwm2m_objset`
+
+- Get all resources values with `m2mb_lwm2m_objget`
+
+- Manage write, read and monitoring resources changed from the portal
+
+**Requirements**
+
+This application expects the user to configure the PDP context ID 1 with the proper APN.
+it can be done with the following AT command:
+
+`AT+CGDCONT=1,"IPV4V6","<user apn>"`
+
+Depending on the Mobiler Network Operator and Access Technology, the APN might be automatically set by the network itself. In this case, nothing must be done by the user.
+
+
+#### Application workflow
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Create a task to manage the LWM2M client and start it
+
+
+**`lwm2m_demo.c`**
+
+**`msgLWM2MTask`**
+- Check registration status
+
+- Initialize LWM2M client,
+
+  - Check for XML file fo custom object
+
+  - Enable unsolicited messages from client
+
+  - Create a task \(lwm2m_taskCB is its callback function \)to manage events from Portal
+
+  - Enable LwM2M client
+
+  - Create a new instance for the custom object
+
+  - Wait for client to register to Portal
+
+  - Performs obj_set and obj_get operations on the related resources
+
+  - Wait for events from server
+
+
+**`lwm2mIndicationCB`**
+
+- Manage events arriving from client \(operations completion status and unsolicited events\)
+- Run lwm2m_taskCB when a monitored resource changes, to manage the action to be done
+
+#### Device Profile upload
+
+**LWM2M resources demo** device profile must be imported to have a real-time update of resources values on the LWM2M browser.
+
+To do so, import the file `json/lwm2m_resources_demo.json` (provided with the sample files) on section `Developer` > `Device profiles` of OneEdge IoT portal:
+
+![](pictures/samples/lwm2m_device_profile_bordered.png)
+
+
+#### Custom Object configuration
+
+The XML file content must be loaded on the Telit IoT Portal for the demo application to be fully executed.
+
+First, enter Developer section from the top menu
+
+![](pictures/samples/lwm2m_xml_1_developer_bordered.png)
+
+
+Choose Object Registry
+
+![](pictures/samples/lwm2m_xml_2_object_registry_bordered.png)
+
+
+Create a New Object
+
+![](pictures/samples/lwm2m_xml_3_new_object_bordered.png)
+
+
+Copy the xml file content and paste it in the new Object form
+
+![](pictures/samples/lwm2m_xml_4_paste_content_bordered.png)
+
+
+
+Also, the application requires the XML file `xml/object_32011.xml` (provided with the sample files) to be stored in module's `/XML/` folder.
+It can be done with
+
+`AT#M2MWRITE=/XML/object_32011.xml,<size_in_bytes>`
+
+To load the XML file in the module, Telit AT Controller (TATC) can be used. Once the command above is issued, press the load content button:
+
+![](pictures/samples/lwm2m_xml_5_load_xml_bordered.png)
+
+
+Select the file from your computer
+
+![](pictures/samples/lwm2m_xml_6_file_select_bordered.png)
+
+
+The file is successfully loaded on the module
+
+![](pictures/samples/lwm2m_xml_7_done_bordered.png)
+
+
+
+#### Onboard the device
+
+**Get the Telit ID**
+
+To retrieve the Telit ID data, issue `AT#TID` to get the Telit ID. The command response will be similar to
+
+\#TID: **xxxxxxxxxxxxxxxxxxxxxxxxxxx**,1
+OK
+
+
+Take note of the Telit ID highlighted in **bold** above (or copy it on a text editor): this ID it will be needed for the onboarding process.
+
+**Create a new Thing**
+
+From the OneEdge portal, on **"Things"** section, click **"New Thing"** button in the top right corner.
+
+![](pictures/samples/lwm2m_new_thing_bordered.png)
+
+In the Create a new thing dialog, select "Telit Module"
+
+![](pictures/samples/lwm2m_telit_module_bordered.png)
+
+A dialog appears: select “Default” thing definition
+
+![](pictures/samples/lwm2m_fota_ack_default_thing_bordered.png)
+
+In the following screen, provide the Telit ID as “Identifier”
+Click on “Find” and make sure that model, firmware and the other details are properly
+populated.
+
+Click on lwm2m tab and set the device profile previously imported as shown in the screenshot below
+
+![](pictures/samples/lwm2m_demo_objget_device_profile_bordered.png)
+
+Click **"Add"** to complete the new thing creation procedure.
+
+
+**If the Thing already exists, its device profile can be changed by following the steps shown in the picture below**
+
+![](pictures/samples/lwm2m_change_device_profile_objget_bordered.png)
+
+
+
+#### Application execution example
+
+![](pictures/samples/lwm2m_1_bordered.png)
+
+
+![](pictures/samples/lwm2m_obj_set_get_1_bordered.png)
+![](pictures/samples/lwm2m_obj_set_get_2_bordered.png)
+![](pictures/samples/lwm2m_obj_set_get_3_bordered.png)
+
+
+
+After the Demo completes the initialization, it is possible to access the object resources from the section Things: 
+select your device, then "LwM2M" tab of OneEdge IoT portal:
+
+![](pictures/samples/lwm2m_portal_object_browser_bordered.png)
+
+An instance of the object will be present and the resources can be modified.
+
+![](pictures/samples/lwm2m_obj_set_get_portal_bordered.png)
+
+---------------------
+
+
+
+### LWM2M REG
+
+Sample application showcasing LWM2M client registration management using M2MB API. Debug prints on **AUX UART**
+
+
+**Features**
+
+
+- Configure LWM2M client and enable it
+
+- Get LWM2M server information using REG apis
+
+- Deregister from LWM2M server using REG apis
+
+- Register to the LWM2M server usign REG apis
+
+**Requirements**
+
+This application expects the user to configure the PDP context ID 1 with the proper APN.
+it can be done with the following AT command:
+
+`AT+CGDCONT=1,"IPV4V6","<user apn>"`
+
+Depending on the Mobiler Network Operator and Access Technology, the APN might be automatically set by the network itself. In this case, nothing must be done by the user.
+
+
+#### Application workflow
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Create a task to manage the LWM2M client and start it
+
+
+**`lwm2m_demo.c`**
+
+**`msgLWM2MTask`**
+- Check registration status
+
+- Initialize LWM2M client, 
+
+  - Check for XML file fo custom object
+  
+  - Enable LwM2M client
+  
+  - Wait for client to register to Portal
+  
+  - Get the LWM2M server information
+
+  - Performs client portal deregistration
+  
+  - Performs client portal registration
+
+
+**`lwm2mIndicationCB`**
+
+- Manage events arriving from client \(operations completion status and unsolicited events\)
+
+#### Application execution example
+
+![](pictures/samples/lwm2m_reg_bordered.png)
+
+#### Device Profile upload
+
+**LWM2M resources demo** device profile must be imported to have a real-time update of resources values on the LWM2M browser. 
+
+To do so, import the file `json/lwm2m_resources_demo.json` (provided with the sample files) on section `Developer` > `Device profiles` of OneEdge IoT portal:
+
+![](pictures/samples/lwm2m_device_profile_bordered.png)
+
+
+#### Custom Object configuration
+
+The XML file content must be loaded on the Telit IoT Portal for the demo application to be fully executed.
+
+First, enter Developer section from the top menu
+
+![](pictures/samples/lwm2m_xml_1_developer_bordered.png)
+
+
+Choose Object Registry
+
+![](pictures/samples/lwm2m_xml_2_object_registry_bordered.png)
+
+
+Create a New Object
+
+![](pictures/samples/lwm2m_xml_3_new_object_bordered.png)
+
+
+Copy the xml file content and paste it in the new Object form
+
+![](pictures/samples/lwm2m_xml_4_paste_content_bordered.png)
+
+
+
+Also, the application requires the XML file `xml/object_32010.xml` (provided with the sample files) to be stored in module's `/XML/` folder. 
+It can be done with 
+
+`AT#M2MWRITE=/XML/object_32010.xml,<size_in_bytes>`
+
+To load the XML file in the module, Telit AT Controller (TATC) can be used. Once the command above is issued, press the load content button:
+
+![](pictures/samples/lwm2m_xml_5_load_xml_bordered.png)
+
+
+Select the file from your computer
+
+![](pictures/samples/lwm2m_xml_6_file_select_bordered.png)
+
+
+The file is successfully loaded on the module
+
+![](pictures/samples/lwm2m_xml_7_done_bordered.png)
+
+#### Onboard the device
+
+**Get the Telit ID**
+
+To retrieve the Telit ID data, issue `AT#TID` to get the Telit ID. The command response will be similar to
+
+\#TID: **xxxxxxxxxxxxxxxxxxxxxxxxxxx**,1
+OK
+
+
+Take note of the Telit ID highlighted in **bold** above (or copy it on a text editor): this ID it will be needed for the onboarding process.
+
+**Create a new Thing**
+
+From the OneEdge portal, on **"Things"** section, click **"New Thing"** button in the top right corner.
+
+![](pictures/samples/lwm2m_new_thing_bordered.png)
+
+In the Create a new thing dialog, select "Telit Module"
+
+![](pictures/samples/lwm2m_telit_module_bordered.png)
+
+A dialog appears: select â€œDefaultâ€� thing definition
+
+![](pictures/samples/lwm2m_fota_ack_default_thing_bordered.png)
+
+In the following screen, provide the Telit ID as â€œIdentifierâ€�
+Click on â€œFindâ€� and make sure that model, firmware and the other details are properly
+populated.
+
+Click on lwm2m tab and set the device profile previously imported as shown in the screenshot below
+
+![](pictures/samples/lwm2m_demo_device_profile_bordered.png)
+
+Click **"Add"** to complete the new thing creation procedure.
+
+**If the Thing already exists, its device profile can be changed by following the steps shown in the picture below**
+
+![](pictures/samples/lwm2m_change_device_profile_bordered.png)
 
 ---------------------
 
@@ -1517,6 +2275,34 @@ The application connects to an NTP server, gets current date and time and update
 
 
 
+### ON OFF button management example 
+
+Sample application on how to handle ON/OFF button. Debug prints on **AUX UART**
+
+
+**Features**
+
+
+- How to enable ON/OFF button handling
+- How to turn off module after ON/OFF button press/release
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open gpio_ON_OFF
+- Configure the interrupt and the callback
+- Init power functionality
+- Wait for on/off button to be pressed
+- If button has been pressed for more than 3 seconds (and then released) then module is turned off.
+
+![](pictures/samples/onoff_management_bordered.png)
+
+---------------------
+
+
+
 ### RTC example 
 
 Sample application that shows RTC apis functionalities: how to get/set moudle system time and timestamp. Debug prints on **AUX UART**
@@ -1541,6 +2327,37 @@ Sample application that shows RTC apis functionalities: how to get/set moudle sy
 - Add 1 hour to timestamp, convert it to system time and set it to module
 
 ![](pictures/samples/RTC_output_bordered.png)
+
+---------------------
+
+
+
+### SIM event handler example 
+
+Sim Event Demo application. Debug prints on **AUX UART**, <ins>using AZX log example functions</ins>
+
+
+**Features**
+
+
+- How to use ATI function for asynchronous management 
+- How to cath URC from an AppZone application
+- How to catch SIM related events and handle them
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Print welcome message 
+- Initialize AT interface
+- Initialize AT URC manager task
+- Initialize SIM event manager task
+- Send 'AT#SIMPR=1' to activate SIM URCs
+- Insert SIM in SIM slot 1 and receive SIM inserted message
+- Remove SIM from SIM slot 1 and receive SIM removed message
+
+![](pictures/samples/SimEventHandler_bordered.png)
 
 ---------------------
 
@@ -1615,6 +2432,49 @@ AT#M2MWRITE="/mod/sms_config.txt",138
 - When SMS has been received, content is decoded and printed. If there is an AT command inside, command is executed and answer printed and sent back to sender as an SMS (depending on sms_config.txt setting)
 
 ![](pictures/samples/sms_atCmd_bordered.png)
+
+---------------------
+
+
+
+### SMTP Client 
+
+Sample application showing SMTP echo demo with M2MB API. Debug prints on **AUX UART**
+
+
+**Features**
+
+
+- How to check module registration and activate PDP context
+- How to open a SMTP client
+- How to send a mail
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Create a task to manage SMTP client and start it
+
+**`M2MB_main.c`**
+
+- Initialize Network structure and check registration
+
+- Initialize PDP structure and start PDP context
+
+- Initialize SMTP client and connect to SMTP server
+
+- Prepare email and send it
+
+- Close SMTP client
+
+- Disable PDP context
+
+![](pictures/samples/smtp_client_bordered.png)
 
 ---------------------
 
@@ -2002,6 +2862,33 @@ Sample application showing how to check if USB cable is plugged in or not. Debug
 - if the event is a connection/disconnection, show the current status
 
 ![](pictures/samples/usb_cable_check_bordered.png)
+
+---------------------
+
+
+
+### Watchdog example 
+
+Sample application that shows how to set and implement a watchdog. Task has been locked waitng for an event with a timeout longer than wd inactivity timeout. If no wd kick or no actions
+
+
+**Features**
+
+
+- Enable watchdog on Task_1
+- Handle watchdog kicks with a timer
+
+
+#### Application workflow
+
+**`M2MB_main.c`**
+
+- Create Task_1 that will be put under watchdog control
+- In Task_1 watchdog is ebnabled on it and a timer created to handle watchdog kicks. Then task enters in a loop where kicks are sent. After 5 kicks a task lock is simulated waiting for an event release (with a timeout longer that task watchdog inactivity timeout)
+- As soon as watchdog inactivity timeout expired M2MB_WDOG_TIMEOUT_IND is generated and handled in WDcallback (in this case the event is released, no further actions are done)
+- No further actions are performed by Task_1 (no kicks are sent) so after watchdog system timeout expiration app is rebooted.
+
+![](pictures/samples/Watchdog_bordered.png)
 
 ---------------------
 
@@ -2472,8 +3359,19 @@ Sample application showcasing Easy AT functionalities. Debug prints on **USB0**
 - Shows how to register custom commands
 
 
+The application adds two custom commands to the list of available ones:
+
+- AT#MYCMD
+- AT#MYINPUT
 
 
+#### AT#MYCMD
+
+This is a simple parameter-waiting command. It expects one string parameter, and will print it on the logging interface once received. The command simply returns OK 
+
+#### AT#MYINPUT
+
+This command expects a numeric parameter, which indicates how many bytes will be received over the interface at most (the command will provide a prompt indicating it is waiting data). Then the data management callback will print when data is received, and if CTRL+Z (0x1A in hex) is received, it will complete the process, printing in the log interface what was received. sending ESC will terminate the process discarding any pending data.
 
 ### Events
 
@@ -2585,6 +3483,44 @@ Sample application showcasing FOTA usage with M2MB API. Debug prints on **USB0**
 
 
 ![](pictures/samples/fota_bordered.png)
+
+---------------------
+
+
+
+### FOTA from Local File example 
+
+Sample application that shows how perform FOTA upgrade using a delta file stored into file system. Debug prints on **USB0**
+
+
+**Features**
+
+
+- How to store and get FOTA upgrade information to/from a file
+- How to get delta file from module file system
+- How to apply the delta and update module firmware
+
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Check if module has been already upgraded or needs to be upgraded reading FOTA upgrade status from a file
+- Create a fota task to manage FOTA and start it with INIT option
+
+**smartFotaTask()**
+- Initialize FOTA system then reset parameters.
+- Get FOTA partiton size and block size
+- Copy delta file from file system to FOTA paartition. when it is completed, FOTADownloadCallback is called.
+- If delta file is correct, apply it. Once complete, write FOTA status flag and current fw version to a file, restart the module.
+
+
+![](pictures/samples/Fota_from_file_app_bordered.png)
 
 ---------------------
 
@@ -2779,7 +3715,7 @@ Sample application showing how to use HTTPs client functionalities. Debug prints
 
 - How to check module registration and activate PDP context
 - How to initialize the http client, set the debug hook function and the data callback to manage incoming data
-- How to perform GET, HEAD or POST operations
+- How to perform GET, HEAD or POST operations (GET also with single range support)
 
 NOTE: the sample app has an optional dependency on azx_base64.h if basic authentication is required (refer to `HTTP_BASIC_AUTH_GET` define in `M2MB_main.c` for further details)
 
@@ -2893,7 +3829,12 @@ Sample application showing how to communicate with an I2C slave device. Debug pr
 - How to open a communication channel with an I2C slave device
 - How to send and receive data to/from the slave device
 
+**Setup**
 
+- Connect sensor VDD to 1v8 supply (e.g. Vaux/PwrMon pin of the module)
+- Connect sensor GND to a GND pin of the module
+- Connect sensor SDA to module GPIO2
+- Connect sensor SCL to module GPIO3
 
 #### Application workflow
 
@@ -2923,7 +3864,12 @@ Sample application showing how to communicate with an I2C slave device with I2C 
 - How to open a communication channel with an I2C slave device
 - How to send and receive data to/from the slave device using raw mode API
 
+**Setup**
 
+- Connect sensor VDD to 1v8 supply (e.g. Vaux/PwrMon pin of the module)
+- Connect sensor GND to a GND pin of the module
+- Connect sensor SDA to module GPIO2
+- Connect sensor SCL to module GPIO3
 
 #### Application workflow
 
@@ -3000,6 +3946,681 @@ For LE910Cx (both Linux and ThreadX based devices), `AT#SPIEN=1` command must be
 ![](pictures/samples/lfs2_spiflash_03_bordered.png)
 
 
+
+---------------------
+
+
+
+### LWM2M
+
+Sample application showcasing LWM2M client usage with M2MB API. Debug prints on **USB0**
+
+
+**Features**
+
+
+- Configure LWM2M client and enable it
+
+- Create an instance of a custom object
+
+- Set an integer value on a read only resource
+
+- Set two integer values on a multi-instance read only resource
+
+- write a string on a read/write resource
+
+- Manage exec requests from the portal
+
+- Manage write, read and monitoring resources changed from the portal
+
+**Requirements**
+
+This application expects the user to configure the PDP context ID 1 with the proper APN.
+it can be done with the following AT command:
+
+`AT+CGDCONT=1,"IPV4V6","<user apn>"`
+
+Depending on the Mobiler Network Operator and Access Technology, the APN might be automatically set by the network itself. In this case, nothing must be done by the user.
+
+
+#### Application workflow
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Create a task to manage the LWM2M client and start it
+
+
+**`lwm2m_demo.c`**
+
+**`msgLWM2MTask`**
+- Check registration status
+
+- Initialize LWM2M client, 
+
+  - Check for XML file fo custom object
+  
+  - Enable unsolicited messages from client
+  
+  - Create a task \(lwm2m_taskCB is its callback function \)to manage events from Portal
+  
+  - Enable LwM2M client
+  
+  - Create a new instance for the custom object
+  
+  - Wait for client to register to Portal
+  
+  - Performs all operations (set, read, get, write) on the related resources
+
+  - Performs a set with notify ack enabled
+  
+  - Wait for events from server
+
+
+**`lwm2mIndicationCB`**
+
+- Manage events arriving from client \(operations completion status and unsolicited events\)
+- Run lwm2m_taskCB when a monitored resource changes, to manage the action to be done
+
+#### Device Profile upload
+
+**LWM2M resources demo** device profile must be imported to have a real-time update of resources values on the LWM2M browser. 
+
+To do so, import the file `json/lwm2m_resources_demo.json` (provided with the sample files) on section `Developer` > `Device profiles` of OneEdge IoT portal:
+
+![](pictures/samples/lwm2m_device_profile_bordered.png)
+
+
+#### Custom Object configuration
+
+The XML file content must be loaded on the Telit IoT Portal for the demo application to be fully executed.
+
+First, enter Developer section from the top menu
+
+![](pictures/samples/lwm2m_xml_1_developer_bordered.png)
+
+
+Choose Object Registry
+
+![](pictures/samples/lwm2m_xml_2_object_registry_bordered.png)
+
+
+Create a New Object
+
+![](pictures/samples/lwm2m_xml_3_new_object_bordered.png)
+
+
+Copy the xml file content and paste it in the new Object form
+
+![](pictures/samples/lwm2m_xml_4_paste_content_bordered.png)
+
+
+
+Also, the application requires the XML file `xml/object_32010.xml` (provided with the sample files) to be stored in module's `/XML/` folder. 
+It can be done with 
+
+`AT#M2MWRITE=/XML/object_32010.xml,<size_in_bytes>`
+
+To load the XML file in the module, Telit AT Controller (TATC) can be used. Once the command above is issued, press the load content button:
+
+![](pictures/samples/lwm2m_xml_5_load_xml_bordered.png)
+
+
+Select the file from your computer
+
+![](pictures/samples/lwm2m_xml_6_file_select_bordered.png)
+
+
+The file is successfully loaded on the module
+
+![](pictures/samples/lwm2m_xml_7_done_bordered.png)
+
+#### Onboard the device
+
+**Get the Telit ID**
+
+To retrieve the Telit ID data, issue `AT#TID` to get the Telit ID. The command response will be similar to
+
+\#TID: **xxxxxxxxxxxxxxxxxxxxxxxxxxx**,1
+OK
+
+
+Take note of the Telit ID highlighted in **bold** above (or copy it on a text editor): this ID it will be needed for the onboarding process.
+
+**Create a new Thing**
+
+From the OneEdge portal, on **"Things"** section, click **"New Thing"** button in the top right corner.
+
+![](pictures/samples/lwm2m_new_thing_bordered.png)
+
+In the Create a new thing dialog, select "Telit Module"
+
+![](pictures/samples/lwm2m_telit_module_bordered.png)
+
+A dialog appears: select “Default” thing definition
+
+![](pictures/samples/lwm2m_fota_ack_default_thing_bordered.png)
+
+In the following screen, provide the Telit ID as “Identifier”
+Click on “Find” and make sure that model, firmware and the other details are properly
+populated.
+
+Click on lwm2m tab and set the device profile previously imported as shown in the screenshot below
+
+![](pictures/samples/lwm2m_demo_device_profile_bordered.png)
+
+Click **"Add"** to complete the new thing creation procedure.
+
+**If the Thing already exists, its device profile can be changed by following the steps shown in the picture below**
+
+![](pictures/samples/lwm2m_change_device_profile_bordered.png)
+
+
+#### Application execution example
+
+![](pictures/samples/lwm2m_1_bordered.png)
+
+
+![](pictures/samples/lwm2m_2_1_bordered.png)
+![](pictures/samples/lwm2m_2_2_bordered.png)
+![](pictures/samples/lwm2m_2_3_bordered.png)
+![](pictures/samples/lwm2m_2_4_bordered.png)
+![](pictures/samples/lwm2m_2_5_bordered.png)
+![](pictures/samples/lwm2m_2_6_bordered.png)
+![](pictures/samples/lwm2m_2_7_bordered.png)
+
+
+After the Demo completes the initialization, it is possible to access the object resources from the section Things: 
+select your device, then "LwM2M" tab of OneEdge IoT portal:
+
+![](pictures/samples/lwm2m_portal_object_browser_bordered.png)
+
+An instance of the object will be present and the resources can be modified. 
+
+![](pictures/samples/lwm2m_portal_object_bordered.png)
+
+For example, executing the two Exec Resources at the bottom of the list, the application will react accordingly:
+
+![](pictures/samples/lwm2m_3_exec_bordered.png)
+
+Writing a string resource (id /32010/0/11 ), the application will notify the change
+
+![](pictures/samples/lwm2m_4_write_bordered.png)
+
+---------------------
+
+
+
+### LWM2M FOTA ACK management (AT URCs)
+
+Sample application showcasing LWM2M client FOTA events and ACKs management via AT URCs. Debug prints on **USB0**
+
+
+**Features**
+
+
+- Configure LWM2M client and enable it _(if not already running)_
+
+- Enable monitoring on object 5 (Firmware Update)
+
+- Configure lwm2m FOTA parameters to enable ACK requirement for each operation (Download, Update)
+
+- Wait for an externally generated FOTA request to handle the steps by sending the acknoledgements when needed
+
+
+Please refer to "80654NT11889A OneEdge Firmware Management Application Note" for further details about FOTA workflow. Get in touch with TS-OneEdge support to receive the document.
+
+**Requirements**
+
+This application expects the user to configure the PDP context ID 1 with the proper APN.
+it can be done with the following AT command:
+
+`AT+CGDCONT=1,"IPV4V6","<user apn>"`
+
+Depending on the Mobile Network Operator and Access Technology, the APN might be automatically set by the network itself. In this case, nothing must be done by the user.
+
+#### Device Profile upload
+
+**Minimal FOTA profile (short lifetime)** device profile must be imported and selected to improve the responsiveness of the FOTA operations
+
+To do so, import the file `json/lwm2m_fota_profile_short.json` (provided with the sample files) on section `Developer` > `Device profiles` of OneEdge IoT portal:
+
+![](pictures/samples/lwm2m_device_profile_bordered.png)
+
+#### Onboard the device
+
+**Get the Telit ID**
+
+To retrieve the Telit ID data, issue `AT#TID` to get the Telit ID. The command response will be similar to
+
+\#TID: **xxxxxxxxxxxxxxxxxxxxxxxxxxx**,1
+OK
+
+
+Take note of the Telit ID highlighted in **bold** above (or copy it on a text editor): this ID it will be needed for the onboarding process.
+
+**Create a new Thing**
+
+From the OneEdge portal, on **"Things"** section, click **"New Thing"** button in the top right corner.
+
+![](pictures/samples/lwm2m_new_thing_bordered.png)
+
+In the Create a new thing dialog, select "Telit Module"
+
+![](pictures/samples/lwm2m_telit_module_bordered.png)
+
+A dialog appears: select “Default” thing definition
+
+![](pictures/samples/lwm2m_fota_ack_default_thing_bordered.png)
+
+In the following screen, provide the Telit ID as “Identifier”
+Click on “Find” and make sure that model, firmware and the other details are properly
+populated.
+
+Click on lwm2m tab and set the device profile previously imported as shown in the screenshot below
+
+![](pictures/samples/lwm2m_fota_ack_device_profile_bordered.png)
+
+Click **"Add"** to complete the new thing creation procedure.
+
+#### Application workflow
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Create a task to manage the LWM2M client and start it
+
+
+**`lwm2m_demo.c`**
+
+**`msgLWM2MTask`**
+
+
+- Initialize LWM2M client,
+
+  - Enable unsolicited messages from client
+
+  - Enable FOTA ACK configuration
+
+  - Create a task \(lwm2m_taskCB is its callback function \)to manage events from Portal
+
+  - Check if LwM2M client is running, if not, enable it
+
+  - Wait for client to register to Portal
+
+  - Wait for FOTA events to arrive, and when the Update request arrives, notify the user that everything must stop before sending the last ACK (as the module will start updating and then reboot)
+
+
+**`lwm2mIndicationCB`**
+
+- Manage events arriving from client \(operations completion status and unsolicited events\)
+- Run lwm2m_taskCB when a monitored resource changes, to manage the action to be done
+
+
+
+
+#### Application execution example
+
+![](pictures/samples/lwm2m_fota_ack_at_1_bordered.png)
+
+![](pictures/samples/lwm2m_fota_ack_at_2_bordered.png)
+FOTA request arrives from server, ACK is sent for Download and Update. Device restarts with the new firmware version
+
+
+![](pictures/samples/lwm2m_fota_ack_at_3_restart_bordered.png)
+Application restarts and is ready for a new FOTA operation
+
+---------------------
+
+
+
+### LWM2M OBJ_GET AND OBJ_SET
+
+Sample application showcasing LWM2M client m2mb_lwm2m_objget and m2mb_lwm2m_objset M2MB APIs usage. Debug prints on **USB0**
+
+
+**Features**
+
+
+- Configure LWM2M client and enable it
+
+- Create an instance of a custom object
+
+- Create a Json string
+
+- Set string, integer, float, boolean, timestamp and opaque values with `m2mb_lwm2m_objset`
+
+- Get all resources values with `m2mb_lwm2m_objget`
+
+- Manage write, read and monitoring resources changed from the portal
+
+**Requirements**
+
+This application expects the user to configure the PDP context ID 1 with the proper APN.
+it can be done with the following AT command:
+
+`AT+CGDCONT=1,"IPV4V6","<user apn>"`
+
+Depending on the Mobiler Network Operator and Access Technology, the APN might be automatically set by the network itself. In this case, nothing must be done by the user.
+
+
+#### Application workflow
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Create a task to manage the LWM2M client and start it
+
+
+**`lwm2m_demo.c`**
+
+**`msgLWM2MTask`**
+- Check registration status
+
+- Initialize LWM2M client,
+
+  - Check for XML file fo custom object
+
+  - Enable unsolicited messages from client
+
+  - Create a task \(lwm2m_taskCB is its callback function \)to manage events from Portal
+
+  - Enable LwM2M client
+
+  - Create a new instance for the custom object
+
+  - Wait for client to register to Portal
+
+  - Performs obj_set and obj_get operations on the related resources
+
+  - Wait for events from server
+
+
+**`lwm2mIndicationCB`**
+
+- Manage events arriving from client \(operations completion status and unsolicited events\)
+- Run lwm2m_taskCB when a monitored resource changes, to manage the action to be done
+
+#### Device Profile upload
+
+**LWM2M resources demo** device profile must be imported to have a real-time update of resources values on the LWM2M browser.
+
+To do so, import the file `json/lwm2m_resources_demo.json` (provided with the sample files) on section `Developer` > `Device profiles` of OneEdge IoT portal:
+
+![](pictures/samples/lwm2m_device_profile_bordered.png)
+
+
+#### Custom Object configuration
+
+The XML file content must be loaded on the Telit IoT Portal for the demo application to be fully executed.
+
+First, enter Developer section from the top menu
+
+![](pictures/samples/lwm2m_xml_1_developer_bordered.png)
+
+
+Choose Object Registry
+
+![](pictures/samples/lwm2m_xml_2_object_registry_bordered.png)
+
+
+Create a New Object
+
+![](pictures/samples/lwm2m_xml_3_new_object_bordered.png)
+
+
+Copy the xml file content and paste it in the new Object form
+
+![](pictures/samples/lwm2m_xml_4_paste_content_bordered.png)
+
+
+
+Also, the application requires the XML file `xml/object_32011.xml` (provided with the sample files) to be stored in module's `/XML/` folder.
+It can be done with
+
+`AT#M2MWRITE=/XML/object_32011.xml,<size_in_bytes>`
+
+To load the XML file in the module, Telit AT Controller (TATC) can be used. Once the command above is issued, press the load content button:
+
+![](pictures/samples/lwm2m_xml_5_load_xml_bordered.png)
+
+
+Select the file from your computer
+
+![](pictures/samples/lwm2m_xml_6_file_select_bordered.png)
+
+
+The file is successfully loaded on the module
+
+![](pictures/samples/lwm2m_xml_7_done_bordered.png)
+
+
+
+#### Onboard the device
+
+**Get the Telit ID**
+
+To retrieve the Telit ID data, issue `AT#TID` to get the Telit ID. The command response will be similar to
+
+\#TID: **xxxxxxxxxxxxxxxxxxxxxxxxxxx**,1
+OK
+
+
+Take note of the Telit ID highlighted in **bold** above (or copy it on a text editor): this ID it will be needed for the onboarding process.
+
+**Create a new Thing**
+
+From the OneEdge portal, on **"Things"** section, click **"New Thing"** button in the top right corner.
+
+![](pictures/samples/lwm2m_new_thing_bordered.png)
+
+In the Create a new thing dialog, select "Telit Module"
+
+![](pictures/samples/lwm2m_telit_module_bordered.png)
+
+A dialog appears: select “Default” thing definition
+
+![](pictures/samples/lwm2m_fota_ack_default_thing_bordered.png)
+
+In the following screen, provide the Telit ID as “Identifier”
+Click on “Find” and make sure that model, firmware and the other details are properly
+populated.
+
+Click on lwm2m tab and set the device profile previously imported as shown in the screenshot below
+
+![](pictures/samples/lwm2m_demo_objget_device_profile_bordered.png)
+
+Click **"Add"** to complete the new thing creation procedure.
+
+
+**If the Thing already exists, its device profile can be changed by following the steps shown in the picture below**
+
+![](pictures/samples/lwm2m_change_device_profile_objget_bordered.png)
+
+
+
+#### Application execution example
+
+![](pictures/samples/lwm2m_1_bordered.png)
+
+
+![](pictures/samples/lwm2m_obj_set_get_1_bordered.png)
+![](pictures/samples/lwm2m_obj_set_get_2_bordered.png)
+![](pictures/samples/lwm2m_obj_set_get_3_bordered.png)
+
+
+
+After the Demo completes the initialization, it is possible to access the object resources from the section Things: 
+select your device, then "LwM2M" tab of OneEdge IoT portal:
+
+![](pictures/samples/lwm2m_portal_object_browser_bordered.png)
+
+An instance of the object will be present and the resources can be modified.
+
+![](pictures/samples/lwm2m_obj_set_get_portal_bordered.png)
+
+---------------------
+
+
+
+### LWM2M REG
+
+Sample application showcasing LWM2M client registration management using M2MB API. Debug prints on **USB0**
+
+
+**Features**
+
+
+- Configure LWM2M client and enable it
+
+- Get LWM2M server information using REG apis
+
+- Deregister from LWM2M server using REG apis
+
+- Register to the LWM2M server usign REG apis
+
+**Requirements**
+
+This application expects the user to configure the PDP context ID 1 with the proper APN.
+it can be done with the following AT command:
+
+`AT+CGDCONT=1,"IPV4V6","<user apn>"`
+
+Depending on the Mobiler Network Operator and Access Technology, the APN might be automatically set by the network itself. In this case, nothing must be done by the user.
+
+
+#### Application workflow
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Create a task to manage the LWM2M client and start it
+
+
+**`lwm2m_demo.c`**
+
+**`msgLWM2MTask`**
+- Check registration status
+
+- Initialize LWM2M client, 
+
+  - Check for XML file fo custom object
+  
+  - Enable LwM2M client
+  
+  - Wait for client to register to Portal
+  
+  - Get the LWM2M server information
+
+  - Performs client portal deregistration
+  
+  - Performs client portal registration
+
+
+**`lwm2mIndicationCB`**
+
+- Manage events arriving from client \(operations completion status and unsolicited events\)
+
+#### Application execution example
+
+![](pictures/samples/lwm2m_reg_bordered.png)
+
+#### Device Profile upload
+
+**LWM2M resources demo** device profile must be imported to have a real-time update of resources values on the LWM2M browser. 
+
+To do so, import the file `json/lwm2m_resources_demo.json` (provided with the sample files) on section `Developer` > `Device profiles` of OneEdge IoT portal:
+
+![](pictures/samples/lwm2m_device_profile_bordered.png)
+
+
+#### Custom Object configuration
+
+The XML file content must be loaded on the Telit IoT Portal for the demo application to be fully executed.
+
+First, enter Developer section from the top menu
+
+![](pictures/samples/lwm2m_xml_1_developer_bordered.png)
+
+
+Choose Object Registry
+
+![](pictures/samples/lwm2m_xml_2_object_registry_bordered.png)
+
+
+Create a New Object
+
+![](pictures/samples/lwm2m_xml_3_new_object_bordered.png)
+
+
+Copy the xml file content and paste it in the new Object form
+
+![](pictures/samples/lwm2m_xml_4_paste_content_bordered.png)
+
+
+
+Also, the application requires the XML file `xml/object_32010.xml` (provided with the sample files) to be stored in module's `/XML/` folder. 
+It can be done with 
+
+`AT#M2MWRITE=/XML/object_32010.xml,<size_in_bytes>`
+
+To load the XML file in the module, Telit AT Controller (TATC) can be used. Once the command above is issued, press the load content button:
+
+![](pictures/samples/lwm2m_xml_5_load_xml_bordered.png)
+
+
+Select the file from your computer
+
+![](pictures/samples/lwm2m_xml_6_file_select_bordered.png)
+
+
+The file is successfully loaded on the module
+
+![](pictures/samples/lwm2m_xml_7_done_bordered.png)
+
+#### Onboard the device
+
+**Get the Telit ID**
+
+To retrieve the Telit ID data, issue `AT#TID` to get the Telit ID. The command response will be similar to
+
+\#TID: **xxxxxxxxxxxxxxxxxxxxxxxxxxx**,1
+OK
+
+
+Take note of the Telit ID highlighted in **bold** above (or copy it on a text editor): this ID it will be needed for the onboarding process.
+
+**Create a new Thing**
+
+From the OneEdge portal, on **"Things"** section, click **"New Thing"** button in the top right corner.
+
+![](pictures/samples/lwm2m_new_thing_bordered.png)
+
+In the Create a new thing dialog, select "Telit Module"
+
+![](pictures/samples/lwm2m_telit_module_bordered.png)
+
+A dialog appears: select â€œDefaultâ€� thing definition
+
+![](pictures/samples/lwm2m_fota_ack_default_thing_bordered.png)
+
+In the following screen, provide the Telit ID as â€œIdentifierâ€�
+Click on â€œFindâ€� and make sure that model, firmware and the other details are properly
+populated.
+
+Click on lwm2m tab and set the device profile previously imported as shown in the screenshot below
+
+![](pictures/samples/lwm2m_demo_device_profile_bordered.png)
+
+Click **"Add"** to complete the new thing creation procedure.
+
+**If the Thing already exists, its device profile can be changed by following the steps shown in the picture below**
+
+![](pictures/samples/lwm2m_change_device_profile_bordered.png)
 
 ---------------------
 
@@ -3238,6 +4859,34 @@ The application connects to an NTP server, gets current date and time and update
 
 
 
+### ON OFF button management example 
+
+Sample application on how to handle ON/OFF button. Debug prints on **USB0**
+
+
+**Features**
+
+
+- How to enable ON/OFF button handling
+- How to turn off module after ON/OFF button press/release
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open gpio_ON_OFF
+- Configure the interrupt and the callback
+- Init power functionality
+- Wait for on/off button to be pressed
+- If button has been pressed for more than 3 seconds (and then released) then module is turned off.
+
+![](pictures/samples/onoff_management_bordered.png)
+
+---------------------
+
+
+
 ### RTC example 
 
 Sample application that shows RTC apis functionalities: how to get/set moudle system time and timestamp. Debug prints on **USB0**
@@ -3262,6 +4911,37 @@ Sample application that shows RTC apis functionalities: how to get/set moudle sy
 - Add 1 hour to timestamp, convert it to system time and set it to module
 
 ![](pictures/samples/RTC_output_bordered.png)
+
+---------------------
+
+
+
+### SIM event handler example 
+
+Sim Event Demo application. Debug prints on **USB0**, <ins>using AZX log example functions</ins>
+
+
+**Features**
+
+
+- How to use ATI function for asynchronous management 
+- How to cath URC from an AppZone application
+- How to catch SIM related events and handle them
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Print welcome message 
+- Initialize AT interface
+- Initialize AT URC manager task
+- Initialize SIM event manager task
+- Send 'AT#SIMPR=1' to activate SIM URCs
+- Insert SIM in SIM slot 1 and receive SIM inserted message
+- Remove SIM from SIM slot 1 and receive SIM removed message
+
+![](pictures/samples/SimEventHandler_bordered.png)
 
 ---------------------
 
@@ -3341,6 +5021,49 @@ AT#M2MWRITE="/mod/sms_config.txt",138
 
 
 
+### SMTP Client 
+
+Sample application showing SMTP echo demo with M2MB API. Debug prints on **USB0**
+
+
+**Features**
+
+
+- How to check module registration and activate PDP context
+- How to open a SMTP client
+- How to send a mail
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Create a task to manage SMTP client and start it
+
+**`M2MB_main.c`**
+
+- Initialize Network structure and check registration
+
+- Initialize PDP structure and start PDP context
+
+- Initialize SMTP client and connect to SMTP server
+
+- Prepare email and send it
+
+- Close SMTP client
+
+- Disable PDP context
+
+![](pictures/samples/smtp_client_bordered.png)
+
+---------------------
+
+
+
 ### SPI Echo
 
 Sample application showing how to communicate over SPI with m2mb API. Debug prints on **USB0**
@@ -3383,6 +5106,17 @@ Sample application showing SPI usage, configuring two ST devices: a magnetometer
 
 - How to open an SPI bus with a slave device
 - How to communicate with the device over the SPI bus
+
+**Setup**
+
+- Connect sensor VDD to 3v8 supply (e.g. Vbatt on the module)
+- Connect sensor GND to a GND pin of the module
+- Connect sensors MOSI to module SPI_MOSI
+- Connect sensors MISO to module SPI_MISO
+- Connect sensors CLK to module SPI_CLK
+- Connect magnetometer CS to module GPIO 2
+- Connect gyroscope CS to module GPIO 3
+
 
 #### Application workflow
 
@@ -3536,6 +5270,51 @@ Sample application showcasing TCP echo demo with M2MB API. Debug prints on **USB
 - Disable PDP context
 
 ![](pictures/samples/tcp_ip_bordered.png)
+
+---------------------
+
+
+
+### TCP non blocking example 
+
+Sample application that shows how to configure and connect a TCP-IP non blocking socket. Debug prints on **USB0**
+
+
+**Features**
+
+
+- How to check module registration and activate PDP context
+- How to open a TCP client non Blocking socket 
+- How to communicate over the socket
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Create a task to manage socket and start it
+
+**`m2m_tcp_test.c`**
+
+- Initialize Network structure and check registration
+
+- Initialize PDP structure and start PDP context
+
+- Create socket and link it to the PDP context id
+
+- Set the socket as non Blocking and connect to server. Uses m2mb_socket_bsd_select, m2mb_socket_bsd_fd_isset_func to check when socket is connected.
+
+- Send data and receive response
+
+- Close socket
+
+- Disable PDP context
+
+![](pictures/samples/TCP_non_lock_output_bordered.png)
 
 ---------------------
 
@@ -3756,6 +5535,70 @@ Sample application showcasing UDP echo demo with M2MB API. Debug prints on **USB
 - Disable PDP context
 
 ![](pictures/samples/udp_bordered.png)
+
+---------------------
+
+
+
+### UDP_Server example 
+
+Sample application that shows UDP listening socket demo with m2mb apis. Debug prints on **USB0**
+
+
+**Features**
+
+
+- How to configure an UDP socket into listen mode 
+- How to receive data using m2mb_socket_bsd_select  
+- How to read data received and send data to client
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Print welcome message
+- Init task apis and create M2M_msgUDPTask to handle UDP socket
+
+
+**`m2mb_udp_test.c`**
+
+**`M2M_msgUDPTask`**
+
+- Wait for module registration
+- Activate PDP context
+- Create UDP listen socket
+- Wait for incoming data from client using m2mb_socket_bsd_select
+- When there are data on socket, read them and send some data back to client
+
+![](pictures/samples/UDP_Server_output_bordered.png)
+
+---------------------
+
+
+
+### Watchdog example 
+
+Sample application that shows how to set and implement a watchdog. Task has been locked waitng for an event with a timeout longer than wd inactivity timeout. If no wd kick or no actions
+
+
+**Features**
+
+
+- Enable watchdog on Task_1
+- Handle watchdog kicks with a timer
+
+
+#### Application workflow
+
+**`M2MB_main.c`**
+
+- Create Task_1 that will be put under watchdog control
+- In Task_1 watchdog is ebnabled on it and a timer created to handle watchdog kicks. Then task enters in a loop where kicks are sent. After 5 kicks a task lock is simulated waiting for an event release (with a timeout longer that task watchdog inactivity timeout)
+- As soon as watchdog inactivity timeout expired M2MB_WDOG_TIMEOUT_IND is generated and handled in WDcallback (in this case the event is released, no further actions are done)
+- No further actions are performed by Task_1 (no kicks are sent) so after watchdog system timeout expiration app is rebooted.
+
+![](pictures/samples/Watchdog_bordered.png)
 
 ---------------------
 
@@ -4260,8 +6103,19 @@ Sample application showcasing Easy AT functionalities. Debug prints on **MAIN UA
 - Shows how to register custom commands
 
 
+The application adds two custom commands to the list of available ones:
+
+- AT#MYCMD
+- AT#MYINPUT
 
 
+#### AT#MYCMD
+
+This is a simple parameter-waiting command. It expects one string parameter, and will print it on the logging interface once received. The command simply returns OK 
+
+#### AT#MYINPUT
+
+This command expects a numeric parameter, which indicates how many bytes will be received over the interface at most (the command will provide a prompt indicating it is waiting data). Then the data management callback will print when data is received, and if CTRL+Z (0x1A in hex) is received, it will complete the process, printing in the log interface what was received. sending ESC will terminate the process discarding any pending data.
 
 ### Events
 
@@ -4373,6 +6227,44 @@ Sample application showcasing FOTA usage with M2MB API. Debug prints on **MAIN U
 
 
 ![](pictures/samples/fota_bordered.png)
+
+---------------------
+
+
+
+### FOTA from Local File example 
+
+Sample application that shows how perform FOTA upgrade using a delta file stored into file system. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- How to store and get FOTA upgrade information to/from a file
+- How to get delta file from module file system
+- How to apply the delta and update module firmware
+
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Check if module has been already upgraded or needs to be upgraded reading FOTA upgrade status from a file
+- Create a fota task to manage FOTA and start it with INIT option
+
+**smartFotaTask()**
+- Initialize FOTA system then reset parameters.
+- Get FOTA partiton size and block size
+- Copy delta file from file system to FOTA paartition. when it is completed, FOTADownloadCallback is called.
+- If delta file is correct, apply it. Once complete, write FOTA status flag and current fw version to a file, restart the module.
+
+
+![](pictures/samples/Fota_from_file_app_bordered.png)
 
 ---------------------
 
@@ -4567,7 +6459,7 @@ Sample application showing how to use HTTPs client functionalities. Debug prints
 
 - How to check module registration and activate PDP context
 - How to initialize the http client, set the debug hook function and the data callback to manage incoming data
-- How to perform GET, HEAD or POST operations
+- How to perform GET, HEAD or POST operations (GET also with single range support)
 
 NOTE: the sample app has an optional dependency on azx_base64.h if basic authentication is required (refer to `HTTP_BASIC_AUTH_GET` define in `M2MB_main.c` for further details)
 
@@ -4681,7 +6573,12 @@ Sample application showing how to communicate with an I2C slave device. Debug pr
 - How to open a communication channel with an I2C slave device
 - How to send and receive data to/from the slave device
 
+**Setup**
 
+- Connect sensor VDD to 1v8 supply (e.g. Vaux/PwrMon pin of the module)
+- Connect sensor GND to a GND pin of the module
+- Connect sensor SDA to module GPIO2
+- Connect sensor SCL to module GPIO3
 
 #### Application workflow
 
@@ -4711,7 +6608,12 @@ Sample application showing how to communicate with an I2C slave device with I2C 
 - How to open a communication channel with an I2C slave device
 - How to send and receive data to/from the slave device using raw mode API
 
+**Setup**
 
+- Connect sensor VDD to 1v8 supply (e.g. Vaux/PwrMon pin of the module)
+- Connect sensor GND to a GND pin of the module
+- Connect sensor SDA to module GPIO2
+- Connect sensor SCL to module GPIO3
 
 #### Application workflow
 
@@ -4788,6 +6690,681 @@ For LE910Cx (both Linux and ThreadX based devices), `AT#SPIEN=1` command must be
 ![](pictures/samples/lfs2_spiflash_03_bordered.png)
 
 
+
+---------------------
+
+
+
+### LWM2M
+
+Sample application showcasing LWM2M client usage with M2MB API. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- Configure LWM2M client and enable it
+
+- Create an instance of a custom object
+
+- Set an integer value on a read only resource
+
+- Set two integer values on a multi-instance read only resource
+
+- write a string on a read/write resource
+
+- Manage exec requests from the portal
+
+- Manage write, read and monitoring resources changed from the portal
+
+**Requirements**
+
+This application expects the user to configure the PDP context ID 1 with the proper APN.
+it can be done with the following AT command:
+
+`AT+CGDCONT=1,"IPV4V6","<user apn>"`
+
+Depending on the Mobiler Network Operator and Access Technology, the APN might be automatically set by the network itself. In this case, nothing must be done by the user.
+
+
+#### Application workflow
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Create a task to manage the LWM2M client and start it
+
+
+**`lwm2m_demo.c`**
+
+**`msgLWM2MTask`**
+- Check registration status
+
+- Initialize LWM2M client, 
+
+  - Check for XML file fo custom object
+  
+  - Enable unsolicited messages from client
+  
+  - Create a task \(lwm2m_taskCB is its callback function \)to manage events from Portal
+  
+  - Enable LwM2M client
+  
+  - Create a new instance for the custom object
+  
+  - Wait for client to register to Portal
+  
+  - Performs all operations (set, read, get, write) on the related resources
+
+  - Performs a set with notify ack enabled
+  
+  - Wait for events from server
+
+
+**`lwm2mIndicationCB`**
+
+- Manage events arriving from client \(operations completion status and unsolicited events\)
+- Run lwm2m_taskCB when a monitored resource changes, to manage the action to be done
+
+#### Device Profile upload
+
+**LWM2M resources demo** device profile must be imported to have a real-time update of resources values on the LWM2M browser. 
+
+To do so, import the file `json/lwm2m_resources_demo.json` (provided with the sample files) on section `Developer` > `Device profiles` of OneEdge IoT portal:
+
+![](pictures/samples/lwm2m_device_profile_bordered.png)
+
+
+#### Custom Object configuration
+
+The XML file content must be loaded on the Telit IoT Portal for the demo application to be fully executed.
+
+First, enter Developer section from the top menu
+
+![](pictures/samples/lwm2m_xml_1_developer_bordered.png)
+
+
+Choose Object Registry
+
+![](pictures/samples/lwm2m_xml_2_object_registry_bordered.png)
+
+
+Create a New Object
+
+![](pictures/samples/lwm2m_xml_3_new_object_bordered.png)
+
+
+Copy the xml file content and paste it in the new Object form
+
+![](pictures/samples/lwm2m_xml_4_paste_content_bordered.png)
+
+
+
+Also, the application requires the XML file `xml/object_32010.xml` (provided with the sample files) to be stored in module's `/XML/` folder. 
+It can be done with 
+
+`AT#M2MWRITE=/XML/object_32010.xml,<size_in_bytes>`
+
+To load the XML file in the module, Telit AT Controller (TATC) can be used. Once the command above is issued, press the load content button:
+
+![](pictures/samples/lwm2m_xml_5_load_xml_bordered.png)
+
+
+Select the file from your computer
+
+![](pictures/samples/lwm2m_xml_6_file_select_bordered.png)
+
+
+The file is successfully loaded on the module
+
+![](pictures/samples/lwm2m_xml_7_done_bordered.png)
+
+#### Onboard the device
+
+**Get the Telit ID**
+
+To retrieve the Telit ID data, issue `AT#TID` to get the Telit ID. The command response will be similar to
+
+\#TID: **xxxxxxxxxxxxxxxxxxxxxxxxxxx**,1
+OK
+
+
+Take note of the Telit ID highlighted in **bold** above (or copy it on a text editor): this ID it will be needed for the onboarding process.
+
+**Create a new Thing**
+
+From the OneEdge portal, on **"Things"** section, click **"New Thing"** button in the top right corner.
+
+![](pictures/samples/lwm2m_new_thing_bordered.png)
+
+In the Create a new thing dialog, select "Telit Module"
+
+![](pictures/samples/lwm2m_telit_module_bordered.png)
+
+A dialog appears: select “Default” thing definition
+
+![](pictures/samples/lwm2m_fota_ack_default_thing_bordered.png)
+
+In the following screen, provide the Telit ID as “Identifier”
+Click on “Find” and make sure that model, firmware and the other details are properly
+populated.
+
+Click on lwm2m tab and set the device profile previously imported as shown in the screenshot below
+
+![](pictures/samples/lwm2m_demo_device_profile_bordered.png)
+
+Click **"Add"** to complete the new thing creation procedure.
+
+**If the Thing already exists, its device profile can be changed by following the steps shown in the picture below**
+
+![](pictures/samples/lwm2m_change_device_profile_bordered.png)
+
+
+#### Application execution example
+
+![](pictures/samples/lwm2m_1_bordered.png)
+
+
+![](pictures/samples/lwm2m_2_1_bordered.png)
+![](pictures/samples/lwm2m_2_2_bordered.png)
+![](pictures/samples/lwm2m_2_3_bordered.png)
+![](pictures/samples/lwm2m_2_4_bordered.png)
+![](pictures/samples/lwm2m_2_5_bordered.png)
+![](pictures/samples/lwm2m_2_6_bordered.png)
+![](pictures/samples/lwm2m_2_7_bordered.png)
+
+
+After the Demo completes the initialization, it is possible to access the object resources from the section Things: 
+select your device, then "LwM2M" tab of OneEdge IoT portal:
+
+![](pictures/samples/lwm2m_portal_object_browser_bordered.png)
+
+An instance of the object will be present and the resources can be modified. 
+
+![](pictures/samples/lwm2m_portal_object_bordered.png)
+
+For example, executing the two Exec Resources at the bottom of the list, the application will react accordingly:
+
+![](pictures/samples/lwm2m_3_exec_bordered.png)
+
+Writing a string resource (id /32010/0/11 ), the application will notify the change
+
+![](pictures/samples/lwm2m_4_write_bordered.png)
+
+---------------------
+
+
+
+### LWM2M FOTA ACK management (AT URCs)
+
+Sample application showcasing LWM2M client FOTA events and ACKs management via AT URCs. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- Configure LWM2M client and enable it _(if not already running)_
+
+- Enable monitoring on object 5 (Firmware Update)
+
+- Configure lwm2m FOTA parameters to enable ACK requirement for each operation (Download, Update)
+
+- Wait for an externally generated FOTA request to handle the steps by sending the acknoledgements when needed
+
+
+Please refer to "80654NT11889A OneEdge Firmware Management Application Note" for further details about FOTA workflow. Get in touch with TS-OneEdge support to receive the document.
+
+**Requirements**
+
+This application expects the user to configure the PDP context ID 1 with the proper APN.
+it can be done with the following AT command:
+
+`AT+CGDCONT=1,"IPV4V6","<user apn>"`
+
+Depending on the Mobile Network Operator and Access Technology, the APN might be automatically set by the network itself. In this case, nothing must be done by the user.
+
+#### Device Profile upload
+
+**Minimal FOTA profile (short lifetime)** device profile must be imported and selected to improve the responsiveness of the FOTA operations
+
+To do so, import the file `json/lwm2m_fota_profile_short.json` (provided with the sample files) on section `Developer` > `Device profiles` of OneEdge IoT portal:
+
+![](pictures/samples/lwm2m_device_profile_bordered.png)
+
+#### Onboard the device
+
+**Get the Telit ID**
+
+To retrieve the Telit ID data, issue `AT#TID` to get the Telit ID. The command response will be similar to
+
+\#TID: **xxxxxxxxxxxxxxxxxxxxxxxxxxx**,1
+OK
+
+
+Take note of the Telit ID highlighted in **bold** above (or copy it on a text editor): this ID it will be needed for the onboarding process.
+
+**Create a new Thing**
+
+From the OneEdge portal, on **"Things"** section, click **"New Thing"** button in the top right corner.
+
+![](pictures/samples/lwm2m_new_thing_bordered.png)
+
+In the Create a new thing dialog, select "Telit Module"
+
+![](pictures/samples/lwm2m_telit_module_bordered.png)
+
+A dialog appears: select “Default” thing definition
+
+![](pictures/samples/lwm2m_fota_ack_default_thing_bordered.png)
+
+In the following screen, provide the Telit ID as “Identifier”
+Click on “Find” and make sure that model, firmware and the other details are properly
+populated.
+
+Click on lwm2m tab and set the device profile previously imported as shown in the screenshot below
+
+![](pictures/samples/lwm2m_fota_ack_device_profile_bordered.png)
+
+Click **"Add"** to complete the new thing creation procedure.
+
+#### Application workflow
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Create a task to manage the LWM2M client and start it
+
+
+**`lwm2m_demo.c`**
+
+**`msgLWM2MTask`**
+
+
+- Initialize LWM2M client,
+
+  - Enable unsolicited messages from client
+
+  - Enable FOTA ACK configuration
+
+  - Create a task \(lwm2m_taskCB is its callback function \)to manage events from Portal
+
+  - Check if LwM2M client is running, if not, enable it
+
+  - Wait for client to register to Portal
+
+  - Wait for FOTA events to arrive, and when the Update request arrives, notify the user that everything must stop before sending the last ACK (as the module will start updating and then reboot)
+
+
+**`lwm2mIndicationCB`**
+
+- Manage events arriving from client \(operations completion status and unsolicited events\)
+- Run lwm2m_taskCB when a monitored resource changes, to manage the action to be done
+
+
+
+
+#### Application execution example
+
+![](pictures/samples/lwm2m_fota_ack_at_1_bordered.png)
+
+![](pictures/samples/lwm2m_fota_ack_at_2_bordered.png)
+FOTA request arrives from server, ACK is sent for Download and Update. Device restarts with the new firmware version
+
+
+![](pictures/samples/lwm2m_fota_ack_at_3_restart_bordered.png)
+Application restarts and is ready for a new FOTA operation
+
+---------------------
+
+
+
+### LWM2M OBJ_GET AND OBJ_SET
+
+Sample application showcasing LWM2M client m2mb_lwm2m_objget and m2mb_lwm2m_objset M2MB APIs usage. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- Configure LWM2M client and enable it
+
+- Create an instance of a custom object
+
+- Create a Json string
+
+- Set string, integer, float, boolean, timestamp and opaque values with `m2mb_lwm2m_objset`
+
+- Get all resources values with `m2mb_lwm2m_objget`
+
+- Manage write, read and monitoring resources changed from the portal
+
+**Requirements**
+
+This application expects the user to configure the PDP context ID 1 with the proper APN.
+it can be done with the following AT command:
+
+`AT+CGDCONT=1,"IPV4V6","<user apn>"`
+
+Depending on the Mobiler Network Operator and Access Technology, the APN might be automatically set by the network itself. In this case, nothing must be done by the user.
+
+
+#### Application workflow
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Create a task to manage the LWM2M client and start it
+
+
+**`lwm2m_demo.c`**
+
+**`msgLWM2MTask`**
+- Check registration status
+
+- Initialize LWM2M client,
+
+  - Check for XML file fo custom object
+
+  - Enable unsolicited messages from client
+
+  - Create a task \(lwm2m_taskCB is its callback function \)to manage events from Portal
+
+  - Enable LwM2M client
+
+  - Create a new instance for the custom object
+
+  - Wait for client to register to Portal
+
+  - Performs obj_set and obj_get operations on the related resources
+
+  - Wait for events from server
+
+
+**`lwm2mIndicationCB`**
+
+- Manage events arriving from client \(operations completion status and unsolicited events\)
+- Run lwm2m_taskCB when a monitored resource changes, to manage the action to be done
+
+#### Device Profile upload
+
+**LWM2M resources demo** device profile must be imported to have a real-time update of resources values on the LWM2M browser.
+
+To do so, import the file `json/lwm2m_resources_demo.json` (provided with the sample files) on section `Developer` > `Device profiles` of OneEdge IoT portal:
+
+![](pictures/samples/lwm2m_device_profile_bordered.png)
+
+
+#### Custom Object configuration
+
+The XML file content must be loaded on the Telit IoT Portal for the demo application to be fully executed.
+
+First, enter Developer section from the top menu
+
+![](pictures/samples/lwm2m_xml_1_developer_bordered.png)
+
+
+Choose Object Registry
+
+![](pictures/samples/lwm2m_xml_2_object_registry_bordered.png)
+
+
+Create a New Object
+
+![](pictures/samples/lwm2m_xml_3_new_object_bordered.png)
+
+
+Copy the xml file content and paste it in the new Object form
+
+![](pictures/samples/lwm2m_xml_4_paste_content_bordered.png)
+
+
+
+Also, the application requires the XML file `xml/object_32011.xml` (provided with the sample files) to be stored in module's `/XML/` folder.
+It can be done with
+
+`AT#M2MWRITE=/XML/object_32011.xml,<size_in_bytes>`
+
+To load the XML file in the module, Telit AT Controller (TATC) can be used. Once the command above is issued, press the load content button:
+
+![](pictures/samples/lwm2m_xml_5_load_xml_bordered.png)
+
+
+Select the file from your computer
+
+![](pictures/samples/lwm2m_xml_6_file_select_bordered.png)
+
+
+The file is successfully loaded on the module
+
+![](pictures/samples/lwm2m_xml_7_done_bordered.png)
+
+
+
+#### Onboard the device
+
+**Get the Telit ID**
+
+To retrieve the Telit ID data, issue `AT#TID` to get the Telit ID. The command response will be similar to
+
+\#TID: **xxxxxxxxxxxxxxxxxxxxxxxxxxx**,1
+OK
+
+
+Take note of the Telit ID highlighted in **bold** above (or copy it on a text editor): this ID it will be needed for the onboarding process.
+
+**Create a new Thing**
+
+From the OneEdge portal, on **"Things"** section, click **"New Thing"** button in the top right corner.
+
+![](pictures/samples/lwm2m_new_thing_bordered.png)
+
+In the Create a new thing dialog, select "Telit Module"
+
+![](pictures/samples/lwm2m_telit_module_bordered.png)
+
+A dialog appears: select “Default” thing definition
+
+![](pictures/samples/lwm2m_fota_ack_default_thing_bordered.png)
+
+In the following screen, provide the Telit ID as “Identifier”
+Click on “Find” and make sure that model, firmware and the other details are properly
+populated.
+
+Click on lwm2m tab and set the device profile previously imported as shown in the screenshot below
+
+![](pictures/samples/lwm2m_demo_objget_device_profile_bordered.png)
+
+Click **"Add"** to complete the new thing creation procedure.
+
+
+**If the Thing already exists, its device profile can be changed by following the steps shown in the picture below**
+
+![](pictures/samples/lwm2m_change_device_profile_objget_bordered.png)
+
+
+
+#### Application execution example
+
+![](pictures/samples/lwm2m_1_bordered.png)
+
+
+![](pictures/samples/lwm2m_obj_set_get_1_bordered.png)
+![](pictures/samples/lwm2m_obj_set_get_2_bordered.png)
+![](pictures/samples/lwm2m_obj_set_get_3_bordered.png)
+
+
+
+After the Demo completes the initialization, it is possible to access the object resources from the section Things: 
+select your device, then "LwM2M" tab of OneEdge IoT portal:
+
+![](pictures/samples/lwm2m_portal_object_browser_bordered.png)
+
+An instance of the object will be present and the resources can be modified.
+
+![](pictures/samples/lwm2m_obj_set_get_portal_bordered.png)
+
+---------------------
+
+
+
+### LWM2M REG
+
+Sample application showcasing LWM2M client registration management using M2MB API. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- Configure LWM2M client and enable it
+
+- Get LWM2M server information using REG apis
+
+- Deregister from LWM2M server using REG apis
+
+- Register to the LWM2M server usign REG apis
+
+**Requirements**
+
+This application expects the user to configure the PDP context ID 1 with the proper APN.
+it can be done with the following AT command:
+
+`AT+CGDCONT=1,"IPV4V6","<user apn>"`
+
+Depending on the Mobiler Network Operator and Access Technology, the APN might be automatically set by the network itself. In this case, nothing must be done by the user.
+
+
+#### Application workflow
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Create a task to manage the LWM2M client and start it
+
+
+**`lwm2m_demo.c`**
+
+**`msgLWM2MTask`**
+- Check registration status
+
+- Initialize LWM2M client, 
+
+  - Check for XML file fo custom object
+  
+  - Enable LwM2M client
+  
+  - Wait for client to register to Portal
+  
+  - Get the LWM2M server information
+
+  - Performs client portal deregistration
+  
+  - Performs client portal registration
+
+
+**`lwm2mIndicationCB`**
+
+- Manage events arriving from client \(operations completion status and unsolicited events\)
+
+#### Application execution example
+
+![](pictures/samples/lwm2m_reg_bordered.png)
+
+#### Device Profile upload
+
+**LWM2M resources demo** device profile must be imported to have a real-time update of resources values on the LWM2M browser. 
+
+To do so, import the file `json/lwm2m_resources_demo.json` (provided with the sample files) on section `Developer` > `Device profiles` of OneEdge IoT portal:
+
+![](pictures/samples/lwm2m_device_profile_bordered.png)
+
+
+#### Custom Object configuration
+
+The XML file content must be loaded on the Telit IoT Portal for the demo application to be fully executed.
+
+First, enter Developer section from the top menu
+
+![](pictures/samples/lwm2m_xml_1_developer_bordered.png)
+
+
+Choose Object Registry
+
+![](pictures/samples/lwm2m_xml_2_object_registry_bordered.png)
+
+
+Create a New Object
+
+![](pictures/samples/lwm2m_xml_3_new_object_bordered.png)
+
+
+Copy the xml file content and paste it in the new Object form
+
+![](pictures/samples/lwm2m_xml_4_paste_content_bordered.png)
+
+
+
+Also, the application requires the XML file `xml/object_32010.xml` (provided with the sample files) to be stored in module's `/XML/` folder. 
+It can be done with 
+
+`AT#M2MWRITE=/XML/object_32010.xml,<size_in_bytes>`
+
+To load the XML file in the module, Telit AT Controller (TATC) can be used. Once the command above is issued, press the load content button:
+
+![](pictures/samples/lwm2m_xml_5_load_xml_bordered.png)
+
+
+Select the file from your computer
+
+![](pictures/samples/lwm2m_xml_6_file_select_bordered.png)
+
+
+The file is successfully loaded on the module
+
+![](pictures/samples/lwm2m_xml_7_done_bordered.png)
+
+#### Onboard the device
+
+**Get the Telit ID**
+
+To retrieve the Telit ID data, issue `AT#TID` to get the Telit ID. The command response will be similar to
+
+\#TID: **xxxxxxxxxxxxxxxxxxxxxxxxxxx**,1
+OK
+
+
+Take note of the Telit ID highlighted in **bold** above (or copy it on a text editor): this ID it will be needed for the onboarding process.
+
+**Create a new Thing**
+
+From the OneEdge portal, on **"Things"** section, click **"New Thing"** button in the top right corner.
+
+![](pictures/samples/lwm2m_new_thing_bordered.png)
+
+In the Create a new thing dialog, select "Telit Module"
+
+![](pictures/samples/lwm2m_telit_module_bordered.png)
+
+A dialog appears: select â€œDefaultâ€� thing definition
+
+![](pictures/samples/lwm2m_fota_ack_default_thing_bordered.png)
+
+In the following screen, provide the Telit ID as â€œIdentifierâ€�
+Click on â€œFindâ€� and make sure that model, firmware and the other details are properly
+populated.
+
+Click on lwm2m tab and set the device profile previously imported as shown in the screenshot below
+
+![](pictures/samples/lwm2m_demo_device_profile_bordered.png)
+
+Click **"Add"** to complete the new thing creation procedure.
+
+**If the Thing already exists, its device profile can be changed by following the steps shown in the picture below**
+
+![](pictures/samples/lwm2m_change_device_profile_bordered.png)
 
 ---------------------
 
@@ -5026,6 +7603,34 @@ The application connects to an NTP server, gets current date and time and update
 
 
 
+### ON OFF button management example 
+
+Sample application on how to handle ON/OFF button. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- How to enable ON/OFF button handling
+- How to turn off module after ON/OFF button press/release
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open gpio_ON_OFF
+- Configure the interrupt and the callback
+- Init power functionality
+- Wait for on/off button to be pressed
+- If button has been pressed for more than 3 seconds (and then released) then module is turned off.
+
+![](pictures/samples/onoff_management_bordered.png)
+
+---------------------
+
+
+
 ### RTC example 
 
 Sample application that shows RTC apis functionalities: how to get/set moudle system time and timestamp. Debug prints on **MAIN UART**
@@ -5050,6 +7655,37 @@ Sample application that shows RTC apis functionalities: how to get/set moudle sy
 - Add 1 hour to timestamp, convert it to system time and set it to module
 
 ![](pictures/samples/RTC_output_bordered.png)
+
+---------------------
+
+
+
+### SIM event handler example 
+
+Sim Event Demo application. Debug prints on **MAIN UART**, <ins>using AZX log example functions</ins>
+
+
+**Features**
+
+
+- How to use ATI function for asynchronous management 
+- How to cath URC from an AppZone application
+- How to catch SIM related events and handle them
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Print welcome message 
+- Initialize AT interface
+- Initialize AT URC manager task
+- Initialize SIM event manager task
+- Send 'AT#SIMPR=1' to activate SIM URCs
+- Insert SIM in SIM slot 1 and receive SIM inserted message
+- Remove SIM from SIM slot 1 and receive SIM removed message
+
+![](pictures/samples/SimEventHandler_bordered.png)
 
 ---------------------
 
@@ -5129,6 +7765,49 @@ AT#M2MWRITE="/mod/sms_config.txt",138
 
 
 
+### SMTP Client 
+
+Sample application showing SMTP echo demo with M2MB API. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- How to check module registration and activate PDP context
+- How to open a SMTP client
+- How to send a mail
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Create a task to manage SMTP client and start it
+
+**`M2MB_main.c`**
+
+- Initialize Network structure and check registration
+
+- Initialize PDP structure and start PDP context
+
+- Initialize SMTP client and connect to SMTP server
+
+- Prepare email and send it
+
+- Close SMTP client
+
+- Disable PDP context
+
+![](pictures/samples/smtp_client_bordered.png)
+
+---------------------
+
+
+
 ### SPI Echo
 
 Sample application showing how to communicate over SPI with m2mb API. Debug prints on **MAIN UART**
@@ -5171,6 +7850,17 @@ Sample application showing SPI usage, configuring two ST devices: a magnetometer
 
 - How to open an SPI bus with a slave device
 - How to communicate with the device over the SPI bus
+
+**Setup**
+
+- Connect sensor VDD to 3v8 supply (e.g. Vbatt on the module)
+- Connect sensor GND to a GND pin of the module
+- Connect sensors MOSI to module SPI_MOSI
+- Connect sensors MISO to module SPI_MISO
+- Connect sensors CLK to module SPI_CLK
+- Connect magnetometer CS to module GPIO 2
+- Connect gyroscope CS to module GPIO 3
+
 
 #### Application workflow
 
@@ -5324,6 +8014,51 @@ Sample application showcasing TCP echo demo with M2MB API. Debug prints on **MAI
 - Disable PDP context
 
 ![](pictures/samples/tcp_ip_bordered.png)
+
+---------------------
+
+
+
+### TCP non blocking example 
+
+Sample application that shows how to configure and connect a TCP-IP non blocking socket. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- How to check module registration and activate PDP context
+- How to open a TCP client non Blocking socket 
+- How to communicate over the socket
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+
+- Print welcome message
+
+- Create a task to manage socket and start it
+
+**`m2m_tcp_test.c`**
+
+- Initialize Network structure and check registration
+
+- Initialize PDP structure and start PDP context
+
+- Create socket and link it to the PDP context id
+
+- Set the socket as non Blocking and connect to server. Uses m2mb_socket_bsd_select, m2mb_socket_bsd_fd_isset_func to check when socket is connected.
+
+- Send data and receive response
+
+- Close socket
+
+- Disable PDP context
+
+![](pictures/samples/TCP_non_lock_output_bordered.png)
 
 ---------------------
 
@@ -5585,6 +8320,43 @@ Sample application showcasing UDP echo demo with M2MB API. Debug prints on **MAI
 
 
 
+### UDP_Server example 
+
+Sample application that shows UDP listening socket demo with m2mb apis. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- How to configure an UDP socket into listen mode 
+- How to receive data using m2mb_socket_bsd_select  
+- How to read data received and send data to client
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Print welcome message
+- Init task apis and create M2M_msgUDPTask to handle UDP socket
+
+
+**`m2mb_udp_test.c`**
+
+**`M2M_msgUDPTask`**
+
+- Wait for module registration
+- Activate PDP context
+- Create UDP listen socket
+- Wait for incoming data from client using m2mb_socket_bsd_select
+- When there are data on socket, read them and send some data back to client
+
+![](pictures/samples/UDP_Server_output_bordered.png)
+
+---------------------
+
+
+
 ### USB Cable Check 
 
 Sample application showing how to check if USB cable is plugged in or not. Debug prints on **MAIN UART**
@@ -5612,6 +8384,66 @@ Sample application showing how to check if USB cable is plugged in or not. Debug
 - if the event is a connection/disconnection, show the current status
 
 ![](pictures/samples/usb_cable_check_bordered.png)
+
+---------------------
+
+
+
+### Basic USB read/write example 
+
+Sample application that shows how to use the basic read/write USB apis. Synchronous or asynchronous mode is available setting SYNC to 1 or 0. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- Read and write on USB (synchoronous mode)
+- Read and write on USB (asynchronous mode)
+
+
+#### Application workflow
+
+**`M2MB_main.c`**
+
+- Open USB port (USB0)
+- Set rx and tx timeouts
+- **SYNC**
+   - read until some data are availableon USB
+   - as soon as some data are available on USB read them and write on USB data received
+
+- **ASYNC**
+  - set the USB callback
+  - write some data on USB and wait for data to be read
+  - as soon as some data are available on USB M2MB_USB_RX_EVENT is generated and handled by callback. Data are read and printed on serial com port.
+   
+![](pictures/samples/USB_TxRxBasic_bordered.png)
+
+---------------------
+
+
+
+### Watchdog example 
+
+Sample application that shows how to set and implement a watchdog. Task has been locked waitng for an event with a timeout longer than wd inactivity timeout. If no wd kick or no actions
+
+
+**Features**
+
+
+- Enable watchdog on Task_1
+- Handle watchdog kicks with a timer
+
+
+#### Application workflow
+
+**`M2MB_main.c`**
+
+- Create Task_1 that will be put under watchdog control
+- In Task_1 watchdog is ebnabled on it and a timer created to handle watchdog kicks. Then task enters in a loop where kicks are sent. After 5 kicks a task lock is simulated waiting for an event release (with a timeout longer that task watchdog inactivity timeout)
+- As soon as watchdog inactivity timeout expired M2MB_WDOG_TIMEOUT_IND is generated and handled in WDcallback (in this case the event is released, no further actions are done)
+- No further actions are performed by Task_1 (no kicks are sent) so after watchdog system timeout expiration app is rebooted.
+
+![](pictures/samples/Watchdog_bordered.png)
 
 ---------------------
 

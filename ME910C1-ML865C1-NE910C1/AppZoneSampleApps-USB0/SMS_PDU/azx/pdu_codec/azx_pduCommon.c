@@ -1217,7 +1217,7 @@ uint16_t pdu_out_encode(pdu_struct *in, uint8_t *out)
 /*******************************************************************************
  *                                                                             *
  *******************************************************************************/
-uint16_t pdu_out_encode_simple(pdu_struct *pdu, uint8_t *out, void *sender, void *msg, uint8_t tp_vp,int dcs)
+uint16_t pdu_out_encode_simple(pdu_struct *pdu, uint8_t *out, AZX_SMS_ADDR_NUM_TYPE_E type, void *sender, void *msg, uint8_t tp_vp,int dcs)
 {
   pdu->first       = 0x11;
   pdu->tp_msg_ref  = 0;
@@ -1226,19 +1226,10 @@ uint16_t pdu_out_encode_simple(pdu_struct *pdu, uint8_t *out, void *sender, void
 
   pdu->smsc.len    = 0;
 
-  pdu->sender.type = PDU_TYPE_INTERNATIONAL;
+  pdu->sender.type = type;
 
+  pdu_phone_pack((uint8_t *)sender, pdu->sender.data);
 
-  if (pdu_phone_is_packed((uint8_t *)sender)) {
-    pdu_phone_copy((uint8_t *)sender, pdu->sender.data);
-  }
-  else{
-    pdu_phone_pack((uint8_t *)sender, pdu->sender.data);
-  }
-
-
-  //pdu->tp_dcs      = PDU_DCS_AUTO;
-  //pdu->tp_dcs      = PDU_DCS_8;
   pdu->tp_dcs      = dcs;
   pdu->msg.data    = (uint8_t *)msg;
 

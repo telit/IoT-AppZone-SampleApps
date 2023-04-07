@@ -1,0 +1,1 @@
+Sim Event Demo application. Debug prints on AUX UART, <ins>using AZX log example functions</ins>

@@ -1,0 +1,1 @@
+Sample application on how to handle ON/OFF button. Debug prints on USB0

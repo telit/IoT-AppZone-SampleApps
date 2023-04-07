@@ -5,10 +5,12 @@
 #define HDR_AZX_TASKS_H_
 /**
  * @file azx_tasks.h
- * @version 1.0.4
+ * @version 1.1.1
  * @dependencies core/azx_log core/azx_utils
  * @author Alessio Quieti
- * @date 07/04/2018
+ * @author Fabio Pintus
+ * @author Norman Argiolas
+ * @date 21/06/2022
  *
  * @brief Tasks related utilities
  *
@@ -48,13 +50,13 @@ typedef INT32 (*USER_TASK_CB)(INT32, INT32, INT32);
  * @brief Available ranges for tasks
  *  @{ */
 #define AZX_TASKS_MIN_STACK_SIZE 1024  /**<Minimum task stack size in bytes*/
-#define AZX_TASKS_MAX_STACK_SIZE 32768 /**<Maximum task stack size in bytes*/
+#define AZX_TASKS_MAX_STACK_SIZE 65536 /**<Maximum task stack size in bytes*/
 
 #define AZX_TASKS_MIN_QUEUE_SIZE 1     /**<Minimum task message queue size in slots*/
 #define AZX_TASKS_MAX_QUEUE_SIZE 100   /**<Maximum task message queue size in slots*/
 
 #define AZX_TASKS_PRIORITY_MAX   1     /**<Maximum task priority value */
-#define AZX_TASKS_PRIORITY_MIN  32     /**<Minimum task priority value*/
+#define AZX_TASKS_PRIORITY_MIN  50     /**<Minimum task priority value*/
 
 #define AZX_TASKS_MAX_TASKS 32         /**< Maximum allowed tasks number */
 
@@ -63,6 +65,19 @@ typedef INT32 (*USER_TASK_CB)(INT32, INT32, INT32);
 #define AZX_TASKS_TASK_NAME_SIZE 64    /**<Maximum task name length*/
   /** @} */
 /** @} */
+
+
+/**
+* @brief task complete return user function
+* 
+* If registered, this function is executed when a task user callback function exits, 
+* reporting the Task ID, input "type" parameter and result code.
+*
+* refer to azx_tasks_init_with_compl()
+* @ingroup taskUsage
+*/
+typedef INT32 (*azx_tasks_onTaskComplCB)(INT32, INT32, INT32);
+
 
 /**
 * @brief Task related return codes
@@ -85,7 +100,9 @@ typedef enum
 
   AZX_TASKS_INVALID_ID_ERR = -20,     /**<Task id is not valid (out of bounds)*/
   AZX_TASKS_ID_NOT_DEFINED_ERR = -21, /**<Task id does not refer to a valid task*/
-  AZX_TASKS_MSG_SEND_ERR = -22        /**<Error when sending a message to task queue*/
+  AZX_TASKS_MSG_SEND_ERR = -22,       /**<Error when sending a message to task queue*/
+  
+  AZX_TASKS_INTERNAL_ERR = -30        /**<Internal OS task error*/
 } AZX_TASKS_ERR_E;
 
 /**
@@ -94,12 +111,12 @@ typedef enum
 */
 typedef enum
 {
-  AZX_TASKS_STACK_S = 2048,      /**<2KB of stack size */
-  AZX_TASKS_STACK_M = 4096,      /**< 4KB  of stack size*/
-  AZX_TASKS_STACK_L = 8192,      /**< 8KB  of stack size*/
-  AZX_TASKS_STACK_XL = 16384,    /**< 16KB  of stack size*/
-
-  M2M_OS_TASK_STACK_LIMIT = 32768 /**< 32K  of stack size. Consider this as a max limit*/
+  AZX_TASKS_STACK_S = 2048,       /**<2KB of stack size */
+  AZX_TASKS_STACK_M = 4096,       /**< 4KB of stack size*/
+  AZX_TASKS_STACK_L = 8192,       /**< 8KB of stack size*/
+  AZX_TASKS_STACK_XL = 16384,     /**< 16KB of stack size*/
+  AZX_TASKS_STACK_XXL = 32768,    /**< 32KB of stack size*/
+  M2M_OS_TASK_STACK_LIMIT = 65536 /**< 64K of stack size. Consider this as a max limit*/
 
 }AZX_TASKS_STACK_SIZE;
 
@@ -148,6 +165,7 @@ typedef struct
 {
   AZX_TASKS_SLOT_T task_slots[AZX_TASKS_MAX_TASKS];
   M2MB_OS_TASK_HANDLE M2MMain_Handle;
+  azx_tasks_onTaskComplCB complCB;
   INT8 isInit;
 } _AZX_TASKS_PARAMS;
 
@@ -162,6 +180,16 @@ INT32 azx_tasks_init(void);
 /** \example{lineno} azx_tasks_example.c
   * This is a detailed example of tasks functions usage.
   */
+
+
+/**
+ * @brief Initializes the callback with all parameters needed to use tasks and monitoring the execution end.
+ *
+ * @return AZX_TASKS_OK
+ *
+ * @ingroup taskUsage
+*/
+INT32 azx_tasks_initWithComplCB(azx_tasks_onTaskComplCB cb);
 
 
 /**
@@ -225,7 +253,7 @@ INT32 azx_tasks_createTask( CHAR *task_name, INT32 stack_size, INT32 priority,
  *
  *  @ingroup taskUsage
 */
-INT32 azx_tasks_destroyTask(INT8 task_id);
+INT32 azx_tasks_destroyTask(INT32 task_id);
 
 /**
  * @brief Sends a message to a task
@@ -249,7 +277,7 @@ INT32 azx_tasks_destroyTask(INT8 task_id);
  *
  * @ingroup taskUsage
 */
-INT32 azx_tasks_sendMessageToTask( INT8 task_id, INT32 type, INT32 param1, INT32 param2 );
+INT32 azx_tasks_sendMessageToTask( INT32 task_id, INT32 type, INT32 param1, INT32 param2 );
 
 
 /**
@@ -287,6 +315,33 @@ CHAR* azx_tasks_getCurrentTaskName( CHAR *name );
  *
  * @return The number of messages that are queued. In case of error, -1 is returned.
  */
-INT32 azx_tasks_getEnqueuedCount( INT8 task_id );
+INT32 azx_tasks_getEnqueuedCount( INT32 TaskProcID );
+
+/**
+ * Suspends a task given its ID. It must be resumed with azx_tasks_resumeTask()
+ *
+ * @param[in] The ID of the task to be suspended.
+ *
+ * @return AZX_TASKS_OK in case of success, a negative value otherwise.
+ */
+INT32 azx_tasks_suspendTask( INT32 TaskProcID );
+
+/**
+ * Resumes a task (suspended with azx_tasks_suspendTask) given its ID
+ *
+ * @param[in] The ID of the task to be resumed.
+ *
+ * @return AZX_TASKS_OK in case of success, a negative value otherwise.
+ */
+INT32 azx_tasks_resumeTask( INT32 TaskProcID );
+
+
+/**
+ * Returns the handle for a given task_id ()
+ * @param[in] The ID of the task whose queue should be checked.
+ *
+ * @return The m2mb handle of the task, NULL in case of failure
+ */
+M2MB_OS_TASK_HANDLE azx_tasks_getM2MBTaskHandleById(INT32 TaskProcID);
 
 #endif /* HDR_AZX_TASKS_H_ */

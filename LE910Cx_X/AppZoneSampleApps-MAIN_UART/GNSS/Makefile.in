@@ -15,7 +15,7 @@ LOGS_COLOUR = 0
 
 ## ---- do not touch below this line
 
-SW_VER = 1.1.15
+SW_VER = 1.1.18
 
 CLEAN_BEFORE_BUILD = clean
 
@@ -24,27 +24,42 @@ CPPFLAGS += -DVERSION=\"$(SW_VER)\"
 
 
 ifeq ($(strip $(LOGS_ENABLE)),1)
-CPPFLAGS += -DAZX_LOG_ENABLE
 CPPFLAGS += -DLOG_CHANNEL=$(LOGS_CHANNEL)
 CPPFLAGS += -DAZX_LOG_LEVEL=AZX_LOG_LEVEL_$(LOGS_LEVEL)
-
 CPPFLAGS += -DAZX_LOG_ENABLE_COLOURS=$(LOGS_COLOUR)
-
+else
+CPPFLAGS += -DAZX_LOG_DISABLE
 endif
+
+
+is_toolchain =$(foreach v,$2,$(if $(findstring $v,$1),$(1)))
+
+GCC_TOOLCHAINS := GCC GNUEABI
+RVCT_TOOLCHAINS := RVCT506
 
 
 # Disable the missing-field-initializers as GCC sometimes complains about
 # legitimate struct initialization
 # (https://stackoverflow.com/questions/1538943/why-is-the-compiler-throwing-this-warning-missing-initializer-isnt-the-stru)
 
-
-ifneq (,$(filter $(TOOLCHAIN),GCC GCC_LINUX GNUEABI))
+ifneq (,$(strip $(call is_toolchain,$(TOOLCHAIN),$(GCC_TOOLCHAINS))))
   CPPFLAGS += -Wall -Werror -Wextra -Wunreachable-code -Wno-missing-field-initializers -Wno-format
 else
-  CPPFLAGS += --diag_suppress=111,177,1293
+  ifneq (,$(strip $(call is_toolchain,$(TOOLCHAIN),$(RVCT_TOOLCHAINS))))
+    CPPFLAGS += --diag_suppress=111,177,1293
+  else
+    $(info "Unexpected toolchain $(TOOLCHAIN)")
+  endif
 endif
+
 # --------------------------------------------------------------------------
 
 
 CPPFLAGS += -I azx/hdr
 OBJS += $(patsubst %.c,%.o,$(wildcard azx/src/*.c))
+
+# from prod_tool.in file
+ifeq ($(AZ_MODEL), ME910G1)
+  CPPFLAGS += -DM2MB_WWAN_GNSS_SWITCH_AVAILABLE
+endif
+

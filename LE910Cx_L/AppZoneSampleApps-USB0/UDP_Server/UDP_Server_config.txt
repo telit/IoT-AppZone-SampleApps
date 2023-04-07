@@ -1,0 +1,5 @@
+web.omnitel.it,#APN
+,#APN_USER
+,#APN_PASS
+3,#PDP_CTX
+6500,#MY_SERVER_LISTEN_PORT

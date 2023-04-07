@@ -13,7 +13,7 @@
   @description
     Sample application showing how to use GNSS functionality. Debug prints on $OUTPUT
   @version
-    1.0.2
+    1.0.3
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -50,7 +50,8 @@
 /* Local defines ================================================================================*/
 #define GPS_BIT         (UINT32)0x1    /*0x0000000000000001*/
 
-#ifndef M2MB_GNSS_WWAN_GNSS_PRIORITY_E
+/*defined via CPPFLAGS by Makefile.in depending on module family (from prod_tool.in file)*/
+#ifndef M2MB_WWAN_GNSS_SWITCH_AVAILABLE
   #define GNSS_MEX10G1 0
 #else
   #define GNSS_MEX10G1 1
@@ -251,7 +252,8 @@ M2MB_RESULT_E res;
 
 			/*this part is available ONLY for MEX10G1 products*/
 #if GNSS_MEX10G1
-			if(moduleType == MEX10G1){
+			if(moduleType == MEX10G1)
+			{
 				m2mb_gnss_getcfg(handle1, M2MB_GNSS_PRIORITY, &priority);
 
 				AZX_LOG_INFO("Priority: %d\r\n", priority);

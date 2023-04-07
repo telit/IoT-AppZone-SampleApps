@@ -88,5 +88,36 @@ int azx_pdu_encode(CHAR *number, CHAR *str, UINT8 *pdu, INT32 dcs);
 /** \example{lineno} azx_pduEnc_example.c
   * This is a example PDU encoding functions usage.
   */
+
+
+/*-----------------------------------------------------------------------------------------------*/
+/**
+  @brief
+    Encode a PDU from the input parameters, allowing to select the number address type
+
+  @details
+    This function encodes the PDU (in binary stream format) using the encoding, number and message provided
+
+  @param[in] type
+    Address number type (national/international), refer to  AZX_SMS_ADDR_NUM_TYPE_E enum.
+  @param[in] number
+    string containig the sender number
+  @param[in] str
+    string containing the text message
+  @param[in] pdu
+    pointer to the pdu buffer that will be filled with the encoded data
+  @param[in] dcs
+    data coding scheme, can bee GSM Standard (PDU_DCS_7), 8bits (PDU_DCS_8) or UCS2 (PDU_DCS_UCS2)
   
+  @return
+    The length of the encoded pdu
+
+  <b>Refer to</b>
+    azx_pdu_Decoder()
+
+  @ingroup pduEncUsage
+*/
+/*-----------------------------------------------------------------------------------------------*/
+INT32 azx_pdu_encode_generic(AZX_SMS_ADDR_NUM_TYPE_E type, CHAR *number, CHAR *str, UINT8 *pdu, INT32 dcs);
+
 #endif /* HDR_PDU_PDU_ENC_H_ */

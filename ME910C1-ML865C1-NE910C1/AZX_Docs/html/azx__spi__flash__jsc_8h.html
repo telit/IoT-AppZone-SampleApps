@@ -34,7 +34,7 @@
   <td id="projectlogo"><img alt="Logo" src="telit-logo.png"/></td>
   <td id="projectalign" style="padding-left: 2em;">
    <div id="projectname">AZX (AppZone eXtensions) documentation
-   &#160;<span id="projectnumber">1.1.15-CxL</span>
+   &#160;<span id="projectnumber">1.1.18-CxL</span>
    </div>
    <div id="projectbrief">A set of companion utilities that make AZ development easier</div>
   </td>
@@ -270,11 +270,11 @@ Enumerations</h2></td></tr>
 <tr class="memitem:a783362908d603d4587037f70c8aa57db"><td class="memItemLeft" align="right" valign="top"><a id="a783362908d603d4587037f70c8aa57db"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>BL_U_3_4_LOCKED</b>&#160;&#160;&#160;(LOCK_CMP | LOCK_INV | LOCK_BP2 | LOCK_BP0)             /* 1   1   1   0   1    Upper 3/4 locked */</td></tr>
 <tr class="separator:a783362908d603d4587037f70c8aa57db"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0411cd49bb5b71852cecd93bcbf0ca2d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <b>MTD_OPS_PLACE_OOB</b> = 0, 
+<tr class="memitem:a726ca809ffd3d67ab4b8476646f26635"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <b>MTD_OPS_PLACE_OOB</b> = 0, 
 <b>MTD_OPS_AUTO_OOB</b> = 1, 
 <b>MTD_OPS_RAW</b> = 2
  }</td></tr>
-<tr class="separator:a0411cd49bb5b71852cecd93bcbf0ca2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a726ca809ffd3d67ab4b8476646f26635"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae681287eda124bd215d2af4d90519154"><td class="memItemLeft" align="right" valign="top"><a id="ae681287eda124bd215d2af4d90519154"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>AZX_SPI_FLASH_ONFI_PARAMS</b></td></tr>
 <tr class="separator:ae681287eda124bd215d2af4d90519154"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -339,8 +339,8 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <dl class="section author"><dt>Author</dt><dd>Norman Argiolas Fabio Pintus</dd></dl>
 <dl class="section date"><dt>Date</dt><dd>File created on: Feb 24, 2020 </dd></dl>
 </div><h2 class="groupheader">Enumeration Type Documentation</h2>
-<a id="a0411cd49bb5b71852cecd93bcbf0ca2d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0411cd49bb5b71852cecd93bcbf0ca2d">&#9670;&nbsp;</a></span>anonymous enum</h2>
+<a id="a726ca809ffd3d67ab4b8476646f26635"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a726ca809ffd3d67ab4b8476646f26635">&#9670;&nbsp;</a></span>anonymous enum</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -412,7 +412,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <div class="line"><span class="comment">//---Functions call</span></div>
 <div class="line">if (<a class="code" href="azx__spi__flash__jsc_8h.html#ae0ce5dec84f2a12c41842f877eeeec7e">azx_spi_flash_initialize</a>(SPI_FLASH_JS28P1GQSCAHG_CS_GPIO, &amp;opts, &amp;g_chip) != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
 <div class="line"> <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 <div class="line">...</div>
@@ -427,12 +427,12 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <div class="line">{</div>
 <div class="line"> <span class="keywordflow">if</span> (ret == AZX_SPI_FLASH_CODE_EBADMSG &amp;&amp; isBad == <span class="keyword">true</span>)</div>
 <div class="line"> {</div>
-<div class="line">     AZX_LOG_INFO(<span class="stringliteral">&quot;Block %d : initial bad block, skip erase\r\n&quot;</span>, blk);</div>
+<div class="line">     <a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;Block %d : initial bad block, skip erase\r\n&quot;</span>, blk);</div>
 <div class="line">     <span class="comment">//...</span></div>
 <div class="line"> }</div>
 <div class="line"> <span class="keywordflow">else</span></div>
 <div class="line"> {</div>
-<div class="line">     AZX_LOG_ERROR(<span class="stringliteral">&quot;Checking bad block failed!!\r\n&quot;</span>);</div>
+<div class="line">     <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Checking bad block failed!!\r\n&quot;</span>);</div>
 <div class="line">     <span class="comment">//...</span></div>
 <div class="line"> }</div>
 <div class="line">}</div>
@@ -488,14 +488,14 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <div class="line"><span class="comment">//---Functions call</span></div>
 <div class="line">if (<a class="code" href="azx__spi__flash__jsc_8h.html#ae0ce5dec84f2a12c41842f877eeeec7e">azx_spi_flash_initialize</a>(SPI_FLASH_JS28P1GQSCAHG_CS_GPIO, &amp;opts, &amp;g_chip) != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
 <div class="line"> <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 <div class="line">...</div>
 <div class="line"> </div>
 <div class="line">if (<a class="code" href="azx__spi__flash__jsc_8h.html#af55c5ca20b66bf5cd4c6a069f9bef4f0">azx_spi_flash_callbak</a>(g_chip, AZX_SPI_FLASH_INITIALIZED) != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;Nand callback failed!!\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Nand callback failed!!\r\n&quot;</span>);</div>
 <div class="line"> <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 </div><!-- fragment --> 
@@ -539,7 +539,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <div class="line"><span class="comment">//---Functions call</span></div>
 <div class="line">if (<a class="code" href="azx__spi__flash__jsc_8h.html#ae0ce5dec84f2a12c41842f877eeeec7e">azx_spi_flash_initialize</a>(SPI_FLASH_JS28P1GQSCAHG_CS_GPIO, &amp;opts, &amp;g_chip) != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
 <div class="line"> <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 <div class="line">...</div>
@@ -549,7 +549,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <div class="line">ret = ret = <a class="code" href="azx__spi__flash__jsc_8h.html#af0458ec80a9a24368fd4a61908a8ac5e">azx_spi_flash_readParameterPage</a>(g_chip, 0, read_buf, g_chip-&gt;page_size);</div>
 <div class="line"><span class="keywordflow">if</span> (ret != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;Nand reading parameters failed!!\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Nand reading parameters failed!!\r\n&quot;</span>);</div>
 <div class="line"> <span class="comment">//...</span></div>
 <div class="line">}</div>
 <div class="line"><span class="comment">//...</span></div>
@@ -558,7 +558,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <div class="line">p = (AZX_SPI_FLASH_ONFI_PARAMS *) &amp;read_buf[0];</div>
 <div class="line"> <span class="keywordflow">if</span> (<a class="code" href="azx__spi__flash__jsc_8h.html#abf0c4c0871dbec223a5d37ae3c957e52">azx_spi_flash_checkParameter</a>(p) != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line"> {</div>
-<div class="line">     AZX_LOG_ERROR(<span class="stringliteral">&quot;parameter page : data invalid, test finished\r\n&quot;</span>);</div>
+<div class="line">     <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;parameter page : data invalid, test finished\r\n&quot;</span>);</div>
 <div class="line"><span class="comment">//...</span></div>
 <div class="line"> }</div>
 </div><!-- fragment --> 
@@ -643,14 +643,14 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <div class="line"><span class="comment">//---Functions call</span></div>
 <div class="line">if (<a class="code" href="azx__spi__flash__jsc_8h.html#ae0ce5dec84f2a12c41842f877eeeec7e">azx_spi_flash_initialize</a>(SPI_FLASH_JS28P1GQSCAHG_CS_GPIO, &amp;opts, &amp;g_chip) != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
 <div class="line"> <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 <div class="line">...</div>
 <div class="line"> </div>
 <div class="line">if (<a class="code" href="azx__spi__flash__jsc_8h.html#a7ce55fd3b71387760d27abbcfc4b9b9b">azx_spi_flash_disableEcc</a>(g_chip) != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;Nand disable ECC failed!!\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Nand disable ECC failed!!\r\n&quot;</span>);</div>
 <div class="line"> <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 </div><!-- fragment --> 
@@ -694,14 +694,14 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <div class="line"><span class="comment">//---Functions call</span></div>
 <div class="line">if (<a class="code" href="azx__spi__flash__jsc_8h.html#ae0ce5dec84f2a12c41842f877eeeec7e">azx_spi_flash_initialize</a>(SPI_FLASH_JS28P1GQSCAHG_CS_GPIO, &amp;opts, &amp;g_chip) != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
 <div class="line"> <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 <div class="line">...</div>
 <div class="line"> </div>
 <div class="line">if (<a class="code" href="azx__spi__flash__jsc_8h.html#a0a658f007e96b84ac78c2e837b97a551">azx_spi_flash_enableEcc</a>(g_chip) != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;Nand anable ECC failed!!\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Nand anable ECC failed!!\r\n&quot;</span>);</div>
 <div class="line"> <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 </div><!-- fragment --> 
@@ -763,7 +763,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <div class="line"><span class="comment">//---Functions call</span></div>
 <div class="line">if (<a class="code" href="azx__spi__flash__jsc_8h.html#ae0ce5dec84f2a12c41842f877eeeec7e">azx_spi_flash_initialize</a>(SPI_FLASH_JS28P1GQSCAHG_CS_GPIO, &amp;opts, &amp;g_chip) != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
 <div class="line"> <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 <div class="line">...</div>
@@ -778,7 +778,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <div class="line">ret = ret = <a class="code" href="azx__spi__flash__jsc_8h.html#a58ad5c71f224ba7b8e78f0c7f87db7cc">azx_spi_flash_erase</a>(chip, block_addr, len);</div>
 <div class="line"><span class="keywordflow">if</span> (ret != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;Nand erase failed!!\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Nand erase failed!!\r\n&quot;</span>);</div>
 <div class="line"> <span class="comment">//...</span></div>
 <div class="line">}</div>
 </div><!-- fragment --> 
@@ -840,7 +840,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <div class="line"><span class="comment">//---Functions call</span></div>
 <div class="line">if (<a class="code" href="azx__spi__flash__jsc_8h.html#ae0ce5dec84f2a12c41842f877eeeec7e">azx_spi_flash_initialize</a>(SPI_FLASH_JS28P1GQSCAHG_CS_GPIO, &amp;opts, &amp;g_chip) != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
 <div class="line"> <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 <div class="line"> </div>
@@ -897,7 +897,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <div class="line"><span class="comment">//---Functions call</span></div>
 <div class="line">if (<a class="code" href="azx__spi__flash__jsc_8h.html#ae0ce5dec84f2a12c41842f877eeeec7e">azx_spi_flash_initialize</a>(SPI_FLASH_JS28P1GQSCAHG_CS_GPIO, &amp;opts, &amp;g_chip) != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
 <div class="line"> <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 <div class="line">...</div>
@@ -935,7 +935,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <div class="line">ret = <a class="code" href="azx__spi__flash__jsc_8h.html#afa9aa4e0c25876ccc0ea6e805c38b640">azx_spi_flash_lockBlock</a>(chip, protect_reg);</div>
 <div class="line"><span class="keywordflow">if</span> (ret != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot; Invalid lock block protection %x\r\n&quot;</span>, protection);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot; Invalid lock block protection %x\r\n&quot;</span>, protection);</div>
 <div class="line">    <span class="keywordflow">return</span> AZX_NAND_CODE_FAIL;</div>
 <div class="line">}</div>
 </div><!-- fragment --> 
@@ -990,7 +990,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <div class="line"><span class="comment">//---Functions call</span></div>
 <div class="line">if (<a class="code" href="azx__spi__flash__jsc_8h.html#ae0ce5dec84f2a12c41842f877eeeec7e">azx_spi_flash_initialize</a>(SPI_FLASH_JS28P1GQSCAHG_CS_GPIO, &amp;opts, &amp;g_chip) != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
 <div class="line"> <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 <div class="line">...</div>
@@ -998,10 +998,10 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <div class="line">UINT8 <span class="keywordtype">id</span>[3] = {0};</div>
 <div class="line"><span class="keywordflow">if</span> (<a class="code" href="azx__spi__flash__jsc_8h.html#ae2913f43be17555a6ce23965c4684515">azx_spi_flash_readID</a>(g_chip, <span class="keywordtype">id</span>) != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;Nand ReadID failed!!\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Nand ReadID failed!!\r\n&quot;</span>);</div>
 <div class="line"> <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
-<div class="line">AZX_LOG_INFO(<span class="stringliteral">&quot;SPI-NAND type mfr_id: %x, dev_id: %x, dev_id2: %x is not in id table.\r\n&quot;</span>,</div>
+<div class="line"><a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;SPI-NAND type mfr_id: %x, dev_id: %x, dev_id2: %x is not in id table.\r\n&quot;</span>,</div>
 <div class="line"> <span class="keywordtype">id</span>[0], <span class="keywordtype">id</span>[1], <span class="keywordtype">id</span>[2]);</div>
 </div><!-- fragment --> 
 </div>
@@ -1062,7 +1062,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <div class="line"><span class="comment">//---Functions call</span></div>
 <div class="line">if (<a class="code" href="azx__spi__flash__jsc_8h.html#ae0ce5dec84f2a12c41842f877eeeec7e">azx_spi_flash_initialize</a>(SPI_FLASH_JS28P1GQSCAHG_CS_GPIO, &amp;opts, &amp;g_chip) != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
 <div class="line"> <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 <div class="line">...</div>
@@ -1086,7 +1086,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <div class="line">ret = ret = <a class="code" href="azx__spi__flash__jsc_8h.html#a353fa68e8b51bdede6ee211d8cd31803">azx_spi_flash_readOob</a>(chip, block_addr, ops);</div>
 <div class="line"><span class="keywordflow">if</span> (ret != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;Nand write failed!!\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Nand write failed!!\r\n&quot;</span>);</div>
 <div class="line"> <span class="comment">//...</span></div>
 <div class="line">}</div>
 </div><!-- fragment --> 
@@ -1155,7 +1155,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <div class="line"><span class="comment">//---Functions call</span></div>
 <div class="line">if (<a class="code" href="azx__spi__flash__jsc_8h.html#ae0ce5dec84f2a12c41842f877eeeec7e">azx_spi_flash_initialize</a>(SPI_FLASH_JS28P1GQSCAHG_CS_GPIO, &amp;opts, &amp;g_chip) != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line">  AZX_LOG_ERROR(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
+<div class="line">  <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
 <div class="line">  <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 <div class="line">...</div>
@@ -1165,7 +1165,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <div class="line">ret = ret = <a class="code" href="azx__spi__flash__jsc_8h.html#af0458ec80a9a24368fd4a61908a8ac5e">azx_spi_flash_readParameterPage</a>(g_chip, 0, read_buf, g_chip-&gt;page_size);</div>
 <div class="line"><span class="keywordflow">if</span> (ret != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line">  AZX_LOG_ERROR(<span class="stringliteral">&quot;Nand reading parameters failed!!\r\n&quot;</span>);</div>
+<div class="line">  <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Nand reading parameters failed!!\r\n&quot;</span>);</div>
 <div class="line">  <span class="comment">//...</span></div>
 <div class="line">}</div>
 </div><!-- fragment --> 
@@ -1234,7 +1234,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <div class="line"><span class="comment">//---Functions call</span></div>
 <div class="line">if (<a class="code" href="azx__spi__flash__jsc_8h.html#ae0ce5dec84f2a12c41842f877eeeec7e">azx_spi_flash_initialize</a>(SPI_FLASH_JS28P1GQSCAHG_CS_GPIO, &amp;opts, &amp;g_chip) != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
 <div class="line"> <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 <div class="line"> </div>
@@ -1245,48 +1245,48 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <div class="line">memset(read_buf, 0xFF, 4096);</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">//---Read UID</span></div>
-<div class="line">AZX_LOG_INFO(<span class="stringliteral">&quot;Read UID...\r\n&quot;</span>);</div>
+<div class="line"><a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;Read UID...\r\n&quot;</span>);</div>
 <div class="line">ret = <a class="code" href="azx__spi__flash__jsc_8h.html#aa023633b3ae3f8e4438681bf6dd99450">azx_spi_flash_readUIDpage</a>(g_chip, 0, read_buf, g_chip-&gt;page_size);</div>
 <div class="line"><span class="keywordflow">if</span> (ret != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;UID page: read operation ERROR, test finished\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;UID page: read operation ERROR, test finished\r\n&quot;</span>);</div>
 <div class="line">    <span class="comment">//...</span></div>
 <div class="line">}</div>
 <div class="line"> </div>
-<div class="line">AZX_LOG_INFO(<span class="stringliteral">&quot; unique ID            : 0x&quot;</span>);</div>
+<div class="line"><a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot; unique ID            : 0x&quot;</span>);</div>
 <div class="line"><span class="keywordflow">for</span> (JSC_uint32 <span class="keywordtype">byte</span> = 0; <span class="keywordtype">byte</span> &lt; 16; <span class="keywordtype">byte</span>++)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_INFO(<span class="stringliteral">&quot;%02X&quot;</span>, read_buf[<span class="keywordtype">byte</span>]);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;%02X&quot;</span>, read_buf[<span class="keywordtype">byte</span>]);</div>
 <div class="line">}</div>
-<div class="line">AZX_LOG_INFO(<span class="stringliteral">&quot;\r\n&quot;</span>);</div>
+<div class="line"><a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;\r\n&quot;</span>);</div>
 <div class="line"> </div>
-<div class="line">AZX_LOG_INFO(<span class="stringliteral">&quot; unique ID complement : 0x&quot;</span>);</div>
+<div class="line"><a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot; unique ID complement : 0x&quot;</span>);</div>
 <div class="line"><span class="keywordflow">for</span> (JSC_uint32 <span class="keywordtype">byte</span> = 0; <span class="keywordtype">byte</span> &lt; 16; <span class="keywordtype">byte</span>++)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_INFO(<span class="stringliteral">&quot;%02X&quot;</span>, read_buf[<span class="keywordtype">byte</span> + 16]);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;%02X&quot;</span>, read_buf[<span class="keywordtype">byte</span> + 16]);</div>
 <div class="line">}</div>
-<div class="line">AZX_LOG_INFO(<span class="stringliteral">&quot;\r\n&quot;</span>);</div>
+<div class="line"><a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;\r\n&quot;</span>);</div>
 <div class="line"> </div>
-<div class="line">AZX_LOG_INFO(<span class="stringliteral">&quot; unique ID XOR        : 0x&quot;</span>);</div>
+<div class="line"><a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot; unique ID XOR        : 0x&quot;</span>);</div>
 <div class="line"><span class="keywordflow">for</span> (JSC_uint32 <span class="keywordtype">byte</span> = 0; <span class="keywordtype">byte</span> &lt; 16; <span class="keywordtype">byte</span>++)</div>
 <div class="line">{</div>
 <div class="line"> xorJSC = read_buf[byte] ^ read_buf[<span class="keywordtype">byte</span> + 16];</div>
-<div class="line"> AZX_LOG_INFO(<span class="stringliteral">&quot;%02X&quot;</span>, xorJSC);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;%02X&quot;</span>, xorJSC);</div>
 <div class="line"> </div>
 <div class="line">    <span class="keywordflow">if</span> (xorJSC != 0xFF)</div>
 <div class="line">    {</div>
 <div class="line">     ret = AZX_NAND_CODE_FAIL;</div>
 <div class="line">    }</div>
 <div class="line">}</div>
-<div class="line">AZX_LOG_INFO(<span class="stringliteral">&quot;\r\n&quot;</span>);</div>
+<div class="line"><a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;\r\n&quot;</span>);</div>
 <div class="line"> </div>
 <div class="line"><span class="keywordflow">if</span> (ret != AZX_NAND_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot; unique ID invalid\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot; unique ID invalid\r\n&quot;</span>);</div>
 <div class="line">}</div>
 <div class="line"><span class="keywordflow">else</span></div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_INFO(<span class="stringliteral">&quot; unique ID valid\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot; unique ID valid\r\n&quot;</span>);</div>
 <div class="line">}</div>
 </div><!-- fragment --> 
 </div>
@@ -1330,7 +1330,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <div class="line"><span class="comment">//---Functions call</span></div>
 <div class="line">if (<a class="code" href="azx__spi__flash__jsc_8h.html#ae0ce5dec84f2a12c41842f877eeeec7e">azx_spi_flash_initialize</a>(SPI_FLASH_JS28P1GQSCAHG_CS_GPIO, &amp;opts, &amp;g_chip) != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
 <div class="line"> <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 <div class="line"> </div>
@@ -1338,10 +1338,10 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <div class="line"> </div>
 <div class="line">if (<a class="code" href="azx__spi__flash__jsc_8h.html#a8e3095bb2fbf30b6bbe8c53ed72f5f99">azx_spi_flash_releaseResources</a>(g_chip) != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;Release memory failed!!\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Release memory failed!!\r\n&quot;</span>);</div>
 <div class="line"> <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
-<div class="line">AZX_LOG_INFO(<span class="stringliteral">&quot;Nand released\r\n&quot;</span>);</div>
+<div class="line"><a class="code" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(<span class="stringliteral">&quot;Nand released\r\n&quot;</span>);</div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -1394,7 +1394,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <div class="line"><span class="comment">//---Functions call</span></div>
 <div class="line">if (<a class="code" href="azx__spi__flash__jsc_8h.html#ae0ce5dec84f2a12c41842f877eeeec7e">azx_spi_flash_initialize</a>(SPI_FLASH_JS28P1GQSCAHG_CS_GPIO, &amp;opts, &amp;g_chip) != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
 <div class="line"> <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 <div class="line">...</div>
@@ -1470,7 +1470,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <div class="line"><span class="comment">//---Functions call</span></div>
 <div class="line">if (<a class="code" href="azx__spi__flash__jsc_8h.html#ae0ce5dec84f2a12c41842f877eeeec7e">azx_spi_flash_initialize</a>(SPI_FLASH_JS28P1GQSCAHG_CS_GPIO, &amp;opts, &amp;g_chip) != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Nand Initialization failed!!\r\n&quot;</span>);</div>
 <div class="line"> <span class="keywordflow">return</span> TEST_ERROR;</div>
 <div class="line">}</div>
 <div class="line">...</div>
@@ -1494,7 +1494,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <div class="line">ret = ret = <a class="code" href="azx__spi__flash__jsc_8h.html#a0de92912fb9daefb4b38b77d2a6489b3">azx_spi_flash_writeOob</a>(chip, block_addr, ops);</div>
 <div class="line"><span class="keywordflow">if</span> (ret != AZX_SPI_FLASH_CODE_PASS)</div>
 <div class="line">{</div>
-<div class="line"> AZX_LOG_ERROR(<span class="stringliteral">&quot;Nand write failed!!\r\n&quot;</span>);</div>
+<div class="line"> <a class="code" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(<span class="stringliteral">&quot;Nand write failed!!\r\n&quot;</span>);</div>
 <div class="line"> <span class="comment">//...</span></div>
 <div class="line">}</div>
 </div><!-- fragment --> 
@@ -1507,6 +1507,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <div class="ttc" id="astruct_a_z_x___s_p_i___f_l_a_s_h___s_p_i___c_h_i_p_html"><div class="ttname"><a href="struct_a_z_x___s_p_i___f_l_a_s_h___s_p_i___c_h_i_p.html">AZX_SPI_FLASH_SPI_CHIP</a></div><div class="ttdef"><b>Definition:</b> azx_spi_flash_jsc.h:120</div></div>
 <div class="ttc" id="aazx__spi__flash__jsc_8h_html_a96d389276fc7ab72fb67e41eb4d2539d"><div class="ttname"><a href="azx__spi__flash__jsc_8h.html#a96d389276fc7ab72fb67e41eb4d2539d">azx_spi_flash_blockIsBad</a></div><div class="ttdeci">AZX_SPI_FLASH_CODE_RESULT_E azx_spi_flash_blockIsBad(AZX_SPI_FLASH_SPI_CHIP *chip, JSC_loff_t offs, JSC_bool *result)</div><div class="ttdoc">azx_spi_flash_blockIsBad checks block is bad or not</div></div>
 <div class="ttc" id="aazx__spi__flash__jsc_8h_html_af0458ec80a9a24368fd4a61908a8ac5e"><div class="ttname"><a href="azx__spi__flash__jsc_8h.html#af0458ec80a9a24368fd4a61908a8ac5e">azx_spi_flash_readParameterPage</a></div><div class="ttdeci">AZX_SPI_FLASH_CODE_RESULT_E azx_spi_flash_readParameterPage(AZX_SPI_FLASH_SPI_CHIP *chip, JSC_uint32 column, JSC_uint8 *buf, JSC_size_t len)</div><div class="ttdoc">azx_spi_flash_readParameterPage read parameter page</div></div>
+<div class="ttc" id="agroup__log_usage_html_ga81e4f03b2a752e5e9cfae1e037ce7256"><div class="ttname"><a href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a></div><div class="ttdeci">#define AZX_LOG_ERROR(a...)</div><div class="ttdef"><b>Definition:</b> azx_log.h:313</div></div>
 <div class="ttc" id="aazx__spi__flash__jsc_8h_html_aa023633b3ae3f8e4438681bf6dd99450"><div class="ttname"><a href="azx__spi__flash__jsc_8h.html#aa023633b3ae3f8e4438681bf6dd99450">azx_spi_flash_readUIDpage</a></div><div class="ttdeci">AZX_SPI_FLASH_CODE_RESULT_E azx_spi_flash_readUIDpage(AZX_SPI_FLASH_SPI_CHIP *chip, JSC_uint32 column, JSC_uint8 *buf, JSC_size_t len)</div><div class="ttdoc">azx_spi_flash_readUIDpage read UID page</div></div>
 <div class="ttc" id="aazx__spi__flash__jsc_8h_html_ae2913f43be17555a6ce23965c4684515"><div class="ttname"><a href="azx__spi__flash__jsc_8h.html#ae2913f43be17555a6ce23965c4684515">azx_spi_flash_readID</a></div><div class="ttdeci">AZX_SPI_FLASH_CODE_RESULT_E azx_spi_flash_readID(AZX_SPI_FLASH_SPI_CHIP *chip, JSC_uint8 *buf)</div><div class="ttdoc">azx_spi_flash_readID reads the ID of the mounted device</div></div>
 <div class="ttc" id="aazx__spi__flash__jsc_8h_html_a0a658f007e96b84ac78c2e837b97a551"><div class="ttname"><a href="azx__spi__flash__jsc_8h.html#a0a658f007e96b84ac78c2e837b97a551">azx_spi_flash_enableEcc</a></div><div class="ttdeci">AZX_SPI_FLASH_CODE_RESULT_E azx_spi_flash_enableEcc(AZX_SPI_FLASH_SPI_CHIP *chip)</div><div class="ttdoc">azx_spi_flash_enableEcc enables internal ECC.</div></div>
@@ -1518,6 +1519,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>__attribute__</b> (
 <div class="ttc" id="aazx__spi__flash__jsc_8h_html_a7ce55fd3b71387760d27abbcfc4b9b9b"><div class="ttname"><a href="azx__spi__flash__jsc_8h.html#a7ce55fd3b71387760d27abbcfc4b9b9b">azx_spi_flash_disableEcc</a></div><div class="ttdeci">AZX_SPI_FLASH_CODE_RESULT_E azx_spi_flash_disableEcc(AZX_SPI_FLASH_SPI_CHIP *chip)</div><div class="ttdoc">azx_spi_flash_disableEcc disables internal ECC.</div></div>
 <div class="ttc" id="aazx__spi__flash__jsc_8h_html_ae0ce5dec84f2a12c41842f877eeeec7e"><div class="ttname"><a href="azx__spi__flash__jsc_8h.html#ae0ce5dec84f2a12c41842f877eeeec7e">azx_spi_flash_initialize</a></div><div class="ttdeci">AZX_SPI_FLASH_CODE_RESULT_E azx_spi_flash_initialize(const JSC_uint8 CS_GPIO_pin, AZX_SPI_FLASH_MICRO_SPI_PARAMS *opts, AZX_SPI_FLASH_SPI_CHIP **chip_ptr)</div><div class="ttdoc">azx_spi_flash_initialize initializes SPI-FLASH service</div></div>
 <div class="ttc" id="aazx__spi__flash__jsc_8h_html_afa9aa4e0c25876ccc0ea6e805c38b640"><div class="ttname"><a href="azx__spi__flash__jsc_8h.html#afa9aa4e0c25876ccc0ea6e805c38b640">azx_spi_flash_lockBlock</a></div><div class="ttdeci">AZX_SPI_FLASH_CODE_RESULT_E azx_spi_flash_lockBlock(AZX_SPI_FLASH_SPI_CHIP *chip, JSC_uint8 lock)</div><div class="ttdoc">azx_spi_flash_lockBlock locks the write operations</div></div>
+<div class="ttc" id="agroup__log_usage_html_ga847d9b9f62e31bf14b31882be7418675"><div class="ttname"><a href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a></div><div class="ttdeci">#define AZX_LOG_INFO(a...)</div><div class="ttdef"><b>Definition:</b> azx_log.h:321</div></div>
 <div class="ttc" id="aazx__spi__flash__jsc_8h_html_a0de92912fb9daefb4b38b77d2a6489b3"><div class="ttname"><a href="azx__spi__flash__jsc_8h.html#a0de92912fb9daefb4b38b77d2a6489b3">azx_spi_flash_writeOob</a></div><div class="ttdeci">AZX_SPI_FLASH_CODE_RESULT_E azx_spi_flash_writeOob(AZX_SPI_FLASH_SPI_CHIP *chip, JSC_loff_t to, AZX_SPI_FLASH_MTD_OOB_OPS *ops)</div><div class="ttdoc">azx_spi_flash_writeOob write data</div></div>
 <!-- HTML footer for doxygen 1.8.15-->
 <!-- start footer part -->

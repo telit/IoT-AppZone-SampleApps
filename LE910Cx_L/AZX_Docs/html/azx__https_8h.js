@@ -1,13 +1,15 @@
 var azx__https_8h =
 [
     [ "AZX_HTTP_OPTIONS", "struct_a_z_x___h_t_t_p___o_p_t_i_o_n_s.html", "struct_a_z_x___h_t_t_p___o_p_t_i_o_n_s" ],
+    [ "AZX_HTTP_CLIENT_CLOSED_REQUEST", "azx__https_8h.html#a03446e974b457891ff3e6df6e90c7a53", null ],
     [ "AZX_HTTP_H_CHUNK_SIZE", "group__http_usage.html#ga1eb3cd56e8853af0fa05eac66e5c170f", null ],
     [ "AZX_HTTP_H_FIELD_SIZE", "group__http_usage.html#ga9567e818e1e8bcdf8df7efbf5c99c2d4", null ],
     [ "AZX_HTTP_H_READ_SIZE", "group__http_usage.html#gaa86e4372eae59c09495c49a8117b4738", null ],
+    [ "AZX_HTTP_OK", "azx__https_8h.html#a7aaabb76612f8a55daa900cae6faa2a2", null ],
     [ "AZX_HTTP_AUTH_SCHEMA", "group__http_conf.html#gafb5cf49a7418b6b306a91aca97342df3", null ],
     [ "AZX_HTTP_METHOD", "group__http_conf.html#gac324733f55c37381f15963897b55dd68", null ],
     [ "azx_httpDebugHook", "group__http_conf.html#gae45c5ce7ad62c080a02504578c721840", null ],
-    [ "AZX_HTTPS_USER_CB", "group__http_conf.html#gaaad9f441f95bdedecbd30f8145df2585", null ],
+    [ "AZX_HTTPS_USER_CB", "group__http_conf.html#gad57846e79605499b70bd0562684f4948", null ],
     [ "user_base64_encode", "group__http_conf.html#ga3cb8375a9c231c36d41bcc6390f26890", null ],
     [ "_AZX_HTTP_METHOD", "group__http_conf.html#ga30623080daf9875d7ef4a53282de1ac0", [
       [ "AZX_HTTP_GET", "group__http_conf.html#gga30623080daf9875d7ef4a53282de1ac0ae405fbb86fb9b0c85f7413e63ba650e6", null ],
@@ -30,6 +32,7 @@ var azx__https_8h =
     [ "azx_http_head", "group__http_usage.html#ga5717de1767a336a315469ea5c2c8e0a8", null ],
     [ "azx_http_initialize", "group__http_conf.html#gae9912e7808e5d0674afa85487ec85387", null ],
     [ "azx_http_post", "group__http_usage.html#ga468c6015a239492a88c0c530fe73d973", null ],
+    [ "azx_http_post_file", "group__http_usage.html#ga296106c2ccb99b6c3f37cefe8bd75b2b", null ],
     [ "azx_http_setCB", "group__http_conf.html#ga0e2abd820dff5b4f020b1b70d797b249", null ],
     [ "azx_http_SSLInit", "group__http_conf.html#gae40751f148308705cd22ee69282afbe8", null ]
 ];
