@@ -9,6 +9,7 @@ var azx__tasks_8h =
     [ "AZX_TASKS_PRIORITY_MIN", "group__task_usage.html#ga8c8cb01a85069a084d2e1dd17e299722", null ],
     [ "AZX_TASKS_QUEUE_MSG_SIZE", "group__task_usage.html#ga146f8901751b1510a2d8add0cfafb8d6", null ],
     [ "AZX_TASKS_TASK_NAME_SIZE", "group__task_usage.html#gad435a24bea52cb07521128b0b84b4afd", null ],
+    [ "azx_tasks_onTaskComplCB", "group__task_usage.html#ga90d9b7cdb04ee33e160a47f4dbd61e31", null ],
     [ "USER_TASK_CB", "group__task_usage.html#gaf5abdb36b530c6d64d58a14555a68416", null ],
     [ "AZX_TASKS_ERR_E", "group__task_usage.html#ga5b29dff3d5b477adbbf73a1515983c6b", [
       [ "AZX_TASKS_OK", "group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6baf0fd3cefaa03e18813132ae02b6fb26c", null ],
@@ -24,7 +25,8 @@ var azx__tasks_8h =
       [ "AZX_TASKS_CREATE_ERR", "group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6ba7b2631b8fb7565c607a86f9555e35457", null ],
       [ "AZX_TASKS_INVALID_ID_ERR", "group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6ba671695a5dacb80dfa6d27451e9fe146b", null ],
       [ "AZX_TASKS_ID_NOT_DEFINED_ERR", "group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6baff0009833effaf091c786391904bff10", null ],
-      [ "AZX_TASKS_MSG_SEND_ERR", "group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6bae659d2da10c13fa8459f28743671970b", null ]
+      [ "AZX_TASKS_MSG_SEND_ERR", "group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6bae659d2da10c13fa8459f28743671970b", null ],
+      [ "AZX_TASKS_INTERNAL_ERR", "group__task_usage.html#gga5b29dff3d5b477adbbf73a1515983c6bae406edbd410c18d740e1bd5a43f738f4", null ]
     ] ],
     [ "AZX_TASKS_MBOX_SIZE", "group__task_usage.html#ga026eeb136a0744da96699ab01272a1ac", [
       [ "AZX_TASKS_MBOX_S", "group__task_usage.html#gga026eeb136a0744da96699ab01272a1aca6b3b1d1fe700fff393ef0236d1d5956e", null ],
@@ -37,13 +39,18 @@ var azx__tasks_8h =
       [ "AZX_TASKS_STACK_M", "group__task_usage.html#gga036b9cf9c298d9d53b608bf3942e3fb3a242b75e65efab695f4fc7679cea1865a", null ],
       [ "AZX_TASKS_STACK_L", "group__task_usage.html#gga036b9cf9c298d9d53b608bf3942e3fb3a55c48feee3f1357cd3d4f8a4a89e2837", null ],
       [ "AZX_TASKS_STACK_XL", "group__task_usage.html#gga036b9cf9c298d9d53b608bf3942e3fb3a23b2068ca2a946f91a92d87c14dd9998", null ],
+      [ "AZX_TASKS_STACK_XXL", "group__task_usage.html#gga036b9cf9c298d9d53b608bf3942e3fb3a935490df232896369ca03eee1ff5ae0c", null ],
       [ "M2M_OS_TASK_STACK_LIMIT", "group__task_usage.html#gga036b9cf9c298d9d53b608bf3942e3fb3ab517d507287a275651ea4c6bb28320aa", null ]
     ] ],
     [ "azx_tasks_createTask", "group__task_usage.html#gaec2329e432960a7d210982ebc379cd0c", null ],
-    [ "azx_tasks_destroyTask", "group__task_usage.html#ga1feb12b83b0e76cca5471d8720082708", null ],
+    [ "azx_tasks_destroyTask", "group__task_usage.html#gaf71b24171beeda54b60e32687c4c7aa7", null ],
     [ "azx_tasks_getCurrentTaskId", "group__task_usage.html#gad1da66a5e55a1b33471d1eec1bfd6623", null ],
     [ "azx_tasks_getCurrentTaskName", "group__task_usage.html#gaadfe1b6031c35086447241b51b39bfb6", null ],
-    [ "azx_tasks_getEnqueuedCount", "azx__tasks_8h.html#afba61203db27eb36059b90f658d7bb9a", null ],
+    [ "azx_tasks_getEnqueuedCount", "azx__tasks_8h.html#a6312ad7011b5126ffac56a83909d1692", null ],
+    [ "azx_tasks_getM2MBTaskHandleById", "azx__tasks_8h.html#a030d42f594b13992e632c6206b0e0be2", null ],
     [ "azx_tasks_init", "group__task_usage.html#ga1fddaf02d721c17e85a1dd9997d296e2", null ],
-    [ "azx_tasks_sendMessageToTask", "group__task_usage.html#ga8bb45f0fffe4cd52bf53cd00b83a2ee2", null ]
+    [ "azx_tasks_initWithComplCB", "group__task_usage.html#ga28939001d8dac98ac818c9537641c8c4", null ],
+    [ "azx_tasks_resumeTask", "azx__tasks_8h.html#afd65f2f5d1853491c2170813738ed603", null ],
+    [ "azx_tasks_sendMessageToTask", "group__task_usage.html#ga72f845282b145dc667207c99c99a384f", null ],
+    [ "azx_tasks_suspendTask", "azx__tasks_8h.html#a17f284ef1cd9b9688ff337be930910f4", null ]
 ];

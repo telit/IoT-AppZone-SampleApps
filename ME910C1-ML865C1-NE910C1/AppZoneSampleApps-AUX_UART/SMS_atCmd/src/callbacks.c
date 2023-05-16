@@ -55,6 +55,8 @@
 
 #define CONFIG_FILE  LOCALPATH "/sms_config.txt"
 
+extern INT16 instanceID;
+
 /* Local typedefs ===============================================================================*/
 /* Local statics ================================================================================*/
 
@@ -86,7 +88,7 @@ static UINT32  curEvBits;
 extern M2MB_OS_EV_HANDLE sms_evHandle;
 extern M2MB_SMS_HANDLE h_sms_handle;
 
-extern M2MB_OS_SEM_HANDLE taskSemHandle;
+//extern M2MB_OS_SEM_HANDLE taskSemHandle;
 
 extern INT8 smsParsingTaskID;
 
@@ -232,7 +234,7 @@ void Sms_Callback(M2MB_SMS_HANDLE h, M2MB_SMS_IND_E sms_event, UINT16 resp_size,
   {
     pdu_struct packet;
     static char number[32];
-    static char message[161];
+    static char message[SMS_PDU_MAX_SIZE]; //more bytes needed due to HEX_raw outtput format
     INT32 len;
 
     AZX_LOG_INFO("M2MB_SMS_READ_RESP Callback\r\n\n");
@@ -258,9 +260,11 @@ void Sms_Callback(M2MB_SMS_HANDLE h, M2MB_SMS_IND_E sms_event, UINT16 resp_size,
     AZX_LOG_INFO("Received SMS, content (len: %d): <<%s>>\r\n", len, message);
     AZX_LOG_INFO("Sender: %s\r\n", number);
 
+    /* Explicitly tag the message as READ */
+    m2mb_sms_set_tag(h, resp->index, M2MB_SMS_TAG_MT_READ);
+
     //RoGa: send a message to sms parsing task
     azx_tasks_sendMessageToTask( smsParsingTaskID, (INT32)resp->index , (INT32)message, (INT32)number);
-    m2mb_os_sem_get(taskSemHandle, M2MB_OS_WAIT_FOREVER );
 
 #if 0
     res = m2mb_os_ev_set(sms_evHandle, EV_SMS_READ, M2MB_OS_EV_SET);
@@ -390,16 +394,16 @@ INT32 pdulen;
 		}
 		//send AT command
 		memset(rsp, 0, sizeof(rsp));
-		retVal = send_async_at_command(0, atCom, rsp, sizeof(rsp));
+		retVal = send_async_at_command(instanceID, atCom, rsp, sizeof(rsp) - 1);
 		if (retVal == M2MB_RESULT_SUCCESS)
 		{
 			//command sent
-			AZX_LOG_TRACE( "at_cmd_async_init() returned success value\r\n" );
+			AZX_LOG_TRACE( "send_async_at_command() returned success value\r\n" );
 
 		}else{
 
-			AZX_LOG_ERROR( "at_cmd_async_init() returned failure value\r\n" );
-			m2mb_os_sem_put(taskSemHandle);
+			AZX_LOG_ERROR( "send_async_at_command() returned failure value\r\n" );
+
 		    return 0;
 
 		}
@@ -445,11 +449,13 @@ INT32 pdulen;
 			}
 
 		}
-	} else {
+	}
+	else
+	{
 		AZX_LOG_ERROR("No AT command in the SMS\r\n");
-		m2mb_os_sem_put(taskSemHandle);
+
 		return 0;
 	}
-	m2mb_os_sem_put(taskSemHandle);
+
 	return 0;
 }

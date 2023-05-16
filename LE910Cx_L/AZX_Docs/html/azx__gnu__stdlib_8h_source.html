@@ -34,7 +34,7 @@
   <td id="projectlogo"><img alt="Logo" src="telit-logo.png"/></td>
   <td id="projectalign" style="padding-left: 2em;">
    <div id="projectname">AZX (AppZone eXtensions) documentation
-   &#160;<span id="projectnumber">1.1.15-CxL</span>
+   &#160;<span id="projectnumber">1.1.19-CxL</span>
    </div>
    <div id="projectbrief">A set of companion utilities that make AZ development easier</div>
   </td>
@@ -95,7 +95,7 @@ $(document).ready(function(){initNavTree('azx__gnu__stdlib_8h_source.html','');}
 <div class="title">azx_gnu_stdlib.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="azx__gnu__stdlib_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*Copyright (C) 2020 Telit Communications S.p.A. Italy - All Rights Reserved.*/</span></div>
+<a href="azx__gnu__stdlib_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*Copyright (C) 2022 Telit Communications S.p.A. Italy - All Rights Reserved.*/</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">/*    See LICENSE file in the project root for full license information.     */</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#ifndef HDR_AZX_GNU_STDLIB_H_</span></div>
@@ -131,37 +131,44 @@ $(document).ready(function(){initNavTree('azx__gnu__stdlib_8h_source.html','');}
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="preprocessor">#ifndef realloc</span></div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="preprocessor">#define realloc(a,b)    azx_gnu_realloc(a,b)</span></div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment">/* Function prototypes ====================================================================*/</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment">//azx_gnu_malloc etc etc  TODO add doxygen description</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="keywordtype">void</span> * <a class="code" href="azx__gnu__stdlib_8h.html#a9a3cae7e50aff0b388a6a8ab8366bb91">azx_gnu_malloc</a>(<span class="keywordtype">size_t</span> size);</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="preprocessor">#undef exit</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="preprocessor">#define exit azx_gnu_exit</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment">/* Function prototypes ====================================================================*/</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="comment">//azx_gnu_malloc etc etc  TODO add doxygen description</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;<span class="keywordtype">void</span> * <a class="code" href="azx__gnu__stdlib_8h.html#a7997c34fb06cfa0e66c00469c2d4e5f6">azx_gnu_calloc</a>(<span class="keywordtype">size_t</span> nitems, <span class="keywordtype">size_t</span> size);</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="keywordtype">void</span> * <a class="code" href="azx__gnu__stdlib_8h.html#a9a3cae7e50aff0b388a6a8ab8366bb91">azx_gnu_malloc</a>(<span class="keywordtype">size_t</span> size);</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;<span class="keywordtype">void</span> <a class="code" href="azx__gnu__stdlib_8h.html#adf00383f106b20e878a20d62fbe11101">azx_gnu_free</a>(<span class="keywordtype">void</span> *ptr);</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160; </div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="keywordtype">void</span> * <a class="code" href="azx__gnu__stdlib_8h.html#a7997c34fb06cfa0e66c00469c2d4e5f6">azx_gnu_calloc</a>(<span class="keywordtype">size_t</span> nitems, <span class="keywordtype">size_t</span> size);</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160; </div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
 <div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;<span class="keywordtype">void</span> * <a class="code" href="azx__gnu__stdlib_8h.html#adde8371f617ee5ec1ac98f0e8f47d62a">azx_gnu_realloc</a>(<span class="keywordtype">void</span> * ptr, <span class="keywordtype">size_t</span> size);</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160; </div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;<span class="preprocessor">#ifdef __cplusplus</span></div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;}</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="keywordtype">void</span> <a class="code" href="azx__gnu__stdlib_8h.html#adf00383f106b20e878a20d62fbe11101">azx_gnu_free</a>(<span class="keywordtype">void</span> *ptr);</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160; </div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;<span class="comment">/*-----------------------------------------------------------------------------------------------*/</span></div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;<span class="keywordtype">void</span> * <a class="code" href="azx__gnu__stdlib_8h.html#adde8371f617ee5ec1ac98f0e8f47d62a">azx_gnu_realloc</a>(<span class="keywordtype">void</span> * ptr, <span class="keywordtype">size_t</span> size);</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160; </div>
 <div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160; </div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* HDR_AZX_GNU_STDLIB_H_ */</span><span class="preprocessor"></span></div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160; </div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;<span class="keywordtype">void</span> <a class="code" href="azx__gnu__stdlib_8h.html#afe18e5b043bc40b9f8c1da366de1a25c">azx_gnu_exit</a>(<span class="keywordtype">int</span> status);</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160; </div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;<span class="preprocessor">#ifdef __cplusplus</span></div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;}</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160; </div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* HDR_AZX_GNU_STDLIB_H_ */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aazx__gnu__stdlib_8h_html_a7997c34fb06cfa0e66c00469c2d4e5f6"><div class="ttname"><a href="azx__gnu__stdlib_8h.html#a7997c34fb06cfa0e66c00469c2d4e5f6">azx_gnu_calloc</a></div><div class="ttdeci">void * azx_gnu_calloc(size_t nitems, size_t size)</div><div class="ttdoc">Allocates bytes of memory and init space with 0.</div></div>
 <div class="ttc" id="aazx__gnu__stdlib_8h_html_adf00383f106b20e878a20d62fbe11101"><div class="ttname"><a href="azx__gnu__stdlib_8h.html#adf00383f106b20e878a20d62fbe11101">azx_gnu_free</a></div><div class="ttdeci">void azx_gnu_free(void *ptr)</div><div class="ttdoc">Free allocated memory.</div></div>
 <div class="ttc" id="aazx__gnu__stdlib_8h_html_a9a3cae7e50aff0b388a6a8ab8366bb91"><div class="ttname"><a href="azx__gnu__stdlib_8h.html#a9a3cae7e50aff0b388a6a8ab8366bb91">azx_gnu_malloc</a></div><div class="ttdeci">void * azx_gnu_malloc(size_t size)</div><div class="ttdoc">Allocates bytes of memory.</div></div>
+<div class="ttc" id="aazx__gnu__stdlib_8h_html_afe18e5b043bc40b9f8c1da366de1a25c"><div class="ttname"><a href="azx__gnu__stdlib_8h.html#afe18e5b043bc40b9f8c1da366de1a25c">azx_gnu_exit</a></div><div class="ttdeci">void azx_gnu_exit(int status)</div><div class="ttdoc">exit process. remaps stdlib exit()</div></div>
 <div class="ttc" id="aazx__gnu__stdlib_8h_html_adde8371f617ee5ec1ac98f0e8f47d62a"><div class="ttname"><a href="azx__gnu__stdlib_8h.html#adde8371f617ee5ec1ac98f0e8f47d62a">azx_gnu_realloc</a></div><div class="ttdeci">void * azx_gnu_realloc(void *ptr, size_t size)</div><div class="ttdoc">Dynamic memory reallocation.</div></div>
 <!-- HTML footer for doxygen 1.8.15-->
 <!-- start footer part -->

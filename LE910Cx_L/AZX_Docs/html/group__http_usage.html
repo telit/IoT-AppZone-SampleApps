@@ -34,7 +34,7 @@
   <td id="projectlogo"><img alt="Logo" src="telit-logo.png"/></td>
   <td id="projectalign" style="padding-left: 2em;">
    <div id="projectname">AZX (AppZone eXtensions) documentation
-   &#160;<span id="projectnumber">1.1.15-CxL</span>
+   &#160;<span id="projectnumber">1.1.19-CxL</span>
    </div>
    <div id="projectbrief">A set of companion utilities that make AZ development easier</div>
   </td>
@@ -128,6 +128,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ga468c6015a239492a88c0c530fe73d973"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_usage.html#ga468c6015a239492a88c0c530fe73d973">azx_http_post</a> (<a class="el" href="struct_a_z_x___h_t_t_p___i_n_f_o.html">AZX_HTTP_INFO</a> *hi, char *url)</td></tr>
 <tr class="memdesc:ga468c6015a239492a88c0c530fe73d973"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run a HTTP POST request.  <a href="group__http_usage.html#ga468c6015a239492a88c0c530fe73d973">More...</a><br /></td></tr>
 <tr class="separator:ga468c6015a239492a88c0c530fe73d973"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga296106c2ccb99b6c3f37cefe8bd75b2b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_usage.html#ga296106c2ccb99b6c3f37cefe8bd75b2b">azx_http_post_file</a> (<a class="el" href="struct_a_z_x___h_t_t_p___i_n_f_o.html">AZX_HTTP_INFO</a> *hi, char *url, char *filepath)</td></tr>
+<tr class="memdesc:ga296106c2ccb99b6c3f37cefe8bd75b2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run a HTTP POST request for a local file.  <a href="group__http_usage.html#ga296106c2ccb99b6c3f37cefe8bd75b2b">More...</a><br /></td></tr>
+<tr class="separator:ga296106c2ccb99b6c3f37cefe8bd75b2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga272faa61175fcf4e7a00529957106d35"><td class="memItemLeft" align="right" valign="top">UINT8&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_usage.html#ga272faa61175fcf4e7a00529957106d35">azx_http_getCID</a> (void)</td></tr>
 <tr class="memdesc:ga272faa61175fcf4e7a00529957106d35"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return configured CID.  <a href="group__http_usage.html#ga272faa61175fcf4e7a00529957106d35">More...</a><br /></td></tr>
 <tr class="separator:ga272faa61175fcf4e7a00529957106d35"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -219,7 +222,7 @@ Header defines</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Run a HTTP GET request. </p>
-<p>Run a HTTP GET request using the URL info and the additional info stored in HTTP_INFO info</p>
+<p>Run a HTTP GET request using the URL info and the additional info stored in HTTP_INFO info. It supports single RANGE requests.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in,out]</td><td class="paramname">hi</td><td><a class="el" href="struct_a_z_x___h_t_t_p___i_n_f_o.html" title="The HTTP operation structure.">AZX_HTTP_INFO</a> struct used to provide additional data for the request (i.e the HTTP authentication type) and store the retrieved metadata from the header</td></tr>
@@ -232,8 +235,11 @@ Header defines</h2></td></tr>
 -1 - Failure</dd></dl>
 <p><b>Refer to</b> <a class="el" href="group__http_conf.html#gae9912e7808e5d0674afa85487ec85387" title="Initialize HTTPs client parameters.">azx_http_initialize()</a> <a class="el" href="group__http_conf.html#gae40751f148308705cd22ee69282afbe8" title="Initialize SSL data.">azx_http_SSLInit()</a> azx_http_set_CB()</p>
 <p><b>Sample usage</b> </p><div class="fragment"><div class="line"><a class="code" href="struct_a_z_x___h_t_t_p___i_n_f_o.html">AZX_HTTP_INFO</a> hi;</div>
+<div class="line"><span class="keywordtype">char</span> respRange[100] = {0};</div>
 <div class="line">memset(&amp;hi, 0, <span class="keyword">sizeof</span>(HTTP_INFO));</div>
 <div class="line">hi.request.<a class="code" href="struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#ac565c09c8ffb02b02a1b044edd2ca85d">auth_type</a> = AuthSchemaBasic;</div>
+<div class="line">hi.request.<a class="code" href="struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#a9687233503e8c210a5fa8c84b990fb27">content_range</a> = (<span class="keywordtype">char</span> *)<span class="stringliteral">&quot;0-50&quot;</span>;</div>
+<div class="line">hi.response.<a class="code" href="struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#a9687233503e8c210a5fa8c84b990fb27">content_range</a> = respRange;</div>
 <div class="line"><a class="code" href="group__http_usage.html#ga5af72b34cc3de7e623f3c9240f6ec0d0">azx_http_get</a>(&amp;hi,<span class="stringliteral">&quot;http://guest:guest@jigsaw.w3.org/HTTP/Basic/&quot;</span>);</div>
 </div><!-- fragment --> <dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_https_example_8c-example.html#a18">azx_https_example.c</a>.</dd>
 </dl>
@@ -338,7 +344,7 @@ Header defines</h2></td></tr>
 <p>Run a HTTP POST request using the URL info and the additional info stored in HTTP_INFO info</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">hi</td><td><a class="el" href="struct_a_z_x___h_t_t_p___i_n_f_o.html" title="The HTTP operation structure.">AZX_HTTP_INFO</a> struct used to provide additional data for the request (i.e the POST data) and store the retrieved metadata from the header</td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">hi</td><td><a class="el" href="struct_a_z_x___h_t_t_p___i_n_f_o.html" title="The HTTP operation structure.">AZX_HTTP_INFO</a> struct used to provide additional data for the request (i.e the POST data) and its content_length and store the retrieved metadata from the header</td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">url</td><td>the URL to parse for the HTTP request</td></tr>
   </table>
   </dd>
@@ -353,18 +359,74 @@ Header defines</h2></td></tr>
 <div class="line">hi.request.<a class="code" href="struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#a4b8018e0fa63244f5d16181874ef996b">post_data</a> = (<span class="keywordtype">char</span> *)m2mb_os_malloc(<span class="keyword">sizeof</span>(<span class="keywordtype">char</span>)* (strlen(data) + 1));</div>
 <div class="line">memset(hi.request.<a class="code" href="struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#a4b8018e0fa63244f5d16181874ef996b">post_data</a>, 0, <span class="keyword">sizeof</span>(<span class="keyword">sizeof</span>(<span class="keywordtype">char</span>)* (strlen(data) + 1)));</div>
 <div class="line">strcpy(hi.request.<a class="code" href="struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#a4b8018e0fa63244f5d16181874ef996b">post_data</a>,data);</div>
+<div class="line">hi.request.<a class="code" href="struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#aeeb62bb853b0d76ce1c8c3bb8bdc4cea">content_length</a> = strlen(hi.request.<a class="code" href="struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#a4b8018e0fa63244f5d16181874ef996b">post_data</a>);</div>
 <div class="line">ret = <a class="code" href="group__http_usage.html#ga468c6015a239492a88c0c530fe73d973">azx_http_post</a>(&amp;hi,(<span class="keywordtype">char</span> *)<span class="stringliteral">&quot;http://postman-echo.com:80/post&quot;</span>);</div>
+</div><!-- fragment --> 
+</div>
+</div>
+<a id="ga296106c2ccb99b6c3f37cefe8bd75b2b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga296106c2ccb99b6c3f37cefe8bd75b2b">&#9670;&nbsp;</a></span>azx_http_post_file()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int azx_http_post_file </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_a_z_x___h_t_t_p___i_n_f_o.html">AZX_HTTP_INFO</a> *&#160;</td>
+          <td class="paramname"><em>hi</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>url</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>filepath</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Run a HTTP POST request for a local file. </p>
+<p>Run a HTTP POST request using the URL info, sending the provided local file</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">hi</td><td><a class="el" href="struct_a_z_x___h_t_t_p___i_n_f_o.html" title="The HTTP operation structure.">AZX_HTTP_INFO</a> struct used to perform the request and store the retrieved metadata from the header</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">url</td><td>the URL to parse for the HTTP request</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">filepath</td><td>path to the local file to be POSTed.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>HTTP response code - Ok </dd>
+<dd>
+-1 - Failure</dd></dl>
+<p><b>Refer to</b> <a class="el" href="group__http_conf.html#gae9912e7808e5d0674afa85487ec85387" title="Initialize HTTPs client parameters.">azx_http_initialize()</a> <a class="el" href="group__http_conf.html#gae40751f148308705cd22ee69282afbe8" title="Initialize SSL data.">azx_http_SSLInit()</a> azx_http_set_CB()</p>
+<p><b>Sample usage</b> </p><div class="fragment"><div class="line"><a class="code" href="struct_a_z_x___h_t_t_p___i_n_f_o.html">AZX_HTTP_INFO</a> hi;</div>
+<div class="line">memset(&amp;hi, 0, <span class="keyword">sizeof</span>(<a class="code" href="struct_a_z_x___h_t_t_p___i_n_f_o.html">AZX_HTTP_INFO</a>));</div>
+<div class="line">ret = <a class="code" href="group__http_usage.html#ga296106c2ccb99b6c3f37cefe8bd75b2b">azx_http_post_file</a>(&amp;hi,(<span class="keywordtype">char</span> *)<span class="stringliteral">&quot;http://postman-echo.com:80/post&quot;</span>, <span class="stringliteral">&quot;/mod/myfile.txt);</span></div>
 </div><!-- fragment --> 
 </div>
 </div>
 </div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="astruct_a_z_x___h_t_t_p___i_n_f_o_html"><div class="ttname"><a href="struct_a_z_x___h_t_t_p___i_n_f_o.html">AZX_HTTP_INFO</a></div><div class="ttdoc">The HTTP operation structure.</div><div class="ttdef"><b>Definition:</b> azx_https.h:258</div></div>
-<div class="ttc" id="astruct_a_z_x___h_t_t_p___h_e_a_d_e_r_html_a4b8018e0fa63244f5d16181874ef996b"><div class="ttname"><a href="struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#a4b8018e0fa63244f5d16181874ef996b">AZX_HTTP_HEADER::post_data</a></div><div class="ttdeci">char * post_data</div><div class="ttdef"><b>Definition:</b> azx_https.h:113</div></div>
+<div class="ttc" id="astruct_a_z_x___h_t_t_p___i_n_f_o_html"><div class="ttname"><a href="struct_a_z_x___h_t_t_p___i_n_f_o.html">AZX_HTTP_INFO</a></div><div class="ttdoc">The HTTP operation structure.</div><div class="ttdef"><b>Definition:</b> azx_https.h:259</div></div>
+<div class="ttc" id="astruct_a_z_x___h_t_t_p___h_e_a_d_e_r_html_a4b8018e0fa63244f5d16181874ef996b"><div class="ttname"><a href="struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#a4b8018e0fa63244f5d16181874ef996b">AZX_HTTP_HEADER::post_data</a></div><div class="ttdeci">char * post_data</div><div class="ttdef"><b>Definition:</b> azx_https.h:112</div></div>
 <div class="ttc" id="agroup__http_usage_html_ga5717de1767a336a315469ea5c2c8e0a8"><div class="ttname"><a href="group__http_usage.html#ga5717de1767a336a315469ea5c2c8e0a8">azx_http_head</a></div><div class="ttdeci">int azx_http_head(AZX_HTTP_INFO *hi, char *url)</div><div class="ttdoc">Run a HTTP HEAD request.</div></div>
+<div class="ttc" id="astruct_a_z_x___h_t_t_p___h_e_a_d_e_r_html_a9687233503e8c210a5fa8c84b990fb27"><div class="ttname"><a href="struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#a9687233503e8c210a5fa8c84b990fb27">AZX_HTTP_HEADER::content_range</a></div><div class="ttdeci">char * content_range</div><div class="ttdef"><b>Definition:</b> azx_https.h:115</div></div>
 <div class="ttc" id="astruct_a_z_x___h_t_t_p___h_e_a_d_e_r_html_ac565c09c8ffb02b02a1b044edd2ca85d"><div class="ttname"><a href="struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#ac565c09c8ffb02b02a1b044edd2ca85d">AZX_HTTP_HEADER::auth_type</a></div><div class="ttdeci">AZX_HTTP_AUTH_SCHEMA auth_type</div><div class="ttdef"><b>Definition:</b> azx_https.h:102</div></div>
 <div class="ttc" id="agroup__http_usage_html_ga5af72b34cc3de7e623f3c9240f6ec0d0"><div class="ttname"><a href="group__http_usage.html#ga5af72b34cc3de7e623f3c9240f6ec0d0">azx_http_get</a></div><div class="ttdeci">int azx_http_get(AZX_HTTP_INFO *hi, char *url)</div><div class="ttdoc">Run a HTTP GET request.</div></div>
 <div class="ttc" id="agroup__http_usage_html_ga468c6015a239492a88c0c530fe73d973"><div class="ttname"><a href="group__http_usage.html#ga468c6015a239492a88c0c530fe73d973">azx_http_post</a></div><div class="ttdeci">int azx_http_post(AZX_HTTP_INFO *hi, char *url)</div><div class="ttdoc">Run a HTTP POST request.</div></div>
+<div class="ttc" id="astruct_a_z_x___h_t_t_p___h_e_a_d_e_r_html_aeeb62bb853b0d76ce1c8c3bb8bdc4cea"><div class="ttname"><a href="struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#aeeb62bb853b0d76ce1c8c3bb8bdc4cea">AZX_HTTP_HEADER::content_length</a></div><div class="ttdeci">long content_length</div><div class="ttdef"><b>Definition:</b> azx_https.h:105</div></div>
+<div class="ttc" id="agroup__http_usage_html_ga296106c2ccb99b6c3f37cefe8bd75b2b"><div class="ttname"><a href="group__http_usage.html#ga296106c2ccb99b6c3f37cefe8bd75b2b">azx_http_post_file</a></div><div class="ttdeci">int azx_http_post_file(AZX_HTTP_INFO *hi, char *url, char *filepath)</div><div class="ttdoc">Run a HTTP POST request for a local file.</div></div>
 <!-- HTML footer for doxygen 1.8.15-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

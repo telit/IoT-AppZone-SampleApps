@@ -5,7 +5,7 @@
 #define HDR_AZX_LOG_H_
 /**
  * @file azx_log.h
- * @version 1.0.9
+ * @version 1.1.0
  * @dependencies 
  * @author Fabio Pintus
  * @author Ioannis Demetriou
@@ -210,6 +210,27 @@ void azx_log_setLevel(AZX_LOG_LEVEL_E level);
  */
 AZX_LOG_LEVEL_E azx_log_getLevel(void);
 
+
+/**
+ * @brief Puts the UART used for logs in power OFF mode
+ *
+ *
+ * @return 0 in case of success, -1 otherwise
+ *
+ * @see azx_log_init()
+ */
+INT32 azx_log_disableUart(void);
+
+/**
+ * @brief Puts the UART used for logs in power ON mode
+ *
+ *
+ * @return 0 in case of success, -1 otherwise
+ *
+ * @see azx_log_init()
+ */
+INT32 azx_log_enableUart(void);
+
 /**
  * @brief Gets the logging component to output to a file.
  *
@@ -254,7 +275,7 @@ void azx_log_flush_to_file(void);
  * If disabled, these messages will be printed using the internal
  * m2mb_trace.h API.
  */
-#ifdef AZX_LOG_ENABLE
+#ifndef AZX_LOG_DISABLE
 
 /** @cond DEV */
 #if AZX_LOG_ENABLE_COLOURS
@@ -306,26 +327,33 @@ void azx_log_flush_to_file(void);
 /** @} */
 /** @} */
 
-#else /* !AZX_LOG_ENABLE */
-
-#include "m2mb_types.h"
-#include "m2mb_trace.h"
-
+#else /* AZX_LOG_DISABLE */
 /**
  * @brief Call this at your AZ entry point to easily configure logging
  */
-#define AZX_LOG_INIT() do { \
-  m2mb_trace_init(); \
-  m2mb_trace_enable(M2MB_TC_M2M_USER); \
-} while(0)
+#define AZX_LOG_INIT()
 
-#define AZX_LOG_CRITICAL(a...) m2mb_trace_file_line_printf(__FILE__, __LINE__, M2MB_TC_M2M_USER, M2MB_TL_FATAL, (CHAR*)a)
-#define AZX_LOG_ERROR(a...)    m2mb_trace_file_line_printf(__FILE__, __LINE__, M2MB_TC_M2M_USER, M2MB_TL_ERROR, (CHAR*)a)
-#define AZX_LOG_WARN(a...)     m2mb_trace_file_line_printf(__FILE__, __LINE__, M2MB_TC_M2M_USER, M2MB_TL_WARNING, (CHAR*)a)
-#define AZX_LOG_INFO(a...)     m2mb_trace_file_line_printf(__FILE__, __LINE__, M2MB_TC_M2M_USER, M2MB_TL_LOG, (CHAR*)a)
-#define AZX_LOG_DEBUG(a...)    m2mb_trace_file_line_printf(__FILE__, __LINE__, M2MB_TC_M2M_USER, M2MB_TL_DEBUG, (CHAR*)a)
+#define AZX_LOG_CRITICAL(a...)
+#define AZX_LOG_ERROR(a...)
+#define AZX_LOG_WARN(a...)
+#define AZX_LOG_INFO(a...)
+#define AZX_LOG_DEBUG(a...)
 #define AZX_LOG_TRACE(a...)
+#endif /* AZX_LOG_DISABLE */
 
-#endif /* AZX_LOG_ENABLE */
+/**
+ * @brief Wrapping macros that can be called with parameters wrapped in double parentheses to be ISO C89/C90 standard compliant.
+ *
+ * e.g. LogInfo(("hello world %d", var));
+ */
+/**/
+#define LogCritical(a)  AZX_LOG_CRITICAL a
+#define LogError(a)     AZX_LOG_ERROR a
+#define LogWarn(a)      AZX_LOG_WARN a
+#define LogInfo(a)      AZX_LOG_INFO a
+#define LogDebug(a)     AZX_LOG_DEBUG a
+#define LogTrace(a)     AZX_LOG_TRACE a
+
 /** @} */
+
 #endif /* HDR_AZX_LOG_H_ */

@@ -65,7 +65,7 @@ void M2MB_main( int argc, char **argv )
   (void)argv;
   
   
-  INT8 taskID;
+  INT32 taskID;
 
   azx_tasks_init();
 

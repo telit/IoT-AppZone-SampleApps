@@ -5,8 +5,6 @@ var azx__gnu__sys__types_8h =
     [ "__u_long_defined", "azx__gnu__sys__types_8h.html#aa533eb809f1d84d5be96986d09c3d82c", null ],
     [ "__u_short_defined", "azx__gnu__sys__types_8h.html#acc6532a77aea8a0cc93a3595abcbe2b2", null ],
     [ "_BSDTYPES_DEFINED", "azx__gnu__sys__types_8h.html#a1a4e27cc21ecdbd9a738a8e9e340e4fd", null ],
-    [ "fd_set", "azx__gnu__sys__types_8h.html#a7acea921b59df1dc48b89b21ecfa446b", null ],
-    [ "fds_bits", "azx__gnu__sys__types_8h.html#adc54b31687655b483505806432677ba5", null ],
     [ "u_char", "azx__gnu__sys__types_8h.html#ae2b02ed168fc99cff3851603910b1fb6", null ],
     [ "u_int", "azx__gnu__sys__types_8h.html#ac319c165d52643e43249fe003e18bdf3", null ],
     [ "u_long", "azx__gnu__sys__types_8h.html#a8f25a50daf29ce2cee1ec038a4d744ea", null ],

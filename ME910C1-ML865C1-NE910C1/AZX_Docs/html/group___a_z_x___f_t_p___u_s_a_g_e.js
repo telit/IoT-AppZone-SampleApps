@@ -28,7 +28,8 @@ var group___a_z_x___f_t_p___u_s_a_g_e =
     ] ],
     [ "AZX_FTP_XFER_E", "group___a_z_x___f_t_p___u_s_a_g_e.html#ga93677062f9160355dea103b8049695f2", [
       [ "AZX_FTP_XFER_FILE", "group___a_z_x___f_t_p___u_s_a_g_e.html#gga93677062f9160355dea103b8049695f2ac9f6fc2bf068a4a3f96e6eff260c3d27", null ],
-      [ "AZX_FTP_XFER_BUFF", "group___a_z_x___f_t_p___u_s_a_g_e.html#gga93677062f9160355dea103b8049695f2a5902786cfaa7660a0a2f89d084ce22ff", null ]
+      [ "AZX_FTP_XFER_BUFF", "group___a_z_x___f_t_p___u_s_a_g_e.html#gga93677062f9160355dea103b8049695f2a5902786cfaa7660a0a2f89d084ce22ff", null ],
+      [ "AZX_FTP_XFER_MAX", "group___a_z_x___f_t_p___u_s_a_g_e.html#gga93677062f9160355dea103b8049695f2ad539bce8f02fdec09cd3b2f279e27735", null ]
     ] ],
     [ "azx_ftp_cdUp", "group___a_z_x___f_t_p___u_s_a_g_e.html#ga14bdbe2e63b0c3a7eaf7d2ede2befa11", null ],
     [ "azx_ftp_chdir", "group___a_z_x___f_t_p___u_s_a_g_e.html#gaf9617c8c28b79495063d2259ee56e10f", null ],

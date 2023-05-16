@@ -34,7 +34,7 @@
   <td id="projectlogo"><img alt="Logo" src="telit-logo.png"/></td>
   <td id="projectalign" style="padding-left: 2em;">
    <div id="projectname">AZX (AppZone eXtensions) documentation
-   &#160;<span id="projectnumber">1.1.15-CxL</span>
+   &#160;<span id="projectnumber">1.1.19-CxL</span>
    </div>
    <div id="projectbrief">A set of companion utilities that make AZ development easier</div>
   </td>
@@ -365,100 +365,101 @@ $(document).ready(function(){initNavTree('azx__pdu_common_8h_source.html','');})
 <div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;}SMS_TXT_OUT_FMT_E;</div>
 <div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160; </div>
 <div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;<span class="comment">// number format</span></div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;<span class="keyword">enum</span></div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;<span class="keyword">typedef</span> <span class="keyword">enum</span></div>
 <div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;{</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;  PDU_TYPE_NATIONAL = 0xA1,</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;  PDU_TYPE_INTERNATIONAL = 0x91,</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;  PDU_TYPE_ALPHADET = 0xD0,</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;  PDU_TYPE_NETWORK = 0xB1</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;};</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160; </div>
-<div class="line"><a name="l00288"></a><span class="lineno"><a class="line" href="structpdu__struct.html">  288</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct</span></div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;{</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;  <span class="comment">// SMSC number</span></div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;  <span class="keyword">struct</span>{ uint8_t len, bytes, type, data[14]; }smsc;</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;  <span class="comment">// caller/sender number</span></div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;  <span class="keyword">struct</span>{ uint8_t len, bytes, type, data[14]; }sender;</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;  <span class="comment">// input/output zero-terminated message (7bit/8bit/UTF8)</span></div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;  <span class="keyword">struct</span>{ uint16_t len, bytes; uint8_t *data; }msg;</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160; </div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;  uint8_t first;      <span class="comment">// 1st octet of the SMS-SUBMIT message (0x11)</span></div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;  uint8_t tp_msg_ref; <span class="comment">// TP-Message-Reference. The &quot;00&quot; value here lets the phone set the message  reference number itself</span></div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;  uint8_t tp_pid;     <span class="comment">// Protocol identifier (0)</span></div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;  uint8_t tp_dcs;     <span class="comment">// Data coding scheme.This message is coded  according to the 7bit default alphabet. Having &quot;02&quot; instead of &quot;00&quot; here, would  indicate that the TP-User-Data field of this message should be interpreted as  8bit rather than 7bit (used in e.g. smart messaging, OTA provisioning etc)</span></div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;  uint8_t tp_vp;      <span class="comment">// TP-Validity-Period. &quot;AA&quot; means 4 days. Note: This  octet is optional, see bits 4 and 3 of the first  octet</span></div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160; </div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;  <span class="comment">// incoming SMS timestamp</span></div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;  uint8_t year, month, date; <span class="comment">// date</span></div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;  uint8_t hour, min, sec;    <span class="comment">// time</span></div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;  int8_t tz;                <span class="comment">// zone</span></div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160; </div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;  <span class="comment">// PDU length in bytes and for CMGS command</span></div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;  uint16_t len_bytes, len_cmgs;</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;}<a class="code" href="structpdu__struct.html">pdu_struct</a>;</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160; </div>
-<div class="line"><a name="l00312"></a><span class="lineno"><a class="line" href="structdcs__struct.html">  312</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct</span></div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;{</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160; </div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;  uint8_t smCompressed;</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;  uint8_t smAlphabet;</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;  uint8_t smClass;</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160; </div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;}<a class="code" href="structdcs__struct.html">dcs_struct</a>;</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160; </div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;<span class="keywordtype">void</span> pdu_set_output_format(SMS_TXT_OUT_FMT_E output_format);</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;SMS_TXT_OUT_FMT_E pdu_get_output_format(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;uint8_t pdu_hex_to_ascii_format (uint8_t LV_nmb);</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160; </div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;<span class="comment">// Change GSM 7-bit table to ANSI</span></div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;uint8_t pdu_corr_sym_unpack_dcs7(<span class="keywordtype">char</span> *Str, uint8_t len);</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;<span class="comment">// pack 7-bit array to 8-bit</span></div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;uint8_t pdu_7to8(uint8_t *a, uint8_t len);</div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;<span class="comment">// unpack 8-bit array to 7-bit</span></div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;uint8_t pdu_8to7(uint8_t *a, uint8_t len);</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160; </div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;<span class="comment">// convert HEX line to bytes, len - length of input buffer</span></div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;<span class="keywordtype">void</span> pdu_hex2bytes(uint8_t *h, uint16_t len, uint8_t *b);</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;<span class="comment">// convert bytes to HEX line, len - length of input buffer</span></div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;<span class="keywordtype">void</span> pdu_bytes2hex(uint8_t *b, uint16_t len, uint8_t *h);</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160; </div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;<span class="comment">// decode incoming PDU (in binary stream format) to out structure, out-&gt;msg.data points to start of incoming text</span></div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;<span class="keywordtype">void</span> pdu_in_decode_binary(uint8_t *in, uint16_t len, <a class="code" href="structpdu__struct.html">pdu_struct</a> *out);</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160; </div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;<span class="comment">// decode incoming PDU (in ASCII string format) to out structure, out-&gt;msg.data points to start of incoming text</span></div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;<span class="keywordtype">void</span> pdu_in_decode(uint8_t *in, uint16_t len, <a class="code" href="structpdu__struct.html">pdu_struct</a> *out);</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;<span class="comment">// decode text PDU, in - start of incoming text, in_bytes - its length in bytes, in_dcs - Data Coding Scheme, out - output buffer, returns number of chars</span></div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;uint16_t pdu_in_decode_text(uint8_t *in, uint16_t in_bytes, uint8_t in_dcs, uint8_t *out);</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160; </div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;<span class="comment">// encode outcoming PDU</span></div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;uint16_t pdu_out_encode(<a class="code" href="structpdu__struct.html">pdu_struct</a> *in, uint8_t *out);</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;<span class="comment">// encode outcoming PDU, simple interface</span></div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;uint16_t pdu_out_encode_simple(<a class="code" href="structpdu__struct.html">pdu_struct</a> *pdu, uint8_t *out, <span class="keywordtype">void</span> *sender, <span class="keywordtype">void</span> *msg, uint8_t tp_vp, <span class="keywordtype">int</span> dsc);</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160; </div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;<span class="comment">// pack text phone number to bytes, returns number of packed digits (11/12), not including terminating F</span></div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;uint8_t pdu_phone_pack(uint8_t *in, uint8_t *out);</div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;<span class="comment">// unpack phone number to string, returns number of unpacked digits</span></div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;uint8_t pdu_phone_unpack(uint8_t *in, uint8_t len, uint8_t *out, uint8_t type);</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;<span class="comment">// check if phone is packed</span></div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;uint8_t pdu_phone_is_packed(uint8_t *phone);</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160; </div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;<span class="comment">// get number of bytes from number of digits</span></div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;uint8_t pdu_phone_digits_bytes(uint8_t digits);</div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;<span class="comment">// get number of bytes of packed phone</span></div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;uint8_t pdu_phone_bytes(uint8_t *in);</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;<span class="comment">// count number of digits</span></div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;uint8_t pdu_phone_digits(uint8_t *in, uint8_t bytes);</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160; </div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;<span class="comment">// compare 2 packed phones</span></div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;uint8_t pdu_phone_cmp(uint8_t *in1, uint8_t in1_bytes, uint8_t *in2, uint8_t in2_bytes);</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;<span class="comment">// copy packed phone</span></div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;<span class="keywordtype">void</span> pdu_phone_copy(uint8_t *in, uint8_t *out);</div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160; </div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* AZX_PDU_CODEC_AZX_PDUCOMMON_H_ */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;  PDU_TYPE_UNKNOWN       = 0x81,</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;  PDU_TYPE_NATIONAL      = 0xA1,</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;  PDU_TYPE_INTERNATIONAL = 0x91,</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;  PDU_TYPE_ALPHADET      = 0xD0,</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;  PDU_TYPE_NETWORK       = 0xB1</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;} AZX_SMS_ADDR_NUM_TYPE_E;</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160; </div>
+<div class="line"><a name="l00289"></a><span class="lineno"><a class="line" href="structpdu__struct.html">  289</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct</span></div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;{</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;  <span class="comment">// SMSC number</span></div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;  <span class="keyword">struct</span>{ uint8_t len, bytes, type, data[14]; }smsc;</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;  <span class="comment">// caller/sender number</span></div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;  <span class="keyword">struct</span>{ uint8_t len, bytes, type, data[14]; }sender;</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;  <span class="comment">// input/output zero-terminated message (7bit/8bit/UTF8)</span></div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;  <span class="keyword">struct</span>{ uint16_t len, bytes; uint8_t *data; }msg;</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160; </div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;  uint8_t first;      <span class="comment">// 1st octet of the SMS-SUBMIT message (0x11)</span></div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;  uint8_t tp_msg_ref; <span class="comment">// TP-Message-Reference. The &quot;00&quot; value here lets the phone set the message  reference number itself</span></div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;  uint8_t tp_pid;     <span class="comment">// Protocol identifier (0)</span></div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;  uint8_t tp_dcs;     <span class="comment">// Data coding scheme.This message is coded  according to the 7bit default alphabet. Having &quot;02&quot; instead of &quot;00&quot; here, would  indicate that the TP-User-Data field of this message should be interpreted as  8bit rather than 7bit (used in e.g. smart messaging, OTA provisioning etc)</span></div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;  uint8_t tp_vp;      <span class="comment">// TP-Validity-Period. &quot;AA&quot; means 4 days. Note: This  octet is optional, see bits 4 and 3 of the first  octet</span></div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160; </div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;  <span class="comment">// incoming SMS timestamp</span></div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;  uint8_t year, month, date; <span class="comment">// date</span></div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;  uint8_t hour, min, sec;    <span class="comment">// time</span></div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;  int8_t tz;                <span class="comment">// zone</span></div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160; </div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;  <span class="comment">// PDU length in bytes and for CMGS command</span></div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;  uint16_t len_bytes, len_cmgs;</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;}<a class="code" href="structpdu__struct.html">pdu_struct</a>;</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160; </div>
+<div class="line"><a name="l00313"></a><span class="lineno"><a class="line" href="structdcs__struct.html">  313</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct</span></div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;{</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160; </div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;  uint8_t smCompressed;</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;  uint8_t smAlphabet;</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;  uint8_t smClass;</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160; </div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;}<a class="code" href="structdcs__struct.html">dcs_struct</a>;</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160; </div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;<span class="keywordtype">void</span> pdu_set_output_format(SMS_TXT_OUT_FMT_E output_format);</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;SMS_TXT_OUT_FMT_E pdu_get_output_format(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;uint8_t pdu_hex_to_ascii_format (uint8_t LV_nmb);</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160; </div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;<span class="comment">// Change GSM 7-bit table to ANSI</span></div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;uint8_t pdu_corr_sym_unpack_dcs7(<span class="keywordtype">char</span> *Str, uint8_t len);</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;<span class="comment">// pack 7-bit array to 8-bit</span></div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;uint8_t pdu_7to8(uint8_t *a, uint8_t len);</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;<span class="comment">// unpack 8-bit array to 7-bit</span></div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;uint8_t pdu_8to7(uint8_t *a, uint8_t len);</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160; </div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;<span class="comment">// convert HEX line to bytes, len - length of input buffer</span></div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;<span class="keywordtype">void</span> pdu_hex2bytes(uint8_t *h, uint16_t len, uint8_t *b);</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;<span class="comment">// convert bytes to HEX line, len - length of input buffer</span></div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;<span class="keywordtype">void</span> pdu_bytes2hex(uint8_t *b, uint16_t len, uint8_t *h);</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160; </div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;<span class="comment">// decode incoming PDU (in binary stream format) to out structure, out-&gt;msg.data points to start of incoming text</span></div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;<span class="keywordtype">void</span> pdu_in_decode_binary(uint8_t *in, uint16_t len, <a class="code" href="structpdu__struct.html">pdu_struct</a> *out);</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160; </div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;<span class="comment">// decode incoming PDU (in ASCII string format) to out structure, out-&gt;msg.data points to start of incoming text</span></div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;<span class="keywordtype">void</span> pdu_in_decode(uint8_t *in, uint16_t len, <a class="code" href="structpdu__struct.html">pdu_struct</a> *out);</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;<span class="comment">// decode text PDU, in - start of incoming text, in_bytes - its length in bytes, in_dcs - Data Coding Scheme, out - output buffer, returns number of chars</span></div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;uint16_t pdu_in_decode_text(uint8_t *in, uint16_t in_bytes, uint8_t in_dcs, uint8_t *out);</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160; </div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;<span class="comment">// encode outcoming PDU</span></div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;uint16_t pdu_out_encode(<a class="code" href="structpdu__struct.html">pdu_struct</a> *in, uint8_t *out);</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;<span class="comment">// encode outcoming PDU, simple interface</span></div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;uint16_t pdu_out_encode_simple(<a class="code" href="structpdu__struct.html">pdu_struct</a> *pdu, uint8_t *out, AZX_SMS_ADDR_NUM_TYPE_E type, <span class="keywordtype">void</span> *sender, <span class="keywordtype">void</span> *msg, uint8_t tp_vp, <span class="keywordtype">int</span> dsc);</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160; </div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;<span class="comment">// pack text phone number to bytes, returns number of packed digits (11/12), not including terminating F</span></div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;uint8_t pdu_phone_pack(uint8_t *in, uint8_t *out);</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;<span class="comment">// unpack phone number to string, returns number of unpacked digits</span></div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;uint8_t pdu_phone_unpack(uint8_t *in, uint8_t len, uint8_t *out, uint8_t type);</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;<span class="comment">// check if phone is packed</span></div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;uint8_t pdu_phone_is_packed(uint8_t *phone);</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160; </div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;<span class="comment">// get number of bytes from number of digits</span></div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;uint8_t pdu_phone_digits_bytes(uint8_t digits);</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;<span class="comment">// get number of bytes of packed phone</span></div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;uint8_t pdu_phone_bytes(uint8_t *in);</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;<span class="comment">// count number of digits</span></div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;uint8_t pdu_phone_digits(uint8_t *in, uint8_t bytes);</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160; </div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;<span class="comment">// compare 2 packed phones</span></div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;uint8_t pdu_phone_cmp(uint8_t *in1, uint8_t in1_bytes, uint8_t *in2, uint8_t in2_bytes);</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;<span class="comment">// copy packed phone</span></div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;<span class="keywordtype">void</span> pdu_phone_copy(uint8_t *in, uint8_t *out);</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160; </div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* AZX_PDU_CODEC_AZX_PDUCOMMON_H_ */</span><span class="preprocessor"></span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="astructdcs__struct_html"><div class="ttname"><a href="structdcs__struct.html">dcs_struct</a></div><div class="ttdef"><b>Definition:</b> azx_pduCommon.h:312</div></div>
-<div class="ttc" id="astructpdu__struct_html"><div class="ttname"><a href="structpdu__struct.html">pdu_struct</a></div><div class="ttdef"><b>Definition:</b> azx_pduCommon.h:288</div></div>
+<div class="ttc" id="astructdcs__struct_html"><div class="ttname"><a href="structdcs__struct.html">dcs_struct</a></div><div class="ttdef"><b>Definition:</b> azx_pduCommon.h:313</div></div>
+<div class="ttc" id="astructpdu__struct_html"><div class="ttname"><a href="structpdu__struct.html">pdu_struct</a></div><div class="ttdef"><b>Definition:</b> azx_pduCommon.h:289</div></div>
 <!-- HTML footer for doxygen 1.8.15-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

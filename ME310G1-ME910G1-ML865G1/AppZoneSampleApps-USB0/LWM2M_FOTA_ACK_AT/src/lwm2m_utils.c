@@ -11,7 +11,7 @@
   @details
 
   @version
-    1.0.0
+    1.0.1
   @note
 
 
@@ -287,7 +287,6 @@ INT32 get_resource(M2MB_LWM2M_HANDLE h, M2MB_LWM2M_OBJ_URI_T *uri, void *inbuf, 
       }
       else
       {
-
         res = 0;
       }
     }
@@ -727,6 +726,7 @@ INT32 get_write_only_opaque_resource(M2MB_LWM2M_HANDLE h, M2MB_LWM2M_OBJ_URI_T *
 INT32 get_write_only_string_resource(M2MB_LWM2M_HANDLE h, M2MB_LWM2M_OBJ_URI_T *pUri, CHAR *string, UINT16 string_max_size)
 {
   UINT16 dataLen = string_max_size;
+  INT32 res;
   if(pUri->uriLen == M2MB_LWM2M_URI_3_FIELDS)
   {
     AZX_LOG_INFO("\r\nGetting string resource {%u/%u/%u} value on LWM2M client.\r\n",
@@ -738,7 +738,12 @@ INT32 get_write_only_string_resource(M2MB_LWM2M_HANDLE h, M2MB_LWM2M_OBJ_URI_T *
         pUri->obj, pUri->objInst, pUri->resource, pUri->resourceInst);
   }
 
-  return get_resource(h, pUri, string, &dataLen );
+  res = get_resource(h, pUri, string, &dataLen );
+  if (res == 0 && dataLen < string_max_size)
+  {
+    string[dataLen] = 0;
+  }
+  return res;
 }
 
 
@@ -880,6 +885,7 @@ INT32 read_rw_opaque_resource(M2MB_LWM2M_HANDLE h, M2MB_LWM2M_OBJ_URI_T *pUri, U
 INT32 read_rw_string_resource(M2MB_LWM2M_HANDLE h, M2MB_LWM2M_OBJ_URI_T *pUri, CHAR *string, UINT16 string_max_size)
 {
   UINT16 dataLen = string_max_size;
+  INT32 res;
   if(pUri->uriLen == M2MB_LWM2M_URI_3_FIELDS)
   {
     AZX_LOG_INFO("\r\nReading string resource {%u/%u/%u} value on LWM2M client.\r\n",
@@ -891,7 +897,12 @@ INT32 read_rw_string_resource(M2MB_LWM2M_HANDLE h, M2MB_LWM2M_OBJ_URI_T *pUri, C
         pUri->obj, pUri->objInst, pUri->resource, pUri->resourceInst);
   }
 
-  return read_resource(h, pUri, string, &dataLen );
+  res = read_resource(h, pUri, string, &dataLen );
+  if (res == 0 && dataLen < string_max_size)
+  {
+    string[dataLen] = 0;
+  }
+  return res;
 }
 
 /**/

@@ -14,7 +14,7 @@
     Sample application showing how to communicate with a MicroChip 24AA256T I2C EEPROM chip using azx eeprom utility APIs. Debug prints on USB0
     
   @version 
-    1.0.0
+    1.0.1
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -53,7 +53,7 @@ int run_I2C_EEPROM_Demo(void)
 
   INT32 res;
   EEPROM_I2C_T i2c_h = {0};
-  AZX_EEPROM_T AA256_h = {0};
+  AZX_EEPROM_T AA256_h = {{0}};
 
   UINT8 buffer[257] = {0};
   UINT16 randomAddr = 0x0213;

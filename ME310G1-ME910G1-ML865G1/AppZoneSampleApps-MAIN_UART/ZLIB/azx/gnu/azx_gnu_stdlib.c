@@ -1,4 +1,4 @@
-/*Copyright (C) 2020 Telit Communications S.p.A. Italy - All Rights Reserved.*/
+/*Copyright (C) 2022 Telit Communications S.p.A. Italy - All Rights Reserved.*/
 /*    See LICENSE file in the project root for full license information.     */
 
 /**
@@ -35,12 +35,14 @@
 #include "m2mb_os_types.h"
 #include "m2mb_os_api.h"
 #include "m2mb_os.h"
-#include "azx_gnu_stdio.h"
+#include "m2mb_fs_stdio.h"
+#include "m2mb_appMng.h"
 
 #include "azx_log.h"
 
-/* Function prototypes and Local defines ========================================================*/
+#include "azx_gnu_stdio.h"
 #include "azx_gnu_stdlib.h"
+/* Function prototypes and Local defines ========================================================*/
 
 
 /* Function definition ==========================================================================*/
@@ -108,3 +110,17 @@ void * azx_gnu_realloc(void * ptr, size_t size)
 	}
 }
 
+void azx_gnu_exit(int status)
+{
+  M2MB_APPMNG_HANDLE myappHandle = NULL;
+  M2MB_APPMNG_RESULT_E appRes;
+  myappHandle = m2mb_appMng_getMyHandle();
+
+  AZX_LOG_TRACE("Exit with status %d\r\n", status);
+  appRes = m2mb_appMng_stop(myappHandle);
+  if( appRes != M2MB_APPMNG_RESULT_SUCCESS )
+  {
+    AZX_LOG_CRITICAL("m2mb_appMng_stop failure, error %d\r\n", appRes);
+  }
+
+}

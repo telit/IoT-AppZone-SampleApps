@@ -38,9 +38,6 @@
 #include "app_cfg.h"
 
 
-
-
-
 /* Local defines ================================================================================*/
 
 /* Local typedefs ===============================================================================*/
@@ -63,9 +60,9 @@ void M2MB_main( int argc, char **argv )
 {
   (void)argc;
   (void)argv;
-  
-  
-  INT8 taskID;
+
+
+  INT32 taskID;
 
   azx_tasks_init();
 
@@ -80,9 +77,9 @@ void M2MB_main( int argc, char **argv )
   taskID = azx_tasks_createTask((char*) "FTP_TASK", AZX_TASKS_STACK_XL, 1, AZX_TASKS_MBOX_S, msgFTPTask);
 
   AZX_LOG_TRACE("Task ID: %d.\r\n", taskID);
-  
+
   azx_sleep_ms(1000);
-  
+
   if (taskID > 0)
   {
     azx_tasks_sendMessageToTask( taskID, INIT, 0, 0);

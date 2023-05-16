@@ -282,6 +282,7 @@ void MYINPUT_INPUT_AT_Callback( M2MB_ATP_HANDLE atpHandle, UINT16 atpI, M2MB_ATP
 
     case BUFF_OF:
       AZX_LOG_ERROR("Buffer overflow\r\n");
+      at_cmd_InputModeEnd( pInput );
       AZX_EASY_AT_RELEASE_WITH_CMEE( &hdls, M2MB_ATP_CME_OPERATION_NOT_ALLOWED, NULL );
       break;
 
@@ -297,8 +298,5 @@ void MYINPUT_INPUT_AT_Callback( M2MB_ATP_HANDLE atpHandle, UINT16 atpI, M2MB_ATP
   default:
     break;
   }
-
-
-
 
 }

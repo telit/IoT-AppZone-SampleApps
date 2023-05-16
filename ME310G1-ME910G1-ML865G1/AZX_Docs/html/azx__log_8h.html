@@ -34,7 +34,7 @@
   <td id="projectlogo"><img alt="Logo" src="telit-logo.png"/></td>
   <td id="projectalign" style="padding-left: 2em;">
    <div id="projectname">AZX (AppZone eXtensions) documentation
-   &#160;<span id="projectnumber">1.1.15-CxL</span>
+   &#160;<span id="projectnumber">1.1.19-CxL</span>
    </div>
    <div id="projectbrief">A set of companion utilities that make AZ development easier</div>
   </td>
@@ -104,15 +104,13 @@ $(document).ready(function(){initNavTree('azx__log_8h.html','');});
 <p>Logging utilities to print on available output channels.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;m2mb_types.h&quot;</code><br />
-<code>#include &quot;m2mb_trace.h&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for azx_log.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="azx__log_8h__incl.png" border="0" usemap="#hdr_2azx__log_8h" alt=""/></div>
 <map name="hdr_2azx__log_8h" id="hdr_2azx__log_8h">
-<area shape="rect" title="Logging utilities to print on available output channels." alt="" coords="75,5,175,32"/>
+<area shape="rect" title="Logging utilities to print on available output channels." alt="" coords="9,5,109,32"/>
 <area shape="rect" title=" " alt="" coords="5,80,113,107"/>
-<area shape="rect" title=" " alt="" coords="137,80,243,107"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -139,24 +137,39 @@ Macros</h2></td></tr>
 <tr class="memitem:a4af7b5c67a5df4ffbcafe9a91a4677bc"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azx__log_8h.html#a4af7b5c67a5df4ffbcafe9a91a4677bc">AZX_LOG_INIT</a>()</td></tr>
 <tr class="memdesc:a4af7b5c67a5df4ffbcafe9a91a4677bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Application logs are printed to the specified channel.  <a href="azx__log_8h.html#a4af7b5c67a5df4ffbcafe9a91a4677bc">More...</a><br /></td></tr>
 <tr class="separator:a4af7b5c67a5df4ffbcafe9a91a4677bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4cbebf6589190814b5ee9adb22bb1d44"><td class="memItemLeft" align="right" valign="top"><a id="a4cbebf6589190814b5ee9adb22bb1d44"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>AZX_LOG_CRITICAL</b>(a...)&#160;&#160;&#160;m2mb_trace_file_line_printf(__FILE__, __LINE__, M2MB_TC_M2M_USER, M2MB_TL_FATAL, (CHAR*)a)</td></tr>
-<tr class="separator:a4cbebf6589190814b5ee9adb22bb1d44"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a81e4f03b2a752e5e9cfae1e037ce7256"><td class="memItemLeft" align="right" valign="top"><a id="a81e4f03b2a752e5e9cfae1e037ce7256"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>AZX_LOG_ERROR</b>(a...)&#160;&#160;&#160;m2mb_trace_file_line_printf(__FILE__, __LINE__, M2MB_TC_M2M_USER, M2MB_TL_ERROR, (CHAR*)a)</td></tr>
-<tr class="separator:a81e4f03b2a752e5e9cfae1e037ce7256"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a47bb701aa779a05aa34ed01fcfbbdd54"><td class="memItemLeft" align="right" valign="top"><a id="a47bb701aa779a05aa34ed01fcfbbdd54"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>AZX_LOG_WARN</b>(a...)&#160;&#160;&#160;m2mb_trace_file_line_printf(__FILE__, __LINE__, M2MB_TC_M2M_USER, M2MB_TL_WARNING, (CHAR*)a)</td></tr>
-<tr class="separator:a47bb701aa779a05aa34ed01fcfbbdd54"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a847d9b9f62e31bf14b31882be7418675"><td class="memItemLeft" align="right" valign="top"><a id="a847d9b9f62e31bf14b31882be7418675"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>AZX_LOG_INFO</b>(a...)&#160;&#160;&#160;m2mb_trace_file_line_printf(__FILE__, __LINE__, M2MB_TC_M2M_USER, M2MB_TL_LOG, (CHAR*)a)</td></tr>
-<tr class="separator:a847d9b9f62e31bf14b31882be7418675"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acd61f6160b4cd02c2ec2259b5bc94670"><td class="memItemLeft" align="right" valign="top"><a id="acd61f6160b4cd02c2ec2259b5bc94670"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>AZX_LOG_DEBUG</b>(a...)&#160;&#160;&#160;m2mb_trace_file_line_printf(__FILE__, __LINE__, M2MB_TC_M2M_USER, M2MB_TL_DEBUG, (CHAR*)a)</td></tr>
-<tr class="separator:acd61f6160b4cd02c2ec2259b5bc94670"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa85ac7254570a307564019c5dfb98d83"><td class="memItemLeft" align="right" valign="top"><a id="aa85ac7254570a307564019c5dfb98d83"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>AZX_LOG_TRACE</b>(a...)</td></tr>
-<tr class="separator:aa85ac7254570a307564019c5dfb98d83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a91920ddea804f783778fce7b4c96d6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azx__log_8h.html#a2a91920ddea804f783778fce7b4c96d6">LogCritical</a>(a)&#160;&#160;&#160;<a class="el" href="group__log_usage.html#ga4cbebf6589190814b5ee9adb22bb1d44">AZX_LOG_CRITICAL</a> a</td></tr>
+<tr class="memdesc:a2a91920ddea804f783778fce7b4c96d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapping macros that can be called with parameters wrapped in double parentheses to be ISO C89/C90 standard compliant.  <a href="azx__log_8h.html#a2a91920ddea804f783778fce7b4c96d6">More...</a><br /></td></tr>
+<tr class="separator:a2a91920ddea804f783778fce7b4c96d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbf35e008d7c6b76fc01e1b2380a8ae1"><td class="memItemLeft" align="right" valign="top"><a id="abbf35e008d7c6b76fc01e1b2380a8ae1"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>LogError</b>(a)&#160;&#160;&#160;<a class="el" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a> a</td></tr>
+<tr class="separator:abbf35e008d7c6b76fc01e1b2380a8ae1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b587f2c097f33dbe37be9f9e7b6c7ee"><td class="memItemLeft" align="right" valign="top"><a id="a5b587f2c097f33dbe37be9f9e7b6c7ee"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>LogWarn</b>(a)&#160;&#160;&#160;<a class="el" href="group__log_usage.html#ga47bb701aa779a05aa34ed01fcfbbdd54">AZX_LOG_WARN</a> a</td></tr>
+<tr class="separator:a5b587f2c097f33dbe37be9f9e7b6c7ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a744621a3732dc573f3d96b1dffaff170"><td class="memItemLeft" align="right" valign="top"><a id="a744621a3732dc573f3d96b1dffaff170"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>LogInfo</b>(a)&#160;&#160;&#160;<a class="el" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a> a</td></tr>
+<tr class="separator:a744621a3732dc573f3d96b1dffaff170"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5842005e179fdeda655d2724940a5bbd"><td class="memItemLeft" align="right" valign="top"><a id="a5842005e179fdeda655d2724940a5bbd"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>LogDebug</b>(a)&#160;&#160;&#160;<a class="el" href="group__log_usage.html#gacd61f6160b4cd02c2ec2259b5bc94670">AZX_LOG_DEBUG</a> a</td></tr>
+<tr class="separator:a5842005e179fdeda655d2724940a5bbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b3defc9cf8c6765428c67362281320e"><td class="memItemLeft" align="right" valign="top"><a id="a6b3defc9cf8c6765428c67362281320e"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>LogTrace</b>(a)&#160;&#160;&#160;<a class="el" href="group__log_usage.html#gaa85ac7254570a307564019c5dfb98d83">AZX_LOG_TRACE</a> a</td></tr>
+<tr class="separator:a6b3defc9cf8c6765428c67362281320e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Public Log Macros</div></td></tr>
+<tr><td colspan="2"><div class="groupText"><p>These function-like macros can be used to print different messages with different log levels </p>
+</div></td></tr>
+<tr class="memitem:ga4cbebf6589190814b5ee9adb22bb1d44"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__log_usage.html#ga4cbebf6589190814b5ee9adb22bb1d44">AZX_LOG_CRITICAL</a>(a...)&#160;&#160;&#160;azx_log_formatted(<a class="el" href="group__log_conf.html#ggae9fa7be40e4fcae6093707def57f82a5a51671d346b1e7d44f8993fa9d2ca174c">AZX_LOG_LEVEL_CRITICAL</a>, __FUNCTION__, __FILE__, __LINE__, a)</td></tr>
+<tr class="separator:ga4cbebf6589190814b5ee9adb22bb1d44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga81e4f03b2a752e5e9cfae1e037ce7256"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">AZX_LOG_ERROR</a>(a...)&#160;&#160;&#160;azx_log_formatted(<a class="el" href="group__log_conf.html#ggae9fa7be40e4fcae6093707def57f82a5acc52fcbd7aa2088fe583a11661b4abf2">AZX_LOG_LEVEL_ERROR</a>, __FUNCTION__, __FILE__, __LINE__, a)</td></tr>
+<tr class="separator:ga81e4f03b2a752e5e9cfae1e037ce7256"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga47bb701aa779a05aa34ed01fcfbbdd54"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__log_usage.html#ga47bb701aa779a05aa34ed01fcfbbdd54">AZX_LOG_WARN</a>(a...)&#160;&#160;&#160;azx_log_formatted(<a class="el" href="group__log_conf.html#ggae9fa7be40e4fcae6093707def57f82a5a0d4c7c18f82729850d7a1c3e35e2f0b8">AZX_LOG_LEVEL_WARN</a>, __FUNCTION__, __FILE__, __LINE__, a)</td></tr>
+<tr class="separator:ga47bb701aa779a05aa34ed01fcfbbdd54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga847d9b9f62e31bf14b31882be7418675"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">AZX_LOG_INFO</a>(a...)&#160;&#160;&#160;azx_log_formatted(<a class="el" href="group__log_conf.html#ggae9fa7be40e4fcae6093707def57f82a5a2bdb3bd46fb4a347265f0c966ded4f25">AZX_LOG_LEVEL_INFO</a>, &quot;&quot;, &quot;&quot;, 0, a)</td></tr>
+<tr class="separator:ga847d9b9f62e31bf14b31882be7418675"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gacd61f6160b4cd02c2ec2259b5bc94670"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__log_usage.html#gacd61f6160b4cd02c2ec2259b5bc94670">AZX_LOG_DEBUG</a>(a...)&#160;&#160;&#160;azx_log_formatted(<a class="el" href="group__log_conf.html#ggae9fa7be40e4fcae6093707def57f82a5aa77afa2490f92d58d965e30ce97c8048">AZX_LOG_LEVEL_DEBUG</a>, __FUNCTION__, __FILE__, __LINE__, a)</td></tr>
+<tr class="separator:gacd61f6160b4cd02c2ec2259b5bc94670"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa85ac7254570a307564019c5dfb98d83"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__log_usage.html#gaa85ac7254570a307564019c5dfb98d83">AZX_LOG_TRACE</a>(a...)&#160;&#160;&#160;azx_log_formatted(<a class="el" href="group__log_conf.html#ggae9fa7be40e4fcae6093707def57f82a5adc5cc122c3a06700e09e4c6d1cc17497">AZX_LOG_LEVEL_TRACE</a>, __FUNCTION__, __FILE__, __LINE__, a)</td></tr>
+<tr class="separator:gaa85ac7254570a307564019c5dfb98d83"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -211,6 +224,12 @@ Functions</h2></td></tr>
 <tr class="memitem:ab2c4e9406084c9f69c1314a718cc90d8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__log_conf.html#gae9fa7be40e4fcae6093707def57f82a5">AZX_LOG_LEVEL_E</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azx__log_8h.html#ab2c4e9406084c9f69c1314a718cc90d8">azx_log_getLevel</a> (void)</td></tr>
 <tr class="memdesc:ab2c4e9406084c9f69c1314a718cc90d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the current value of the log level.  <a href="azx__log_8h.html#ab2c4e9406084c9f69c1314a718cc90d8">More...</a><br /></td></tr>
 <tr class="separator:ab2c4e9406084c9f69c1314a718cc90d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1118287cc32aed65c4ca32cccae47ebf"><td class="memItemLeft" align="right" valign="top">INT32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azx__log_8h.html#a1118287cc32aed65c4ca32cccae47ebf">azx_log_disableUart</a> (void)</td></tr>
+<tr class="memdesc:a1118287cc32aed65c4ca32cccae47ebf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Puts the UART used for logs in power OFF mode.  <a href="azx__log_8h.html#a1118287cc32aed65c4ca32cccae47ebf">More...</a><br /></td></tr>
+<tr class="separator:a1118287cc32aed65c4ca32cccae47ebf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9660d2ae041136d9cb99db1d38792d39"><td class="memItemLeft" align="right" valign="top">INT32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azx__log_8h.html#a9660d2ae041136d9cb99db1d38792d39">azx_log_enableUart</a> (void)</td></tr>
+<tr class="memdesc:a9660d2ae041136d9cb99db1d38792d39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Puts the UART used for logs in power ON mode.  <a href="azx__log_8h.html#a9660d2ae041136d9cb99db1d38792d39">More...</a><br /></td></tr>
+<tr class="separator:a9660d2ae041136d9cb99db1d38792d39"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af64520b985c9e8b97fda9dd77279bdd3"><td class="memItemLeft" align="right" valign="top">BOOLEAN&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azx__log_8h.html#af64520b985c9e8b97fda9dd77279bdd3">azx_log_send_to_file</a> (const CHAR *filename, UINT32 circular_chunks, <a class="el" href="group__log_conf.html#gae9fa7be40e4fcae6093707def57f82a5">AZX_LOG_LEVEL_E</a> min_level, UINT32 max_size_kb)</td></tr>
 <tr class="memdesc:af64520b985c9e8b97fda9dd77279bdd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the logging component to output to a file.  <a href="azx__log_8h.html#af64520b985c9e8b97fda9dd77279bdd3">More...</a><br /></td></tr>
 <tr class="separator:af64520b985c9e8b97fda9dd77279bdd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -220,7 +239,7 @@ Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Logging utilities to print on available output channels. </p>
-<dl class="section version"><dt>Version</dt><dd>1.0.9 </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>1.1.0 </dd></dl>
 <dl class="section user"><dt>Dependencies</dt><dd><br  />
  </dd></dl>
 <dl class="section author"><dt>Author</dt><dd>Fabio Pintus </dd>
@@ -243,15 +262,41 @@ Ioannis Demetriou </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">do</span> { \</div>
-<div class="line">  m2mb_trace_init(); \</div>
-<div class="line">  m2mb_trace_enable(M2MB_TC_M2M_USER); \</div>
+<b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">do</span> {\</div>
+<div class="line">  AZX_LOG_CFG_T cfg =\</div>
+<div class="line">  {\</div>
+<div class="line">    <span class="comment">/*.log_level*/</span>   AZX_LOG_LEVEL,\</div>
+<div class="line">    <span class="comment">/*.log_channel*/</span> LOG_CHANNEL,\</div>
+<div class="line">    <span class="comment">/*.log_colours*/</span> _LOG_COLOURS\</div>
+<div class="line">  };\</div>
+<div class="line">  azx_log_init(&amp;cfg);\</div>
 <div class="line">} <span class="keywordflow">while</span>(0)</div>
 </div><!-- fragment -->
 <p>Application logs are printed to the specified channel. </p>
 <p>If enabled, all AZX_LOG* messages will be printed to the channel specified in <a class="el" href="azx__log_8h.html#a4af7b5c67a5df4ffbcafe9a91a4677bc">AZX_LOG_INIT</a>.</p>
 <p>If disabled, these messages will be printed using the internal m2mb_trace.h API.</p>
 <p>Call this at your AZ entry point to easily configure logging </p>
+
+</div>
+</div>
+<a id="a2a91920ddea804f783778fce7b4c96d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a91920ddea804f783778fce7b4c96d6">&#9670;&nbsp;</a></span>LogCritical</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define LogCritical</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">a</td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="group__log_usage.html#ga4cbebf6589190814b5ee9adb22bb1d44">AZX_LOG_CRITICAL</a> a</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Wrapping macros that can be called with parameters wrapped in double parentheses to be ISO C89/C90 standard compliant. </p>
+<p>e.g. LogInfo(("hello world %d", var)); </p>
 
 </div>
 </div>
@@ -278,6 +323,50 @@ Ioannis Demetriou </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="group__log_conf.html#ga08e797515ecc2b71223a72c77c6dc6af" title="Initializes the log functionality.">azx_log_init</a></dd></dl>
 <p><b>Example</b> </p><pre class="fragment">azx_log_deinit();
 </pre> 
+</div>
+</div>
+<a id="a1118287cc32aed65c4ca32cccae47ebf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1118287cc32aed65c4ca32cccae47ebf">&#9670;&nbsp;</a></span>azx_log_disableUart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">INT32 azx_log_disableUart </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Puts the UART used for logs in power OFF mode. </p>
+<dl class="section return"><dt>Returns</dt><dd>0 in case of success, -1 otherwise</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__log_conf.html#ga08e797515ecc2b71223a72c77c6dc6af" title="Initializes the log functionality.">azx_log_init()</a> </dd></dl>
+
+</div>
+</div>
+<a id="a9660d2ae041136d9cb99db1d38792d39"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9660d2ae041136d9cb99db1d38792d39">&#9670;&nbsp;</a></span>azx_log_enableUart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">INT32 azx_log_enableUart </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Puts the UART used for logs in power ON mode. </p>
+<dl class="section return"><dt>Returns</dt><dd>0 in case of success, -1 otherwise</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__log_conf.html#ga08e797515ecc2b71223a72c77c6dc6af" title="Initializes the log functionality.">azx_log_init()</a> </dd></dl>
+
 </div>
 </div>
 <a id="a3e999a06dd697da3196e357039081124"></a>

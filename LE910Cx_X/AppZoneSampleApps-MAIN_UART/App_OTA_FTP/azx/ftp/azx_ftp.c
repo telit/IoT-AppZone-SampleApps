@@ -635,7 +635,7 @@ static M2MB_RESULT_E FtpAssociateCid( const CHAR *host, INT8 cid, struct M2MB_SO
   sin->sin_family = M2MB_SOCKET_BSD_AF_INET;
 
   lhost = azx_ftp_strdup( host );
-  
+
   if(!lhost)
   {
     ret = M2MB_RESULT_FAIL;
@@ -653,7 +653,7 @@ static M2MB_RESULT_E FtpAssociateCid( const CHAR *host, INT8 cid, struct M2MB_SO
       /*Advance pnum pointer by one and put a EOS where : was*/
       *pnum++ = '\0';
     }
-    
+
     if( pnum[strspn( pnum, "0123456789" )] == 0 ) //check if string is composed of base10 digits only
     {
       sin->sin_port = m2mb_socket_bsd_htons( (UINT16) (atoi( pnum ) & 0xFFFF ));
@@ -757,7 +757,7 @@ static INT32 FtpOpenPort(AZX_FTP_NET_BUF_T *nControl, AZX_FTP_NET_BUF_T **nData,
   INT32 on=1;
   AZX_FTP_NET_BUF_T *ctrl;
   CHAR *cp;
-  UINT32 v[6] = {0};
+
   CHAR buf[AZX_FTP_TMP_BUFSIZ];
 
   if (nControl->dir != AZX_FTP_CONTROL)
@@ -778,34 +778,41 @@ static INT32 FtpOpenPort(AZX_FTP_NET_BUF_T *nControl, AZX_FTP_NET_BUF_T **nData,
   l = sizeof(sin);
   if (nControl->cmode == AZX_FTP_PASSIVE)
   {
+    int port = 0;
+    char sep;
+
+    char search_template[20] = {0};
     memset(&sin, 0, l);
     sin.in.sin_family = AF_INET;
-    if (!FtpSendCmd("PASV",'2',nControl))
-      return -1;
-    cp = strchr(nControl->response,'(');
-    if (cp == NULL)
-      return -1;
-    cp++;
-    
-    if( 6 != sscanf(cp,"%u,%u,%u,%u,%u,%u", &v[2],&v[3],&v[4],&v[5],&v[0],&v[1]))
+
+    if (m2mb_socket_bsd_get_peer_name(nControl->handle, &sin.sa, &l) < 0)
     {
-      AZX_FTP_DEBUG(AZX_FTP_DEBUG_HOOK_ERROR,"PASV parse error\r\n");
+      AZX_FTP_DEBUG(AZX_FTP_DEBUG_HOOK_ERROR,"getpeername\r\n");
       return -1;
     }
-    AZX_FTP_DEBUG(AZX_FTP_DEBUG_HOOK_DEBUG,"v[2] %u, v[3] %u, v[4] %u, v[5] %u, v[0] %u, v[1] %u\r\n", 
-          v[2], v[3], v[4], v[5], v[0], v[1]);
-#if 1
-    sin.sa.sa_data[2] = (CHAR) (v[2] & 0xFF);
-    sin.sa.sa_data[3] = (CHAR) (v[3] & 0xFF);
-    sin.sa.sa_data[4] = (CHAR) (v[4] & 0xFF);
-    sin.sa.sa_data[5] = (CHAR) (v[5] & 0xFF);
-    sin.sa.sa_data[0] = (CHAR) (v[0] & 0xFF);
-    sin.sa.sa_data[1] = (CHAR) (v[1] & 0xFF);
-#else
-    sin.in.sin_addr.s_addr =  ((unsigned char)(v[2])) + ((unsigned char)(v[3]) << 8) + ((unsigned char)(v[4]) << 16) + ((unsigned char)(v[5]) << 24);
-    sin.in.sin_port = (UINT16) (v[0] + (v[1] * 256));
-#endif
-    AZX_FTP_DEBUG(AZX_FTP_DEBUG_HOOK_DEBUG,"ip and port (net order): %x, %x\r\n", sin.in.sin_addr.s_addr, sin.in.sin_port);
+    /* rfc2428 */
+    if (!FtpSendCmd("EPSV",'2',nControl))
+    {
+      return -1;
+    }
+    cp = strchr(nControl->response,'(');
+    if (cp == NULL)
+    {
+      return -1;
+    }
+    cp++;
+    sep = *cp;
+    sprintf(search_template, "%c%c%c%%d%c", sep,sep,sep,sep);
+
+    if(1 != sscanf(cp, search_template, &port))
+    {
+      return -1;
+    }
+    else
+    {
+      sin.in.sin_port = m2mb_socket_bsd_htons((UINT16)(port & 0xffff));
+      AZX_FTP_DEBUG(AZX_FTP_DEBUG_HOOK_DEBUG,"port (net order): %x\r\n", sin.in.sin_port);
+    }
   }
   else
   {
@@ -1052,7 +1059,7 @@ static INT32 FtpXferFile(AZX_FTP_FILE_INFO_T *localfile, AZX_FTP_FILE_INFO_T *re
     }
     //FTP_DEBUG(FTP_DEBUG_HOOK_DEBUG,"local file opened.\r\n");
   }
- 
+
   if(localfile == NULL)
   {
     AZX_FTP_DEBUG( AZX_FTP_DEBUG_HOOK_DEBUG,"no localfile provided\r\n");
@@ -1469,6 +1476,7 @@ AZX_FTP_GLOBALDEF INT32 azx_ftp_connect(const CHAR *host, AZX_FTP_NET_BUF_T **nC
     net_close(sControl);
     return 0;
   }
+
   if (connect(sControl, (struct sockaddr *)&sin, sizeof(sin)) == -1)
   {
     AZX_FTP_DEBUG(AZX_FTP_DEBUG_HOOK_ERROR,"connect\r\n");
@@ -1567,10 +1575,10 @@ AZX_FTP_GLOBALDEF INT32 azx_ftp_clearCallback(AZX_FTP_NET_BUF_T *nControl)
 AZX_FTP_GLOBALDEF INT32 azx_ftp_options(INT32 opt, INT32 val, AZX_FTP_NET_BUF_T *nControl)
 {
   INT32 v,rv=0;
-  
+
   if(NULL != nControl)
   {
-    
+
     switch (opt)
     {
     case AZX_FTP_CONNMODE:
@@ -1667,7 +1675,7 @@ AZX_FTP_GLOBALDEF INT32 azx_ftp_write(const void *buf, INT32 len, AZX_FTP_NET_BU
   {
     return 0;
   }
-  
+
   if (nData->dir != AZX_FTP_WRITE)
   {
     return 0;
@@ -1708,7 +1716,7 @@ AZX_FTP_GLOBALDEF INT32 azx_ftp_close(AZX_FTP_NET_BUF_T *nData)
   {
     return 0;
   }
-  
+
   switch (nData->dir)
   {
   case AZX_FTP_WRITE:
@@ -1765,7 +1773,7 @@ AZX_FTP_GLOBALDEF INT32 azx_ftp_site(const CHAR *cmd, AZX_FTP_NET_BUF_T *nContro
   {
     return 0;
   }
-  
+
   if ((strlen(cmd) + 7) > sizeof(buf))
   {
     return 0;
@@ -1790,12 +1798,12 @@ AZX_FTP_GLOBALDEF INT32 azx_ftp_sysType(CHAR *buf, INT32 max, AZX_FTP_NET_BUF_T 
   INT32 l = max;
   CHAR *b = buf;
   CHAR *s;
-  
+
   if(NULL == nControl)
   {
     return 0;
   }
-  
+
   if (!FtpSendCmd("SYST",'2',nControl))
   {
     return 0;
@@ -1815,7 +1823,7 @@ AZX_FTP_GLOBALDEF INT32 azx_ftp_sysType(CHAR *buf, INT32 max, AZX_FTP_NET_BUF_T 
 AZX_FTP_GLOBALDEF INT32 azx_ftp_mkdir(const CHAR *path, AZX_FTP_NET_BUF_T *nControl)
 {
   CHAR buf[AZX_FTP_TMP_BUFSIZ];
-  
+
   if(NULL == nControl)
   {
     return 0;
@@ -1844,7 +1852,7 @@ AZX_FTP_GLOBALDEF INT32 azx_ftp_chdir(const CHAR *path, AZX_FTP_NET_BUF_T *nCont
   {
     return 0;
   }
-  
+
   if ((strlen(path) + 6) > sizeof(buf))
   {
     return 0;
@@ -1866,7 +1874,7 @@ AZX_FTP_GLOBALDEF INT32 azx_ftp_cdUp(AZX_FTP_NET_BUF_T *nControl)
   {
     return 0;
   }
-  
+
   if (!FtpSendCmd("CDUP",'2',nControl))
     return 0;
   return 1;
@@ -1885,7 +1893,7 @@ AZX_FTP_GLOBALDEF INT32 azx_ftp_rmdir(const CHAR *path, AZX_FTP_NET_BUF_T *nCont
   {
     return 0;
   }
-  
+
   if ((strlen(path) + 6) > sizeof(buf))
     return 0;
   sprintf(buf,"RMD %s",path);
@@ -1904,12 +1912,12 @@ AZX_FTP_GLOBALDEF INT32 azx_ftp_pwd(CHAR *path, INT32 max, AZX_FTP_NET_BUF_T *nC
   INT32 l = max;
   CHAR *b = path;
   CHAR *s;
-  
+
   if(NULL == nControl)
   {
     return 0;
   }
-  
+
   if (!FtpSendCmd("PWD",'2',nControl))
   {
     return 0;
@@ -2004,12 +2012,12 @@ AZX_FTP_GLOBALDEF INT32 azx_ftp_size(const CHAR *path, UINT32 *size, CHAR mode, 
   CHAR cmd[64];
   INT32 resp,rv=1;
   UINT32 sz;
-  
+
   if(NULL == nControl)
   {
     return 0;
   }
-  
+
   if ((strlen(path) + 7) > sizeof(cmd))
   {
     return 0;
@@ -2096,7 +2104,7 @@ AZX_FTP_GLOBALDEF INT32 azx_ftp_modDate(const CHAR *path, CHAR *dt, INT32 max, A
 {
   CHAR buf[AZX_FTP_TMP_BUFSIZ];
   INT32 rv = 1;
-  
+
   if(NULL == nControl)
   {
     return 0;
@@ -2125,7 +2133,7 @@ AZX_FTP_GLOBALDEF INT32 azx_ftp_modDate(const CHAR *path, CHAR *dt, INT32 max, A
  * return 1 if successful, 0 otherwise
  */
 AZX_FTP_GLOBALDEF INT32 azx_ftp_get(AZX_FTP_XFER_T *output, const CHAR *path,
-    CHAR mode, AZX_FTP_NET_BUF_T *nControl)
+        CHAR mode, AZX_FTP_NET_BUF_T *nControl)
 {
   AZX_FTP_FILE_INFO_T remote_info;
   INT32 ret;
@@ -2196,7 +2204,7 @@ AZX_FTP_GLOBALDEF INT32 azx_ftp_get(AZX_FTP_XFER_T *output, const CHAR *path,
  * return 1 if successful, 0 otherwise
  */
 AZX_FTP_GLOBALDEF INT32 azx_ftp_put(AZX_FTP_XFER_T *input, const CHAR *path, CHAR mode,
-    AZX_FTP_NET_BUF_T *nControl)
+        AZX_FTP_NET_BUF_T *nControl)
 {
   AZX_FTP_FILE_INFO_T remote_info;
   remote_info.path = (CHAR*) path;
@@ -2247,7 +2255,7 @@ AZX_FTP_GLOBALDEF INT32 azx_ftp_rename(const CHAR *src, const CHAR *dst, AZX_FTP
 {
   CHAR cmd[AZX_FTP_TMP_BUFSIZ];
 
-  
+
   if(NULL == nControl)
   {
     return 0;
@@ -2284,7 +2292,7 @@ AZX_FTP_GLOBALDEF INT32 azx_ftp_delete(const CHAR *fnm, AZX_FTP_NET_BUF_T *nCont
   {
     return 0;
   }
-  
+
   if ((strlen(fnm) + 7) > sizeof(cmd))
   {
     return 0;

@@ -34,7 +34,7 @@
   <td id="projectlogo"><img alt="Logo" src="telit-logo.png"/></td>
   <td id="projectalign" style="padding-left: 2em;">
    <div id="projectname">AZX (AppZone eXtensions) documentation
-   &#160;<span id="projectnumber">1.1.15-CxL</span>
+   &#160;<span id="projectnumber">1.1.19-CxL</span>
    </div>
    <div id="projectbrief">A set of companion utilities that make AZ development easier</div>
   </td>
@@ -125,8 +125,6 @@ Data Fields</h2></td></tr>
 <tr class="separator:a96d238225d01cc207e77d4140e3e2b5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad72c30d64c80b4ffbd49d0d81a880cff"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#ad72c30d64c80b4ffbd49d0d81a880cff">referrer</a> [<a class="el" href="group__http_usage.html#ga9567e818e1e8bcdf8df7efbf5c99c2d4">AZX_HTTP_H_FIELD_SIZE</a>]</td></tr>
 <tr class="separator:ad72c30d64c80b4ffbd49d0d81a880cff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad930e846064b3e7383764980fa9a792d"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#ad930e846064b3e7383764980fa9a792d">boundary</a> [<a class="el" href="group__http_usage.html#ga9567e818e1e8bcdf8df7efbf5c99c2d4">AZX_HTTP_H_FIELD_SIZE</a>]</td></tr>
-<tr class="separator:ad930e846064b3e7383764980fa9a792d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac194fd4b0f404aae7584e9e0055a953e"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#ac194fd4b0f404aae7584e9e0055a953e">accept_type</a> [<a class="el" href="group__http_usage.html#ga9567e818e1e8bcdf8df7efbf5c99c2d4">AZX_HTTP_H_FIELD_SIZE</a>]</td></tr>
 <tr class="separator:ac194fd4b0f404aae7584e9e0055a953e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b8018e0fa63244f5d16181874ef996b"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#a4b8018e0fa63244f5d16181874ef996b">post_data</a></td></tr>
@@ -135,6 +133,8 @@ Data Fields</h2></td></tr>
 <tr class="separator:aea075e8551f0d14674cd1a57d78c4c5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a332a7525e2394bebb227969c2d3f15b2"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#a332a7525e2394bebb227969c2d3f15b2">custom_fields</a></td></tr>
 <tr class="separator:a332a7525e2394bebb227969c2d3f15b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9687233503e8c210a5fa8c84b990fb27"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_a_z_x___h_t_t_p___h_e_a_d_e_r.html#a9687233503e8c210a5fa8c84b990fb27">content_range</a></td></tr>
+<tr class="separator:a9687233503e8c210a5fa8c84b990fb27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>HTTP header structure. </p>
@@ -168,21 +168,6 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Type of authentication </p>
-
-</div>
-</div>
-<a id="ad930e846064b3e7383764980fa9a792d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad930e846064b3e7383764980fa9a792d">&#9670;&nbsp;</a></span>boundary</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">char AZX_HTTP_HEADER::boundary[<a class="el" href="group__http_usage.html#ga9567e818e1e8bcdf8df7efbf5c99c2d4">AZX_HTTP_H_FIELD_SIZE</a>]</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Field to hold HTTP boundary </p>
 
 </div>
 </div>
@@ -228,6 +213,21 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Field to hold HTTP content length </p>
+
+</div>
+</div>
+<a id="a9687233503e8c210a5fa8c84b990fb27"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9687233503e8c210a5fa8c84b990fb27">&#9670;&nbsp;</a></span>content_range</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char* AZX_HTTP_HEADER::content_range</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The Content-Range info, request for user or containing the server response (buffer provided by used) </p>
 
 </div>
 </div>

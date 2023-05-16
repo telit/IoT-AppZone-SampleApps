@@ -11,7 +11,7 @@
   @details
 
   @version
-    1.1.7
+    1.1.8
   @note
 
 
@@ -47,42 +47,18 @@
 
 #include "ssl_test.h"
 
-#include "app_cfg.h" /*FOR LOCALPATH define*/
+#include "read_parameters.h"
 
 /* Local defines ================================================================================*/
 
 /* 0: test using HTTPS server with client authentication (port 20443)
    1: test using HTTPS server on port 443 with server authentication;
-*/
-#define HTTP_443 1
+ */
 
-#if HTTP_443 //https with server authentication only
-  #define SERVER_PORT 443 //https
-  #define SERVER "modules.telit.com"
-  #define CA_CERT_PATH LOCALPATH "/ssl_certs/modulesCA.crt"
-  #define CLIENT_CERT_PATH ""
-  #define CLIENT_KEY_PATH ""
-  CHAR  queryBuf[] = "GET / HTTP/1.1\r\nHost: modules.telit.com\r\n\r\n";;
-  M2MB_SSL_AUTH_TYPE_E SSL_AUTH_MODE  = M2MB_SSL_SERVER_AUTH;
-#else //https with client cert
-  #define SERVER "modules.telit.com"
-  #define CA_CERT_PATH LOCALPATH "/ssl_certs/modulesCA.crt"
-
-  #define CLIENT_CERT_PATH LOCALPATH "/ssl_certs/modulesClient.crt"
-  #define CLIENT_KEY_PATH LOCALPATH "/ssl_certs/modulesClient_pkcs1.key"  //Only RSA Private keys are supported
-
-  #define SERVER_PORT 20443 //echo client+server
-  M2MB_SSL_AUTH_TYPE_E SSL_AUTH_MODE  = M2MB_SSL_SERVER_CLIENT_AUTH;
-  CHAR  queryBuf[] = "GET / HTTP/1.1\r\nHost: modules.telit.com\r\n\r\n";
-#endif
-
-
-#define APN      "web.omnitel.it"
-
-#define PDP_CTX   (UINT8)1
 
 /* Local typedefs ===============================================================================*/
-
+CHAR  queryBuf[] = "GET / HTTP/1.1\r\nHost: modules.telit.com\r\n\r\n";;
+M2MB_SSL_AUTH_TYPE_E SSL_AUTH_MODE  = M2MB_SSL_SERVER_AUTH;
 /* Local statics ================================================================================*/
 
 static M2MB_OS_EV_HANDLE net_pdp_evHandle = NULL;
@@ -102,11 +78,12 @@ UINT8 CA_BUF[2048];
 UINT8 CLIENT_CERT_BUF[2048];
 UINT8 CLIENT_KEY_BUF[2048];
 
-
 CHAR  respBuf[2048];
 
 /* Local function prototypes ====================================================================*/
+
 /* Static functions =============================================================================*/
+
 
 /* Global functions =============================================================================*/
 
@@ -117,8 +94,8 @@ int get_host_ip_by_name(const CHAR* host)
   struct M2MB_SOCKET_BSD_HOSTENT he;
   char tmpbuf[1024];
   int herr;
-  if ( ( ( m2mb_socket_bsd_get_host_by_name_2_r_cid( host, M2MB_SOCKET_BSD_AF_INET,  &he, tmpbuf, (SIZE_T) 1024, &phe, (INT32*) &herr, PDP_CTX) ) != 0 ) ||
-       ( phe == NULL ) )
+  if ( ( ( m2mb_socket_bsd_get_host_by_name_2_r_cid( host, M2MB_SOCKET_BSD_AF_INET,  &he, tmpbuf, (SIZE_T) 1024, &phe, (INT32*) &herr, gPDP_CTX) ) != 0 ) ||
+          ( phe == NULL ) )
   {
     return 0;
   }
@@ -172,9 +149,9 @@ void NetCallback(M2MB_NET_HANDLE h, M2MB_NET_IND_E net_event, UINT16 resp_size, 
       break;
 
 
-  default:
-    AZX_LOG_DEBUG("unexpected net_event: %d\r\n", net_event);
-    break;
+    default:
+      AZX_LOG_DEBUG("unexpected net_event: %d\r\n", net_event);
+      break;
 
   }
 }
@@ -245,6 +222,9 @@ INT32 msgHTTPSTask(INT32 type, INT32 param1, INT32 param2)
   {
     AZX_LOG_DEBUG("INIT\r\n");
 
+    configureParameters(); /*set default values first*/
+    readConfigFromFile(); /*try to read configuration from file (if present)*/
+
     /* Init events handler */
     osRes  = m2mb_os_ev_setAttrItem( &evAttrHandle, CMDS_ARGS(M2MB_OS_EV_SEL_CMD_CREATE_ATTR, NULL, M2MB_OS_EV_SEL_CMD_NAME, "net_pdp_ev"));
     osRes = m2mb_os_ev_init( &net_pdp_evHandle, &evAttrHandle );
@@ -292,7 +272,7 @@ INT32 msgHTTPSTask(INT32 type, INT32 param1, INT32 param2)
       AZX_LOG_DEBUG("m2mb_ssl_create_config PASSED \r\n");
     }
 
-    sslRes = m2mb_ssl_config( sslConfigHndl, M2MB_SSL_NAME_SNI, (void*)SERVER );
+    sslRes = m2mb_ssl_config( sslConfigHndl, M2MB_SSL_NAME_SNI, (void*)gSERVER );
     if(sslRes != 0)
     {
       AZX_LOG_ERROR("m2mb_ssl_config SNI failed\r\n");
@@ -316,17 +296,16 @@ INT32 msgHTTPSTask(INT32 type, INT32 param1, INT32 param2)
 
     if(SSL_AUTH_MODE == M2MB_SSL_SERVER_AUTH || SSL_AUTH_MODE == M2MB_SSL_SERVER_CLIENT_AUTH)
     {
-      AZX_LOG_DEBUG("loading CA CERT from file %s\r\n", CA_CERT_PATH);
+      AZX_LOG_DEBUG("loading CA CERT from file %s\r\n", gCA_CERT_PATH);
 
-      if (0 ==m2mb_fs_stat(CA_CERT_PATH, &st))
+      if (0 ==m2mb_fs_stat(gCA_CERT_PATH, &st))
       {
         AZX_LOG_DEBUG("file size: %u\r\n",  st.st_size);
 
       }
 
-      fd = m2mb_fs_open(CA_CERT_PATH,
-                M2MB_O_RDONLY   /*open in read only mode*/
-                );
+      fd = m2mb_fs_open(gCA_CERT_PATH, M2MB_O_RDONLY   /*open in read only mode*/
+      );
       if (fd == -1 )
       {
         AZX_LOG_ERROR("Cannot open file\r\n");
@@ -366,17 +345,15 @@ INT32 msgHTTPSTask(INT32 type, INT32 param1, INT32 param2)
     {
 
       /*Load certificate for client*/
-      AZX_LOG_DEBUG("loading client CERT from file %s\r\n", CLIENT_CERT_PATH);
+      AZX_LOG_DEBUG("loading client CERT from file %s\r\n", gCLIENT_CERT_PATH);
 
-      if (0 ==m2mb_fs_stat(CLIENT_CERT_PATH, &st))
+      if (0 ==m2mb_fs_stat(gCLIENT_CERT_PATH, &st))
       {
         AZX_LOG_DEBUG("file size: %u\r\n",  st.st_size);
 
       }
 
-      fd = m2mb_fs_open(CLIENT_CERT_PATH,
-                M2MB_O_RDONLY   /*open in read only mode*/
-                );
+      fd = m2mb_fs_open(gCLIENT_CERT_PATH, M2MB_O_RDONLY   /*open in read only mode*/);
       if (fd == -1 )
       {
         AZX_LOG_ERROR("Cannot open file\r\n");
@@ -406,17 +383,15 @@ INT32 msgHTTPSTask(INT32 type, INT32 param1, INT32 param2)
       /*Now load client key*/
 
 
-      AZX_LOG_DEBUG("loading client KEY from file %s\r\n", CLIENT_KEY_PATH);
+      AZX_LOG_DEBUG("loading client KEY from file %s\r\n", gCLIENT_KEY_PATH);
 
-      if (0 ==m2mb_fs_stat(CLIENT_KEY_PATH, &st))
+      if (0 ==m2mb_fs_stat(gCLIENT_KEY_PATH, &st))
       {
         AZX_LOG_DEBUG("file size: %u\r\n",  st.st_size);
 
       }
 
-      fd = m2mb_fs_open(CLIENT_KEY_PATH,
-                M2MB_O_RDONLY   /*open in read only mode*/
-                );
+      fd = m2mb_fs_open(gCLIENT_KEY_PATH, M2MB_O_RDONLY   /*open in read only mode*/);
       if (fd == -1 )
       {
         AZX_LOG_ERROR("Cannot open file\r\n");
@@ -452,9 +427,11 @@ INT32 msgHTTPSTask(INT32 type, INT32 param1, INT32 param2)
         AZX_LOG_ERROR("cannot load client certificate + key into context!\r\n");
         return -1;
       }
+    }
 
+    if(SSL_AUTH_MODE == M2MB_SSL_SERVER_AUTH || SSL_AUTH_MODE == M2MB_SSL_SERVER_CLIENT_AUTH)
+    {
       AZX_LOG_DEBUG("certificates successfully stored!\r\n");
-
     }
 
     /* Second step: Certificates were loaded, now check network registration and activate PDP context */
@@ -499,16 +476,18 @@ INT32 msgHTTPSTask(INT32 type, INT32 param1, INT32 param2)
     memset( apnUser, 0x00, sizeof(apnUser) );
     memset( apnPwd, 0x00, sizeof(apnPwd) );
 
-    strcat( apn, APN );
+    strcat( apn, gAPN );
+    strcat( apnUser, gAPN_UserName );
+    strcat( apnPwd, gAPN_Password );
 
     AZX_LOG_DEBUG("Activate PDP with APN %s....\r\n", apn);
-    retVal = m2mb_pdp_activate(pdpHandle, PDP_CTX, apn, apnUser, apnPwd, M2MB_PDP_IPV4); //activates cid 3 with APN "internet.wind.biz" and IP type IPV4
+    retVal = m2mb_pdp_activate(pdpHandle, gPDP_CTX, apn, apnUser, apnPwd, M2MB_PDP_IPV4); //activates cid 3 with APN "internet.wind.biz" and IP type IPV4
     if ( retVal != M2MB_RESULT_SUCCESS )
     {
       AZX_LOG_ERROR("cannot activate pdp context. Trying deactivating and reactivating again\r\n");
-      m2mb_pdp_deactivate(pdpHandle, PDP_CTX);
+      m2mb_pdp_deactivate(pdpHandle, gPDP_CTX);
       azx_sleep_ms(1000);
-      retVal = m2mb_pdp_activate(pdpHandle, PDP_CTX, apn, apnUser, apnPwd, M2MB_PDP_IPV4); //activates cid 3 with APN "internet.wind.biz" and IP type IPV4
+      retVal = m2mb_pdp_activate(pdpHandle, gPDP_CTX, apn, apnUser, apnPwd, M2MB_PDP_IPV4); //activates cid 3 with APN "internet.wind.biz" and IP type IPV4
       if ( retVal != M2MB_RESULT_SUCCESS )
       {
         AZX_LOG_ERROR("cannot activate pdp context. Quitting...\r\n");
@@ -534,33 +513,33 @@ INT32 msgHTTPSTask(INT32 type, INT32 param1, INT32 param2)
     }
 
 
-    if ( m2mb_socket_set_cid( sock_client, PDP_CTX ) != 0 )
+    if ( m2mb_socket_set_cid( sock_client, gPDP_CTX ) != 0 )
     {
-      AZX_LOG_ERROR( "Socket not set to ctx: %d\r\n", PDP_CTX );
+      AZX_LOG_ERROR( "Socket not set to ctx: %d\r\n", gPDP_CTX );
       return -1;
     }
 
-    AZX_LOG_DEBUG( "Socket ctx set to %d\r\n", PDP_CTX );
+    AZX_LOG_DEBUG( "Socket ctx set to %d\r\n", gPDP_CTX );
 
     memset(&stSockAddr, 0, sizeof(struct M2MB_SOCKET_BSD_SOCKADDR_IN));
 
-    if (0 == (stSockAddr.sin_addr.s_addr= get_host_ip_by_name(SERVER)))
+    if (0 == (stSockAddr.sin_addr.s_addr= get_host_ip_by_name(gSERVER)))
     {
       AZX_LOG_ERROR("Cannot retrieve IP\r\n");
       task_status = APPLICATION_EXIT;
       break;
     }
-      else
-      {
-        m2mb_socket_bsd_inet_ntop(M2MB_SOCKET_BSD_AF_INET, (const void*) &(stSockAddr.sin_addr.s_addr), ip_addr, sizeof(ip_addr));
-        AZX_LOG_DEBUG("Retrieved IP: %s \r\n", ip_addr);
-      }
+    else
+    {
+      m2mb_socket_bsd_inet_ntop(M2MB_SOCKET_BSD_AF_INET, (const void*) &(stSockAddr.sin_addr.s_addr), ip_addr, sizeof(ip_addr));
+      AZX_LOG_DEBUG("Retrieved IP: %s \r\n", ip_addr);
+    }
 
-      stSockAddr.sin_family = M2MB_SOCKET_BSD_PF_INET;
-      stSockAddr.sin_port = m2mb_socket_bsd_htons(SERVER_PORT);
+    stSockAddr.sin_family = M2MB_SOCKET_BSD_PF_INET;
+    stSockAddr.sin_port = m2mb_socket_bsd_htons(gSERVER_PORT);
 
     if( 0 != m2mb_socket_bsd_connect(sock_client, (struct M2MB_SOCKET_BSD_SOCKADDR*)&stSockAddr,
-                              sizeof(struct M2MB_SOCKET_BSD_SOCKADDR_IN)))
+            sizeof(struct M2MB_SOCKET_BSD_SOCKADDR_IN)))
     {
       task_status = APPLICATION_EXIT;
       break;
@@ -576,8 +555,8 @@ INT32 msgHTTPSTask(INT32 type, INT32 param1, INT32 param2)
 
     if( sslConnHndl == 0 )
     {
-       AZX_LOG_ERROR("m2mb_ssl_secure_socket FAILED error %d \r\n",sslRes );
-     return -1;
+      AZX_LOG_ERROR("m2mb_ssl_secure_socket FAILED error %d \r\n",sslRes );
+      return -1;
     }
     else
     {
@@ -586,13 +565,13 @@ INT32 msgHTTPSTask(INT32 type, INT32 param1, INT32 param2)
 
     if( sslRes != 0 )
     {
-       AZX_LOG_ERROR("m2mb_ssl_connect FAILED error %d. Please verify module clock with AT+CCLK? command \r\n.",sslRes );
-     return -1;
+      AZX_LOG_ERROR("m2mb_ssl_connect FAILED error %d. Please verify module clock with AT+CCLK? command \r\n.",sslRes );
+      return -1;
     }
 
     else
     {
-       AZX_LOG_DEBUG("m2mb_ssl_connect ret %d \r\n",sslRes );
+      AZX_LOG_DEBUG("m2mb_ssl_connect ret %d \r\n",sslRes );
     }
 
 
@@ -670,32 +649,32 @@ INT32 msgHTTPSTask(INT32 type, INT32 param1, INT32 param2)
     AZX_LOG_DEBUG("application exit\r\n");
 
 
-  m2mb_ssl_delete_config( sslConfigHndl );
+    m2mb_ssl_delete_config( sslConfigHndl );
 
-  if(SSL_AUTH_MODE == M2MB_SSL_SERVER_AUTH || SSL_AUTH_MODE == M2MB_SSL_SERVER_CLIENT_AUTH)
-  {
-    m2mb_ssl_cert_delete( M2MB_SSL_CACERT, (CHAR*) "CAListTest" );
-  }
+    if(SSL_AUTH_MODE == M2MB_SSL_SERVER_AUTH || SSL_AUTH_MODE == M2MB_SSL_SERVER_CLIENT_AUTH)
+    {
+      m2mb_ssl_cert_delete( M2MB_SSL_CACERT, (CHAR*) "CAListTest" );
+    }
 
-  if(SSL_AUTH_MODE == M2MB_SSL_SERVER_CLIENT_AUTH)
-  {
-    m2mb_ssl_cert_delete( M2MB_SSL_CERT, (CHAR*) "ClientCertTest" );
-  }
+    if(SSL_AUTH_MODE == M2MB_SSL_SERVER_CLIENT_AUTH)
+    {
+      m2mb_ssl_cert_delete( M2MB_SSL_CERT, (CHAR*) "ClientCertTest" );
+    }
 
-  m2mb_ssl_delete_ctxt( sslCtxtHndl );
+    m2mb_ssl_delete_ctxt( sslCtxtHndl );
 
-  ret = m2mb_pdp_deactivate(pdpHandle, PDP_CTX);
-  if(ret != M2MB_RESULT_SUCCESS)
-  {
-    AZX_LOG_ERROR("CANNOT DEACTIVATE PDP\r\n");
-    return -1;
-  }
-  else
-  {
-    AZX_LOG_DEBUG("m2mb_pdp_deactivate returned success \r\n");
-  }
+    ret = m2mb_pdp_deactivate(pdpHandle, gPDP_CTX);
+    if(ret != M2MB_RESULT_SUCCESS)
+    {
+      AZX_LOG_ERROR("CANNOT DEACTIVATE PDP\r\n");
+      return -1;
+    }
+    else
+    {
+      AZX_LOG_DEBUG("m2mb_pdp_deactivate returned success \r\n");
+    }
 
-  AZX_LOG_DEBUG("Application complete.\r\n");
+    AZX_LOG_DEBUG("Application complete.\r\n");
   }
   return 0;
 }

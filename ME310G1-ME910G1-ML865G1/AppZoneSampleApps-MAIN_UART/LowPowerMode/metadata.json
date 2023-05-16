@@ -1,0 +1,59 @@
+{
+  "name": "Sample App for <xxxx>",
+  "type": "sample-app",
+  "description": "A sample app that shows how to set the modem in low power mode.",
+  "copyright": "Telit Communications, 2022",
+  "homepage": "https://www.telit.com/",
+  "keywords": [
+    "IoT AppZone",
+    "Low Power"
+  ],
+  "availability": {
+    "MXXXXC1": {
+      "firmwares": [
+        "30.00.xx9",
+        "30.01.xx0"
+      ]
+    },
+    "MXXXXG1": {
+      "firmwares": [
+        "37.00.xx3",
+        "37.00.xx4",
+        "37.00.xx5",
+        "37.00.xx6"
+      ]
+    },
+    "LE910Cx-L": {
+      "firmwares": [
+        "25.21.xx3"
+      ]
+    }
+  },
+  "groups": [
+    {
+      "name": "MAIN_UART",
+      "limitations": []
+    },
+    {
+      "name": "AUX_UART",
+      "limitations": []
+    }
+  ],
+  "platform": "GCC",
+  "license": "MIT",
+  "support": {
+    "email": "ts-emea@telit.com"
+  },
+  "authors": [
+    {
+      "name": "Gianluca Loi",
+      "email": "gianluca.loi@telit.com",
+      "homepage": "http://www.telit.com/",
+      "role": "Developer"
+    }
+  ],
+  "requires": {
+    "core/azx_log": "master",
+    "core/azx_utils": "master"
+  }
+}

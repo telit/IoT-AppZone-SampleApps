@@ -28,8 +28,11 @@
 #include <stdarg.h>
 
 #include "m2mb_types.h"
+
 #include "m2mb_os_api.h"
+
 #include "m2mb_fs_posix.h"
+
 #include "m2mb_net.h"
 #include "m2mb_pdp.h"
 #include "m2mb_socket.h"
@@ -43,50 +46,8 @@
 
 #include "mqtt_demo.h"
 
-
+#include "read_parameters.h"
 /* Local defines =====================================================================*/
-
-#define SSL_CERT_CA_NAME "ca-cert-pool"
-#define SSL_CLIENT_NAME "SSL-Client"
-
-
-/* SSL */
-/*Note: A possible root path for certificates could be LOCALPATH define in app_cfg.h file */
-#define CACERTFILE        ""   /* Root CA file path in module filesystem (if needed) */
-#define CLIENTCERTFILE    ""   /* Client certificate file path in module filesystem (if needed) */
-#define CLIENTKEYFILE     ""   /* Client private key file path in module filesystem (if needed) */
-
-
-#define USER_SSL_AUTH      M2MB_SSL_NO_AUTH
-
-/* Server configuration */
-#define MQTT_BROKER_ADDRESS "api-dev.devicewise.com"
-
-#define MQTT_BROKER_PORT        (UINT32)1883
-#define MQTT_BROKER_PORT_SSL    (UINT32)8883
-
-/* Client Configuration */
-#define CLIENT_ID "test_m2mb_mqtt_id"
-#define CLIENT_USERNAME "test_m2mb_mqtt"
-#define CLIENT_PASSWORD "q3XYKetChZRdGuKF"
-
-
-#define CLIENT_TIMEOUT_SEC 60 /*operations timeout*/
-
-#define CLIENT_KEEPALIVE_SEC 60 /*KeepAlive timeout*/
-
-#define SUB_TOPIC "test_topic"
-#define SUB_TOPIC2 "test_topic2"
-
-#define PUB_MESSAGE "Hello from M2MB MQTT!"
-
-/* PDP configuration */
-#define APN      "web.omnitel.it"
-
-#define PDP_CTX   3
-
-
-
 
 
 
@@ -99,15 +60,18 @@ static M2MB_PDP_HANDLE pdpHandle;
 
 static M2MB_MQTT_HANDLE mqttHandle = NULL;
 
+
 /* Local function prototypes ====================================================================*/
 static void mqtt_topic_cb( M2MB_MQTT_HANDLE handle, void *arg, const CHAR *topic,
-                           UINT16 topic_length, const CHAR *msg, UINT32 msg_length, M2MB_MQTT_RX_STATUS_E status );
+        UINT16 topic_length, const CHAR *msg, UINT32 msg_length, M2MB_MQTT_RX_STATUS_E status );
 
 static void CleanSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SSL_CTXT_HANDLE* p_hSSLCtx, M2MB_SSL_AUTH_TYPE_E ssl_auth_mode);
 static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SSL_CTXT_HANDLE* p_hSSLCtx, M2MB_SSL_AUTH_TYPE_E ssl_auth_mode);
 
 
 /* Static functions =============================================================================*/
+
+
 static void mqtt_topic_cb( M2MB_MQTT_HANDLE handle, void *arg, const CHAR *topic,
                            UINT16 topic_length, const CHAR *msg, UINT32 msg_length, M2MB_MQTT_RX_STATUS_E status )
 {
@@ -130,7 +94,6 @@ static void mqtt_topic_cb( M2MB_MQTT_HANDLE handle, void *arg, const CHAR *topic
 }
 
 
-
 static void CleanSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SSL_CTXT_HANDLE* p_hSSLCtx, M2MB_SSL_AUTH_TYPE_E ssl_auth_mode )
 {
 
@@ -144,7 +107,7 @@ static void CleanSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SSL_C
   if(ssl_auth_mode >= M2MB_SSL_SERVER_AUTH)
   {
     /* clean everything */
-    res = m2mb_ssl_cert_delete( M2MB_SSL_CACERT, (CHAR*)SSL_CERT_CA_NAME );
+    res = m2mb_ssl_cert_delete( M2MB_SSL_CACERT, (CHAR*)gSSL_CERT_CA_NAME );
     if(res==0)
     {
       AZX_LOG_DEBUG("m2mb_ssl_cert_delete PASS\r\n");
@@ -154,10 +117,10 @@ static void CleanSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SSL_C
       AZX_LOG_ERROR("m2mb_ssl_cert_delete failed with code %d\r\n",res);
     }
   }
-  
+
   if(ssl_auth_mode >= M2MB_SSL_SERVER_CLIENT_AUTH)
   {
-    res = m2mb_ssl_cert_delete( M2MB_SSL_CERT, (CHAR*)SSL_CLIENT_NAME );
+    res = m2mb_ssl_cert_delete( M2MB_SSL_CERT, (CHAR*)gSSL_CLIENT_NAME );
     if(res==0)
     {
       AZX_LOG_TRACE("m2mb_ssl_cert_delete PASS\r\n");
@@ -167,7 +130,7 @@ static void CleanSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SSL_C
       AZX_LOG_ERROR("m2mb_ssl_cert_delete failed with code %d\r\n",res);
     }
   }
-  
+
   res = m2mb_ssl_delete_config(*p_hSSLConfig);
   if(res==0)
   {
@@ -238,17 +201,17 @@ static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SS
 
   if ((ssl_auth_mode ==   M2MB_SSL_SERVER_AUTH) || (ssl_auth_mode ==   M2MB_SSL_SERVER_CLIENT_AUTH))
   {
-    AZX_LOG_DEBUG("ca cert file %s \r\n",CACERTFILE);
+    AZX_LOG_DEBUG("ca cert file %s \r\n",gCACERTFILE);
 
-    if (0 ==m2mb_fs_stat(CACERTFILE, &st))
+    if (0 ==m2mb_fs_stat(gCACERTFILE, &st))
     {
       AZX_LOG_DEBUG("file size: %u\r\n",  st.st_size);
     }
 
-    fd = m2mb_fs_open(CACERTFILE,M2MB_O_RDONLY   /*open in read only mode*/ );
+    fd = m2mb_fs_open(gCACERTFILE,M2MB_O_RDONLY   /*open in read only mode*/ );
     if (fd == -1 )
     {
-      AZX_LOG_DEBUG("Cannot open file %s \r\n",CACERTFILE);
+      AZX_LOG_DEBUG("Cannot open file %s \r\n",gCACERTFILE);
       m2mb_ssl_delete_config(*p_hSSLConfig);
       return -1;
     }
@@ -275,14 +238,14 @@ static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SS
     SSL_info.ca_List.ca_Info[0]->ca_Size =  st.st_size;
     SSL_info.ca_List.ca_Info[0]->ca_Buf = CA_BUF;
 
-    if (0 != m2mb_ssl_cert_store( M2MB_SSL_CACERT,SSL_info,(CHAR*) SSL_CERT_CA_NAME ))
+    if (0 != m2mb_ssl_cert_store( M2MB_SSL_CACERT,SSL_info,(CHAR*) gSSL_CERT_CA_NAME ))
     {
       AZX_LOG_ERROR("m2mb_ssl_cert_store FAILED\r\n" );
       CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_NO_AUTH);
       return -1;
     }
 
-    if (0 != m2mb_ssl_cert_load( *p_hSSLCtx,M2MB_SSL_CACERT,(CHAR*) SSL_CERT_CA_NAME ))
+    if (0 != m2mb_ssl_cert_load( *p_hSSLCtx,M2MB_SSL_CACERT,(CHAR*) gSSL_CERT_CA_NAME ))
     {
       AZX_LOG_ERROR("m2mb_ssl_cert_load FAILED\r\n" );
       CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_AUTH);
@@ -294,17 +257,17 @@ static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SS
   if (ssl_auth_mode == M2MB_SSL_SERVER_CLIENT_AUTH)
   {
     AZX_LOG_DEBUG("server + client authentication is chosen \r\n");
-    AZX_LOG_DEBUG("ca cert file %s \r\n",CLIENTCERTFILE);
+    AZX_LOG_DEBUG("ca cert file %s \r\n",gCLIENTCERTFILE);
 
-    if (0 ==m2mb_fs_stat(CLIENTCERTFILE, &st))
+    if (0 ==m2mb_fs_stat(gCLIENTCERTFILE, &st))
     {
       AZX_LOG_DEBUG("file size: %u\r\n",  st.st_size);
     }
 
-    fd = m2mb_fs_open(CLIENTCERTFILE, M2MB_O_RDONLY);   /*open in read only mode*/
+    fd = m2mb_fs_open(gCLIENTCERTFILE, M2MB_O_RDONLY);   /*open in read only mode*/
     if (fd == -1 )
     {
-      AZX_LOG_DEBUG("Cannot open file %s \r\n",CLIENTCERTFILE);
+      AZX_LOG_DEBUG("Cannot open file %s \r\n",gCLIENTCERTFILE);
       CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_AUTH);
       return -1;
     }
@@ -332,19 +295,19 @@ static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SS
     SSL_info.cert.cert_Size=st.st_size;
 
 
-    AZX_LOG_DEBUG("Client Key file %s \r\n",CLIENTKEYFILE);
+    AZX_LOG_DEBUG("Client Key file %s \r\n",gCLIENTKEYFILE);
 
 
-    if (0 ==m2mb_fs_stat(CLIENTKEYFILE, &st))
+    if (0 ==m2mb_fs_stat(gCLIENTKEYFILE, &st))
     {
       AZX_LOG_DEBUG("file size: %u\r\n",  st.st_size);
 
     }
 
-    fd = m2mb_fs_open(CLIENTKEYFILE, M2MB_O_RDONLY);   /*open in read only mode*/
+    fd = m2mb_fs_open(gCLIENTKEYFILE, M2MB_O_RDONLY);   /*open in read only mode*/
     if (fd == -1 )
     {
-      AZX_LOG_DEBUG("Cannot open file %s \r\n",CLIENTKEYFILE);
+      AZX_LOG_DEBUG("Cannot open file %s \r\n",gCLIENTKEYFILE);
       CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_AUTH);
       return -1;
     }
@@ -371,14 +334,14 @@ static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SS
     SSL_info.cert.key_Buf=client_key_buf;
     SSL_info.cert.key_Size=st.st_size;
 
-    if (0 != m2mb_ssl_cert_store( M2MB_SSL_CERT,SSL_info,(CHAR*) SSL_CLIENT_NAME ))
+    if (0 != m2mb_ssl_cert_store( M2MB_SSL_CERT,SSL_info,(CHAR*) gSSL_CLIENT_NAME ))
     {
       AZX_LOG_ERROR("m2mb_ssl_cert_store FAILED\r\n" );
       CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_AUTH);
       return -1;
     }
 
-    if (0 != m2mb_ssl_cert_load( *p_hSSLCtx,M2MB_SSL_CERT,(CHAR*) SSL_CLIENT_NAME ))
+    if (0 != m2mb_ssl_cert_load( *p_hSSLCtx,M2MB_SSL_CERT,(CHAR*) gSSL_CLIENT_NAME ))
     {
       AZX_LOG_ERROR("m2mb_ssl_cert_load FAILED\r\n" );
       CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_CLIENT_AUTH);
@@ -474,6 +437,8 @@ INT32 MQTT_Task( INT32 type, INT32 param1, INT32 param2 )
   {
     AZX_LOG_DEBUG( "INIT\r\n" );
 
+    configureParameters(); /*set default values first*/
+    readConfigFromFile(); /*try to read configuration from file (if present)*/
 
     AZX_LOG_DEBUG( "Init MQTT\r\n" );
     result = m2mb_mqtt_init( &mqttHandle, NULL, NULL );
@@ -489,8 +454,8 @@ INT32 MQTT_Task( INT32 type, INT32 param1, INT32 param2 )
     }
 
     result = m2mb_mqtt_conf( mqttHandle, CMDS(
-        /* Set Client ID */
-        M2MB_MQTT_SET_CLIENT_ID, ( char * ) CLIENT_ID ) );
+            /* Set Client ID */
+            M2MB_MQTT_SET_CLIENT_ID, ( char * ) gCLIENT_ID ) );
 
     if( result != M2MB_MQTT_SUCCESS )
     {
@@ -501,7 +466,7 @@ INT32 MQTT_Task( INT32 type, INT32 param1, INT32 param2 )
 
     /* Set Timeout in milliseconds */
     result = m2mb_mqtt_conf( mqttHandle, CMDS(
-        M2MB_MQTT_SET_TIMEOUT_MS, CLIENT_TIMEOUT_SEC * 1000 ) );
+            M2MB_MQTT_SET_TIMEOUT_MS, gCLIENT_TIMEOUT_SEC * 1000 ) );
 
     if( result != M2MB_MQTT_SUCCESS )
     {
@@ -512,7 +477,7 @@ INT32 MQTT_Task( INT32 type, INT32 param1, INT32 param2 )
 
     /* Set Keepalive in seconds */
     result = m2mb_mqtt_conf( mqttHandle, CMDS(
-        M2MB_MQTT_SET_KEEPALIVE_SEC, CLIENT_KEEPALIVE_SEC ) );
+            M2MB_MQTT_SET_KEEPALIVE_SEC, gCLIENT_KEEPALIVE_SEC ) );
 
     if( result != M2MB_MQTT_SUCCESS )
     {
@@ -523,7 +488,7 @@ INT32 MQTT_Task( INT32 type, INT32 param1, INT32 param2 )
 
     /* Set Username */
     result = m2mb_mqtt_conf( mqttHandle, CMDS(
-        M2MB_MQTT_SET_USERNAME, ( char * ) CLIENT_USERNAME ) );
+            M2MB_MQTT_SET_USERNAME, ( char * ) gCLIENT_USERNAME ) );
 
     if( result != M2MB_MQTT_SUCCESS )
     {
@@ -534,7 +499,7 @@ INT32 MQTT_Task( INT32 type, INT32 param1, INT32 param2 )
 
     /* Set Password */
     result = m2mb_mqtt_conf( mqttHandle, CMDS(
-        M2MB_MQTT_SET_PASSWORD, ( char * ) CLIENT_PASSWORD ) );
+            M2MB_MQTT_SET_PASSWORD, ( char * ) CLIENT_PASSWORD ) );
 
     if( result != M2MB_MQTT_SUCCESS )
     {
@@ -545,7 +510,7 @@ INT32 MQTT_Task( INT32 type, INT32 param1, INT32 param2 )
 
     /* Set the PDP context to be used */
     result = m2mb_mqtt_conf( mqttHandle, CMDS(
-        M2MB_MQTT_SET_PDP_CONTEXT, PDP_CTX ) );
+            M2MB_MQTT_SET_PDP_CONTEXT, gPDP_CTX ) );
 
     if( result != M2MB_MQTT_SUCCESS )
     {
@@ -554,7 +519,7 @@ INT32 MQTT_Task( INT32 type, INT32 param1, INT32 param2 )
       break;
     }
 
-    if (0 == PrepareSSLEnvironment(&sslConfigHndl, &sslCtxtHndl, USER_SSL_AUTH))
+    if (0 == PrepareSSLEnvironment(&sslConfigHndl, &sslCtxtHndl, (M2MB_SSL_AUTH_TYPE_E)gUSER_SSL_AUTH))
     {
       result = m2mb_mqtt_conf(mqttHandle, CMDS(M2MB_MQTT_SECURE_OPT, sslConfigHndl, sslCtxtHndl));
       if( result != M2MB_MQTT_SUCCESS )
@@ -623,17 +588,17 @@ INT32 MQTT_Task( INT32 type, INT32 param1, INT32 param2 )
     }
 
     azx_sleep_ms( 2000 );
-    AZX_LOG_DEBUG( "Activate PDP with APN %s on CID %d....\r\n", APN, PDP_CTX );
-    retVal = m2mb_pdp_activate( pdpHandle, ( UINT8 ) PDP_CTX, ( char * ) APN, ( char * ) NULL,
-        ( char * ) NULL, M2MB_PDP_IPV4 ); //activates cid 3 with APN "internet.wind.biz" and IP type IPV4
+    AZX_LOG_DEBUG( "Activate PDP with APN %s on CID %d....\r\n", gAPN, gPDP_CTX );
+    retVal = m2mb_pdp_activate( pdpHandle, ( UINT8 ) gPDP_CTX, ( char * ) gAPN, ( char * ) gAPN_UserName,
+            ( char * ) gAPN_Password, M2MB_PDP_IPV4 ); //activates cid 3 with APN "internet.wind.biz" and IP type IPV4
 
     if( retVal != M2MB_RESULT_SUCCESS )
     {
       AZX_LOG_ERROR( "Cannot activate pdp context. Trying deactivating and reactivating again\r\n" );
-      m2mb_pdp_deactivate( pdpHandle, PDP_CTX );
+      m2mb_pdp_deactivate( pdpHandle, gPDP_CTX );
       azx_sleep_ms( 1000 );
-      retVal = m2mb_pdp_activate( pdpHandle, ( UINT8 ) PDP_CTX, ( char * ) APN, ( char * ) NULL,
-          ( char * ) NULL, M2MB_PDP_IPV4 ); //activates cid 3 with APN "internet.wind.biz" and IP type IPV4
+      retVal = m2mb_pdp_activate( pdpHandle, ( UINT8 ) gPDP_CTX, ( char * ) gAPN, ( char * ) gAPN_UserName,
+              ( char * ) gAPN_Password, M2MB_PDP_IPV4 ); //activates cid 3 with APN "internet.wind.biz" and IP type IPV4
 
       if( retVal != M2MB_RESULT_SUCCESS )
       {
@@ -646,9 +611,9 @@ INT32 MQTT_Task( INT32 type, INT32 param1, INT32 param2 )
     m2mb_os_ev_get( net_pdp_evHandle, EV_PDP_BIT, M2MB_OS_EV_GET_ANY_AND_CLEAR, &curEvBits,
         M2MB_OS_WAIT_FOREVER );
 
-    AZX_LOG_INFO( "\r\nConnecting to broker <%s>:%u...\r\n", MQTT_BROKER_ADDRESS, MQTT_BROKER_PORT_SSL );
+    AZX_LOG_INFO( "\r\nConnecting to broker <%s>:%u...\r\n", gMQTT_BROKER_ADDRESS, gMQTT_BROKER_PORT_SSL );
 
-    result = m2mb_mqtt_connect( mqttHandle, MQTT_BROKER_ADDRESS, MQTT_BROKER_PORT_SSL );
+    result = m2mb_mqtt_connect( mqttHandle, gMQTT_BROKER_ADDRESS, gMQTT_BROKER_PORT_SSL );
     if( result == M2MB_MQTT_SUCCESS )
     {
       AZX_LOG_INFO( "Done.\r\n" );
@@ -660,13 +625,13 @@ INT32 MQTT_Task( INT32 type, INT32 param1, INT32 param2 )
       break;
     }
 
-    topics[0].topic_filter = SUB_TOPIC; /* Select the topic */
+    topics[0].topic_filter = gSUB_TOPIC; /* Select the topic */
     topics[0].qos = M2MB_MQTT_QOS_0;          /* The Quality of Service */
     topics[0].cb = mqtt_topic_cb; /*And the callback function that will be called when data arrives.*/
-    topics[1].topic_filter = SUB_TOPIC2; /*Select a second topic */
+    topics[1].topic_filter = gSUB_TOPIC2; /*Select a second topic */
     topics[1].qos = M2MB_MQTT_QOS_0;          /*The Quality of Service*/
     topics[1].cb = mqtt_topic_cb; /*And the callback function that will be called when data arrives.*/
-    AZX_LOG_INFO( "Subscribing to %s and %s..\r\n", SUB_TOPIC, SUB_TOPIC2 );
+    AZX_LOG_INFO( "Subscribing to %s and %s..\r\n", gSUB_TOPIC, gSUB_TOPIC2 );
     result = m2mb_mqtt_subscribe( mqttHandle, 1 /*Start from msg ID 1*/, 2, topics );
 
     if( result == M2MB_MQTT_SUCCESS )
@@ -688,14 +653,14 @@ INT32 MQTT_Task( INT32 type, INT32 param1, INT32 param2 )
 
       if( msgId % 2 == 0 )
       {
-        topic = ( char * ) SUB_TOPIC;
+        topic = ( char * ) gSUB_TOPIC;
       }
       else
       {
-        topic = ( char * ) SUB_TOPIC2;
+        topic = ( char * ) gSUB_TOPIC2;
       }
 
-      sprintf( msg, "%s ID: %d", PUB_MESSAGE, msgId );
+      sprintf( msg, "%s ID: %d", gPUB_MESSAGE, msgId );
       AZX_LOG_DEBUG( "PUBLISHING <%s> to topic %s\r\n", msg, topic );
       result = m2mb_mqtt_publish( mqttHandle, M2MB_MQTT_QOS_0, retain, msgId, topic, msg, strlen( msg ) );
 
@@ -727,7 +692,7 @@ INT32 MQTT_Task( INT32 type, INT32 param1, INT32 param2 )
       break;
     }
 
-    CleanSSLEnvironment(&sslConfigHndl, &sslCtxtHndl, USER_SSL_AUTH);
+    CleanSSLEnvironment(&sslConfigHndl, &sslCtxtHndl, (M2MB_SSL_AUTH_TYPE_E)gUSER_SSL_AUTH);
 
     result = m2mb_mqtt_deinit( mqttHandle );
     if( result == M2MB_MQTT_SUCCESS )
@@ -749,7 +714,7 @@ INT32 MQTT_Task( INT32 type, INT32 param1, INT32 param2 )
   if( task_status == APPLICATION_EXIT )
   {
     AZX_LOG_DEBUG( "application exit\r\n" );
-    ret = m2mb_pdp_deactivate( pdpHandle, PDP_CTX );
+    ret = m2mb_pdp_deactivate( pdpHandle, gPDP_CTX );
 
     if( ret != M2MB_RESULT_SUCCESS )
     {

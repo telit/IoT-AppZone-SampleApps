@@ -1,0 +1,2 @@
+mod/delta.bin,#FOTA_WRITING_FILE_NAME
+mod/fota_up_info.txt,#FOTA_UP_INFO_PATH

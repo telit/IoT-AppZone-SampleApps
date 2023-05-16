@@ -34,7 +34,7 @@
   <td id="projectlogo"><img alt="Logo" src="telit-logo.png"/></td>
   <td id="projectalign" style="padding-left: 2em;">
    <div id="projectname">AZX (AppZone eXtensions) documentation
-   &#160;<span id="projectnumber">1.1.15-CxL</span>
+   &#160;<span id="projectnumber">1.1.19-CxL</span>
    </div>
    <div id="projectbrief">A set of companion utilities that make AZ development easier</div>
   </td>
@@ -134,10 +134,10 @@ Enumerations</h2></td></tr>
 <tr class="memdesc:gadbdffe015f1f2c5125641399bf181029"><td class="mdescLeft">&#160;</td><td class="mdescRight">FTP user callback events. When data is received, one of the events is reported.  <a href="group___a_z_x___f_t_p___u_s_a_g_e.html#gadbdffe015f1f2c5125641399bf181029">More...</a><br /></td></tr>
 <tr class="separator:gadbdffe015f1f2c5125641399bf181029"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga93677062f9160355dea103b8049695f2"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___a_z_x___f_t_p___u_s_a_g_e.html#ga93677062f9160355dea103b8049695f2">AZX_FTP_XFER_E</a> { <a class="el" href="group___a_z_x___f_t_p___u_s_a_g_e.html#gga93677062f9160355dea103b8049695f2ac9f6fc2bf068a4a3f96e6eff260c3d27">AZX_FTP_XFER_FILE</a>, 
-<a class="el" href="group___a_z_x___f_t_p___u_s_a_g_e.html#gga93677062f9160355dea103b8049695f2a5902786cfaa7660a0a2f89d084ce22ff">AZX_FTP_XFER_BUFF</a>
+<a class="el" href="group___a_z_x___f_t_p___u_s_a_g_e.html#gga93677062f9160355dea103b8049695f2a5902786cfaa7660a0a2f89d084ce22ff">AZX_FTP_XFER_BUFF</a>, 
+<a class="el" href="group___a_z_x___f_t_p___u_s_a_g_e.html#gga93677062f9160355dea103b8049695f2ad539bce8f02fdec09cd3b2f279e27735">AZX_FTP_XFER_MAX</a> =0xFFFFFFFF
  }</td></tr>
-<tr class="memdesc:ga93677062f9160355dea103b8049695f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">FTP transfer type. <br  />
-  <a href="group___a_z_x___f_t_p___u_s_a_g_e.html#ga93677062f9160355dea103b8049695f2">More...</a><br /></td></tr>
+<tr class="memdesc:ga93677062f9160355dea103b8049695f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">FTP transfer type.  <a href="group___a_z_x___f_t_p___u_s_a_g_e.html#ga93677062f9160355dea103b8049695f2">More...</a><br /></td></tr>
 <tr class="separator:ga93677062f9160355dea103b8049695f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
@@ -278,7 +278,7 @@ FTP max REST retries</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Use binary (image) mode </p>
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_ftp_example_8c-example.html#a16">azx_ftp_example.c</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_ftp_example_8c-example.html#a17">azx_ftp_example.c</a>.</dd>
 </dl>
 
 </div>
@@ -462,23 +462,23 @@ FTP max REST retries</h2></td></tr>
 <div class="line">    }</div>
 <div class="line">  <span class="keywordflow">return</span> 1;</div>
 <div class="line">}</div>
-<div class="line">  </div>
+<div class="line"> </div>
 <div class="line">  main()</div>
 <div class="line">  {</div>
-<div class="line">      </div>
+<div class="line"> </div>
 <div class="line">      <span class="comment">//...//</span></div>
 <div class="line">      AZX_FTP_XFER local;</div>
 <div class="line">      <a class="code" href="struct_a_z_x___f_t_p___n_e_t___b_u_f___t_a_g.html">AZX_FTP_NET_BUF_T</a> *ftp_client;</div>
 <div class="line">      <span class="keywordtype">char</span> remote_file_path[] = <span class="stringliteral">&quot;myfile&quot;</span>;</div>
 <div class="line">      <span class="keywordtype">char</span> buffer[512];</div>
-<div class="line">      </div>
+<div class="line"> </div>
 <div class="line">      <span class="comment">// Init ftp client</span></div>
-<div class="line">      </div>
+<div class="line"> </div>
 <div class="line">      local.type = <a class="code" href="group___a_z_x___f_t_p___u_s_a_g_e.html#gga93677062f9160355dea103b8049695f2a5902786cfaa7660a0a2f89d084ce22ff">AZX_FTP_XFER_BUFF</a>;</div>
 <div class="line">      local.payload.buffInfo.buffer = (<span class="keywordtype">char</span>*) buffer;</div>
 <div class="line">      local.payload.buffInfo.bufferSize = <span class="keyword">sizeof</span>(buffer);</div>
 <div class="line">      local.payload.buffInfo.buf_cb = my_data_cb; <span class="comment">//the data callback needed to manage the data.</span></div>
-<div class="line">      </div>
+<div class="line"> </div>
 <div class="line">      <a class="code" href="group___a_z_x___f_t_p___u_s_a_g_e.html#ga9bbf4cf039c3c252c2b340b5edc83f47">azx_ftp_get</a>(&amp;(local), remote_file_path, <a class="code" href="group___a_z_x___f_t_p___u_s_a_g_e.html#gad9c77d2d392c378a6d013c0cc9864d12">AZX_FTP_BINARY</a>, ftp_client);</div>
 <div class="line"> </div>
 <div class="line">  }</div>
@@ -546,13 +546,14 @@ FTP max REST retries</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>FTP transfer type. <br  />
- </p>
+<p>FTP transfer type. </p>
 <p><b>Refer to</b> AZX_FTP_XFER_T </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="gga93677062f9160355dea103b8049695f2ac9f6fc2bf068a4a3f96e6eff260c3d27"></a>AZX_FTP_XFER_FILE&#160;</td><td class="fielddoc"><p>File will be transferred as a file stream </p>
 </td></tr>
 <tr><td class="fieldname"><a id="gga93677062f9160355dea103b8049695f2a5902786cfaa7660a0a2f89d084ce22ff"></a>AZX_FTP_XFER_BUFF&#160;</td><td class="fielddoc"><p>File transfer will be managed with a buffer </p>
+</td></tr>
+<tr><td class="fieldname"><a id="gga93677062f9160355dea103b8049695f2ad539bce8f02fdec09cd3b2f279e27735"></a>AZX_FTP_XFER_MAX&#160;</td><td class="fielddoc"><p>max value, do not use </p>
 </td></tr>
 </table>
 
@@ -658,7 +659,7 @@ FTP max REST retries</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1</dd></dl>
 <p><b>Refer to</b> <a class="el" href="group___a_z_x___f_t_p___u_s_a_g_e.html#ga9bbf4cf039c3c252c2b340b5edc83f47" title="FTP retrieve remote file.">azx_ftp_get()</a> <a class="el" href="group___a_z_x___f_t_p___u_s_a_g_e.html#gab31a7329f4257d631b2dd19a60f87ea3" title="FTP send local file.">azx_ftp_put()</a> </p>
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_ftp_example_8c-example.html#a20">azx_ftp_example.c</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_ftp_example_8c-example.html#a21">azx_ftp_example.c</a>.</dd>
 </dl>
 
 </div>
@@ -702,7 +703,7 @@ FTP max REST retries</h2></td></tr>
 <dd>
 0 otherwise</dd></dl>
 <p><b>Refer to</b> <a class="el" href="group___a_z_x___f_t_p___c_o_n_f.html#ga66188a5de36ea1d3cc9cf3708474f35b" title="FTP initialize function.">azx_ftp_init()</a> </p>
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_ftp_example_8c-example.html#a13">azx_ftp_example.c</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_ftp_example_8c-example.html#a14">azx_ftp_example.c</a>.</dd>
 </dl>
 
 </div>
@@ -851,7 +852,7 @@ FTP max REST retries</h2></td></tr>
 <dd>
 0 otherwise</dd></dl>
 <p><b>Refer to</b> <a class="el" href="group___a_z_x___f_t_p___c_o_n_f.html#ga66188a5de36ea1d3cc9cf3708474f35b" title="FTP initialize function.">azx_ftp_init()</a> <a class="el" href="group___a_z_x___f_t_p___u_s_a_g_e.html#gaf1d7d4071e395d57344d1961068ab56c" title="FTP connection function.">azx_ftp_connect()</a> <a class="el" href="group___a_z_x___f_t_p___u_s_a_g_e.html#ga2725d29c5b79492215523d7de3c39a6f" title="FTP login function.">azx_ftp_login()</a> </p>
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_ftp_example_8c-example.html#a31">azx_ftp_example.c</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_ftp_example_8c-example.html#a32">azx_ftp_example.c</a>.</dd>
 </dl>
 
 </div>
@@ -882,7 +883,7 @@ FTP max REST retries</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The server response string</dd></dl>
 <p><b>Refer to</b> <a class="el" href="group___a_z_x___f_t_p___c_o_n_f.html#ga66188a5de36ea1d3cc9cf3708474f35b" title="FTP initialize function.">azx_ftp_init()</a> <a class="el" href="group___a_z_x___f_t_p___u_s_a_g_e.html#ga2725d29c5b79492215523d7de3c39a6f" title="FTP login function.">azx_ftp_login()</a> <a class="el" href="group___a_z_x___f_t_p___u_s_a_g_e.html#ga9bbf4cf039c3c252c2b340b5edc83f47" title="FTP retrieve remote file.">azx_ftp_get()</a> <a class="el" href="group___a_z_x___f_t_p___u_s_a_g_e.html#gab31a7329f4257d631b2dd19a60f87ea3" title="FTP send local file.">azx_ftp_put()</a> </p>
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_ftp_example_8c-example.html#a17">azx_ftp_example.c</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_ftp_example_8c-example.html#a18">azx_ftp_example.c</a>.</dd>
 </dl>
 
 </div>
@@ -933,7 +934,7 @@ FTP max REST retries</h2></td></tr>
 <dd>
 0 otherwise</dd></dl>
 <p><b>Refer to</b> <a class="el" href="group___a_z_x___f_t_p___c_o_n_f.html#ga66188a5de36ea1d3cc9cf3708474f35b" title="FTP initialize function.">azx_ftp_init()</a> <a class="el" href="group___a_z_x___f_t_p___u_s_a_g_e.html#gaf1d7d4071e395d57344d1961068ab56c" title="FTP connection function.">azx_ftp_connect()</a> FtpQuit() </p>
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_ftp_example_8c-example.html#a14">azx_ftp_example.c</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_ftp_example_8c-example.html#a15">azx_ftp_example.c</a>.</dd>
 </dl>
 
 </div>
@@ -1033,7 +1034,7 @@ FTP max REST retries</h2></td></tr>
 <dd>
 0 otherwise</dd></dl>
 <p><b>Refer to</b> <a class="el" href="group___a_z_x___f_t_p___c_o_n_f.html#ga66188a5de36ea1d3cc9cf3708474f35b" title="FTP initialize function.">azx_ftp_init()</a> <a class="el" href="group___a_z_x___f_t_p___u_s_a_g_e.html#gaf1d7d4071e395d57344d1961068ab56c" title="FTP connection function.">azx_ftp_connect()</a> <a class="el" href="group___a_z_x___f_t_p___u_s_a_g_e.html#ga2725d29c5b79492215523d7de3c39a6f" title="FTP login function.">azx_ftp_login()</a> </p>
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_ftp_example_8c-example.html#a18">azx_ftp_example.c</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_ftp_example_8c-example.html#a19">azx_ftp_example.c</a>.</dd>
 </dl>
 
 </div>
@@ -1190,7 +1191,7 @@ FTP max REST retries</h2></td></tr>
 <dd>
 0 otherwise</dd></dl>
 <p><b>Refer to</b> <a class="el" href="group___a_z_x___f_t_p___c_o_n_f.html#ga66188a5de36ea1d3cc9cf3708474f35b" title="FTP initialize function.">azx_ftp_init()</a> <a class="el" href="group___a_z_x___f_t_p___u_s_a_g_e.html#gaf1d7d4071e395d57344d1961068ab56c" title="FTP connection function.">azx_ftp_connect()</a> <a class="el" href="group___a_z_x___f_t_p___u_s_a_g_e.html#ga2725d29c5b79492215523d7de3c39a6f" title="FTP login function.">azx_ftp_login()</a> </p>
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_ftp_example_8c-example.html#a32">azx_ftp_example.c</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_ftp_example_8c-example.html#a33">azx_ftp_example.c</a>.</dd>
 </dl>
 
 </div>
@@ -1272,7 +1273,7 @@ FTP max REST retries</h2></td></tr>
 <dd>
 0 otherwise</dd></dl>
 <p><b>Refer to</b> <a class="el" href="group___a_z_x___f_t_p___c_o_n_f.html#ga66188a5de36ea1d3cc9cf3708474f35b" title="FTP initialize function.">azx_ftp_init()</a> <a class="el" href="group___a_z_x___f_t_p___u_s_a_g_e.html#gaf1d7d4071e395d57344d1961068ab56c" title="FTP connection function.">azx_ftp_connect()</a> <a class="el" href="group___a_z_x___f_t_p___u_s_a_g_e.html#ga2725d29c5b79492215523d7de3c39a6f" title="FTP login function.">azx_ftp_login()</a> </p>
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_ftp_example_8c-example.html#a38">azx_ftp_example.c</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_ftp_example_8c-example.html#a39">azx_ftp_example.c</a>.</dd>
 </dl>
 
 </div>
@@ -1405,7 +1406,7 @@ FTP max REST retries</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1</dd></dl>
 <p><b>Refer to</b> <a class="el" href="group___a_z_x___f_t_p___u_s_a_g_e.html#ga9bbf4cf039c3c252c2b340b5edc83f47" title="FTP retrieve remote file.">azx_ftp_get()</a> <a class="el" href="group___a_z_x___f_t_p___u_s_a_g_e.html#gab31a7329f4257d631b2dd19a60f87ea3" title="FTP send local file.">azx_ftp_put()</a> </p>
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_ftp_example_8c-example.html#a30">azx_ftp_example.c</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_ftp_example_8c-example.html#a31">azx_ftp_example.c</a>.</dd>
 </dl>
 
 </div>
@@ -1505,7 +1506,7 @@ FTP max REST retries</h2></td></tr>
 <dd>
 0 otherwise</dd></dl>
 <p><b>Refer to</b> <a class="el" href="group___a_z_x___f_t_p___c_o_n_f.html#ga66188a5de36ea1d3cc9cf3708474f35b" title="FTP initialize function.">azx_ftp_init()</a> <a class="el" href="group___a_z_x___f_t_p___u_s_a_g_e.html#gaf1d7d4071e395d57344d1961068ab56c" title="FTP connection function.">azx_ftp_connect()</a> <a class="el" href="group___a_z_x___f_t_p___u_s_a_g_e.html#ga2725d29c5b79492215523d7de3c39a6f" title="FTP login function.">azx_ftp_login()</a> </p>
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_ftp_example_8c-example.html#a15">azx_ftp_example.c</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="azx_ftp_example_8c-example.html#a16">azx_ftp_example.c</a>.</dd>
 </dl>
 
 </div>

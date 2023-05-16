@@ -52,7 +52,7 @@ static INT32 freepos=0; //these are used for hptf test case
 static INT32 evaluate[3]={0,0,0};
 
 /*Label tasks for convenience*/
-static INT8 PRODUCER, CONSUMER, SUPPORT, SUPPORT2;
+static INT32 PRODUCER, CONSUMER, SUPPORT, SUPPORT2;
 
 
 

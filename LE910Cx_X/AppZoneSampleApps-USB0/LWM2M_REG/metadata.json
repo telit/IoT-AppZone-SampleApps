@@ -1,0 +1,64 @@
+{
+  "name": "Sample App for LwM2M REG functionalities",
+  "type": "sample-app",
+  "description": "A sample app that shows how to use LwM2M REG actions with M2MB API.",
+  "copyright": "Telit Communications, 2021",
+  "homepage": "https://www.telit.com/",
+  "keywords": [
+    "IoT AppZone",
+    "LWM2M",
+    "OneEdge"
+  ],
+  "availability": {
+    "MXXXXC1": {
+      "firmwares": [
+        "30.01.xx1"
+      ]
+    },
+    "MXXXXG1": {
+      "firmwares": [
+        "37.00.xx6"
+      ]
+    },
+    "LE910Cx-X": {
+      "firmwares": [
+        "25.30.xx3",
+        "25.30.xx4",
+        "25.30.xx5",
+        "25.30.xx6"
+      ]
+    }
+  },
+  "groups": [
+    {
+      "name": "MAIN_UART",
+      "limitations": []
+    },
+    {
+      "name": "AUX_UART",
+      "limitations": []
+    },
+    {
+      "name": "USB0",
+      "limitations": []
+    }
+  ],
+  "platform": "GCC",
+  "license": "MIT",
+  "support": {
+    "email": "ts-emea@telit.com"
+  },
+  "authors": [
+    {
+      "name": "Gianluca Loi",
+      "email": "Gianluca.Loi@telit.com",
+      "homepage": "http://www.telit.com/",
+      "role": "Developer"
+    }
+  ],
+  "requires": {
+    "core/azx_log": "master",
+    "core/azx_utils": "master",
+    "core/azx_tasks": "master"
+  }
+}

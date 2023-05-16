@@ -1,0 +1,52 @@
+{
+  "name": "Sample App for ONOFF button handling",
+  "type": "sample-app",
+  "description": "A sample app that shows how to handle ON OFF button in appzone.",
+  "copyright": "Telit Communications, 2021",
+  "homepage": "https://www.telit.com/",
+  "keywords": [
+    "IoT AppZone",
+    "ONOFF",
+    "ON",
+    "OFF"
+  ],
+  "availability": {
+    "LE910Cx-X": {
+      "firmwares": [
+        "25.30.xx6"
+      ]
+    }
+  },
+  "groups": [
+    {
+      "name": "MAIN_UART",
+      "limitations": []
+    },
+    {
+      "name": "AUX_UART",
+      "limitations": [
+        "LE910Cx-L"
+      ]
+    },
+    {
+      "name": "USB0",
+      "limitations": []
+    }
+  ],
+  "platform": "GCC",
+  "license": "MIT",
+  "support": {
+    "email": "ts-emea@telit.com"
+  },
+  "authors": [
+    {
+      "name": "Roberta Galeazzo",
+      "email": "Roberta.Galeazzo@telit.com",
+      "homepage": "http://www.telit.com/",
+      "role": "Developer"
+    }
+  ],
+  "requires": {
+    "core/azx_log": "master"
+  }
+}
