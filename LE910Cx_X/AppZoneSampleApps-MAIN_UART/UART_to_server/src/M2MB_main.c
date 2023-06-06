@@ -47,14 +47,9 @@
 
 #include "app_cfg.h"
 
+#include "read_parameters.h"
 
 /* Local defines ================================================================================*/
-
-#define APN          "web.omnitel.it"
-#define SERVER       "modules.telit.com"
-#define SERVER_PORT  10510
-
-#define PDP_CTX   (UINT8)3
 
 #define EV_NET_BIT         (UINT32)0x1    /*0x0000000000000001*/
 #define EV_PDP_BIT         (UINT32)0x2    /*0x0000000000000010*/
@@ -321,6 +316,10 @@ INT32 socket_init(void)
   {
     AZX_LOG_DEBUG("INIT\r\n");
 
+    configureParameters(); /*set default values first*/
+    readConfigFromFile(); /*try to read configuration from file (if present)*/
+
+
     /* Init events handler */
     osRes  = m2mb_os_ev_setAttrItem( &evAttrHandle, CMDS_ARGS(M2MB_OS_EV_SEL_CMD_CREATE_ATTR, NULL, M2MB_OS_EV_SEL_CMD_NAME, "net_pdp_ev"));
     osRes = m2mb_os_ev_init( &net_pdp_evHandle, &evAttrHandle );
@@ -378,16 +377,18 @@ INT32 socket_init(void)
     memset( apnUser, 0x00, sizeof(apnUser) );
     memset( apnPwd, 0x00, sizeof(apnPwd) );
 
-    strcat( apn, APN );
+    strcat(apn, gAPN);
+    strcat(apnUser, gAPN_UserName);
+    strcat(apnPwd, gAPN_Password);
 
     AZX_LOG_INFO("Activate PDP with APN %s....\r\n", apn);
-    retVal = m2mb_pdp_activate(pdpHandle, PDP_CTX, apn, apnUser, apnPwd, M2MB_PDP_IPV4); //activates cid 3 with APN "internet.wind.biz" and IP type IPV4
+    retVal = m2mb_pdp_activate(pdpHandle, gPDP_CTX, apn, apnUser, apnPwd, M2MB_PDP_IPV4); //activates cid 3 with APN "internet.wind.biz" and IP type IPV4
     if ( retVal != M2MB_RESULT_SUCCESS )
     {
       AZX_LOG_ERROR("cannot activate pdp context. Trying deactivating and reactivating again\r\n");
-      m2mb_pdp_deactivate(pdpHandle, PDP_CTX);
+      m2mb_pdp_deactivate(pdpHandle, gPDP_CTX);
       azx_sleep_ms(1000);
-      retVal = m2mb_pdp_activate(pdpHandle, PDP_CTX, apn, apnUser, apnPwd, M2MB_PDP_IPV4); //activates cid 3 with APN "internet.wind.biz" and IP type IPV4
+      retVal = m2mb_pdp_activate(pdpHandle, gPDP_CTX, apn, apnUser, apnPwd, M2MB_PDP_IPV4); //activates cid 3 with APN "internet.wind.biz" and IP type IPV4
       if ( retVal != M2MB_RESULT_SUCCESS )
       {
         AZX_LOG_ERROR("cannot activate pdp context. Quitting...\r\n");
@@ -413,17 +414,17 @@ INT32 socket_init(void)
     }
 
 
-    if ( m2mb_socket_set_cid( sock_client, PDP_CTX ) != 0 )
+    if ( m2mb_socket_set_cid( sock_client, gPDP_CTX ) != 0 )
     {
-      AZX_LOG_ERROR( "Socket not set to ctx: %d\r\n", PDP_CTX );
+      AZX_LOG_ERROR( "Socket not set to ctx: %d\r\n", gPDP_CTX );
       return -1;
     }
 
-    AZX_LOG_DEBUG( "Socket ctx set to %d\r\n", PDP_CTX );
+    AZX_LOG_DEBUG( "Socket ctx set to %d\r\n", gPDP_CTX );
 
     memset(&stSockAddr, 0, sizeof(struct M2MB_SOCKET_BSD_SOCKADDR_IN));
 
-    if (0 == (stSockAddr.sin_addr.s_addr= get_host_ip_by_name(SERVER)))
+    if (0 == (stSockAddr.sin_addr.s_addr= get_host_ip_by_name(gServer)))
     {
       AZX_LOG_ERROR("Cannot retrieve IP\r\n");
       task_status = APPLICATION_EXIT;
@@ -436,7 +437,7 @@ INT32 socket_init(void)
     }
 
     stSockAddr.sin_family = M2MB_SOCKET_BSD_PF_INET;
-    stSockAddr.sin_port = m2mb_socket_bsd_htons(SERVER_PORT);
+    stSockAddr.sin_port = m2mb_socket_bsd_htons(gServer_Port);
 
     if( 0 != m2mb_socket_bsd_connect(sock_client, (struct M2MB_SOCKET_BSD_SOCKADDR*)&stSockAddr,
         sizeof(struct M2MB_SOCKET_BSD_SOCKADDR_IN)))
@@ -457,7 +458,7 @@ INT32 socket_init(void)
     AZX_LOG_DEBUG("application exit\r\n");
     m2mb_socket_bsd_close( sock_client );
 
-    ret = m2mb_pdp_deactivate(pdpHandle, PDP_CTX);
+    ret = m2mb_pdp_deactivate(pdpHandle, gPDP_CTX);
     if(ret != M2MB_RESULT_SUCCESS)
     {
       AZX_LOG_ERROR("CANNOT DEACTIVATE PDP\r\n");

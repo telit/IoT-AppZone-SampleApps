@@ -104,6 +104,7 @@ static struct
   CHAR current_name[40];
   UINT32 circular_chunks;
   UINT32 max_size_kb;
+  UINT32 current_file_size;
   AZX_LOG_LEVEL_E min_level;
   UINT32 cache_idx;
   CHAR cache[MAX_FILE_LOG_CACHE];
@@ -117,6 +118,8 @@ static struct
   /*.circular_chunks */
   0,
   /*.max_size_kb */
+  0,
+  /*.current_file_size */
   0,
   /*.min_level */
   AZX_LOG_LEVEL_CRITICAL,
@@ -174,7 +177,7 @@ static INT32  log_print_to_USB (const CHAR *path, const CHAR *message );
 static UINT32 get_uptime(void);
 static const char* get_file_title(const CHAR* path);
 static char* get_current_task_name(CHAR *name);
-static BOOLEAN check_file_size(const CHAR* filename, UINT32 max_size_kb);
+static BOOLEAN check_file_size(const CHAR* filename, UINT32 max_size_kb, UINT32 data_size);
 static void flush_log_to_file(void);
 static void file_log_or_cache(const CHAR* buffer);
 static const CHAR* get_next_log_filename(const CHAR* filename,
@@ -482,6 +485,37 @@ AZX_LOG_LEVEL_E azx_log_getLevel(void)
   return AZX_LOG_LEVEL_NONE;
 }
 
+INT32 azx_log_disableUart(void)
+{
+  INT32 res = -1;
+  if(log_cfg.isInit)
+  {
+
+     if(log_cfg.ch_fd != -1 && (log_cfg.channel == AZX_LOG_TO_MAIN_UART || log_cfg.channel == AZX_LOG_TO_AUX_UART ))
+     {
+       res = m2mb_uart_ioctl(log_cfg.ch_fd, M2MB_UART_IOCTL_SET_POWER_STATE, FALSE);
+     }
+  }
+
+  return res;
+}
+
+
+INT32 azx_log_enableUart(void)
+{
+  INT32 res = -1;
+  if(log_cfg.isInit)
+  {
+
+    if(log_cfg.ch_fd != -1 && (log_cfg.channel == AZX_LOG_TO_MAIN_UART || log_cfg.channel == AZX_LOG_TO_AUX_UART ))
+     {
+       res = m2mb_uart_ioctl(log_cfg.ch_fd, M2MB_UART_IOCTL_SET_POWER_STATE, TRUE);
+     }
+  }
+
+  return res;
+}
+
 /*----------------------------------------------------------------------------*/
 /*!
   \brief Prints on the requested log channel (USB, UART, AUX)
@@ -575,7 +609,24 @@ INT32 azx_log_formatted(AZX_LOG_LEVEL_E level,
 
     if(logFile.fd && level >= logFile.min_level)
     {
-      if(!check_file_size(logFile.current_name, logFile.max_size_kb))
+
+      switch(level)
+      {
+        LOG_FILE_PREFIX(TRACE);
+        LOG_FILE_PREFIX(DEBUG);
+        LOG_FILE_PREFIX(INFO);
+        LOG_FILE_PREFIX(WARN);
+        LOG_FILE_PREFIX(ERROR);
+        LOG_FILE_PREFIX(CRITICAL);
+        default:
+          break;
+      }
+
+      va_start(arg, fmt);
+      vsnprintf(log_buffer + offset, LOG_BUFFER_SIZE - offset, fmt, arg);
+      va_end(arg);
+
+      if(!check_file_size(logFile.current_name, logFile.max_size_kb, strlen(log_buffer)))
       {
         /* Log limit reached, so we'll need to open the next file in the rotation. Log in the file
          * that this limit is reached and then get the next filename */
@@ -600,21 +651,6 @@ INT32 azx_log_formatted(AZX_LOG_LEVEL_E level,
         }
       }
 
-      switch(level)
-      {
-        LOG_FILE_PREFIX(TRACE);
-        LOG_FILE_PREFIX(DEBUG);
-        LOG_FILE_PREFIX(INFO);
-        LOG_FILE_PREFIX(WARN);
-        LOG_FILE_PREFIX(ERROR);
-        LOG_FILE_PREFIX(CRITICAL);
-        default:
-          break;
-      }
-
-      va_start(arg, fmt);
-      vsnprintf(log_buffer + offset, LOG_BUFFER_SIZE - offset, fmt, arg);
-      va_end(arg);
       file_log_or_cache(log_buffer);
     }
 
@@ -625,15 +661,34 @@ end:
   return sent;
 }
 
-static BOOLEAN check_file_size(const CHAR* filename, UINT32 max_size_kb)
+static BOOLEAN check_file_size(const CHAR* filename, UINT32 max_size_kb, UINT32 data_size)
 {
   struct M2MB_STAT stat;
+  BOOLEAN result = TRUE;
+  UINT32 max_size_bytes = max_size_kb << 10;
+
   if(-1 == m2mb_fs_stat(filename, &stat))
   {
     /* Most likely the file doesn't exist, so return true */
     return TRUE;
   }
-  return ((stat.st_size >> 10) < max_size_kb);
+
+  logFile.current_file_size = stat.st_size;
+
+  if(logFile.current_file_size >= max_size_bytes)
+  {
+    result = FALSE;
+  }
+  else if (data_size > 0) /*If the function was provided with the expected amount of data to write */
+  {
+    /* The file is still smaller than the expected size, but less than the amount needed to log the new message */
+    if( (max_size_bytes - logFile.current_file_size) < data_size )
+    {
+      result = FALSE;
+    }
+  }
+
+  return result;
 }
 
 static void flush_log_to_file(void)
@@ -647,7 +702,34 @@ static void file_log_or_cache(const CHAR* buffer)
 {
   const UINT32 size = strlen(buffer);
 
-  if(MAX_FILE_LOG_CACHE - 1 - size < logFile.cache_idx)
+  /*If the file max size in KB is smaller than file LOG CACHE, flush earlier*/
+//  UINT32 max_size = M2MB_MIN(  logFile.max_size_kb << 10 , MAX_FILE_LOG_CACHE);
+  UINT32 file_max_size_bytes = logFile.max_size_kb << 10;
+  UINT32 max_size = MAX_FILE_LOG_CACHE;
+
+
+  /*If the file max size in bytes is smaller than file LOG CACHE, flush earlier*/
+  if( (file_max_size_bytes > 0)  && ( (file_max_size_bytes) < MAX_FILE_LOG_CACHE ) )
+  {
+    /*size = file max size*/
+    max_size = file_max_size_bytes;
+  }
+  else
+  {
+    /*If the file remaining size in bytes is smaller than file LOG CACHE, flush earlier*/
+    UINT32 offset = file_max_size_bytes - logFile.current_file_size;
+    if( (offset > 0 ) && ( offset < MAX_FILE_LOG_CACHE ))
+    {
+      /*size = offset between file size and cache size*/
+      max_size = offset;
+    }
+    else
+    {
+      /*size = log cache size*/
+    }
+  }
+
+  if(max_size - 1 - size < logFile.cache_idx)
   {
     flush_log_to_file();
   }
@@ -699,7 +781,7 @@ static const CHAR* get_next_log_filename(const CHAR* filename,
   /* First try the original file */
   snprintf(filenameInUse, sizeof(filenameInUse), "%s", filename);
 
-  if(check_file_size(filenameInUse, max_size_kb))
+  if(check_file_size(filenameInUse, max_size_kb, 0))
   {
     goto end;
   }
@@ -715,7 +797,7 @@ static const CHAR* get_next_log_filename(const CHAR* filename,
    * filename.1 (since the old one got moved to filename.2) */
   snprintf(filenameInUse, sizeof(filenameInUse), "%s.1", filename);
 
-  if(check_file_size(filenameInUse, max_size_kb))
+  if(check_file_size(filenameInUse, max_size_kb, 0))
   {
     goto end;
   }
@@ -740,7 +822,7 @@ BOOLEAN azx_log_send_to_file(const CHAR* filename, UINT32 circular_chunks,
     return FALSE;
   }
 
-  if(circular_chunks == 0 && !check_file_size(filename, max_size_kb))
+  if(circular_chunks == 0 && !check_file_size(filename, max_size_kb, 0))
   {
     return FALSE;
   }

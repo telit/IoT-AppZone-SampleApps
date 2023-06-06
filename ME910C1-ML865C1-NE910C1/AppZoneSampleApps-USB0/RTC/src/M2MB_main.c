@@ -13,7 +13,7 @@
   @description
     Sample application that shows RTC apis functionalities: how to get/set moudle system time and timestamp. Debug prints on USB0
   @version
-    1.0.0
+    1.0.1
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -106,7 +106,8 @@ void *myUserdata = NULL;
 
 
 struct tm dateTime;
-time_t currTime;
+time_t tmpTime;
+M2MB_RTC_TIMEVAL_T currTime;
 INT32 rtcfd;
 M2MB_RTC_TIME_T newTime;
 INT16 timeZone;
@@ -172,7 +173,7 @@ INT16 timeZone;
 	if(retVal == 0)
 	{
 
-		AZX_LOG_INFO("\r\nCurrent time in seconds from the epoch: %d\r\n", currTime);
+		AZX_LOG_INFO("\r\nCurrent time in seconds from the epoch: %d\r\n", currTime.sec);
 
 	}
 	else
@@ -219,9 +220,10 @@ INT16 timeZone;
 
 	//Add 1 hour -> 3600 sec
 
-	currTime += 3600;
+	currTime.sec += 3600;
+	tmpTime = (time_t)currTime.sec;
 	{
-		struct tm *tmp = localtime(&currTime);
+		struct tm *tmp = localtime(&tmpTime);
 		if (tmp != NULL)
 		{
 			dateTime = *tmp;

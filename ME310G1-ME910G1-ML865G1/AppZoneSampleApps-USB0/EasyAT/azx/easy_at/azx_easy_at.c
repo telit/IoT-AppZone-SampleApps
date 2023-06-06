@@ -53,6 +53,19 @@
   #define ULONG_LONG_MAX ULLONG_MAX
 #endif
 
+
+#ifndef ATP_THREAD_PRIORITY
+
+#define ATP_THREAD_PRIORITY 231
+
+#endif
+
+#ifndef ATP_THREAD_STACK_SIZE
+
+#define ATP_THREAD_STACK_SIZE (16*1024)
+
+#endif
+
 /* Local typedefs ===============================================================================*/
 
 /**

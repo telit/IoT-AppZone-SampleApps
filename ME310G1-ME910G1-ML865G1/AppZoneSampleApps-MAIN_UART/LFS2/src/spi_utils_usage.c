@@ -18,7 +18,7 @@
   @details
 
   @version
- 	 1.0.0
+ 	 1.0.1
 
   @note
 
@@ -374,7 +374,7 @@ static TEST_RESULT_E testAllInOneFunction ( void )
 		return TEST_ERROR;
 	}
 
-	char content [10] = {0};
+	char content [32] = {0};
 
 	memset(content, 0x00, sizeof(content));
 	strcat(content, "content000");

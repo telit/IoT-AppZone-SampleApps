@@ -31,7 +31,7 @@ Depending on the Mobile Network Operator and Access Technology, the APN might be
 
 **Minimal FOTA profile (short lifetime)** device profile must be imported and selected to improve the responsiveness of the FOTA operations
 
-To do so, import the file `lwm2m_fota_profile_short.json` on section `Developer` > `Device profiles` of OneEdge IoT portal:
+To do so, import the file `json/lwm2m_fota_profile_short.json` (provided with the sample files) on section `Developer` > `Device profiles` of OneEdge IoT portal:
 
 ![](../../pictures/samples/lwm2m_device_profile_bordered.png)
 

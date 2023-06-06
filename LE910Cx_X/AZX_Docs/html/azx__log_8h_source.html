@@ -34,7 +34,7 @@
   <td id="projectlogo"><img alt="Logo" src="telit-logo.png"/></td>
   <td id="projectalign" style="padding-left: 2em;">
    <div id="projectname">AZX (AppZone eXtensions) documentation
-   &#160;<span id="projectnumber">1.1.15-CxL</span>
+   &#160;<span id="projectnumber">1.1.19-CxL</span>
    </div>
    <div id="projectbrief">A set of companion utilities that make AZ development easier</div>
   </td>
@@ -168,64 +168,70 @@ $(document).ready(function(){initNavTree('azx__log_8h_source.html','');});
 <div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160; </div>
 <div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;<a class="code" href="group__log_conf.html#gae9fa7be40e4fcae6093707def57f82a5">AZX_LOG_LEVEL_E</a> <a class="code" href="azx__log_8h.html#ab2c4e9406084c9f69c1314a718cc90d8">azx_log_getLevel</a>(<span class="keywordtype">void</span>);</div>
 <div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160; </div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;BOOLEAN <a class="code" href="azx__log_8h.html#af64520b985c9e8b97fda9dd77279bdd3">azx_log_send_to_file</a>(<span class="keyword">const</span> CHAR* filename, UINT32 circular_chunks,</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    <a class="code" href="group__log_conf.html#gae9fa7be40e4fcae6093707def57f82a5">AZX_LOG_LEVEL_E</a> min_level, UINT32 max_size_kb);</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160; </div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;<span class="keywordtype">void</span> <a class="code" href="azx__log_8h.html#a3e999a06dd697da3196e357039081124">azx_log_flush_to_file</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160; </div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160; </div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160; </div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;<span class="preprocessor">#ifdef AZX_LOG_ENABLE</span></div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160; </div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;INT32 <a class="code" href="azx__log_8h.html#a1118287cc32aed65c4ca32cccae47ebf">azx_log_disableUart</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160; </div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;INT32 <a class="code" href="azx__log_8h.html#a9660d2ae041136d9cb99db1d38792d39">azx_log_enableUart</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160; </div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;BOOLEAN <a class="code" href="azx__log_8h.html#af64520b985c9e8b97fda9dd77279bdd3">azx_log_send_to_file</a>(<span class="keyword">const</span> CHAR* filename, UINT32 circular_chunks,</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;    <a class="code" href="group__log_conf.html#gae9fa7be40e4fcae6093707def57f82a5">AZX_LOG_LEVEL_E</a> min_level, UINT32 max_size_kb);</div>
 <div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160; </div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;<span class="preprocessor">#if AZX_LOG_ENABLE_COLOURS</span></div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;<span class="preprocessor">#define _LOG_COLOURS 1</span></div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;<span class="preprocessor">#define _LOG_COLOURS 0</span></div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160; </div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;<span class="comment">/* Set to 1 below to get coloured logs*/</span></div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;<span class="preprocessor">#define AZX_LOG_INIT() do {\</span></div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;<span class="preprocessor">  AZX_LOG_CFG_T cfg =\</span></div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;<span class="preprocessor">  {\</span></div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;<span class="preprocessor">    </span><span class="comment">/*.log_level*/</span><span class="preprocessor">   AZX_LOG_LEVEL,\</span></div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;<span class="preprocessor">    </span><span class="comment">/*.log_channel*/</span><span class="preprocessor"> LOG_CHANNEL,\</span></div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;<span class="preprocessor">    </span><span class="comment">/*.log_colours*/</span><span class="preprocessor"> _LOG_COLOURS\</span></div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;<span class="preprocessor">  };\</span></div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;<span class="preprocessor">  azx_log_init(&amp;cfg);\</span></div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;<span class="preprocessor">} while(0)</span></div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;<span class="keywordtype">void</span> <a class="code" href="azx__log_8h.html#a3e999a06dd697da3196e357039081124">azx_log_flush_to_file</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160; </div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160; </div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160; </div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;<span class="preprocessor">#ifndef AZX_LOG_DISABLE</span></div>
 <div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160; </div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;<span class="preprocessor">#define AZX_LOG_CRITICAL(a...)  azx_log_formatted(AZX_LOG_LEVEL_CRITICAL, __FUNCTION__, __FILE__, __LINE__, a)</span></div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160; </div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;<span class="preprocessor">#define AZX_LOG_ERROR(a...)     azx_log_formatted(AZX_LOG_LEVEL_ERROR, __FUNCTION__, __FILE__, __LINE__, a)</span></div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160; </div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;<span class="preprocessor">#define AZX_LOG_WARN(a...)      azx_log_formatted(AZX_LOG_LEVEL_WARN, __FUNCTION__, __FILE__, __LINE__, a)</span></div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160; </div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;<span class="preprocessor">#define AZX_LOG_INFO(a...)      azx_log_formatted(AZX_LOG_LEVEL_INFO, &quot;&quot;, &quot;&quot;, 0, a)</span></div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160; </div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;<span class="preprocessor">#define AZX_LOG_DEBUG(a...)     azx_log_formatted(AZX_LOG_LEVEL_DEBUG, __FUNCTION__, __FILE__, __LINE__, a)</span></div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160; </div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;<span class="preprocessor">#define AZX_LOG_TRACE(a...)     azx_log_formatted(AZX_LOG_LEVEL_TRACE, __FUNCTION__, __FILE__, __LINE__, a)</span></div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160; </div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;<span class="preprocessor">#else </span><span class="comment">/* !AZX_LOG_ENABLE */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;<span class="preprocessor">#if AZX_LOG_ENABLE_COLOURS</span></div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;<span class="preprocessor">#define _LOG_COLOURS 1</span></div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;<span class="preprocessor">#define _LOG_COLOURS 0</span></div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160; </div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;<span class="comment">/* Set to 1 below to get coloured logs*/</span></div>
+<div class="line"><a name="l00291"></a><span class="lineno"><a class="line" href="azx__log_8h.html#a4af7b5c67a5df4ffbcafe9a91a4677bc">  291</a></span>&#160;<span class="preprocessor">#define AZX_LOG_INIT() do {\</span></div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;<span class="preprocessor">  AZX_LOG_CFG_T cfg =\</span></div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;<span class="preprocessor">  {\</span></div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;<span class="preprocessor">    </span><span class="comment">/*.log_level*/</span><span class="preprocessor">   AZX_LOG_LEVEL,\</span></div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;<span class="preprocessor">    </span><span class="comment">/*.log_channel*/</span><span class="preprocessor"> LOG_CHANNEL,\</span></div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;<span class="preprocessor">    </span><span class="comment">/*.log_colours*/</span><span class="preprocessor"> _LOG_COLOURS\</span></div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;<span class="preprocessor">  };\</span></div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;<span class="preprocessor">  azx_log_init(&amp;cfg);\</span></div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;<span class="preprocessor">} while(0)</span></div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160; </div>
+<div class="line"><a name="l00309"></a><span class="lineno"><a class="line" href="group__log_usage.html#ga4cbebf6589190814b5ee9adb22bb1d44">  309</a></span>&#160;<span class="preprocessor">#define AZX_LOG_CRITICAL(a...)  azx_log_formatted(AZX_LOG_LEVEL_CRITICAL, __FUNCTION__, __FILE__, __LINE__, a)</span></div>
 <div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160; </div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;<span class="preprocessor">#include &quot;m2mb_types.h&quot;</span></div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;<span class="preprocessor">#include &quot;m2mb_trace.h&quot;</span></div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160; </div>
-<div class="line"><a name="l00317"></a><span class="lineno"><a class="line" href="azx__log_8h.html#a4af7b5c67a5df4ffbcafe9a91a4677bc">  317</a></span>&#160;<span class="preprocessor">#define AZX_LOG_INIT() do { \</span></div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;<span class="preprocessor">  m2mb_trace_init(); \</span></div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;<span class="preprocessor">  m2mb_trace_enable(M2MB_TC_M2M_USER); \</span></div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;<span class="preprocessor">} while(0)</span></div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160; </div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;<span class="preprocessor">#define AZX_LOG_CRITICAL(a...) m2mb_trace_file_line_printf(__FILE__, __LINE__, M2MB_TC_M2M_USER, M2MB_TL_FATAL, (CHAR*)a)</span></div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;<span class="preprocessor">#define AZX_LOG_ERROR(a...)    m2mb_trace_file_line_printf(__FILE__, __LINE__, M2MB_TC_M2M_USER, M2MB_TL_ERROR, (CHAR*)a)</span></div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;<span class="preprocessor">#define AZX_LOG_WARN(a...)     m2mb_trace_file_line_printf(__FILE__, __LINE__, M2MB_TC_M2M_USER, M2MB_TL_WARNING, (CHAR*)a)</span></div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;<span class="preprocessor">#define AZX_LOG_INFO(a...)     m2mb_trace_file_line_printf(__FILE__, __LINE__, M2MB_TC_M2M_USER, M2MB_TL_LOG, (CHAR*)a)</span></div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;<span class="preprocessor">#define AZX_LOG_DEBUG(a...)    m2mb_trace_file_line_printf(__FILE__, __LINE__, M2MB_TC_M2M_USER, M2MB_TL_DEBUG, (CHAR*)a)</span></div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;<span class="preprocessor">#define AZX_LOG_TRACE(a...)</span></div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160; </div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* AZX_LOG_ENABLE */</span><span class="preprocessor"></span></div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160; </div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* HDR_AZX_LOG_H_ */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;<span class="preprocessor">#define AZX_LOG_ERROR(a...)     azx_log_formatted(AZX_LOG_LEVEL_ERROR, __FUNCTION__, __FILE__, __LINE__, a)</span></div>
+<div class="line"><a name="l00313"></a><span class="lineno"><a class="line" href="group__log_usage.html#ga81e4f03b2a752e5e9cfae1e037ce7256">  313</a></span>&#160; </div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;<span class="preprocessor">#define AZX_LOG_WARN(a...)      azx_log_formatted(AZX_LOG_LEVEL_WARN, __FUNCTION__, __FILE__, __LINE__, a)</span></div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160; </div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;<span class="preprocessor">#define AZX_LOG_INFO(a...)      azx_log_formatted(AZX_LOG_LEVEL_INFO, &quot;&quot;, &quot;&quot;, 0, a)</span></div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160; </div>
+<div class="line"><a name="l00321"></a><span class="lineno"><a class="line" href="group__log_usage.html#ga847d9b9f62e31bf14b31882be7418675">  321</a></span>&#160;<span class="preprocessor">#define AZX_LOG_DEBUG(a...)     azx_log_formatted(AZX_LOG_LEVEL_DEBUG, __FUNCTION__, __FILE__, __LINE__, a)</span></div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160; </div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;<span class="preprocessor">#define AZX_LOG_TRACE(a...)     azx_log_formatted(AZX_LOG_LEVEL_TRACE, __FUNCTION__, __FILE__, __LINE__, a)</span></div>
+<div class="line"><a name="l00325"></a><span class="lineno"><a class="line" href="group__log_usage.html#gacd61f6160b4cd02c2ec2259b5bc94670">  325</a></span>&#160; </div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;<span class="preprocessor">#else </span><span class="comment">/* AZX_LOG_DISABLE */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160; </div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;<span class="preprocessor">#define AZX_LOG_INIT()</span></div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160; </div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;<span class="preprocessor">#define AZX_LOG_CRITICAL(a...)</span></div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;<span class="preprocessor">#define AZX_LOG_ERROR(a...)</span></div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;<span class="preprocessor">#define AZX_LOG_WARN(a...)</span></div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;<span class="preprocessor">#define AZX_LOG_INFO(a...)</span></div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;<span class="preprocessor">#define AZX_LOG_DEBUG(a...)</span></div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;<span class="preprocessor">#define AZX_LOG_TRACE(a...)</span></div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* AZX_LOG_DISABLE */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160; </div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160; </div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;<span class="preprocessor">#define LogCritical(a)  AZX_LOG_CRITICAL a</span></div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;<span class="preprocessor">#define LogError(a)     AZX_LOG_ERROR a</span></div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;<span class="preprocessor">#define LogWarn(a)      AZX_LOG_WARN a</span></div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;<span class="preprocessor">#define LogInfo(a)      AZX_LOG_INFO a</span></div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;<span class="preprocessor">#define LogDebug(a)     AZX_LOG_DEBUG a</span></div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;<span class="preprocessor">#define LogTrace(a)     AZX_LOG_TRACE a</span></div>
+<div class="line"><a name="l00356"></a><span class="lineno"><a class="line" href="azx__log_8h.html#a2a91920ddea804f783778fce7b4c96d6">  356</a></span>&#160; </div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* HDR_AZX_LOG_H_ */</span><span class="preprocessor"></span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="agroup__log_usage_html_ggabe77e5a2f7b57b5029c6f7cdfa7e3dd0aadebfaa08c22d4ad0729e98b50ce880c"><div class="ttname"><a href="group__log_usage.html#ggabe77e5a2f7b57b5029c6f7cdfa7e3dd0aadebfaa08c22d4ad0729e98b50ce880c">AZX_LOG_CANNOT_OPEN_USB_CHANNEL</a></div><div class="ttdef"><b>Definition:</b> azx_log.h:62</div></div>
@@ -242,8 +248,10 @@ $(document).ready(function(){initNavTree('azx__log_8h_source.html','');});
 <div class="ttc" id="agroup__log_usage_html_ggabe77e5a2f7b57b5029c6f7cdfa7e3dd0a90e600d320bbca44c2c869025835b1c7"><div class="ttname"><a href="group__log_usage.html#ggabe77e5a2f7b57b5029c6f7cdfa7e3dd0a90e600d320bbca44c2c869025835b1c7">AZX_LOG_UNEXPECTED_CHANNEL</a></div><div class="ttdef"><b>Definition:</b> azx_log.h:63</div></div>
 <div class="ttc" id="astruct_a_z_x___l_o_g___c_f_g___t_html"><div class="ttname"><a href="struct_a_z_x___l_o_g___c_f_g___t.html">AZX_LOG_CFG_T</a></div><div class="ttdoc">Logging configuration structure.</div><div class="ttdef"><b>Definition:</b> azx_log.h:92</div></div>
 <div class="ttc" id="aazx__log_8h_html_af64520b985c9e8b97fda9dd77279bdd3"><div class="ttname"><a href="azx__log_8h.html#af64520b985c9e8b97fda9dd77279bdd3">azx_log_send_to_file</a></div><div class="ttdeci">BOOLEAN azx_log_send_to_file(const CHAR *filename, UINT32 circular_chunks, AZX_LOG_LEVEL_E min_level, UINT32 max_size_kb)</div><div class="ttdoc">Gets the logging component to output to a file.</div></div>
+<div class="ttc" id="aazx__log_8h_html_a1118287cc32aed65c4ca32cccae47ebf"><div class="ttname"><a href="azx__log_8h.html#a1118287cc32aed65c4ca32cccae47ebf">azx_log_disableUart</a></div><div class="ttdeci">INT32 azx_log_disableUart(void)</div><div class="ttdoc">Puts the UART used for logs in power OFF mode.</div></div>
 <div class="ttc" id="agroup__log_usage_html_ggabe77e5a2f7b57b5029c6f7cdfa7e3dd0a12ddd7346038a59740724ffcc8c20e12"><div class="ttname"><a href="group__log_usage.html#ggabe77e5a2f7b57b5029c6f7cdfa7e3dd0a12ddd7346038a59740724ffcc8c20e12">AZX_LOG_NOT_INIT</a></div><div class="ttdef"><b>Definition:</b> azx_log.h:59</div></div>
 <div class="ttc" id="agroup__log_conf_html_ggae9fa7be40e4fcae6093707def57f82a5acc52fcbd7aa2088fe583a11661b4abf2"><div class="ttname"><a href="group__log_conf.html#ggae9fa7be40e4fcae6093707def57f82a5acc52fcbd7aa2088fe583a11661b4abf2">AZX_LOG_LEVEL_ERROR</a></div><div class="ttdef"><b>Definition:</b> azx_log.h:47</div></div>
+<div class="ttc" id="aazx__log_8h_html_a9660d2ae041136d9cb99db1d38792d39"><div class="ttname"><a href="azx__log_8h.html#a9660d2ae041136d9cb99db1d38792d39">azx_log_enableUart</a></div><div class="ttdeci">INT32 azx_log_enableUart(void)</div><div class="ttdoc">Puts the UART used for logs in power ON mode.</div></div>
 <div class="ttc" id="agroup__log_conf_html_gga03b618927cb5d884386832ab76781760a0af771a438449471f0f1fb0a6e5d65d4"><div class="ttname"><a href="group__log_conf.html#gga03b618927cb5d884386832ab76781760a0af771a438449471f0f1fb0a6e5d65d4">AZX_LOG_TO_AUX_UART</a></div><div class="ttdef"><b>Definition:</b> azx_log.h:79</div></div>
 <div class="ttc" id="aazx__log_8h_html_a1cff830ca498f89db8a6ba0882441231"><div class="ttname"><a href="azx__log_8h.html#a1cff830ca498f89db8a6ba0882441231">azx_log_deinit</a></div><div class="ttdeci">INT32 azx_log_deinit(void)</div><div class="ttdoc">Deinitializes the log functionality.</div></div>
 <div class="ttc" id="agroup__log_conf_html_ggae9fa7be40e4fcae6093707def57f82a5a2bdb3bd46fb4a347265f0c966ded4f25"><div class="ttname"><a href="group__log_conf.html#ggae9fa7be40e4fcae6093707def57f82a5a2bdb3bd46fb4a347265f0c966ded4f25">AZX_LOG_LEVEL_INFO</a></div><div class="ttdef"><b>Definition:</b> azx_log.h:45</div></div>

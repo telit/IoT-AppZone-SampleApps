@@ -1,0 +1,14 @@
+internet,#APN
+,#APN_USERNAME
+,#APN_PASSWORD
+1,#PDP_CTX
+example.server.com,#MAIL_SERVER
+25,#MAIL_PORT
+exampleUser1@exampledomain.com,#MAIL_USER
+exampleUserPwd1,#MAIL_PASS
+exampleUser1@exampledomain.com,#MAIL_FROM
+ExUser1,#MAIL_FROM_NAME
+Hello from AppZone,#MAIL_SUBJECT
+AppZone Test,#MAIL_BODY
+exampleUser2@exampledomain.com,#MAIL_TO
+ExUser2,#MAIL_TO_NAME

@@ -1,5 +1,6 @@
 var annotated_dup =
 [
+    [ "addrinfo", "structaddrinfo.html", "structaddrinfo" ],
     [ "AZX_CJSON_TAG", "struct_a_z_x___c_j_s_o_n___t_a_g.html", "struct_a_z_x___c_j_s_o_n___t_a_g" ],
     [ "AZX_EASY_AT_ATCOMMAND_TAG", "struct_a_z_x___e_a_s_y___a_t___a_t_c_o_m_m_a_n_d___t_a_g.html", "struct_a_z_x___e_a_s_y___a_t___a_t_c_o_m_m_a_n_d___t_a_g" ],
     [ "AZX_EASY_AT_HANDLES_TAG", "struct_a_z_x___e_a_s_y___a_t___h_a_n_d_l_e_s___t_a_g.html", "struct_a_z_x___e_a_s_y___a_t___h_a_n_d_l_e_s___t_a_g" ],

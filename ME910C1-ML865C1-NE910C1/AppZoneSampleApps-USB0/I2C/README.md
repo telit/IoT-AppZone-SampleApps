@@ -10,7 +10,12 @@ Sample application showing how to communicate with an I2C slave device. Debug pr
 - How to open a communication channel with an I2C slave device
 - How to send and receive data to/from the slave device
 
+**Setup**
 
+- Connect sensor VDD to 1v8 supply (e.g. Vaux/PwrMon pin of the module)
+- Connect sensor GND to a GND pin of the module
+- Connect sensor SDA to module GPIO2
+- Connect sensor SCL to module GPIO3
 
 #### Application workflow
 

@@ -1,0 +1,3 @@
+/file.txt,#FILE
+the quick brown fox jumped over the lazy dog.,#DATA_STRING
+bb0fa6eff92c305f166803b6938dd33a,#RIGHT_MD5_HASH

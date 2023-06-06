@@ -1,0 +1,9 @@
+web.omnitel.it,#APN
+,#APN_USERNAME
+,#APN_PASSWORD
+3,#PDP_CDX
+modules.telit.com,#SERVER
+443,#SERVER_PORT
+/ssl_certs/modulesCA.crt,#CA_CERT_PATH
+,#CLIENT_CERT_PATH
+,#CLIENT_KEY_PATH

@@ -13,7 +13,7 @@
   @description
     Sample application showcasing Easy AT functionalities. Debug prints on AUX UART
   @version
-    1.0.2
+    1.0.3
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()

@@ -1,3 +1,20 @@
+1.0.7
+better variable management in getaddrinfo
+-----------
+1.0.6
+rvct fixes
+-----------
+1.0.5
+added time.h, getaddrinfo
+code cleanup
+-----------
+1.0.4
+added sys/stat.h, printf, sleep, exit remaps
+code cleanup
+-----------
+1.0.3
+code cleanup
+-----------
 1.0.2
 code cleanup
 -----------

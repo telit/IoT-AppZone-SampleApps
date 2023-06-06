@@ -9,8 +9,8 @@
 #define HDR_NTP_TYPES_H_
 
 typedef enum {
-	INIT,
-	SET_MODULE_RTC
+  INIT,
+  SET_MODULE_RTC
 
 } APP_STATUS;
 

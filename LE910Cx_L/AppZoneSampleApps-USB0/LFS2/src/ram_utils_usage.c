@@ -205,7 +205,7 @@ TEST_RESULT_E ramDiskDemo (void)
 	}
 
 
-	char content [11] = {0};
+	char content [32] = {0};
 
 	memset(content, 0x00, sizeof(content));
 	strcat(content, "content000");

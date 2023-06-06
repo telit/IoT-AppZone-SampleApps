@@ -1,4 +1,4 @@
-/*Copyright (C) 2020 Telit Communications S.p.A. Italy - All Rights Reserved.*/
+/*Copyright (C) 2022 Telit Communications S.p.A. Italy - All Rights Reserved.*/
 /*    See LICENSE file in the project root for full license information.     */
 
 
@@ -7,7 +7,7 @@
 
 /**
   @file azx_https.h
-  @version 1.1.1
+  @version 2.1.0
   @dependencies azx_string_utils gnu azx_base64
 
   @brief HTTPs client
@@ -19,12 +19,11 @@
        m2mb_types.h
        m2mb_socket.h
        m2mb_ssl.h
-       
-       
+
 
   @author
     Luca Boi
-    Fabio Pintus (AZX conversion)
+    Fabio Pintus (AZX conversion and improvements)
 
   @date
      11/09/2020
@@ -53,7 +52,8 @@
 /** @} */
 /** @} */  //close addtogroup
 
-
+#define AZX_HTTP_OK 200
+#define AZX_HTTP_CLIENT_CLOSED_REQUEST 499
 
 /* Global typedefs ===========================================================*/
 //typedef unsigned char BOOL;   /**< Boolean value*/
@@ -108,11 +108,12 @@ typedef struct
   char user_agent[AZX_HTTP_H_FIELD_SIZE];      /**<Field to hold HTTP user agent*/
   char location[AZX_HTTP_H_FIELD_SIZE];        /**<Field to hold HTTP location*/
   char referrer[AZX_HTTP_H_FIELD_SIZE];        /**<Field to hold HTTP referrer*/
-  char boundary[AZX_HTTP_H_FIELD_SIZE];        /**<Field to hold HTTP boundary*/
   char accept_type[AZX_HTTP_H_FIELD_SIZE];     /**<Field to hold HTTP accept type*/
   char *post_data;                             /**<Field that will hold POST data. Must be allocated in user application */
   char *cookie;                                /**<Field that will hold cookie data. Must be allocated in user application */
   char *custom_fields;                         /**<Field that will hold additional custom fields. Must be allocated in user application */
+  char* content_range;                         /**<The Content-Range info, request for user or containing the server response (buffer provided by used)*/
+
 } AZX_HTTP_HEADER;
 
 
@@ -160,10 +161,10 @@ typedef struct
 {
 
   int    https;                              /**<Is connection secure?*/
-  char   host[256];                       /**<Destination host name*/
+  char   host[256];                          /**<Destination host name*/
   int    port;                               /**<Destination host port*/
-  char   path[AZX_HTTP_H_FIELD_SIZE];         /**<Destination URI (e.g. "/index.html" */
-  char   auth_credentials[256];       /**< Authentication credentials. Will contain "username:password" base64 encoded */
+  char   path[AZX_HTTP_H_FIELD_SIZE];        /**<Destination URI (e.g. "/index.html" */
+  char   auth_credentials[256];              /**< Authentication credentials. Will contain "username:password" base64 encoded */
 } AZX_HTTP_URL;
 
 /* The required option to correctly use the callback function */
@@ -173,18 +174,18 @@ typedef struct
     User callback prototype
 
   @details
-    This is the function signature (user must define one and pass it to will be called by the client to allow user receive and manage incoming data.
+    This is the function signature. User must define one and pass it to azx_http_setCB(). It will be called by the client
+    to allow user receive and manage incoming data, or to notify the amount of transmitted data during a POST operation.
 
   @param[in]
-       Incoming data buffer
+       Incoming data buffer in case of download (GET), NULL in case of upload (POST)
   @param[in]
-       Incoming data length
+       Incoming data length in case of GET, sent data length in case of POST
   @param[inout]
-       the Event Flag pointer. It can be used to force the HTTP client to stop current operation.
-
+       the user provided context
 
   @return
-       Integer value, not used
+       Integer value, if 0, HTTPS client will keep transferring data, otherwise it will abort the process.
 
   <b>Refer to</b>
   azx_https_set_CB() azx_httpCallbackOptions
@@ -192,7 +193,7 @@ typedef struct
   @ingroup httpConf
 */
 /*-----------------------------------------------------------------------------------------------*/
-typedef INT32( *AZX_HTTPS_USER_CB )( void *, UINT32, INT8 * );
+typedef INT32( *AZX_HTTPS_USER_CB )( void *, UINT32, void * );
 
 
 /*!
@@ -237,8 +238,8 @@ typedef struct
   user_cb_bytes_size;    /**< The buffer size. Every time the buffer content reaches this size, the callback function will executed. */
   void
   *cbData;               /**< The buffer pointer (already allocated) that will contain the data to output with the callback */
-  INT8
-  *cbEvtFlag;            /**< Callback event pointer. This is a flag. When activated (set to a value different from 0) from user application side this leads the HTTP read process to be forcefully stopped */
+  void
+  *cbArg;            	 /**< Callback argument pointer. This is a user provided context.*/
   AZX_HTTPS_USER_CB cbFunc;                /**< Function pointer to the callback function */
 } azx_httpCallbackOptions;
 
@@ -392,17 +393,17 @@ typedef int ( *azx_httpDebugHook )( AZX_HTTP_LOG_HOOK_LEVELS_E level, const char
 /*-----------------------------------------------------------------------------------------------*/
 typedef struct
 {
-  unsigned char cid;                               /**< Context id to be used for connection */
   AZX_HTTP_LOG_HOOK_LEVELS_E loglevel;    /**< Global debug Level to set */
-  azx_httpDebugHook logFunc;                    /**< Function to call for prints */
-  void *logArg;                                      /**< Parameter for logging function. Unused*/
-  int padding;                                        /**< Padding*/
+  azx_httpDebugHook logFunc;              /**< Function to call for prints */
+  void *logArg;                           /**< Parameter for logging function. Unused*/
+  unsigned char cid;                      /**< Context id to be used for connection */
+  int padding;                            /**< Padding*/
 } AZX_HTTP_OPTIONS;
 
 /*! \cond PRIVATE */
 extern AZX_HTTP_OPTIONS *hi_struct;
 
-#define AZX_HTTP_LOG(l,a...)   ({ { if(hi_struct->loglevel >= l && hi_struct->logFunc) {hi_struct->logFunc(l, __FUNCTION__, __FILE__, __LINE__, a);}}})
+#define AZX_HTTP_LOG(l,a...)    { if(hi_struct->loglevel >= l && hi_struct->logFunc) {hi_struct->logFunc(l, __FUNCTION__, __FILE__, __LINE__, a);}}
 /*! \endcond */
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -480,7 +481,8 @@ void azx_http_initialize( AZX_HTTP_OPTIONS *opts );
     Run a HTTP GET request
 
   \details
-    Run a HTTP GET request using the URL info and the additional info stored in HTTP_INFO info
+    Run a HTTP GET request using the URL info and the additional info stored in HTTP_INFO info.
+    It supports single RANGE requests.
 
   \param[inout] hi
     AZX_HTTP_INFO struct used to provide additional data for the request (i.e the HTTP authentication type) and store the retrieved metadata from the header
@@ -501,8 +503,11 @@ void azx_http_initialize( AZX_HTTP_OPTIONS *opts );
   <b>Sample usage</b>
   \code
       AZX_HTTP_INFO hi;
+      char respRange[100] = {0};
       memset(&hi, 0, sizeof(HTTP_INFO));
       hi.request.auth_type = AuthSchemaBasic;
+      hi.request.content_range = (char *)"0-50";
+      hi.response.content_range = respRange;
       azx_http_get(&hi,"http://guest:guest@jigsaw.w3.org/HTTP/Basic/");
   \endcode
 */
@@ -556,7 +561,7 @@ int  azx_http_head( AZX_HTTP_INFO *hi, char *url );
     Run a HTTP POST request using the URL info and the additional info stored in HTTP_INFO info
 
   \param[inout] hi
-    AZX_HTTP_INFO struct used to provide additional data for the request (i.e the POST data) and store the retrieved metadata from the header
+    AZX_HTTP_INFO struct used to provide additional data for the request (i.e the POST data) and its content_length and store the retrieved metadata from the header
 
   \param[in] url
     the URL to parse for the HTTP request
@@ -579,12 +584,51 @@ int  azx_http_head( AZX_HTTP_INFO *hi, char *url );
       hi.request.post_data = (char *)m2mb_os_malloc(sizeof(char)* (strlen(data) + 1));
       memset(hi.request.post_data, 0, sizeof(sizeof(char)* (strlen(data) + 1)));
       strcpy(hi.request.post_data,data);
+      hi.request.content_length = strlen(hi.request.post_data);
       ret = azx_http_post(&hi,(char *)"http://postman-echo.com:80/post");
   \endcode
 */
 /*-----------------------------------------------------------------------------------------------*/
 int  azx_http_post( AZX_HTTP_INFO *hi, char *url );
 /*-----------------------------------------------------------------------------------------------*/
+
+/*!
+  \brief
+    Run a HTTP POST request for a local file
+
+  \details
+    Run a HTTP POST request using the URL info, sending the provided local file
+
+  \param[inout] hi
+    AZX_HTTP_INFO struct used to perform the request and store the retrieved metadata from the header
+
+  \param[in] url
+    the URL to parse for the HTTP request
+
+  \param[in] filepath
+    path to the local file to be POSTed.
+
+   \return
+    HTTP response code - Ok
+  \return
+     -1   - Failure
+
+  <b>Refer to</b>
+    azx_http_initialize() azx_http_SSLInit() azx_http_set_CB()
+
+  @ingroup httpUsage
+
+  <b>Sample usage</b>
+  \code
+      AZX_HTTP_INFO hi;
+      memset(&hi, 0, sizeof(AZX_HTTP_INFO));
+      ret = azx_http_post_file(&hi,(char *)"http://postman-echo.com:80/post", "/mod/myfile.txt);
+  \endcode
+*/
+/*-----------------------------------------------------------------------------------------------*/
+int azx_http_post_file( AZX_HTTP_INFO *hi, char *url, char *filepath);
+/*-----------------------------------------------------------------------------------------------*/
+
 /*!
   \brief
     Sets user callback
@@ -608,13 +652,20 @@ int  azx_http_post( AZX_HTTP_INFO *hi, char *url );
 
   <b>Sample usage</b>
   \code
-      INT8 cbEvt = 0;
+      INT8 cbArg = 0;
 
-      int DATA_CB(char* buffer, UINT32 size, INT8 *flag)
+      int DATA_CB(char* buffer, UINT32 size, INT8 *cbArg)
       {
         //set stop flag if needed
-        // *flag = 1;
-
+        // return = 1;
+        if(buffer != NULL)
+        {
+           //download operation
+        }
+        else
+        {
+           //upload operation
+        }
         return 0;
       }
 
@@ -623,7 +674,7 @@ int  azx_http_post( AZX_HTTP_INFO *hi, char *url );
       cbOpt.user_cb_bytes_size = 1500;
       cbOpt.cbFunc = DATA_CB;
       cbOpt.cbData = m2mb_os_malloc(cbOpt.user_cb_bytes_size + 1); //one more element for \0
-      cbOpt.cbEvtFlag = &cbEvt;
+      cbOpt.cbArg = &cbArg;
 
       AZX_HTTP_INFO hi;
       memset(&hi, 0, sizeof(HTTP_INFO));

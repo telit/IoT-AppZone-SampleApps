@@ -1,4 +1,4 @@
-/*Copyright (C) 2020 Telit Communications S.p.A. Italy - All Rights Reserved.*/
+/*Copyright (C) 2022 Telit Communications S.p.A. Italy - All Rights Reserved.*/
 /*    See LICENSE file in the project root for full license information.     */
 
 /**
@@ -44,6 +44,8 @@
 #define in_addr           M2MB_SOCKET_BSD_IN_ADDR
 #define in6_addr          M2MB_SOCKET_BSD_IPV6_ADDR
 #define s6_addr           addr8_s
+#undef fd_set
+#define fd_set 			  M2MB_SOCKET_BSD_FD_SET_T
 /**   End of structs  **/
 
 /**   Functions         **/
@@ -69,6 +71,18 @@
 #define accept            m2mb_socket_bsd_accept
 #define inet_ntoa(a)      m2mb_socket_bsd_addr_str(a.s_addr)
 #define select            azx_gnu_select
+
+#undef	fd_set
+#define	fd_set		M2MB_SOCKET_BSD_FD_SET_T
+#undef	fds_bits
+#define	fds_bits	fd_array
+
+
+#undef getaddrinfo
+#define getaddrinfo azx_gnu_getaddrinfo
+
+#undef freeaddrinfo
+#define freeaddrinfo azx_gnu_freeaddrinfo
 
 /** Macros **/
 #define _SS_MAXSIZE       128  /* Implementation specific max size */
@@ -117,6 +131,7 @@ typedef UINT8 uint8_t;
 #define PF_INET6        AF_INET6
 #define IPPROTO_TCP     M2MB_SOCKET_BSD_IPPROTO_TCP
 #define IPPROTO_UDP     M2MB_SOCKET_BSD_IPPROTO_UDP
+#define AF_UNSPEC       M2MB_SOCKET_BSD_AF_UNSPEC
 #define SOCK_STREAM     M2MB_SOCKET_BSD_SOCK_STREAM
 #define SOCK_DGRAM      M2MB_SOCKET_BSD_SOCK_DGRAM
 #define SO_SNDBUF       M2MB_SOCKET_BSD_SO_SNDBUF
@@ -141,6 +156,23 @@ typedef UINT8 uint8_t;
 #endif
 #ifndef AI_NUMERICSERV
   #define AI_NUMERICSERV  0x0400  /* Don't use name resolution.  */
+#endif
+
+
+#ifndef EAI_FAIL
+#define	EAI_FAIL		 4	/* non-recoverable failure in name resolution */
+#endif
+#ifndef EAI_MEMORY
+#define	EAI_MEMORY		 6	/* memory allocation failure */
+#endif
+#ifndef EAI_NODATA
+#define	EAI_NODATA		 7	/* no address associated with host */
+#endif
+#ifndef EAI_NONAME
+#define	EAI_NONAME		 8	/* host nor service provided, or not known */
+#endif
+#ifndef EAI_SYSTEM
+#define	EAI_SYSTEM		11	/* system error returned in errno */
 #endif
 
 /** From in.h --> **/
@@ -177,6 +209,18 @@ struct sockaddr_storage
   /* _SS_MAXSIZE value minus size of ss_family */
   /* __ss_pad1, __ss_align fields is 112 */
 };
+struct addrinfo {
+               int              ai_flags;
+               int              ai_family;
+               int              ai_socktype;
+               int              ai_protocol;
+               socklen_t        ai_addrlen;
+               struct M2MB_SOCKET_BSD_SOCKADDR *ai_addr;
+               char            *ai_canonname;
+               struct addrinfo *ai_next;
+           };
+
+#define INET6_ADDRSTRLEN 46
 
 /** End of Wrappers **/
 
@@ -410,5 +454,8 @@ extern INT32 azx_gnu_h_errno;
 const char *azx_gnu_hstrerror( int err );
 #define hstrerror azx_gnu_hstrerror
 /** <-- From netdb.h **/
+int azx_gnu_getaddrinfo(const char *node, const char *service, const struct addrinfo *hints, struct addrinfo **res);
+
+void azx_gnu_freeaddrinfo (struct addrinfo *ai);
 
 #endif /* HDR_AZX_GNU_SYS_SOCKET_H_ */

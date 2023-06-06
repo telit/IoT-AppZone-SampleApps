@@ -1,0 +1,1 @@
+The application shows how to set the module in low power modes (by disabling UART and RF). Debug prints on MAIN UART which it is enabled/disabled to reach low power mode, <ins>using AZX log example functions</ins>

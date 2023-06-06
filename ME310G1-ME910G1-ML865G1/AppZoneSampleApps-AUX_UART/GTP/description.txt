@@ -1,0 +1,1 @@
+Sample application that shows hot to get the position using GTP feature. Debug prints on AUX UART
