@@ -1,11 +1,11 @@
 /* The standard CSS for doxygen 1.8.15, customized for Telit*/
 
 body, table, div, p, dl {
-  font: 400 14px/22px Roboto,sans-serif;
+  font: 400 14px/22px Open Sans;
 }
 
 p.reference, p.definition {
-  font: 400 14px/22px Roboto,sans-serif;
+  font: 400 14px/22px Open Sans;
 }
 
 /* @group Heading Levels */
@@ -15,7 +15,7 @@ h1.groupheader {
 }
 
 .title {
-  font: 400 14px/28px Roboto,sans-serif;
+  font: 400 14px/28px Open Sans;
   font-size: 150%;
   font-weight: bold;
   margin: 10px 2px;
@@ -123,7 +123,7 @@ div.navtab {
 /* @group Link Styling */
 
 a {
-  color: #FDB722;
+  color: #00A880;
   font-weight: normal;
   text-decoration: none;
 }
@@ -313,7 +313,7 @@ div.groupText {
 
 body {
   background-color: white;
-  color: #064b7c;
+    color: #002F70;
     margin: 0;
 }
 
@@ -384,19 +384,19 @@ span.keyword {
 }
 
 span.keywordtype {
-  color: #604020
+  color: #4461A8
 }
 
 span.keywordflow {
-  color: #e08000
+  color: #00A880
 }
 
 span.comment {
-  color: #800000
+  color: #829DD1
 }
 
 span.preprocessor {
-  color: #806020
+  color: #85CCB3
 }
 
 span.stringliteral {
@@ -519,7 +519,7 @@ table.memberdecls {
 
 .mdescLeft, .mdescRight {
   padding: 0px 8px 4px 8px;
-  color: #064b7c;
+  color: #002F70;
 }
 
 .memSeparator {
@@ -686,7 +686,7 @@ dl.reflist dd {
 }
 
 .paramname {
-  color: #602020;
+  color: #00694B;
   white-space: nowrap;
 }
 .paramname em {
@@ -888,7 +888,7 @@ div.directory {
 }
 
 table.directory {
-    font: 400 14px Roboto,sans-serif;
+    font: 400 14px Open Sans;
 }
 
 /* @end */
@@ -1114,7 +1114,7 @@ div.header
 div.headertitle
 {
     padding: 5px 5px 5px 10px;
-    background-color: #274769; /*DARK BLUE*/
+    background-color: #002F70; /*DARK BLUE*/
     color: #FFF;
     text-shadow: 1px 1px 1px rgb(0, 0, 0);
 }
@@ -1143,7 +1143,7 @@ dl.note {
   margin-left: -7px;
   padding-left: 3px;
   border-left: 4px solid;
-  border-color: #D0C000;
+  border-color: #00A880;
 }
 
 dl.note.DocNodeRTL {
@@ -1153,7 +1153,7 @@ dl.note.DocNodeRTL {
   margin-right: -7px;
   padding-right: 3px;
   border-right: 4px solid;
-  border-color: #D0C000;
+  border-color: #00A880;
 }
 
 dl.warning, dl.attention {
@@ -1268,7 +1268,7 @@ dl.section dd {
   text-align: center;
   vertical-align: center;
   border-collapse: separate;
-    padding: 10px 0px 10px 0px;
+    padding: 10px 0px 10px 10px;
 }
  
 #projectlogo img
@@ -1283,27 +1283,28 @@ dl.section dd {
 
 #projectname
 {
-  font: 300% Tahoma, Arial,sans-serif;
+  font: 300% Ebrima;
     margin: 0px;
   padding: 2px 0px;
-    color:#064b7c;
+  color:#002F70;
 }
     
 #projectbrief
 {
-  font: 120% Tahoma, Arial,sans-serif;
+  font: 120% Ebrima;
     font-style: italic;
   margin: 0px;
   padding: 0px;
-    color:#6498D3;
+  color:#829DD1;
 }
 
 #projectnumber
 {
-  font: 75% Tahoma, Arial,sans-serif;
+  font: 75% Ebrima;
+    font-style: italic;
   margin: 0px;
   padding: 0px;
-    color:#FDB722;
+  color:#00A880;
 }
 
 #titlearea
@@ -1513,7 +1514,7 @@ tr.heading h2 {
 #powerTip div {
         margin: 0px;
         padding: 0px;
-        font: 12px/16px Roboto,sans-serif;
+        font: 12px/16px Open Sans;
 }
 
 #powerTip:before, #powerTip:after {

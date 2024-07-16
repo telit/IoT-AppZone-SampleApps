@@ -382,10 +382,22 @@ static INT32 ftp_debug_hk(AZX_FTP_DEBUG_HOOK_LEVELS_E level, const CHAR *functio
   return AZX_LOG_INFO("%s", buf);
 }
 
+static void checkNetStat(  M2MB_NET_REG_STATUS_T *stat_info)
+{
+  if  (stat_info->stat == 1 || stat_info->stat == 5)
+  {
+    AZX_LOG_DEBUG("Module is registered to cell 0x%X!\r\n", (unsigned int)stat_info->cellID);
+    m2mb_os_ev_set(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_SET);
+  }
+  else
+  {
+    m2mb_os_ev_set(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_CLEAR);
+  }
+}
+
 static void NetCallback(M2MB_NET_HANDLE h, M2MB_NET_IND_E net_event, UINT16 resp_size, void *resp_struct, void *myUserdata)
 {
-  (void)resp_size;
-  (void)myUserdata;
+  UNUSED_3( h, resp_size, myUserdata);
 
   M2MB_NET_REG_STATUS_T *stat_info;
 
@@ -393,24 +405,24 @@ static void NetCallback(M2MB_NET_HANDLE h, M2MB_NET_IND_E net_event, UINT16 resp
   {
   case M2MB_NET_GET_REG_STATUS_INFO_RESP:
     stat_info = (M2MB_NET_REG_STATUS_T*)resp_struct;
-    if  (stat_info->stat == 1 || stat_info->stat == 5)
-    {
-      AZX_LOG_DEBUG("Module is registered to network\r\n");
-      m2mb_os_ev_set(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_SET);
-    }
-    else
-    {
-      m2mb_net_get_reg_status_info(h); //call it again
-    }
+    checkNetStat(stat_info);
     break;
 
+  case M2MB_NET_REG_STATUS_IND:
+    stat_info = (M2MB_NET_REG_STATUS_T*)resp_struct;
+    AZX_LOG_DEBUG("Net Stat IND is %d, %d, %d, %d, %ld\r\n",
+        stat_info->stat, stat_info->rat, stat_info->srvDomain,
+        stat_info->areaCode, stat_info->cellID);
+    checkNetStat(stat_info);
+    break;
 
   default:
-    AZX_LOG_DEBUG("unexpected net_event: %d\r\n", net_event);
+    AZX_LOG_TRACE("Unexpected net_event: %d\r\n", net_event);
     break;
 
   }
 }
+
 
 static void PdpCallback(M2MB_PDP_HANDLE h, M2MB_PDP_IND_E pdp_event, UINT8 cid, void *userdata)
 {
@@ -501,6 +513,12 @@ INT32 msgFTPTask(INT32 type, INT32 param1, INT32 param2)
       AZX_LOG_ERROR( "m2mb_net_init did not return M2MB_RESULT_SUCCESS\r\n" );
     }
 
+    retVal = m2mb_net_enable_ind(h, M2MB_NET_REG_STATUS_IND, 1);
+    if ( retVal != M2MB_RESULT_SUCCESS )
+    {
+      AZX_LOG_ERROR( "m2mb_net_enable_ind failed\r\n" );
+      return 1;
+    }
 
     AZX_LOG_DEBUG("Waiting for registration...\r\n");
 
@@ -511,7 +529,7 @@ INT32 msgFTPTask(INT32 type, INT32 param1, INT32 param2)
     }
 
     /*Wait for network registration event to occur (released in NetCallback function) */
-    m2mb_os_ev_get(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_GET_ANY_AND_CLEAR, &curEvBits, M2MB_OS_WAIT_FOREVER);
+    m2mb_os_ev_get(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_GET_ANY, &curEvBits, M2MB_OS_WAIT_FOREVER);
 
 
 

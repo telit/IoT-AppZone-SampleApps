@@ -1,0 +1,1 @@
+Sample application showcasing LWM2M client FOTA events and ACKs management via APIs. Debug prints on MAIN UART

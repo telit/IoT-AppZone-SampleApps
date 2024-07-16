@@ -13,7 +13,7 @@
   @description
     The file contains NTP task that handles NTP query and module internal clock setting
   @version
-    1.0.3
+    1.0.4
   @note
 
   @author
@@ -75,46 +75,48 @@ extern INT32 ntpTask;
 
 /* Static functions =============================================================================*/
 
-
-/* Global functions =============================================================================*/
-
-void NetCallback(M2MB_NET_HANDLE h, M2MB_NET_IND_E net_event, UINT16 resp_size, void *resp_struct, void *myUserdata)
+static void checkNetStat(  M2MB_NET_REG_STATUS_T *stat_info)
 {
-  (void)resp_size;
-  (void)myUserdata;
+  if  (stat_info->stat == 1 || stat_info->stat == 5)
+  {
+    AZX_LOG_DEBUG("Module is registered to cell 0x%X!\r\n", (unsigned int)stat_info->cellID);
+    m2mb_os_ev_set(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_SET);
+  }
+  else
+  {
+    m2mb_os_ev_set(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_CLEAR);
+  }
+}
+
+static void NetCallback(M2MB_NET_HANDLE h, M2MB_NET_IND_E net_event, UINT16 resp_size, void *resp_struct, void *myUserdata)
+{
+  UNUSED_3( h, resp_size, myUserdata);
 
   M2MB_NET_REG_STATUS_T *stat_info;
 
   switch (net_event)
   {
+  case M2MB_NET_GET_REG_STATUS_INFO_RESP:
+    stat_info = (M2MB_NET_REG_STATUS_T*)resp_struct;
+    checkNetStat(stat_info);
+    break;
 
-#if 0
-    case M2MB_NET_REG_STATUS_IND:
-      AZX_LOG_TRACE("Network change event!\r\n");
-      m2mb_net_get_reg_status_info(h);
-      break;
-#endif
-
-    case M2MB_NET_GET_REG_STATUS_INFO_RESP:
-      stat_info = (M2MB_NET_REG_STATUS_T*)resp_struct;
-      if  (stat_info->stat == 1 || stat_info->stat == 5)
-      {
-        AZX_LOG_INFO("Module is registered!\r\n");
-        m2mb_os_ev_set(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_SET);
-      }
-      else
-      {
-        m2mb_net_get_reg_status_info(h); //call it again
-      }
-      break;
-
+  case M2MB_NET_REG_STATUS_IND:
+    stat_info = (M2MB_NET_REG_STATUS_T*)resp_struct;
+    AZX_LOG_DEBUG("Net Stat IND is %d, %d, %d, %d, %ld\r\n",
+        stat_info->stat, stat_info->rat, stat_info->srvDomain,
+        stat_info->areaCode, stat_info->cellID);
+    checkNetStat(stat_info);
+    break;
 
     default:
-      AZX_LOG_TRACE("unexpected net_event: %d\r\n", net_event);
+      AZX_LOG_TRACE("Unexpected net_event: %d\r\n", net_event);
       break;
 
   }
 }
+
+/* Global functions =============================================================================*/
 
 void m2mb_ntp_ind_callback ( M2MB_NTP_HANDLE h,
         M2MB_NTP_EVENTS_E ntp_event,
@@ -238,6 +240,13 @@ INT32 NTP_task(INT32 type, INT32 param1, INT32 param2)
       }
 
 
+      retVal = m2mb_net_enable_ind(hNet, M2MB_NET_REG_STATUS_IND, 1);
+      if ( retVal != M2MB_RESULT_SUCCESS )
+      {
+        AZX_LOG_ERROR( "m2mb_net_enable_ind failed\r\n" );
+        return 1;
+      }
+
       AZX_LOG_INFO("\r\nWaiting for registration...\r\n");
 
       res = m2mb_net_get_reg_status_info(hNet);
@@ -247,7 +256,7 @@ INT32 NTP_task(INT32 type, INT32 param1, INT32 param2)
       }
 
       /*Wait for network registration event to occur (released in NetCallback function) */
-      m2mb_os_ev_get(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_GET_ANY_AND_CLEAR, &curEvBits, M2MB_OS_WAIT_FOREVER);
+      m2mb_os_ev_get(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_GET_ANY, &curEvBits, M2MB_OS_WAIT_FOREVER);
 
       /*Init NTP*/
       res = m2mb_ntp_init(&hNtp, m2mb_ntp_ind_callback, (void*)userContext);

@@ -1,4 +1,4 @@
-/*Copyright (C) 2020 Telit Communications S.p.A. Italy - All Rights Reserved.*/
+/*Copyright (C) 2023 Telit Communications S.p.A. Italy - All Rights Reserved.*/
 /*    See LICENSE file in the project root for full license information.     */
 
 /**
@@ -11,7 +11,7 @@
   @details
 
   @version 
-    1.0.0
+    1.0.2
 
   @note
 
@@ -37,11 +37,13 @@
 
 #include "read_parameters.h"
 
+#define FILESIZE 1024
 char gAPN[MAX_PARAMS_STR_LEN] = {0};
 char gAPN_UserName[MAX_PARAMS_STR_LEN] = {0};
 char gAPN_Password[MAX_PARAMS_STR_LEN] = {0};
 UINT16 gPDP_CTX = 0;
 
+UINT16 gUSE_TLS = 0;
 char gSSL_CERT_CA_NAME[MAX_PARAMS_STR_LEN] = {0};
 char gSSL_CLIENT_NAME[MAX_PARAMS_STR_LEN] = {0};
 char gCACERTFILE[MAX_PARAMS_STR_LEN] = {0};
@@ -94,9 +96,9 @@ char *mystrtok(char **m, char *s, char c)
 int readConfigFromFile(void)
 {
 
-  INT32 fd = -1;
-  INT32 fs_res;
-  CHAR recv[512];
+	INT32 fd = -1;
+	INT32 fs_res;
+	CHAR recv[FILESIZE];
 
   char *p = NULL;
 
@@ -104,6 +106,7 @@ int readConfigFromFile(void)
   char *_APN_USERNAME = NULL;
   char *_APN_PASSWORD = NULL;
   char *_PDP_CDX = NULL;
+  char *_USE_SSL = NULL;
   char *_SSL_CERT_CA_NAME = NULL;
   char *_SSL_CLIENT_NAME = NULL;
   char *_CACERTFILE= NULL;
@@ -157,6 +160,8 @@ int readConfigFromFile(void)
 
     //PDP_CDX
     _PDP_CDX = mystrtok(&p, NULL,',');
+    mystrtok(&p, NULL,'\n'); //strip description
+    _USE_SSL = mystrtok(&p, NULL,',');
     mystrtok(&p, NULL,'\n'); //strip description
 
     //SSL_CERT_CA_NAME
@@ -227,7 +232,7 @@ int readConfigFromFile(void)
     _PUB_MESSAGE = mystrtok(&p, NULL,',');
     mystrtok(&p, NULL,'\n'); //strip description
 
-    if( !_APN || !_APN_USERNAME || ! _APN_PASSWORD || !_PDP_CDX ||
+    if( !_APN || !_APN_USERNAME || ! _APN_PASSWORD || !_PDP_CDX ||!_USE_SSL ||
             !_SSL_CERT_CA_NAME || !_SSL_CLIENT_NAME ||
             !_CACERTFILE || !_CLIENTCERTFILE ||!_CLIENTKEYFILE ||
             !_USER_SSL_AUTH ||
@@ -242,59 +247,67 @@ int readConfigFromFile(void)
     else
     {
 
-      strcpy(gAPN, _APN);
-      strcpy(gAPN_UserName, _APN_USERNAME);
-      strcpy(gAPN_Password, _APN_PASSWORD);
+		strcpy(gAPN, _APN);
+		strcpy(gAPN_UserName, _APN_USERNAME);
+		strcpy(gAPN_Password, _APN_PASSWORD);
 
-      gPDP_CTX = atoi(_PDP_CDX);
+		gPDP_CTX = atoi(_PDP_CDX);
 
-      strcpy(gSSL_CERT_CA_NAME, _SSL_CERT_CA_NAME);
-      strcpy(gSSL_CLIENT_NAME, _SSL_CLIENT_NAME);
-      strcpy(gCACERTFILE, _CACERTFILE);
-      strcpy(gCLIENTCERTFILE, _CLIENTCERTFILE);
-      strcpy(gCLIENTKEYFILE, _CLIENTKEYFILE);
+      gUSE_TLS = atoi(_USE_SSL);
+			strcpy(gSSL_CERT_CA_NAME, _SSL_CERT_CA_NAME);
+			strcpy(gSSL_CLIENT_NAME, _SSL_CLIENT_NAME);
 
-      gUSER_SSL_AUTH = atoi(_USER_SSL_AUTH);
+      char tmp[100] = {0};
+			strcpy(tmp, _CACERTFILE);
+			sprintf(gCACERTFILE, "%s/%s",LOCALPATH,tmp);
+			memset(tmp, 0, 100);
+			strcpy(tmp, _CLIENTCERTFILE);
+			sprintf(gCLIENTCERTFILE, "%s/%s",LOCALPATH,tmp);
+			memset(tmp, 0, 100);
+			strcpy(tmp, _CLIENTKEYFILE);
+			sprintf(gCLIENTKEYFILE, "%s/%s",LOCALPATH,tmp);
+      memset(tmp, 0, 100);
+			gUSER_SSL_AUTH = atoi(_USER_SSL_AUTH);
 
-      strcpy(gMQTT_BROKER_ADDRESS, _MQTT_BROKER_ADDRESS);
+		strcpy(gMQTT_BROKER_ADDRESS, _MQTT_BROKER_ADDRESS);
 
-      gMQTT_BROKER_PORT = atoi(_MQTT_BROKER_PORT);
-      gMQTT_BROKER_PORT_SSL = atoi(_MQTT_BROKER_PORT_SSL);
+		gMQTT_BROKER_PORT = atoi(_MQTT_BROKER_PORT);
+		gMQTT_BROKER_PORT_SSL = atoi(_MQTT_BROKER_PORT_SSL);
 
-      strcpy(gCLIENT_ID, _CLIENT_ID);
-      strcpy(gCLIENT_USERNAME, _CLIENT_USERNAME);
-      strcpy(gCLIENT_PASSWORD, _CLIENT_PASSWORD);
+		strcpy(gCLIENT_ID, _CLIENT_ID);
+		strcpy(gCLIENT_USERNAME, _CLIENT_USERNAME);
+		strcpy(gCLIENT_PASSWORD, _CLIENT_PASSWORD);
 
-      gCLIENT_TIMEOUT_SEC = atoi(_CLIENT_TIMEOUT_SEC);
-      gCLIENT_KEEPALIVE_SEC = atoi(_CLIENT_KEEPALIVE_SEC);
+		gCLIENT_TIMEOUT_SEC = atoi(_CLIENT_TIMEOUT_SEC);
+		gCLIENT_KEEPALIVE_SEC = atoi(_CLIENT_KEEPALIVE_SEC);
 
-      strcpy(gSUB_TOPIC, _SUB_TOPIC);
-      strcpy(gSUB_TOPIC2, _SUB_TOPIC2);
-      strcpy(gPUB_MESSAGE, _PUB_MESSAGE);
+		strcpy(gSUB_TOPIC, _SUB_TOPIC);
+		strcpy(gSUB_TOPIC2, _SUB_TOPIC2);
+		strcpy(gPUB_MESSAGE, _PUB_MESSAGE);
 
-      AZX_LOG_INFO("Set APN to: <<%s>>\r\n", gAPN);
-      AZX_LOG_INFO("Set APN USER to: <<%s>>\r\n", gAPN_UserName);
-      AZX_LOG_INFO("Set APN PASS to: <<%s>>\r\n", gAPN_Password);
-      AZX_LOG_INFO("Set PDP_CDX to: %u\r\n", gPDP_CTX);
-
-      AZX_LOG_INFO("Set SSL_CERT_CA_NAME to: <<%s>>\r\n", gSSL_CERT_CA_NAME);
-      AZX_LOG_INFO("Set SSL_CLIENT_NAME to: <<%s>>\r\n", gSSL_CLIENT_NAME);
-      AZX_LOG_INFO("Set CACERTFILE to: <<%s>>\r\n", gCACERTFILE);
-      AZX_LOG_INFO("Set CLIENTCERTFILE to: <<%s>>\r\n", gCLIENTCERTFILE);
-      AZX_LOG_INFO("Set CLIENTKEYFILE to: <<%s>>\r\n", gCLIENTKEYFILE);
-      AZX_LOG_INFO("Set USER_SSL_AUTH to: %u\r\n", gUSER_SSL_AUTH);
-      AZX_LOG_INFO("Set MQTT_BROKER_ADDRESS to: <<%s>>\r\n", gMQTT_BROKER_ADDRESS);
-      AZX_LOG_INFO("Set MQTT_BROKER_PORT to: %u\r\n", gMQTT_BROKER_PORT);
-      AZX_LOG_INFO("Set MQTT_BROKER_PORT_SSL to: %u\r\n", gMQTT_BROKER_PORT_SSL);
-      AZX_LOG_INFO("Set CLIENT_ID to: <<%s>>\r\n", gCLIENT_ID);
-      AZX_LOG_INFO("Set CLIENT_USERNAME to: <<%s>>\r\n", gCLIENT_USERNAME);
-      AZX_LOG_INFO("Set CLIENT_PASSWORD to: <<%s>>\r\n", gCLIENT_PASSWORD);
-      AZX_LOG_INFO("Set CLIENT_TIMEOUT_SEC to: %u\r\n", gCLIENT_TIMEOUT_SEC);
-      AZX_LOG_INFO("Set CLIENT_KEEPALIVE_SEC to: %u\r\n", gCLIENT_KEEPALIVE_SEC);
-      AZX_LOG_INFO("Set SUB_TOPIC to: <<%s>>\r\n", gSUB_TOPIC);
-      AZX_LOG_INFO("Set SUB_TOPIC2 to: <<%s>>\r\n", gSUB_TOPIC2);
-      AZX_LOG_INFO("Set PUB_MESSAGE to: <<%s>>\r\n", gPUB_MESSAGE);
-      return 1;
+		AZX_LOG_INFO("Set APN to: <<%s>>\r\n", gAPN);
+		AZX_LOG_INFO("Set APN USER to: <<%s>>\r\n", gAPN_UserName);
+		AZX_LOG_INFO("Set APN PASS to: <<%s>>\r\n", gAPN_Password);
+		AZX_LOG_INFO("Set PDP_CDX to: %u\r\n", gPDP_CTX);
+      AZX_LOG_INFO("Set USE_TLS to: %u\r\n", gUSE_TLS);
+		AZX_LOG_INFO("Set SSL_CERT_CA_NAME to: <<%s>>\r\n", gSSL_CERT_CA_NAME);
+		AZX_LOG_INFO("Set SSL_CLIENT_NAME to: <<%s>>\r\n", gSSL_CLIENT_NAME);
+		AZX_LOG_INFO("Set CACERTFILE to: <<%s>>\r\n", gCACERTFILE);
+		AZX_LOG_INFO("Set CLIENTCERTFILE to: <<%s>>\r\n", gCLIENTCERTFILE);
+		AZX_LOG_INFO("Set CLIENTKEYFILE to: <<%s>>\r\n", gCLIENTKEYFILE);
+		AZX_LOG_INFO("Set USER_SSL_AUTH to: %u\r\n", gUSER_SSL_AUTH);
+		AZX_LOG_INFO("Set MQTT_BROKER_ADDRESS to: <<%s>>\r\n", gMQTT_BROKER_ADDRESS);
+		AZX_LOG_INFO("Set MQTT_BROKER_PORT to: %u\r\n", gMQTT_BROKER_PORT);
+		AZX_LOG_INFO("Set MQTT_BROKER_PORT_SSL to: %u\r\n", gMQTT_BROKER_PORT_SSL);
+		AZX_LOG_INFO("Set CLIENT_ID to: <<%s>>\r\n", gCLIENT_ID);
+		AZX_LOG_INFO("Set CLIENT_USERNAME to: <<%s>>\r\n", gCLIENT_USERNAME);
+		AZX_LOG_INFO("Set CLIENT_PASSWORD to: <<%s>>\r\n", gCLIENT_PASSWORD);
+		AZX_LOG_INFO("Set CLIENT_TIMEOUT_SEC to: %u\r\n", gCLIENT_TIMEOUT_SEC);
+		AZX_LOG_INFO("Set CLIENT_KEEPALIVE_SEC to: %u\r\n", gCLIENT_KEEPALIVE_SEC);
+		AZX_LOG_INFO("Set SUB_TOPIC to: <<%s>>\r\n", gSUB_TOPIC);
+		AZX_LOG_INFO("Set SUB_TOPIC2 to: <<%s>>\r\n", gSUB_TOPIC2);
+		AZX_LOG_INFO("Set PUB_MESSAGE to: <<%s>>\r\n", gPUB_MESSAGE);
+        return 1;
     }
   }
   else
@@ -310,6 +323,7 @@ void configureParameters(void)
   strcpy(gAPN_Password, APN_PASS);
   gPDP_CTX = PDP_CTX;
 
+  gUSE_TLS = USE_TLS;
   strcpy(gSSL_CERT_CA_NAME, SSL_CERT_CA_NAME);
   strcpy(gSSL_CLIENT_NAME, SSL_CLIENT_NAME);
   strcpy(gCACERTFILE, CACERTFILE);

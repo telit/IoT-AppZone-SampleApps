@@ -11,7 +11,7 @@
   @details
 
   @version
-    1.0.3
+    1.0.5
   @note
 
 
@@ -451,7 +451,7 @@ static int cell_get_rssi(INT32 *rssi)
   }
 
   /*Wait for network registration event to occur (released in NetCallback function) */
-  if(M2MB_OS_SUCCESS == m2mb_os_ev_get( net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_GET_ANY_AND_CLEAR, &curEvBits,
+  if(M2MB_OS_SUCCESS == m2mb_os_ev_get( net_pdp_evHandle, EV_NET_SIGNAL_BIT, M2MB_OS_EV_GET_ANY_AND_CLEAR, &curEvBits,
       M2MB_OS_MS2TICKS(10000) ))
   {
     *rssi = gRSSI;
@@ -485,8 +485,9 @@ static M2MB_RESULT_E check_net_attach(UINT32 timeout_ms)
 {
   M2MB_RESULT_E retVal;
   UINT32  curEvBits;
-  UINT32 count = 0;
+
   AZX_LOG_DEBUG( "Waiting for registration...\r\n" );
+
 
   do
   {
@@ -499,10 +500,10 @@ static M2MB_RESULT_E check_net_attach(UINT32 timeout_ms)
     }
 
     /*Wait for network registration event to occur (released in NetCallback function) */
-    if(M2MB_OS_SUCCESS != m2mb_os_ev_get( net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_GET_ANY_AND_CLEAR, &curEvBits,
-        M2MB_OS_MS2TICKS(1000) ))
+    if(M2MB_OS_SUCCESS != m2mb_os_ev_get( net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_GET_ANY, &curEvBits,
+        M2MB_OS_MS2TICKS(timeout_ms) ))
     {
-      AZX_LOG_DEBUG("not registered, try again..\r\n");
+      AZX_LOG_DEBUG("not registered, abort\r\n");
       retVal = M2MB_RESULT_FAIL;
     }
     else
@@ -510,74 +511,86 @@ static M2MB_RESULT_E check_net_attach(UINT32 timeout_ms)
       retVal = M2MB_RESULT_SUCCESS;
       break;
     }
-    count +=1000;
-  } while(count < timeout_ms);
+  } while(0);
 
   return retVal;
 }
 
 /* Global functions =============================================================================*/
-void NetCallback( M2MB_NET_HANDLE h, M2MB_NET_IND_E net_event, UINT16 resp_size, void *resp_struct,
-                  void *myUserdata )
+
+static void checkNetStat(  M2MB_NET_REG_STATUS_T *stat_info)
 {
-  ( void )h;
-  ( void )resp_size;
-  ( void )myUserdata;
+  if  (stat_info->stat == 1 || stat_info->stat == 5)
+  {
+    AZX_LOG_DEBUG("Module is registered to cell 0x%X!\r\n", (unsigned int)stat_info->cellID);
+    m2mb_os_ev_set(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_SET);
+  }
+  else
+  {
+    m2mb_os_ev_set(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_CLEAR);
+  }
+}
+
+static void NetCallback(M2MB_NET_HANDLE h, M2MB_NET_IND_E net_event, UINT16 resp_size, void *resp_struct, void *myUserdata)
+{
+  UNUSED_3( h, resp_size, myUserdata);
+
   M2MB_NET_REG_STATUS_T *stat_info;
 
-  switch( net_event )
+  switch (net_event)
   {
-    case M2MB_NET_GET_REG_STATUS_INFO_RESP:
-      stat_info = ( M2MB_NET_REG_STATUS_T * )resp_struct;
-
-      if( stat_info->stat == 1 || stat_info->stat == 5 )
-      {
-        AZX_LOG_DEBUG( "Module is registered\r\n" );
-        m2mb_os_ev_set( net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_SET );
-      }
-
-
-      break;
-    case M2MB_NET_GET_SIGNAL_INFO_RESP:
-    {
-      M2MB_NET_GET_SIGNAL_INFO_RESP_T *resp = (M2MB_NET_GET_SIGNAL_INFO_RESP_T*)resp_struct;
-      AZX_LOG_TRACE("GET Signal Info resp is %d, %d\r\n", resp->rat, resp->rssi);
-      gRSSI = resp->rssi;
-      if(resp->sigInfo != NULL)
-      {
-        if( (resp->rat == M2MB_NET_RAT_UTRAN) || ((resp->rat >= M2MB_NET_RAT_UTRAN_wHSDPA) && (resp->rat <= M2MB_NET_RAT_UTRAN_wHSDPAandHSUPA)) )
-        {
-          M2MB_NET_SIGNAL_INFO_UTRAN_T *tmpSigInfo = (M2MB_NET_SIGNAL_INFO_UTRAN_T*)(resp->sigInfo);
-          if(tmpSigInfo)
-          {
-            AZX_LOG_TRACE("GET Signal Info resp is %d\r\n", tmpSigInfo->ecio);
-            gRSSI = tmpSigInfo->ecio;
-          }
-          else
-          {
-            AZX_LOG_WARN("Cannot get Signal Info\r\n");
-          }
-        }
-        else if (resp->rat == M2MB_NET_RAT_EUTRAN)
-        {
-          M2MB_NET_SIGNAL_INFO_EUTRAN_T *tmpSigInfo = (M2MB_NET_SIGNAL_INFO_EUTRAN_T*)(resp->sigInfo);
-          if(tmpSigInfo)
-          {
-            AZX_LOG_TRACE("GET Signal Info resp is %d, %d, %d\r\n", tmpSigInfo->rsrq, tmpSigInfo->rsrp, tmpSigInfo->snr);
-            gRSSI = tmpSigInfo->rsrp;
-          }
-          else
-          {
-            AZX_LOG_WARN("Cannot get Signal Info\r\n");
-          }
-        }
-      }
-      m2mb_os_ev_set( net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_SET );
-    }
+  case M2MB_NET_GET_REG_STATUS_INFO_RESP:
+    stat_info = (M2MB_NET_REG_STATUS_T*)resp_struct;
+    checkNetStat(stat_info);
     break;
-    default:
-      AZX_LOG_DEBUG( "unexpected net_event: %d\r\n", net_event );
-      break;
+
+  case M2MB_NET_REG_STATUS_IND:
+    stat_info = (M2MB_NET_REG_STATUS_T*)resp_struct;
+    AZX_LOG_DEBUG("Net Stat IND is %d, %d, %d, %d, %ld\r\n",
+        stat_info->stat, stat_info->rat, stat_info->srvDomain,
+        stat_info->areaCode, stat_info->cellID);
+    checkNetStat(stat_info);
+    break;
+  case M2MB_NET_GET_SIGNAL_INFO_RESP:
+  {
+    M2MB_NET_GET_SIGNAL_INFO_RESP_T *resp = (M2MB_NET_GET_SIGNAL_INFO_RESP_T*)resp_struct;
+    AZX_LOG_TRACE("GET Signal Info resp is %d, %d\r\n", resp->rat, resp->rssi);
+    gRSSI = resp->rssi;
+    if(resp->sigInfo != NULL)
+    {
+      if( (resp->rat == M2MB_NET_RAT_UTRAN) || ((resp->rat >= M2MB_NET_RAT_UTRAN_wHSDPA) && (resp->rat <= M2MB_NET_RAT_UTRAN_wHSDPAandHSUPA)) )
+      {
+        M2MB_NET_SIGNAL_INFO_UTRAN_T *tmpSigInfo = (M2MB_NET_SIGNAL_INFO_UTRAN_T*)(resp->sigInfo);
+        if(tmpSigInfo)
+        {
+          AZX_LOG_TRACE("GET Signal Info resp is %d\r\n", tmpSigInfo->ecio);
+          gRSSI = tmpSigInfo->ecio;
+        }
+        else
+        {
+          AZX_LOG_WARN("Cannot get Signal Info\r\n");
+        }
+      }
+      else if (resp->rat == M2MB_NET_RAT_EUTRAN)
+      {
+        M2MB_NET_SIGNAL_INFO_EUTRAN_T *tmpSigInfo = (M2MB_NET_SIGNAL_INFO_EUTRAN_T*)(resp->sigInfo);
+        if(tmpSigInfo)
+        {
+          AZX_LOG_TRACE("GET Signal Info resp is %d, %d, %d\r\n", tmpSigInfo->rsrq, tmpSigInfo->rsrp, tmpSigInfo->snr);
+          gRSSI = tmpSigInfo->rsrp;
+        }
+        else
+        {
+          AZX_LOG_WARN("Cannot get Signal Info\r\n");
+        }
+      }
+    }
+    m2mb_os_ev_set( net_pdp_evHandle, EV_NET_SIGNAL_BIT, M2MB_OS_EV_SET );
+  }
+  break;
+  default:
+    AZX_LOG_TRACE("Unexpected net_event: %d\r\n", net_event);
+    break;
   }
 }
 
@@ -768,6 +781,13 @@ INT32 AWS_Task( INT32 type, INT32 param1, INT32 param2 )
       AZX_LOG_ERROR( "m2mb_net_init did not return M2MB_RESULT_SUCCESS\r\n" );
     }
 
+    retVal = m2mb_net_enable_ind(netHandle, M2MB_NET_REG_STATUS_IND, 1);
+    if ( retVal != M2MB_RESULT_SUCCESS )
+    {
+      AZX_LOG_ERROR( "m2mb_net_enable_ind failed\r\n" );
+      return 1;
+    }
+
 
     retVal = check_net_attach(60000);
     if( retVal == M2MB_RESULT_SUCCESS )
@@ -885,7 +905,7 @@ INT32 AWS_Task( INT32 type, INT32 param1, INT32 param2 )
       UINT8 retain = 0;
       char *topic = NULL;
       char msg[128];
-      INT32 rssi;
+      INT32 rssi = 0;
       int res;
       M2MB_RTC_TIME_T time;
 

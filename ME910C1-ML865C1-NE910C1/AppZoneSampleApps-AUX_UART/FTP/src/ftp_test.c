@@ -15,6 +15,7 @@
 #include "m2mb_socket.h"
 #include "m2mb_fs_posix.h" //for file stats
 #include "m2mb_fs_stdio.h"
+#include "m2mb_ssl.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -54,6 +55,81 @@ struct REMFILE loc_file;
 
 static char gFTP_Address[512];
 
+
+
+M2MB_SSL_CONFIG_HANDLE sslConfigHndl = NULL;
+M2MB_SSL_CTXT_HANDLE sslCtxtHndl = NULL;
+
+#ifdef REDUCED_CYPHER_LIST
+M2MB_SSL_CIPHER_SUITE_E CipherSuite[M2MB_SSL_MAX_CIPHERSUITES];
+static const M2MB_SSL_CIPHER_SUITE_E s_cipher_suite[] = {
+  M2MB_TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+  M2MB_TLS_RSA_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_DHE_RSA_WITH_AES_128_CBC_SHA,
+  M2MB_TLS_DHE_RSA_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_RSA_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_RSA_WITH_AES_128_CBC_SHA256,
+  M2MB_TLS_DHE_RSA_WITH_AES_128_CBC_SHA256,
+  M2MB_TLS_RSA_WITH_AES_256_CBC_SHA256,
+};
+#else
+static const M2MB_SSL_CIPHER_SUITE_E s_cipher_suite[] = {
+  M2MB_TLS_PSK_WITH_RC4_128_SHA,
+  M2MB_TLS_PSK_WITH_3DES_EDE_CBC_SHA,
+  M2MB_TLS_PSK_WITH_AES_128_CBC_SHA,
+  M2MB_TLS_PSK_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_PSK_WITH_AES_128_GCM_SHA256,
+  M2MB_TLS_PSK_WITH_AES_256_GCM_SHA384,
+  M2MB_TLS_PSK_WITH_AES_128_CBC_SHA256,
+  M2MB_TLS_PSK_WITH_AES_256_CBC_SHA384,
+  M2MB_TLS_RSA_WITH_AES_128_CBC_SHA,
+  M2MB_TLS_DHE_RSA_WITH_AES_128_CBC_SHA,
+  M2MB_TLS_RSA_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_DHE_RSA_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_RSA_WITH_AES_128_CBC_SHA256,
+  M2MB_TLS_RSA_WITH_AES_256_CBC_SHA256,
+  M2MB_TLS_DHE_RSA_WITH_AES_128_CBC_SHA256,
+  M2MB_TLS_DHE_RSA_WITH_AES_256_CBC_SHA256,
+  M2MB_TLS_RSA_WITH_AES_128_GCM_SHA256,
+  M2MB_TLS_RSA_WITH_AES_256_GCM_SHA384,
+  M2MB_TLS_DHE_RSA_WITH_AES_128_GCM_SHA256,
+  M2MB_TLS_DHE_RSA_WITH_AES_256_GCM_SHA384,
+  M2MB_TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA,
+  M2MB_TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,
+  M2MB_TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_ECDH_RSA_WITH_AES_128_CBC_SHA,
+  M2MB_TLS_ECDH_RSA_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,
+  M2MB_TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,
+  M2MB_TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384,
+  M2MB_TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256,
+  M2MB_TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA384,
+  M2MB_TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,
+  M2MB_TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,
+  M2MB_TLS_ECDH_RSA_WITH_AES_128_CBC_SHA256,
+  M2MB_TLS_ECDH_RSA_WITH_AES_256_CBC_SHA384,
+  M2MB_TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+  M2MB_TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
+  M2MB_TLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256,
+  M2MB_TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384,
+  M2MB_TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+  M2MB_TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+  M2MB_TLS_ECDH_RSA_WITH_AES_128_GCM_SHA256,
+  M2MB_TLS_ECDH_RSA_WITH_AES_256_GCM_SHA384,
+  M2MB_TLS_RSA_WITH_AES_128_CCM_8,
+  M2MB_TLS_RSA_WITH_AES_256_CCM_8,
+  M2MB_TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256,
+  M2MB_TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,
+  M2MB_TLS_DHE_RSA_WITH_CHACHA20_POLY1305_SHA256,
+  M2MB_TLS_AES_128_GCM_SHA256,
+  M2MB_TLS_AES_256_GCM_SHA384,
+  M2MB_TLS_CHACHA20_POLY1305_SHA256,
+  M2MB_TLS_AES_128_CCM_SHA256,
+  M2MB_TLS_AES_128_CCM_8_SHA256,
+};
+#endif
 /* Local function prototypes ====================================================================*/
 static UINT32 get_uptime(void);
 static const char* get_file_title(const CHAR* path);
@@ -64,7 +140,281 @@ static INT32 ftp_debug_hk(AZX_FTP_DEBUG_HOOK_LEVELS_E level, const CHAR *functio
 static void NetCallback(M2MB_NET_HANDLE h, M2MB_NET_IND_E net_event, UINT16 resp_size, void *resp_struct, void *myUserdata);
 static void PdpCallback(M2MB_PDP_HANDLE h, M2MB_PDP_IND_E pdp_event, UINT8 cid, void *userdata);
 
+static void CleanSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SSL_CTXT_HANDLE* p_hSSLCtx, M2MB_SSL_AUTH_TYPE_E ssl_auth_mode);
+static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SSL_CTXT_HANDLE* p_hSSLCtx, M2MB_SSL_AUTH_TYPE_E ssl_auth_mode);
+
 /* Static functions =============================================================================*/
+
+
+static void CleanSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SSL_CTXT_HANDLE* p_hSSLCtx, M2MB_SSL_AUTH_TYPE_E ssl_auth_mode )
+{
+
+  INT32 res;
+
+  if (p_hSSLConfig == NULL || p_hSSLCtx == NULL)
+  {
+    return;
+  }
+
+  if(ssl_auth_mode >= M2MB_SSL_SERVER_AUTH)
+  {
+    /* clean everything */
+    res = m2mb_ssl_cert_delete( M2MB_SSL_CACERT, (CHAR*)gCA_CERT_PATH );
+    if(res==0)
+    {
+      AZX_LOG_DEBUG("m2mb_ssl_cert_delete PASS\r\n");
+    }
+    else
+    {
+      AZX_LOG_ERROR("m2mb_ssl_cert_delete failed with code %d\r\n",res);
+    }
+  }
+
+  if(ssl_auth_mode >= M2MB_SSL_SERVER_CLIENT_AUTH)
+  {
+    res = m2mb_ssl_cert_delete( M2MB_SSL_CERT, (CHAR*)gCLIENT_CERT_PATH );
+    if(res==0)
+    {
+      AZX_LOG_TRACE("m2mb_ssl_cert_delete PASS\r\n");
+    }
+    else
+    {
+      AZX_LOG_ERROR("m2mb_ssl_cert_delete failed with code %d\r\n",res);
+    }
+  }
+
+  res = m2mb_ssl_delete_config(*p_hSSLConfig);
+  if(res==0)
+  {
+    AZX_LOG_DEBUG("m2mb_ssl_delete_config PASS\r\n");
+  }
+  else
+  {
+    AZX_LOG_ERROR("m2mb_ssl_delete_config failed with code %d\r\n",res);
+  }
+
+  m2mb_ssl_delete_ctxt( *p_hSSLCtx);
+}
+
+
+static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SSL_CTXT_HANDLE* p_hSSLCtx, M2MB_SSL_AUTH_TYPE_E ssl_auth_mode)
+{
+
+  M2MB_SSL_CONFIG_T SSLConfig;
+
+  UINT8 CA_BUF[4096];
+  UINT8 client_cert_buf[4096];
+  UINT8 client_key_buf[4096];
+
+
+  M2MB_SSL_SEC_INFO_U SSL_info;
+  //M2MB_SSL_CONNECTION_HANDLE hSSLConn;
+  M2MB_SSL_CA_INFO_T ca_Info[1];
+
+  INT32 fd = -1;
+  struct M2MB_STAT st;
+  INT32 res;
+
+
+  if (p_hSSLConfig == NULL || p_hSSLCtx == NULL )
+  {
+    return -2;
+  }
+
+  AZX_LOG_DEBUG("m2mb_ssl_create_ctxt():  \r\n");
+  *p_hSSLCtx =  m2mb_ssl_create_ctxt();
+
+  if(*p_hSSLCtx == NULL)
+  {
+    AZX_LOG_ERROR("m2mb_ssl_create_ctxt() failed\r\n");
+    return -1;
+  }
+  else
+  {
+    AZX_LOG_DEBUG("m2mb_ssl_create_ctxt() passed\r\n" );
+  }
+
+  SSLConfig.ProtVers = M2MB_SSL_PROTOCOL_TLS_1_2;
+#ifndef REDUCED_CYPHER_LIST
+  SSLConfig.CipherSuites = (M2MB_SSL_CIPHER_SUITE_E *)&s_cipher_suite[0];
+  SSLConfig.CipherSuitesNum = (sizeof(s_cipher_suite) / sizeof(s_cipher_suite[0]));
+#else
+  SSLConfig.CipherSuites = CipherSuite;
+
+  SSLConfig.CipherSuites[0] = M2MB_TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256;
+  SSLConfig.CipherSuites[1] = M2MB_TLS_RSA_WITH_AES_256_CBC_SHA;
+  SSLConfig.CipherSuites[2] = M2MB_TLS_DHE_RSA_WITH_AES_128_CBC_SHA;
+  SSLConfig.CipherSuites[3] = M2MB_TLS_DHE_RSA_WITH_AES_256_CBC_SHA;
+  SSLConfig.CipherSuites[4] = M2MB_TLS_RSA_WITH_AES_256_CBC_SHA;
+  SSLConfig.CipherSuites[5] = M2MB_TLS_RSA_WITH_AES_128_CBC_SHA256;
+  SSLConfig.CipherSuites[6] = M2MB_TLS_DHE_RSA_WITH_AES_128_CBC_SHA256;
+  SSLConfig.CipherSuites[7] = M2MB_TLS_RSA_WITH_AES_256_CBC_SHA256;
+  SSLConfig.CipherSuitesNum = 8;
+#endif
+  SSLConfig.AuthType = ssl_auth_mode;
+
+  *p_hSSLConfig = m2mb_ssl_create_config( SSLConfig, &res );
+
+  if( (*p_hSSLConfig == NULL) || (res != 0))
+  {
+    AZX_LOG_ERROR("m2mb_ssl_create_config FAILED error %d\r\n",res );
+    return -1;
+  }
+
+  if ((ssl_auth_mode == M2MB_SSL_SERVER_AUTH) || (ssl_auth_mode == M2MB_SSL_SERVER_CLIENT_AUTH))
+  {
+    AZX_LOG_DEBUG("ca cert file %s \r\n",gCA_CERT_PATH);
+
+    if (0 == m2mb_fs_stat(gCA_CERT_PATH, &st))
+    {
+      AZX_LOG_DEBUG("file size: %u\r\n",  st.st_size);
+    }
+
+    fd = m2mb_fs_open(gCA_CERT_PATH,M2MB_O_RDONLY   /*open in read only mode*/ );
+    if (fd == -1 )
+    {
+      AZX_LOG_DEBUG("Cannot open file %s \r\n",gCA_CERT_PATH);
+      m2mb_ssl_delete_config(*p_hSSLConfig);
+      return -1;
+    }
+
+    AZX_LOG_DEBUG("Reading content from file. Size: %u\r\n", st.st_size);
+    res = m2mb_fs_read(fd, CA_BUF, st.st_size);
+
+    if (res != (INT32) st.st_size)
+    {
+      AZX_LOG_DEBUG("Failed reading buffer into file.\r\n");
+      m2mb_fs_close(fd);
+      m2mb_ssl_delete_config(*p_hSSLConfig);
+      return -1;
+
+    }
+    AZX_LOG_DEBUG("Buffer successfully received from file. %d bytes were loaded.\r\n", res);
+
+
+    AZX_LOG_DEBUG("Closing file.\r\n");
+    m2mb_fs_close(fd);
+
+    SSL_info.ca_List.ca_Cnt = 1;
+    SSL_info.ca_List.ca_Info[0] = &ca_Info[0];
+    SSL_info.ca_List.ca_Info[0]->ca_Size =  st.st_size;
+    SSL_info.ca_List.ca_Info[0]->ca_Buf = CA_BUF;
+
+    if (0 != m2mb_ssl_cert_store( M2MB_SSL_CACERT,SSL_info,(CHAR*) "CAListTest" ))
+    {
+      AZX_LOG_ERROR("m2mb_ssl_cert_store FAILED\r\n" );
+      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_NO_AUTH);
+      return -1;
+    }
+
+    if (0 != m2mb_ssl_cert_load( *p_hSSLCtx, M2MB_SSL_CACERT,(CHAR*) "CAListTest" ))
+    {
+      AZX_LOG_ERROR("m2mb_ssl_cert_load FAILED\r\n" );
+      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_AUTH);
+      return -1;
+    }
+
+  }
+
+  if (ssl_auth_mode == M2MB_SSL_SERVER_CLIENT_AUTH)
+  {
+    AZX_LOG_DEBUG("server + client authentication is chosen \r\n");
+    AZX_LOG_DEBUG("ca cert file %s \r\n",gCLIENT_CERT_PATH);
+
+    if (0 ==m2mb_fs_stat(gCLIENT_CERT_PATH, &st))
+    {
+      AZX_LOG_DEBUG("file size: %u\r\n",  st.st_size);
+    }
+
+    fd = m2mb_fs_open(gCLIENT_CERT_PATH, M2MB_O_RDONLY);   /*open in read only mode*/
+    if (fd == -1 )
+    {
+      AZX_LOG_DEBUG("Cannot open file %s \r\n",gCLIENT_CERT_PATH);
+      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_AUTH);
+      return -1;
+    }
+
+    AZX_LOG_DEBUG("Reading content from file. Size: %u\r\n", st.st_size);
+    res = m2mb_fs_read(fd, client_cert_buf, st.st_size);
+
+    if (res != (INT32)st.st_size)
+    {
+      AZX_LOG_DEBUG("Failed reading buffer into file.\r\n");
+      m2mb_fs_close(fd);
+      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_AUTH);
+      return -1;
+    }
+
+    AZX_LOG_DEBUG("Buffer successfully received from file. %d bytes were loaded.\r\n", res);
+
+
+    AZX_LOG_DEBUG("Closing file.\r\n");
+    m2mb_fs_close(fd);
+
+
+    memset(&SSL_info,0x00,sizeof(SSL_info)); //try to memset SSL_info buffer to remove CA entries
+    SSL_info.cert.cert_Buf=client_cert_buf;
+    SSL_info.cert.cert_Size=st.st_size;
+
+
+    AZX_LOG_DEBUG("Client Key file %s \r\n",gCLIENT_KEY_PATH);
+
+
+    if (0 ==m2mb_fs_stat(gCLIENT_KEY_PATH, &st))
+    {
+      AZX_LOG_DEBUG("file size: %u\r\n",  st.st_size);
+
+    }
+
+    fd = m2mb_fs_open(gCLIENT_KEY_PATH, M2MB_O_RDONLY);   /*open in read only mode*/
+    if (fd == -1 )
+    {
+      AZX_LOG_DEBUG("Cannot open file %s \r\n",gCLIENT_KEY_PATH);
+      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_AUTH);
+      return -1;
+    }
+
+    AZX_LOG_DEBUG("Reading content from file. Size: %u\r\n", st.st_size);
+    res = m2mb_fs_read(fd, client_key_buf, st.st_size);
+
+    if (res != (INT32)st.st_size)
+    {
+      AZX_LOG_DEBUG("Failed reading buffer into file.\r\n");
+      m2mb_fs_close(fd);
+      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_AUTH);
+      return -1;
+    }
+    else
+    {
+      AZX_LOG_DEBUG("Buffer successfully received from file. %d bytes were loaded.\r\n", res);
+    }
+
+    AZX_LOG_DEBUG("Closing file.\r\n");
+    m2mb_fs_close(fd);
+
+
+    SSL_info.cert.key_Buf=client_key_buf;
+    SSL_info.cert.key_Size=st.st_size;
+
+    if (0 != m2mb_ssl_cert_store( M2MB_SSL_CERT,SSL_info,(CHAR*) "ClientCertTest" ))
+    {
+      AZX_LOG_ERROR("m2mb_ssl_cert_store FAILED\r\n" );
+      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_AUTH);
+      return -1;
+    }
+
+    if (0 != m2mb_ssl_cert_load( *p_hSSLCtx,M2MB_SSL_CERT,(CHAR*) "ClientCertTest" ))
+    {
+      AZX_LOG_ERROR("m2mb_ssl_cert_load FAILED\r\n" );
+      CleanSSLEnvironment(p_hSSLConfig, p_hSSLCtx, M2MB_SSL_SERVER_CLIENT_AUTH);
+      return -1;
+    }
+  }
+
+  AZX_LOG_DEBUG("SSL env completed\r\n");
+  return 0;
+}
+
 
 
 static UINT32 get_uptime(void)
@@ -178,32 +528,44 @@ static INT32 ftp_debug_hk(AZX_FTP_DEBUG_HOOK_LEVELS_E level, const CHAR *functio
   return AZX_LOG_INFO("%s", buf);
 }
 
+
+static void checkNetStat(  M2MB_NET_REG_STATUS_T *stat_info)
+{
+  if  (stat_info->stat == 1 || stat_info->stat == 5)
+  {
+    AZX_LOG_DEBUG("Module is registered to network\r\n");
+    m2mb_os_ev_set(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_SET);
+  }
+  else
+  {
+    m2mb_os_ev_set(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_CLEAR);
+  }
+}
+
 static void NetCallback(M2MB_NET_HANDLE h, M2MB_NET_IND_E net_event, UINT16 resp_size, void *resp_struct, void *myUserdata)
 {
-  (void)resp_size;
-  (void)myUserdata;
+  UNUSED_3( h, resp_size, myUserdata);
 
   M2MB_NET_REG_STATUS_T *stat_info;
 
   switch (net_event)
   {
-    case M2MB_NET_GET_REG_STATUS_INFO_RESP:
-      stat_info = (M2MB_NET_REG_STATUS_T*)resp_struct;
-      if  (stat_info->stat == 1 || stat_info->stat == 5)
-      {
-        AZX_LOG_DEBUG("Module is registered to network\r\n");
-        m2mb_os_ev_set(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_SET);
-      }
-      else
-      {
-        m2mb_net_get_reg_status_info(h); //call it again
-      }
-      break;
+  case M2MB_NET_GET_REG_STATUS_INFO_RESP:
+    stat_info = (M2MB_NET_REG_STATUS_T*)resp_struct;
+    checkNetStat(stat_info);
+    break;
 
+  case M2MB_NET_REG_STATUS_IND:
+    stat_info = (M2MB_NET_REG_STATUS_T*)resp_struct;
+    AZX_LOG_DEBUG("Net Stat IND is %d, %d, %d, %d, %ld\r\n",
+        stat_info->stat, stat_info->rat, stat_info->srvDomain,
+        stat_info->areaCode, stat_info->cellID);
+    checkNetStat(stat_info);
+    break;
 
-    default:
-      AZX_LOG_DEBUG("unexpected net_event: %d\r\n", net_event);
-      break;
+  default:
+    AZX_LOG_TRACE("Unexpected net_event: %d\r\n", net_event);
+    break;
 
   }
 }
@@ -294,6 +656,13 @@ INT32 msgFTPTask(INT32 type, INT32 param1, INT32 param2)
       AZX_LOG_ERROR( "m2mb_net_init did not return M2MB_RESULT_SUCCESS\r\n" );
     }
 
+    retVal = m2mb_net_enable_ind(h, M2MB_NET_REG_STATUS_IND, 1);
+    if ( retVal != M2MB_RESULT_SUCCESS )
+    {
+      AZX_LOG_ERROR( "m2mb_net_enable_ind failed\r\n" );
+      return 1;
+    }
+
 
     AZX_LOG_DEBUG("Waiting for registration...\r\n");
 
@@ -304,7 +673,7 @@ INT32 msgFTPTask(INT32 type, INT32 param1, INT32 param2)
     }
 
     /*Wait for network registration event to occur (released in NetCallback function) */
-    m2mb_os_ev_get(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_GET_ANY_AND_CLEAR, &curEvBits, M2MB_OS_WAIT_FOREVER);
+    m2mb_os_ev_get(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_GET_ANY, &curEvBits, M2MB_OS_WAIT_FOREVER);
 
 
 
@@ -338,6 +707,22 @@ INT32 msgFTPTask(INT32 type, INT32 param1, INT32 param2)
     opts.level = AZX_FTP_DEBUG_HOOK_ERROR;
     opts.cbFunc = ftp_debug_hk;
     opts.cid = gPDP_CTX;
+    opts.ssl = gENABLE_TLS;
+
+    if(gENABLE_TLS)
+    {
+      ret = PrepareSSLEnvironment(&sslConfigHndl, &sslCtxtHndl, (M2MB_SSL_AUTH_TYPE_E)gAUTH_TYPE);
+      if(ret < 0)
+      {
+        AZX_LOG_ERROR("failed initializing SSL session... \r\n");
+        return -1;
+      }
+      else
+      {
+        opts.sslConfigH = sslConfigHndl;
+        opts.sslCtxtH = sslCtxtHndl;
+      }
+    }
 
     ret = azx_ftp_init(&opts);
     if (ret != 1)
@@ -364,10 +749,29 @@ INT32 msgFTPTask(INT32 type, INT32 param1, INT32 param2)
     else
     {
       AZX_LOG_ERROR("failed connecting.. \r\n");
+      if(gENABLE_TLS)
+      {
+        CleanSSLEnvironment(&sslConfigHndl, &sslCtxtHndl, (M2MB_SSL_AUTH_TYPE_E)gAUTH_TYPE);
+      }
       task_status = APPLICATION_EXIT;
       break;
     }
     azx_sleep_ms(1000);
+
+    if(gENABLE_TLS)
+    {
+      ret = azx_ftp_sslCfg('P', '0', ftp_client);
+      if (ret == 1)
+      {
+        AZX_LOG_DEBUG("Protocol private and BS set.\r\n");
+      }
+      else
+      {
+        AZX_LOG_ERROR("failed \r\n");
+        task_status = APPLICATION_EXIT;
+        break;
+      }
+    }
 
     ret = azx_ftp_login(gFTP_USER, gFTP_PASS, ftp_client);
     if (ret == 1)
@@ -397,6 +801,64 @@ INT32 msgFTPTask(INT32 type, INT32 param1, INT32 param2)
     }
     //AZX_LOG_DEBUG("last server response: <%s>\r\n", FtpLastResponse(ftp_client));
 #endif
+
+    /* =======================
+     *
+     *  LIST
+     *
+     * ======================*/
+     AZX_FTP_XFER_T local;
+     int filesize = 2*1024;  //to be changed according with the size
+    {
+
+      memset(&local, 0, sizeof(AZX_FTP_XFER_T));
+
+      memset(filename_buffer, 0, sizeof(filename_buffer));
+      sprintf(filename_buffer, "%s", gREMOTE_FOLDER);
+
+      rem_file.fnm = (char*)filename_buffer;
+
+
+      azx_ftp_clearCallback(ftp_client);
+
+      cb_opts.cbFunc = log_progress;
+      cb_opts.cbArg = &rem_file;
+      cb_opts.idleTime = 1000;
+      cb_opts.bytesXferred = 1024;
+
+      local.type = AZX_FTP_XFER_BUFF;                                        /* Define the local recipient as buffer */
+      local.payload.buffInfo.buffer = (CHAR*) m2mb_os_malloc(filesize + 1); /* Set the local buffer reference that will hold the data */
+      local.payload.buffInfo.bufferSize = filesize + 1;                     /* Set the local buffer size */
+
+      local.payload.buffInfo.buf_cb = buf_data_cb; /* The data callback to be executed. Set as NULL if not required */
+
+      if(! local.payload.buffInfo.buffer)
+      {
+        AZX_LOG_ERROR("failed allocating buffer.. \r\n");
+        task_status = APPLICATION_EXIT;
+        break;
+      }
+
+      memset(local.payload.buffInfo.buffer, 0, local.payload.buffInfo.bufferSize); /*file_size + 2*/
+
+      azx_ftp_setCallback(&cb_opts, ftp_client);
+
+      AZX_LOG_INFO("Get file list of %s \r\n", rem_file.fnm);
+
+
+      ret = azx_ftp_dir(&(local), rem_file.fnm, ftp_client);
+      if (ret > 0)
+      {
+        AZX_LOG_DEBUG("Done. File list\r\n");
+      }
+      else
+      {
+        AZX_LOG_ERROR("File list.. \r\n");
+        task_status = APPLICATION_EXIT;
+        break;
+      }
+    }
+
 
     /* =======================
      *
@@ -452,7 +914,7 @@ INT32 msgFTPTask(INT32 type, INT32 param1, INT32 param2)
      *
      * ======================*/
     {
-      AZX_FTP_XFER_T local;
+      //AZX_FTP_XFER_T local;
 
       azx_ftp_clearCallback(ftp_client);
 

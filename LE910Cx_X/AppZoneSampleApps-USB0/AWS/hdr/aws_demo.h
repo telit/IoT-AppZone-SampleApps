@@ -31,6 +31,7 @@
 #define EV_NET_BIT              (UINT32)0x1    /*0x0000000000000001*/
 #define EV_PDP_UP_BIT           (UINT32)0x2    /*0x0000000000000010*/
 #define EV_PDP_DOWN_BIT         (UINT32)0x4    /*0x0000000000000100*/
+#define EV_NET_SIGNAL_BIT       (UINT32)0x8    /*0x0000000000001000*/
 
 /* Global typedefs ==============================================================================*/
 typedef enum

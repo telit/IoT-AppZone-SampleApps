@@ -11,7 +11,7 @@
   @details
 
   @version
-    1.0.5
+    1.0.6
   @note
 
 
@@ -363,6 +363,22 @@ static M2MB_RESULT_E lwm2m_reg(M2MB_LWM2M_REG_ACTION_E regAction)
     }
     case M2MB_LWM2M_REG_ACTION_UPDATE_REG:
     {
+      /*
+       * Start update registration action for the required server (by using shServerID) for the current LWM2M agent (defined by agentID)
+       * Because there is no data retrieved by this action, m2mb_lwm2m_reg api takes listPointer as NULL
+       * This section acts as: AT#LWM2MREG=<agentID>,2,<shServerID>
+       */
+      AZX_LOG_INFO("Update registration action using LWM2M REG api!\r\n");
+      memset( &regReq, 0, sizeof( M2MB_LWM2M_REG_PARAM_T ) );
+      regReq.agentId = agentID;
+      regReq.serverId = &shServerID; // requires the entire list of servers data to be returned
+      regReq.actionId = M2MB_LWM2M_REG_ACTION_UPDATE_REG;
+      if( m2mb_lwm2m_reg( lwm2mHandle, &regReq, NULL, regListSize ) != M2MB_RESULT_SUCCESS )
+      {
+        AZX_LOG_ERROR( "m2mb_lwm2m_reg request failed\r\n" );
+        retVal = M2MB_RESULT_FAIL;
+      }
+      /*******************************************************************/
       break;
     }
     case M2MB_LWM2M_REG_ACTION_GET_SRV_INFO:
@@ -605,6 +621,30 @@ INT32 msgLWM2MTask(INT32 type, INT32 param1, INT32 param2)
      * Act client registration
      */
     if(lwm2m_reg(M2MB_LWM2M_REG_ACTION_FORCE_REG) != M2MB_RESULT_SUCCESS)
+    {
+      task_status = APPLICATION_EXIT;
+      break;
+    }
+    azx_sleep_ms(10000);
+
+    for(int i = 0; i < 10; i++)
+    {
+      /*
+       * Act client update registration
+       */
+      if(lwm2m_reg(M2MB_LWM2M_REG_ACTION_UPDATE_REG) != M2MB_RESULT_SUCCESS)
+      {
+        task_status = APPLICATION_EXIT;
+        break;
+      }
+      azx_sleep_ms(10000);
+    }
+    if(task_status == APPLICATION_EXIT) break;
+
+    /*
+     * Act client deregistration
+     */
+    if(lwm2m_reg(M2MB_LWM2M_REG_ACTION_FORCE_DEREG) != M2MB_RESULT_SUCCESS)
     {
       task_status = APPLICATION_EXIT;
       break;

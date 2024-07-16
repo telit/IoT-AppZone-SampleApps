@@ -33,6 +33,7 @@
 #define APN_PASS ""
 #define PDP_CTX (UINT8)3
 
+#define USE_TLS 0
 #define SSL_CERT_CA_NAME "ca-cert-pool"
 #define SSL_CLIENT_NAME "SSL-Client"
 /* SSL */
@@ -68,6 +69,7 @@ extern char gAPN_UserName[MAX_PARAMS_STR_LEN];
 extern char gAPN_Password[MAX_PARAMS_STR_LEN];
 extern UINT16 gPDP_CTX;
 
+extern UINT16 gUSE_TLS;
 extern char gSSL_CERT_CA_NAME[MAX_PARAMS_STR_LEN];
 extern char gSSL_CLIENT_NAME[MAX_PARAMS_STR_LEN];
 extern char gCACERTFILE[MAX_PARAMS_STR_LEN];

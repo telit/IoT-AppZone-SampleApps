@@ -11,7 +11,7 @@
   @details
 
   @version
-    1.0.6
+    1.0.7
   @note
 
 
@@ -61,6 +61,76 @@ static M2MB_PDP_HANDLE pdpHandle;
 static M2MB_MQTT_HANDLE mqttHandle = NULL;
 
 
+#ifdef REDUCED_CYPHER_LIST
+M2MB_SSL_CIPHER_SUITE_E CipherSuite[M2MB_SSL_MAX_CIPHERSUITES];
+static const M2MB_SSL_CIPHER_SUITE_E s_cipher_suite[] = {
+  M2MB_TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+  M2MB_TLS_RSA_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_DHE_RSA_WITH_AES_128_CBC_SHA,
+  M2MB_TLS_DHE_RSA_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_RSA_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_RSA_WITH_AES_128_CBC_SHA256,
+  M2MB_TLS_DHE_RSA_WITH_AES_128_CBC_SHA256,
+  M2MB_TLS_RSA_WITH_AES_256_CBC_SHA256,
+};
+#else
+static const M2MB_SSL_CIPHER_SUITE_E s_cipher_suite[] = {
+  M2MB_TLS_PSK_WITH_RC4_128_SHA,
+  M2MB_TLS_PSK_WITH_3DES_EDE_CBC_SHA,
+  M2MB_TLS_PSK_WITH_AES_128_CBC_SHA,
+  M2MB_TLS_PSK_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_PSK_WITH_AES_128_GCM_SHA256,
+  M2MB_TLS_PSK_WITH_AES_256_GCM_SHA384,
+  M2MB_TLS_PSK_WITH_AES_128_CBC_SHA256,
+  M2MB_TLS_PSK_WITH_AES_256_CBC_SHA384,
+  M2MB_TLS_RSA_WITH_AES_128_CBC_SHA,
+  M2MB_TLS_DHE_RSA_WITH_AES_128_CBC_SHA,
+  M2MB_TLS_RSA_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_DHE_RSA_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_RSA_WITH_AES_128_CBC_SHA256,
+  M2MB_TLS_RSA_WITH_AES_256_CBC_SHA256,
+  M2MB_TLS_DHE_RSA_WITH_AES_128_CBC_SHA256,
+  M2MB_TLS_DHE_RSA_WITH_AES_256_CBC_SHA256,
+  M2MB_TLS_RSA_WITH_AES_128_GCM_SHA256,
+  M2MB_TLS_RSA_WITH_AES_256_GCM_SHA384,
+  M2MB_TLS_DHE_RSA_WITH_AES_128_GCM_SHA256,
+  M2MB_TLS_DHE_RSA_WITH_AES_256_GCM_SHA384,
+  M2MB_TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA,
+  M2MB_TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,
+  M2MB_TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_ECDH_RSA_WITH_AES_128_CBC_SHA,
+  M2MB_TLS_ECDH_RSA_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,
+  M2MB_TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,
+  M2MB_TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384,
+  M2MB_TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256,
+  M2MB_TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA384,
+  M2MB_TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,
+  M2MB_TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,
+  M2MB_TLS_ECDH_RSA_WITH_AES_128_CBC_SHA256,
+  M2MB_TLS_ECDH_RSA_WITH_AES_256_CBC_SHA384,
+  M2MB_TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+  M2MB_TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
+  M2MB_TLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256,
+  M2MB_TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384,
+  M2MB_TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+  M2MB_TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+  M2MB_TLS_ECDH_RSA_WITH_AES_128_GCM_SHA256,
+  M2MB_TLS_ECDH_RSA_WITH_AES_256_GCM_SHA384,
+  M2MB_TLS_RSA_WITH_AES_128_CCM_8,
+  M2MB_TLS_RSA_WITH_AES_256_CCM_8,
+  M2MB_TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256,
+  M2MB_TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,
+  M2MB_TLS_DHE_RSA_WITH_CHACHA20_POLY1305_SHA256,
+  M2MB_TLS_AES_128_GCM_SHA256,
+  M2MB_TLS_AES_256_GCM_SHA384,
+  M2MB_TLS_CHACHA20_POLY1305_SHA256,
+  M2MB_TLS_AES_128_CCM_SHA256,
+  M2MB_TLS_AES_128_CCM_8_SHA256,
+};
+#endif
 /* Local function prototypes ====================================================================*/
 static void mqtt_topic_cb( M2MB_MQTT_HANDLE handle, void *arg, const CHAR *topic,
         UINT16 topic_length, const CHAR *msg, UINT32 msg_length, M2MB_MQTT_RX_STATUS_E status );
@@ -147,7 +217,7 @@ static void CleanSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SSL_C
 
 static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SSL_CTXT_HANDLE* p_hSSLCtx, M2MB_SSL_AUTH_TYPE_E ssl_auth_mode)
 {
-  M2MB_SSL_CIPHER_SUITE_E CipherSuite[4];
+
   M2MB_SSL_CONFIG_T SSLConfig;
 
   UINT8 CA_BUF[4096];
@@ -183,11 +253,22 @@ static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SS
   }
 
   SSLConfig.ProtVers = M2MB_SSL_PROTOCOL_TLS_1_2;
+#ifndef REDUCED_CYPHER_LIST
+  SSLConfig.CipherSuites = (M2MB_SSL_CIPHER_SUITE_E *)&s_cipher_suite[0];
+  SSLConfig.CipherSuitesNum = (sizeof(s_cipher_suite) / sizeof(s_cipher_suite[0]));
+#else
   SSLConfig.CipherSuites = CipherSuite;
 
-  SSLConfig.CipherSuites[0] = M2MB_TLS_RSA_WITH_AES_128_CBC_SHA;
+  SSLConfig.CipherSuites[0] = M2MB_TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256;
   SSLConfig.CipherSuites[1] = M2MB_TLS_RSA_WITH_AES_256_CBC_SHA;
-  SSLConfig.CipherSuitesNum = 2;
+  SSLConfig.CipherSuites[2] = M2MB_TLS_DHE_RSA_WITH_AES_128_CBC_SHA;
+  SSLConfig.CipherSuites[3] = M2MB_TLS_DHE_RSA_WITH_AES_256_CBC_SHA;
+  SSLConfig.CipherSuites[4] = M2MB_TLS_RSA_WITH_AES_256_CBC_SHA;
+  SSLConfig.CipherSuites[5] = M2MB_TLS_RSA_WITH_AES_128_CBC_SHA256;
+  SSLConfig.CipherSuites[6] = M2MB_TLS_DHE_RSA_WITH_AES_128_CBC_SHA256;
+  SSLConfig.CipherSuites[7] = M2MB_TLS_RSA_WITH_AES_256_CBC_SHA256;
+  SSLConfig.CipherSuitesNum = 8;
+#endif
 
   SSLConfig.AuthType =   ssl_auth_mode;
 
@@ -357,32 +438,44 @@ static INT32 PrepareSSLEnvironment(M2MB_SSL_CONFIG_HANDLE* p_hSSLConfig, M2MB_SS
 
 
 /* Global functions =============================================================================*/
-void NetCallback( M2MB_NET_HANDLE h, M2MB_NET_IND_E net_event, UINT16 resp_size, void *resp_struct,
-                  void *myUserdata )
+static void checkNetStat(  M2MB_NET_REG_STATUS_T *stat_info)
 {
-  ( void )resp_size;
-  ( void )myUserdata;
+  if  (stat_info->stat == 1 || stat_info->stat == 5)
+  {
+    AZX_LOG_DEBUG("Module is registered to cell 0x%X!\r\n", (unsigned int)stat_info->cellID);
+    m2mb_os_ev_set(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_SET);
+  }
+  else
+  {
+    m2mb_os_ev_set(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_CLEAR);
+  }
+}
+
+static void NetCallback(M2MB_NET_HANDLE h, M2MB_NET_IND_E net_event, UINT16 resp_size, void *resp_struct, void *myUserdata)
+{
+  UNUSED_3( h, resp_size, myUserdata);
+
   M2MB_NET_REG_STATUS_T *stat_info;
 
-  switch( net_event )
+  switch (net_event)
   {
-    case M2MB_NET_GET_REG_STATUS_INFO_RESP:
-      stat_info = ( M2MB_NET_REG_STATUS_T * )resp_struct;
+  case M2MB_NET_GET_REG_STATUS_INFO_RESP:
+    stat_info = (M2MB_NET_REG_STATUS_T*)resp_struct;
+    checkNetStat(stat_info);
+    break;
 
-      if( stat_info->stat == 1 || stat_info->stat == 5 )
-      {
-        AZX_LOG_DEBUG( "Module is registered\r\n" );
-        m2mb_os_ev_set( net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_SET );
-      }
-      else
-      {
-        m2mb_net_get_reg_status_info( h ); /* try again */
-      }
-      break;
+  case M2MB_NET_REG_STATUS_IND:
+    stat_info = (M2MB_NET_REG_STATUS_T*)resp_struct;
+    AZX_LOG_DEBUG("Net Stat IND is %d, %d, %d, %d, %ld\r\n",
+        stat_info->stat, stat_info->rat, stat_info->srvDomain,
+        stat_info->areaCode, stat_info->cellID);
+    checkNetStat(stat_info);
+    break;
 
-    default:
-      AZX_LOG_DEBUG( "unexpected net_event: %d\r\n", net_event );
-      break;
+  default:
+    AZX_LOG_TRACE("Unexpected net_event: %d\r\n", net_event);
+    break;
+
   }
 }
 
@@ -519,6 +612,8 @@ INT32 MQTT_Task( INT32 type, INT32 param1, INT32 param2 )
       break;
     }
 
+    if(gUSE_TLS)
+    {
     if (0 == PrepareSSLEnvironment(&sslConfigHndl, &sslCtxtHndl, (M2MB_SSL_AUTH_TYPE_E)gUSER_SSL_AUTH))
     {
       result = m2mb_mqtt_conf(mqttHandle, CMDS(M2MB_MQTT_SECURE_OPT, sslConfigHndl, sslCtxtHndl));
@@ -532,6 +627,7 @@ INT32 MQTT_Task( INT32 type, INT32 param1, INT32 param2 )
     {
       AZX_LOG_ERROR("PrepareSSLEnvironment() failed!\r\n");
       break;
+	    }
     }
 
 
@@ -563,6 +659,13 @@ INT32 MQTT_Task( INT32 type, INT32 param1, INT32 param2 )
       AZX_LOG_ERROR( "m2mb_net_init did not return M2MB_RESULT_SUCCESS\r\n" );
     }
 
+    retVal = m2mb_net_enable_ind(h, M2MB_NET_REG_STATUS_IND, 1);
+    if ( retVal != M2MB_RESULT_SUCCESS )
+    {
+      AZX_LOG_ERROR( "m2mb_net_enable_ind failed\r\n" );
+      return 1;
+    }
+
     AZX_LOG_DEBUG( "Waiting for registration...\r\n" );
     retVal = m2mb_net_get_reg_status_info( h );
 
@@ -572,8 +675,9 @@ INT32 MQTT_Task( INT32 type, INT32 param1, INT32 param2 )
     }
 
     /*Wait for network registration event to occur (released in NetCallback function) */
-    m2mb_os_ev_get( net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_GET_ANY_AND_CLEAR, &curEvBits,
+    m2mb_os_ev_get( net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_GET_ANY, &curEvBits,
         M2MB_OS_WAIT_FOREVER );
+
     AZX_LOG_DEBUG( "Pdp context activation\r\n" );
     retVal = m2mb_pdp_init( &pdpHandle, PdpCallback, myUserdata );
 
@@ -611,9 +715,17 @@ INT32 MQTT_Task( INT32 type, INT32 param1, INT32 param2 )
     m2mb_os_ev_get( net_pdp_evHandle, EV_PDP_BIT, M2MB_OS_EV_GET_ANY_AND_CLEAR, &curEvBits,
         M2MB_OS_WAIT_FOREVER );
 
+    if(gUSE_TLS)
+    {
     AZX_LOG_INFO( "\r\nConnecting to broker <%s>:%u...\r\n", gMQTT_BROKER_ADDRESS, gMQTT_BROKER_PORT_SSL );
 
     result = m2mb_mqtt_connect( mqttHandle, gMQTT_BROKER_ADDRESS, gMQTT_BROKER_PORT_SSL );
+    }
+    else
+    {
+      AZX_LOG_INFO( "\r\nConnecting to broker <%s>:%u...\r\n", gMQTT_BROKER_ADDRESS, gMQTT_BROKER_PORT );
+      result = m2mb_mqtt_connect( mqttHandle, gMQTT_BROKER_ADDRESS, gMQTT_BROKER_PORT );
+    }
     if( result == M2MB_MQTT_SUCCESS )
     {
       AZX_LOG_INFO( "Done.\r\n" );
@@ -692,7 +804,10 @@ INT32 MQTT_Task( INT32 type, INT32 param1, INT32 param2 )
       break;
     }
 
+    if(gUSE_TLS)
+    {
     CleanSSLEnvironment(&sslConfigHndl, &sslCtxtHndl, (M2MB_SSL_AUTH_TYPE_E)gUSER_SSL_AUTH);
+    }
 
     result = m2mb_mqtt_deinit( mqttHandle );
     if( result == M2MB_MQTT_SUCCESS )

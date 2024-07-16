@@ -13,7 +13,8 @@
   "availability": {
     "LE910Cx-X": {
       "firmwares": [
-        "25.30.xx6"
+        "25.30.xx6",
+        "25.30.xx8"
       ]
     }
   },

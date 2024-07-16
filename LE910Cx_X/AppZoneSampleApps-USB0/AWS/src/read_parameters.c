@@ -11,7 +11,7 @@
   @details
 
   @version 
-    1.0.1
+    1.0.2
 
   @note
 
@@ -95,7 +95,7 @@ int readConfigFromFile(void)
 
   INT32 fd = -1;
   INT32 fs_res;
-  CHAR recv[512];
+  CHAR *recv = NULL;
 
   char *p = NULL;
 
@@ -130,8 +130,22 @@ int readConfigFromFile(void)
 
   if(fd != -1)
   {
-    memset(recv, 0, sizeof(recv));
-    fs_res = m2mb_fs_read(fd, recv, sizeof(recv));
+
+    struct M2MB_STAT info;
+    if(0 != m2mb_fs_fstat(fd, &info))
+    {
+      AZX_LOG_ERROR("Cannot get file size!\r\n");
+      return -1;
+    }
+    recv = (char *)m2mb_os_malloc(info.st_size + 1);
+    if(!recv)
+    {
+      AZX_LOG_ERROR("Cannot allocate file buffer!\r\n");
+      return -1;
+    }
+    memset(recv, 0, info.st_size + 1);
+
+    fs_res = m2mb_fs_read(fd, recv, info.st_size);
     if(-1 == fs_res)
     {
       AZX_LOG_ERROR("cannot open config file!\r\n");
@@ -236,6 +250,7 @@ int readConfigFromFile(void)
             ! _CLIENT_ID || !_CLIENT_USERNAME || !_CLIENT_PASSWORD || !_PUB_TOPIC_TEMPLATE)
     {
       AZX_LOG_CRITICAL("Cannot extract parameters from file!!\r\n");
+      m2mb_os_free(recv);
       return -1;
     }
     else
@@ -279,6 +294,8 @@ int readConfigFromFile(void)
       strcpy(gCLIENT_USERNAME, _CLIENT_USERNAME);
       strcpy(gCLIENT_PASSWORD, _CLIENT_PASSWORD);
       strcpy(gPUB_TOPIC_TEMPLATE, _PUB_TOPIC_TEMPLATE);
+
+      m2mb_os_free(recv);
 
       AZX_LOG_INFO("Set APN to: <<%s>>\r\n", gAPN);
       AZX_LOG_INFO("Set APN USER to: <<%s>>\r\n", gAPN_UserName);
