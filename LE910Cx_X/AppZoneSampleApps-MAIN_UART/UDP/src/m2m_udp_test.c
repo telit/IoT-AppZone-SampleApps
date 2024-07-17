@@ -11,7 +11,7 @@
   @details
   
   @version 
-    1.0.1
+    1.0.2
   @note
   
 
@@ -54,8 +54,7 @@
 M2MB_PDP_HANDLE pdpHandle;
 M2MB_SOCKET_BSD_SOCKET sock_client = M2MB_SOCKET_BSD_INVALID_SOCKET;
 
-M2MB_OS_SEM_HANDLE RegLockHandle = NULL;
-M2MB_OS_SEM_HANDLE pdpLockHandle = NULL;
+static M2MB_OS_EV_HANDLE net_pdp_evHandle = NULL;
 
 /* Local function prototypes ====================================================================*/
 
@@ -100,49 +99,53 @@ INT32 get_pending_bytes(M2MB_SOCKET_BSD_SOCKET s, INT32 *pending)
 }
 
 
-void NetCallback(M2MB_NET_HANDLE h, M2MB_NET_IND_E net_event, UINT16 resp_size, void *resp_struct, void *myUserdata)
+static void checkNetStat(  M2MB_NET_REG_STATUS_T *stat_info)
 {
-  (void)resp_size;
-  (void)resp_struct;
-  (void)myUserdata;
+  if  (stat_info->stat == 1 || stat_info->stat == 5)
+  {
+    AZX_LOG_DEBUG("Module is registered to cell 0x%X!\r\n", (unsigned int)stat_info->cellID);
+    m2mb_os_ev_set(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_SET);
+  }
+  else
+  {
+    m2mb_os_ev_set(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_CLEAR);
+  }
+}
+
+static void NetCallback(M2MB_NET_HANDLE h, M2MB_NET_IND_E net_event, UINT16 resp_size, void *resp_struct, void *myUserdata)
+{
+  UNUSED_3( h, resp_size, myUserdata);
+
   M2MB_NET_REG_STATUS_T *stat_info;
 
   switch (net_event)
   {
+  case M2MB_NET_GET_REG_STATUS_INFO_RESP:
+    stat_info = (M2MB_NET_REG_STATUS_T*)resp_struct;
+    checkNetStat(stat_info);
+    break;
 
-#if 0
-    case M2MB_NET_REG_STATUS_IND:
-      AZX_LOG_DEBUG("Network change event!\r\n");
-      m2mb_net_get_reg_status_info(h);
-      break;
-#endif
+  case M2MB_NET_REG_STATUS_IND:
+    stat_info = (M2MB_NET_REG_STATUS_T*)resp_struct;
+    AZX_LOG_DEBUG("Net Stat IND is %d, %d, %d, %d, %ld\r\n",
+        stat_info->stat, stat_info->rat, stat_info->srvDomain,
+        stat_info->areaCode, stat_info->cellID);
+    checkNetStat(stat_info);
+    break;
 
-    case M2MB_NET_GET_REG_STATUS_INFO_RESP:
-      stat_info = (M2MB_NET_REG_STATUS_T*)resp_struct;
-      //PrintToUart("GET NET status resp is STAT: %d, RAT: %d, SRVDOMAIN: %d, AREA CODE: 0x%X, CELL ID: 0x%X\r\n", stat_info->stat, stat_info->rat, stat_info->srvDomain, stat_info->areaCode, stat_info->cellID);
-      if  (stat_info->stat == 1 || stat_info->stat == 5)
-      {
-        AZX_LOG_DEBUG("Module is registered to cell 0x%X!\r\n", stat_info->cellID);
-        m2mb_os_sem_put(RegLockHandle);
-      }
-      else if (stat_info->stat == 2)
-      {
-        m2mb_net_get_reg_status_info(h); //call it again
-      }
-      break;
-
-
-    default:
-      AZX_LOG_DEBUG("unexpected net_event: %d\r\n", net_event);
-      break;
+  default:
+    AZX_LOG_TRACE("Unexpected net_event: %d\r\n", net_event);
+    break;
 
   }
 }
+
 
 void PdpCallback(M2MB_PDP_HANDLE h, M2MB_PDP_IND_E pdp_event, UINT8 cid, void *userdata)
 {
   (void)userdata;
   struct M2MB_SOCKET_BSD_SOCKADDR_IN CBtmpAddress;
+
   CHAR CBtmpIPaddr[32];
 
   switch (pdp_event)
@@ -152,8 +155,7 @@ void PdpCallback(M2MB_PDP_HANDLE h, M2MB_PDP_IND_E pdp_event, UINT8 cid, void *u
       m2mb_pdp_get_my_ip(h, cid, M2MB_PDP_IPV4, &CBtmpAddress.sin_addr.s_addr);
       m2mb_socket_bsd_inet_ntop( M2MB_SOCKET_BSD_AF_INET, &CBtmpAddress.sin_addr.s_addr, ( CHAR * )&( CBtmpIPaddr ), sizeof( CBtmpIPaddr ) );
       AZX_LOG_DEBUG( "IP address: %s\r\n", CBtmpIPaddr);
-      //azx_sleep_ms( 1000 );
-      m2mb_os_sem_put(pdpLockHandle);
+      m2mb_os_ev_set(net_pdp_evHandle, EV_PDP_BIT, M2MB_OS_EV_SET);
       break;
 
     case M2MB_PDP_DOWN:
@@ -177,7 +179,10 @@ INT32 M2M_msgUDPTask(INT32 type, INT32 param1, INT32 param2)
 
   M2MB_NET_HANDLE h;
   struct M2MB_SOCKET_BSD_TIMEVAL timeOutVal;
-  M2MB_OS_SEM_ATTR_HANDLE semAttrHandle;
+
+  M2MB_OS_RESULT_E               osRes;
+  M2MB_OS_EV_ATTR_HANDLE         evAttrHandle;
+  UINT32                  curEvBits;
 
   INT32 fromlen;
 
@@ -202,18 +207,21 @@ INT32 M2M_msgUDPTask(INT32 type, INT32 param1, INT32 param2)
     readConfigFromFile(); /*try to read configuration from file (if present)*/
 
 
-    if (RegLockHandle == NULL)
+    /* Init events handler */
+    osRes  = m2mb_os_ev_setAttrItem( &evAttrHandle, CMDS_ARGS(M2MB_OS_EV_SEL_CMD_CREATE_ATTR, NULL, M2MB_OS_EV_SEL_CMD_NAME, "net_pdp_ev"));
+    osRes = m2mb_os_ev_init( &net_pdp_evHandle, &evAttrHandle );
+
+    if ( osRes != M2MB_OS_SUCCESS )
     {
-      m2mb_os_sem_setAttrItem( &semAttrHandle, CMDS_ARGS( M2MB_OS_SEM_SEL_CMD_CREATE_ATTR,  NULL,M2MB_OS_SEM_SEL_CMD_COUNT, 0 /*IPC*/, M2MB_OS_SEM_SEL_CMD_TYPE, M2MB_OS_SEM_GEN,M2MB_OS_SEM_SEL_CMD_NAME, "regSem"));
-      m2mb_os_sem_init( &RegLockHandle, &semAttrHandle );
+      m2mb_os_ev_setAttrItem( &evAttrHandle, M2MB_OS_EV_SEL_CMD_DEL_ATTR, NULL );
+      AZX_LOG_CRITICAL("m2mb_os_ev_init failed!\r\n");
+      return -1;
     }
-    if (pdpLockHandle == NULL)
+    else
     {
-      m2mb_os_sem_setAttrItem( &semAttrHandle, CMDS_ARGS( M2MB_OS_SEM_SEL_CMD_CREATE_ATTR,  NULL,M2MB_OS_SEM_SEL_CMD_COUNT, 0 /*IPC*/, M2MB_OS_SEM_SEL_CMD_TYPE, M2MB_OS_SEM_GEN,M2MB_OS_SEM_SEL_CMD_NAME, "pdpSem"));
-      m2mb_os_sem_init( &pdpLockHandle, &semAttrHandle );
+      AZX_LOG_DEBUG("m2mb_os_ev_init success\r\n");
     }
 
-    m2mb_fs_unlink((const CHAR *) "/core/file_load");
 
     retVal = m2mb_net_init(&h, NetCallback, myUserdata);
     if ( retVal == M2MB_RESULT_SUCCESS )
@@ -225,6 +233,12 @@ INT32 M2M_msgUDPTask(INT32 type, INT32 param1, INT32 param2)
       AZX_LOG_ERROR( "m2mb_net_init not returned M2MB_RESULT_SUCCESS\r\n" );
     }
 
+    retVal = m2mb_net_enable_ind(h, M2MB_NET_REG_STATUS_IND, 1);
+    if ( retVal != M2MB_RESULT_SUCCESS )
+    {
+      AZX_LOG_ERROR( "m2mb_net_enable_ind failed\r\n" );
+      return 1;
+    }
 
     AZX_LOG_INFO("Waiting for registration...\r\n");
 
@@ -233,7 +247,9 @@ INT32 M2M_msgUDPTask(INT32 type, INT32 param1, INT32 param2)
     {
       AZX_LOG_ERROR( "m2mb_net_get_reg_status_info did not return M2MB_RESULT_SUCCESS\r\n" );
     }
-    m2mb_os_sem_get(RegLockHandle, M2MB_OS_WAIT_FOREVER );
+
+    /*Wait for network registration event to occur (released in NetCallback function) */
+    m2mb_os_ev_get(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_GET_ANY, &curEvBits, M2MB_OS_WAIT_FOREVER);
 
 
     AZX_LOG_DEBUG("Pdp context initialization\r\n");
@@ -263,8 +279,9 @@ INT32 M2M_msgUDPTask(INT32 type, INT32 param1, INT32 param2)
     {
       AZX_LOG_ERROR("cannot activate pdp context.\r\n");
     }
-    m2mb_os_sem_get(pdpLockHandle, M2MB_OS_WAIT_FOREVER );
 
+    /*Wait for pdp activation event to occur (released in PDPCallback function) */
+    m2mb_os_ev_get(net_pdp_evHandle, EV_PDP_BIT, M2MB_OS_EV_GET_ANY_AND_CLEAR, &curEvBits, M2MB_OS_WAIT_FOREVER);
     AZX_LOG_DEBUG("Creating Socket...\r\n");
 
 

@@ -11,7 +11,7 @@
   @details
 
   @version
-    1.1.8
+    1.2.0
   @note
 
 
@@ -60,6 +60,78 @@
 CHAR  queryBuf[] = "GET / HTTP/1.1\r\nHost: modules.telit.com\r\n\r\n";;
 M2MB_SSL_AUTH_TYPE_E SSL_AUTH_MODE  = M2MB_SSL_SERVER_AUTH;
 /* Local statics ================================================================================*/
+
+#ifdef REDUCED_CYPHER_LIST
+static const M2MB_SSL_CIPHER_SUITE_E s_cipher_suite[] = {
+  M2MB_TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+  M2MB_TLS_RSA_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_DHE_RSA_WITH_AES_128_CBC_SHA,
+  M2MB_TLS_DHE_RSA_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_RSA_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_RSA_WITH_AES_128_CBC_SHA256,
+  M2MB_TLS_DHE_RSA_WITH_AES_128_CBC_SHA256,
+  M2MB_TLS_RSA_WITH_AES_256_CBC_SHA256,
+};
+#else
+static const M2MB_SSL_CIPHER_SUITE_E s_cipher_suite[] = {
+  M2MB_TLS_PSK_WITH_RC4_128_SHA,
+  M2MB_TLS_PSK_WITH_3DES_EDE_CBC_SHA,
+  M2MB_TLS_PSK_WITH_AES_128_CBC_SHA,
+  M2MB_TLS_PSK_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_PSK_WITH_AES_128_GCM_SHA256,
+  M2MB_TLS_PSK_WITH_AES_256_GCM_SHA384,
+  M2MB_TLS_PSK_WITH_AES_128_CBC_SHA256,
+  M2MB_TLS_PSK_WITH_AES_256_CBC_SHA384,
+  M2MB_TLS_RSA_WITH_AES_128_CBC_SHA,
+  M2MB_TLS_DHE_RSA_WITH_AES_128_CBC_SHA,
+  M2MB_TLS_RSA_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_DHE_RSA_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_RSA_WITH_AES_128_CBC_SHA256,
+  M2MB_TLS_RSA_WITH_AES_256_CBC_SHA256,
+  M2MB_TLS_DHE_RSA_WITH_AES_128_CBC_SHA256,
+  M2MB_TLS_DHE_RSA_WITH_AES_256_CBC_SHA256,
+  M2MB_TLS_RSA_WITH_AES_128_GCM_SHA256,
+  M2MB_TLS_RSA_WITH_AES_256_GCM_SHA384,
+  M2MB_TLS_DHE_RSA_WITH_AES_128_GCM_SHA256,
+  M2MB_TLS_DHE_RSA_WITH_AES_256_GCM_SHA384,
+  M2MB_TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA,
+  M2MB_TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,
+  M2MB_TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_ECDH_RSA_WITH_AES_128_CBC_SHA,
+  M2MB_TLS_ECDH_RSA_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,
+  M2MB_TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
+  M2MB_TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,
+  M2MB_TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384,
+  M2MB_TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256,
+  M2MB_TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA384,
+  M2MB_TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,
+  M2MB_TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,
+  M2MB_TLS_ECDH_RSA_WITH_AES_128_CBC_SHA256,
+  M2MB_TLS_ECDH_RSA_WITH_AES_256_CBC_SHA384,
+  M2MB_TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+  M2MB_TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
+  M2MB_TLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256,
+  M2MB_TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384,
+  M2MB_TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+  M2MB_TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+  M2MB_TLS_ECDH_RSA_WITH_AES_128_GCM_SHA256,
+  M2MB_TLS_ECDH_RSA_WITH_AES_256_GCM_SHA384,
+  M2MB_TLS_RSA_WITH_AES_128_CCM_8,
+  M2MB_TLS_RSA_WITH_AES_256_CCM_8,
+  M2MB_TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256,
+  M2MB_TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,
+  M2MB_TLS_DHE_RSA_WITH_CHACHA20_POLY1305_SHA256,
+
+  /* Additional Cipher Suites TLS v1.3*/
+  M2MB_TLS_AES_128_GCM_SHA256,
+  M2MB_TLS_AES_256_GCM_SHA384,
+  M2MB_TLS_CHACHA20_POLY1305_SHA256,
+  M2MB_TLS_AES_128_CCM_SHA256,
+  M2MB_TLS_AES_128_CCM_8_SHA256,
+};
+#endif
 
 static M2MB_OS_EV_HANDLE net_pdp_evHandle = NULL;
 
@@ -123,35 +195,43 @@ INT32 get_pending_bytes(M2MB_SOCKET_BSD_SOCKET s, INT32 *pending)
 }
 
 
-void NetCallback(M2MB_NET_HANDLE h, M2MB_NET_IND_E net_event, UINT16 resp_size, void *resp_struct, void *myUserdata)
+static void checkNetStat(  M2MB_NET_REG_STATUS_T *stat_info)
 {
-  (void)resp_size;
-  (void)myUserdata;
+  if  (stat_info->stat == 1 || stat_info->stat == 5)
+  {
+    AZX_LOG_DEBUG("Module is registered to cell 0x%X!\r\n", (unsigned int)stat_info->cellID);
+    m2mb_os_ev_set(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_SET);
+  }
+  else
+  {
+    m2mb_os_ev_set(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_CLEAR);
+  }
+}
+
+static void NetCallback(M2MB_NET_HANDLE h, M2MB_NET_IND_E net_event, UINT16 resp_size, void *resp_struct, void *myUserdata)
+{
+  UNUSED_3( h, resp_size, myUserdata);
 
   M2MB_NET_REG_STATUS_T *stat_info;
 
   switch (net_event)
   {
+  case M2MB_NET_GET_REG_STATUS_INFO_RESP:
+    stat_info = (M2MB_NET_REG_STATUS_T*)resp_struct;
+    checkNetStat(stat_info);
+    break;
 
+  case M2MB_NET_REG_STATUS_IND:
+    stat_info = (M2MB_NET_REG_STATUS_T*)resp_struct;
+    AZX_LOG_DEBUG("Net Stat IND is %d, %d, %d, %d, %ld\r\n",
+        stat_info->stat, stat_info->rat, stat_info->srvDomain,
+        stat_info->areaCode, stat_info->cellID);
+    checkNetStat(stat_info);
+    break;
 
-
-    case M2MB_NET_GET_REG_STATUS_INFO_RESP:
-      stat_info = (M2MB_NET_REG_STATUS_T*)resp_struct;
-      if  (stat_info->stat == 1 || stat_info->stat == 5)
-      {
-        AZX_LOG_DEBUG("Module is registered to cell 0x%X!\r\n", stat_info->cellID);
-        m2mb_os_ev_set(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_SET);
-      }
-      else
-      {
-        m2mb_net_get_reg_status_info(h); //try again
-      }
-      break;
-
-
-    default:
-      AZX_LOG_DEBUG("unexpected net_event: %d\r\n", net_event);
-      break;
+  default:
+    AZX_LOG_TRACE("Unexpected net_event: %d\r\n", net_event);
+    break;
 
   }
 }
@@ -244,7 +324,11 @@ INT32 msgHTTPSTask(INT32 type, INT32 param1, INT32 param2)
     AZX_LOG_DEBUG("Init SSL session test app\r\n");
 
     sslConfig.ProtVers = M2MB_SSL_PROTOCOL_TLS_1_2;
+#if 1
+    sslConfig.CipherSuites = (M2MB_SSL_CIPHER_SUITE_E *)&s_cipher_suite[0];
+    sslConfig.CipherSuitesNum = (sizeof(s_cipher_suite) / sizeof(s_cipher_suite[0]));
 
+#else
     sslConfig.CipherSuites = CipherSuite; //(M2MB_SSL_CIPHER_SUITE_E *)malloc( 4*sizeof( M2MB_SSL_CIPHER_SUITE_E ) );
 
     sslConfig.CipherSuites[0] = M2MB_TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256;
@@ -256,7 +340,7 @@ INT32 msgHTTPSTask(INT32 type, INT32 param1, INT32 param2)
     sslConfig.CipherSuites[6] = M2MB_TLS_DHE_RSA_WITH_AES_128_CBC_SHA256;
     sslConfig.CipherSuites[7] = M2MB_TLS_RSA_WITH_AES_256_CBC_SHA256;
     sslConfig.CipherSuitesNum = 8;
-
+#endif
     sslConfig.AuthType = SSL_AUTH_MODE;
     sslConfigHndl = m2mb_ssl_create_config( sslConfig,&sslRes );
 
@@ -446,6 +530,12 @@ INT32 msgHTTPSTask(INT32 type, INT32 param1, INT32 param2)
       AZX_LOG_ERROR( "m2mb_net_init did not return M2MB_RESULT_SUCCESS\r\n" );
     }
 
+    retVal = m2mb_net_enable_ind(h, M2MB_NET_REG_STATUS_IND, 1);
+    if ( retVal != M2MB_RESULT_SUCCESS )
+    {
+      AZX_LOG_ERROR( "m2mb_net_enable_ind failed\r\n" );
+      return 1;
+    }
 
     AZX_LOG_DEBUG("Waiting for registration...\r\n");
 
@@ -456,7 +546,7 @@ INT32 msgHTTPSTask(INT32 type, INT32 param1, INT32 param2)
     }
 
     /*Wait for network registration event to occur (released in NetCallback function) */
-    m2mb_os_ev_get(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_GET_ANY_AND_CLEAR, &curEvBits, M2MB_OS_WAIT_FOREVER);
+    m2mb_os_ev_get(net_pdp_evHandle, EV_NET_BIT, M2MB_OS_EV_GET_ANY, &curEvBits, M2MB_OS_WAIT_FOREVER);
 
 
     AZX_LOG_DEBUG("Pdp context activation\r\n");

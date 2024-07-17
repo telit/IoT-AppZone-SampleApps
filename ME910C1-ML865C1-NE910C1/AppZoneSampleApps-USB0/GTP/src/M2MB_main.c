@@ -9,11 +9,11 @@
     The file contains the main user entry point of Appzone
 
   @details
-  
+
   @description
     Sample application that shows hot to get the position using GTP feature. Debug prints on USB0
   @version 
-    1.0.0
+    1.0.1
   @note
     Start of Appzone: Entry point
     User code entry is in function M2MB_main()
@@ -65,34 +65,42 @@ void *userdata = NULL;
 UINT8 n;
 
 
-void NetCallback(M2MB_NET_HANDLE h, M2MB_NET_IND_E net_event, UINT16 resp_size, void *resp_struct, void *myUserdata)
+static void checkNetStat(  M2MB_NET_REG_STATUS_T *stat_info)
 {
-  (void)resp_size;
-  (void)myUserdata;
+  if  (stat_info->stat == 1 || stat_info->stat == 5)
+  {
+    AZX_LOG_DEBUG("Module is registered to cell 0x%X!\r\n", (unsigned int)stat_info->cellID);
+    m2mb_os_ev_set(net_gps_evHandle, NET_BIT, M2MB_OS_EV_SET);
+  }
+  else
+  {
+    m2mb_os_ev_set(net_gps_evHandle, NET_BIT, M2MB_OS_EV_CLEAR);
+  }
+}
+
+static void NetCallback(M2MB_NET_HANDLE h, M2MB_NET_IND_E net_event, UINT16 resp_size, void *resp_struct, void *myUserdata)
+{
+  UNUSED_3( h, resp_size, myUserdata);
 
   M2MB_NET_REG_STATUS_T *stat_info;
 
   switch (net_event)
   {
+  case M2MB_NET_GET_REG_STATUS_INFO_RESP:
+    stat_info = (M2MB_NET_REG_STATUS_T*)resp_struct;
+    checkNetStat(stat_info);
+    break;
 
-
-
-    case M2MB_NET_GET_REG_STATUS_INFO_RESP:
-      stat_info = (M2MB_NET_REG_STATUS_T*)resp_struct;
-      if  (stat_info->stat == 1 || stat_info->stat == 5)
-      {
-        AZX_LOG_DEBUG("Module is registered to cell 0x%X!\r\n", stat_info->cellID);
-        m2mb_os_ev_set(net_gps_evHandle, NET_BIT, M2MB_OS_EV_SET);
-      }
-      else
-      {
-        m2mb_net_get_reg_status_info(h); //try again
-      }
-      break;
-
+  case M2MB_NET_REG_STATUS_IND:
+    stat_info = (M2MB_NET_REG_STATUS_T*)resp_struct;
+    AZX_LOG_DEBUG("Net Stat IND is %d, %d, %d, %d, %ld\r\n",
+        stat_info->stat, stat_info->rat, stat_info->srvDomain,
+        stat_info->areaCode, stat_info->cellID);
+    checkNetStat(stat_info);
+    break;
 
   default:
-    AZX_LOG_DEBUG("unexpected net_event: %d\r\n", net_event);
+    AZX_LOG_TRACE("Unexpected net_event: %d\r\n", net_event);
     break;
 
   }
@@ -158,27 +166,28 @@ void gnssCallbackFN( M2MB_GNSS_HANDLE handle, M2MB_GNSS_IND_E event, UINT16 resp
   (void)resp_size;
 
   AZX_LOG_DEBUG("gnssCallback event: %d\r\n", event);
-  switch (event){
+  switch (event)
+  {
 
-	  case M2MB_GNSS_INDICATION_POSITION_REPORT:
-	  {
-		  
-	  	memcpy(userdata,(M2MB_GNSS_GTP_INFO_T *)resp,sizeof(M2MB_GNSS_GTP_INFO_T));
-	  	m2mb_os_ev_set(net_gps_evHandle,GPS_BIT, M2MB_OS_EV_SET);
-	  }
-	  break;
+  case M2MB_GNSS_INDICATION_POSITION_REPORT:
+  {
 
-	  case M2MB_GNSS_INDICATION_NMEA_REPORT:
-	  {
-		  //old fw versions
-	  	memcpy(userdata,(M2MB_GNSS_GTP_INFO_T *)resp,sizeof(M2MB_GNSS_GTP_INFO_T));
-		  m2mb_os_ev_set(net_gps_evHandle,GPS_BIT, M2MB_OS_EV_SET);
-	  }
-	  break;
+    memcpy(userdata,(M2MB_GNSS_GTP_INFO_T *)resp,sizeof(M2MB_GNSS_GTP_INFO_T));
+    m2mb_os_ev_set(net_gps_evHandle,GPS_BIT, M2MB_OS_EV_SET);
+  }
+  break;
 
-	  default:
-		  AZX_LOG_WARN("unexpected event\r\n");
-		  break;
+  case M2MB_GNSS_INDICATION_NMEA_REPORT:
+  {
+    //old fw versions
+    memcpy(userdata,(M2MB_GNSS_GTP_INFO_T *)resp,sizeof(M2MB_GNSS_GTP_INFO_T));
+    m2mb_os_ev_set(net_gps_evHandle,GPS_BIT, M2MB_OS_EV_SET);
+  }
+  break;
+
+  default:
+    AZX_LOG_WARN("unexpected event\r\n");
+    break;
   }
 
 }
@@ -203,7 +212,7 @@ void M2MB_main( int argc, char **argv )
   M2MB_RESULT_E res;
   M2MB_POWER_HANDLE pwHandle;
   M2MB_NET_HANDLE hNet;
-  
+
   M2MB_OS_RESULT_E        osRes;
   M2MB_OS_EV_ATTR_HANDLE  evAttrHandle;
   UINT32                  curEvBits;
@@ -212,120 +221,128 @@ void M2MB_main( int argc, char **argv )
   /*SET output channel */
   azx_sleep_ms(2000);
   AZX_LOG_INIT();
-  
+
   AZX_LOG_INFO("\r\nStarting GTP demo app. This is v%s built on %s %s.\r\n\r\n",
-        VERSION, __DATE__, __TIME__);
-	osRes  = m2mb_os_ev_setAttrItem( &evAttrHandle, CMDS_ARGS(M2MB_OS_EV_SEL_CMD_CREATE_ATTR, NULL, M2MB_OS_EV_SEL_CMD_NAME, "gps_ev"));
-	osRes = m2mb_os_ev_init( &net_gps_evHandle, &evAttrHandle );
+      VERSION, __DATE__, __TIME__);
+  osRes  = m2mb_os_ev_setAttrItem( &evAttrHandle, CMDS_ARGS(M2MB_OS_EV_SEL_CMD_CREATE_ATTR, NULL, M2MB_OS_EV_SEL_CMD_NAME, "gps_ev"));
+  osRes = m2mb_os_ev_init( &net_gps_evHandle, &evAttrHandle );
 
-	if ( osRes != M2MB_OS_SUCCESS ){
-		m2mb_os_ev_setAttrItem( &evAttrHandle, M2MB_OS_EV_SEL_CMD_DEL_ATTR, NULL );
-		AZX_LOG_CRITICAL("m2mb_os_ev_init failed!\r\n");
-		return;
-	} else {
+  if ( osRes != M2MB_OS_SUCCESS ){
+    m2mb_os_ev_setAttrItem( &evAttrHandle, M2MB_OS_EV_SEL_CMD_DEL_ATTR, NULL );
+    AZX_LOG_CRITICAL("m2mb_os_ev_init failed!\r\n");
+    return;
+  } else {
 
-		AZX_LOG_TRACE("m2mb_os_ev_init success\r\n");
+    AZX_LOG_TRACE("m2mb_os_ev_init success\r\n");
 
-	}
+  }
 
-	/*Check network registration*/
-	res = m2mb_net_init(&hNet, NetCallback, userdata);
-	if ( res == M2MB_RESULT_SUCCESS )
-	{
-		AZX_LOG_DEBUG( "m2mb_net_init returned M2MB_RESULT_SUCCESS\r\n");
-	}
-	else
-	{
-		AZX_LOG_ERROR( "m2mb_net_init did not return M2MB_RESULT_SUCCESS\r\n" );
-	}
+  /*Check network registration*/
+  res = m2mb_net_init(&hNet, NetCallback, userdata);
+  if ( res == M2MB_RESULT_SUCCESS )
+  {
+    AZX_LOG_DEBUG( "m2mb_net_init returned M2MB_RESULT_SUCCESS\r\n");
+  }
+  else
+  {
+    AZX_LOG_ERROR( "m2mb_net_init did not return M2MB_RESULT_SUCCESS\r\n" );
+  }
 
+  res = m2mb_net_enable_ind(hNet, M2MB_NET_REG_STATUS_IND, 1);
+  if ( res != M2MB_RESULT_SUCCESS )
+  {
+    AZX_LOG_ERROR( "m2mb_net_enable_ind failed\r\n" );
+    return;
+  }
 
-	AZX_LOG_DEBUG("Waiting for registration...\r\n");
+  AZX_LOG_DEBUG("Waiting for registration...\r\n");
 
-	res = m2mb_net_get_reg_status_info(hNet);
-	if ( res != M2MB_RESULT_SUCCESS )
-	{
-		AZX_LOG_ERROR( "m2mb_net_get_reg_status_info did not return M2MB_RESULT_SUCCESS\r\n" );
-	}
-	/*Wait for network registration event to occur (released in NetCallback function) */
-	m2mb_os_ev_get(net_gps_evHandle, NET_BIT, M2MB_OS_EV_GET_ANY_AND_CLEAR, &curEvBits, M2MB_OS_WAIT_FOREVER);
-
-	AZX_LOG_DEBUG("Pdp context setting\r\n");
-	res = m2mb_pdp_init(&pdpHandle, NULL, NULL);
-	if ( res == M2MB_RESULT_SUCCESS )
-	{
-		AZX_LOG_DEBUG( "m2mb_pdp_init returned M2MB_RESULT_SUCCESS\r\n");
-	}
-	else
-	{
-		AZX_LOG_DEBUG( "m2mb_pdp_init did not return M2MB_RESULT_SUCCESS\r\n" );
-	}
-
-	res = m2mb_pdp_APN_set( pdpHandle, PDP_CTX, (CHAR*)APN );
-	res = m2mb_pdp_deinit(pdpHandle);
-	if ( res == M2MB_RESULT_SUCCESS )
-	{
-		AZX_LOG_DEBUG( "m2mb_pdp_deinit returned M2MB_RESULT_SUCCESS\r\n");
-	}
-	else
-	{
-		AZX_LOG_DEBUG( "m2mb_pdp_deinit did not return M2MB_RESULT_SUCCESS\r\n" );
-	}
+  res = m2mb_net_get_reg_status_info(hNet);
+  if ( res != M2MB_RESULT_SUCCESS )
+  {
+    AZX_LOG_ERROR( "m2mb_net_get_reg_status_info did not return M2MB_RESULT_SUCCESS\r\n" );
+  }
 
 
-	/*Create GPS/GTP handle*/
-	if( M2MB_RESULT_SUCCESS != m2mb_gnss_init( &gtp_handle, gnssCallbackFN, &gtpData ) )
-	{
-		AZX_LOG_ERROR("m2mb_gnss_init, failed!\r\n");
-		return;
-	}
+  /*Wait for network registration event to occur (released in NetCallback function) */
+  m2mb_os_ev_get(net_gps_evHandle, NET_BIT, M2MB_OS_EV_GET_ANY, &curEvBits, M2MB_OS_WAIT_FOREVER);
 
-	azx_sleep_ms(1000);
+  AZX_LOG_DEBUG("Pdp context setting\r\n");
+  res = m2mb_pdp_init(&pdpHandle, NULL, NULL);
+  if ( res == M2MB_RESULT_SUCCESS )
+  {
+    AZX_LOG_DEBUG( "m2mb_pdp_init returned M2MB_RESULT_SUCCESS\r\n");
+  }
+  else
+  {
+    AZX_LOG_DEBUG( "m2mb_pdp_init did not return M2MB_RESULT_SUCCESS\r\n" );
+  }
 
-	/*Check GTP status, if not enabled enable it and reboot*/
-	AZX_LOG_INFO("\r\nCheck if GTP has been already enabled\r\n");
-	m2mb_gnss_GetGTPstatus(gtp_handle,&status);
-	if (status == 0)
-	{
-		AZX_LOG_DEBUG("GTP status: %d => not enabled. Enable it and reboot module\r\n", status);
-		if (M2MB_RESULT_SUCCESS != m2mb_power_init (&pwHandle, NULL, NULL))
-		{
-			AZX_LOG_ERROR("m2mb_power_init, failed!\r\n");
-			return;
-		}
+  res = m2mb_pdp_APN_set( pdpHandle, PDP_CTX, (CHAR*)APN );
+  res = m2mb_pdp_deinit(pdpHandle);
+  if ( res == M2MB_RESULT_SUCCESS )
+  {
+    AZX_LOG_DEBUG( "m2mb_pdp_deinit returned M2MB_RESULT_SUCCESS\r\n");
+  }
+  else
+  {
+    AZX_LOG_DEBUG( "m2mb_pdp_deinit did not return M2MB_RESULT_SUCCESS\r\n" );
+  }
 
-		res = m2mb_gnss_EnableGTP( gtp_handle, 1 );
-		if ( res == M2MB_RESULT_SUCCESS )
-		{
-			AZX_LOG_INFO( "m2mb_gnss_EnableGTP succeeded\r\n");
-			m2mb_power_reboot(pwHandle);
-			m2mb_power_deinit(pwHandle);
-		}
-		else
-		{
-			AZX_LOG_ERROR( "m2mb_gnss_EnableGTP fail, res: %d\r\n", res );
-			return;
-		}
-	}
-	else
-	{
-		AZX_LOG_DEBUG("GTP status: %d => Enabled\r\n", status);
-	}
 
-	/*Get GTP position*/
+  /*Create GPS/GTP handle*/
+  if( M2MB_RESULT_SUCCESS != m2mb_gnss_init( &gtp_handle, gnssCallbackFN, &gtpData ) )
+  {
+    AZX_LOG_ERROR("m2mb_gnss_init, failed!\r\n");
+    return;
+  }
 
-	AZX_LOG_DEBUG("Get the position...\r\n");
-	if( M2MB_RESULT_SUCCESS != m2mb_gnss_GTP( gtp_handle ) )
-	{
-		AZX_LOG_ERROR("Failed to get GTP position\r\n");
-		return;
-	}
-	AZX_LOG_INFO("\r\nm2mb_gnss_GTP OK, waiting for position...\r\n");
-	/*Wait for GPS fix/NMEA sentences event to occur (released in gnssCallbackFN function) */
-	m2mb_os_ev_get(net_gps_evHandle, GPS_BIT, M2MB_OS_EV_GET_ANY_AND_CLEAR, &curEvBits, M2MB_OS_WAIT_FOREVER);
-	AZX_LOG_INFO("GTP position got\r\n");
-	printGTPInfo_test( &gtpData );
+  azx_sleep_ms(1000);
 
-	azx_sleep_ms(2000);
+  /*Check GTP status, if not enabled enable it and reboot*/
+  AZX_LOG_INFO("\r\nCheck if GTP has been already enabled\r\n");
+  m2mb_gnss_GetGTPstatus(gtp_handle,&status);
+  if (status == 0)
+  {
+    AZX_LOG_DEBUG("GTP status: %d => not enabled. Enable it and reboot module\r\n", status);
+    if (M2MB_RESULT_SUCCESS != m2mb_power_init (&pwHandle, NULL, NULL))
+    {
+      AZX_LOG_ERROR("m2mb_power_init, failed!\r\n");
+      return;
+    }
+
+    res = m2mb_gnss_EnableGTP( gtp_handle, 1 );
+    if ( res == M2MB_RESULT_SUCCESS )
+    {
+      AZX_LOG_INFO( "m2mb_gnss_EnableGTP succeeded\r\n");
+      m2mb_power_reboot(pwHandle);
+      m2mb_power_deinit(pwHandle);
+    }
+    else
+    {
+      AZX_LOG_ERROR( "m2mb_gnss_EnableGTP fail, res: %d\r\n", res );
+      return;
+    }
+  }
+  else
+  {
+    AZX_LOG_DEBUG("GTP status: %d => Enabled\r\n", status);
+  }
+
+  /*Get GTP position*/
+
+  AZX_LOG_DEBUG("Get the position...\r\n");
+  if( M2MB_RESULT_SUCCESS != m2mb_gnss_GTP( gtp_handle ) )
+  {
+    AZX_LOG_ERROR("Failed to get GTP position\r\n");
+    return;
+  }
+  AZX_LOG_INFO("\r\nm2mb_gnss_GTP OK, waiting for position...\r\n");
+  /*Wait for GPS fix/NMEA sentences event to occur (released in gnssCallbackFN function) */
+  m2mb_os_ev_get(net_gps_evHandle, GPS_BIT, M2MB_OS_EV_GET_ANY_AND_CLEAR, &curEvBits, M2MB_OS_WAIT_FOREVER);
+  AZX_LOG_INFO("GTP position got\r\n");
+  printGTPInfo_test( &gtpData );
+
+  azx_sleep_ms(2000);
 }
 

@@ -41,7 +41,7 @@
   margin:0px;
   outline:none;
   font-weight: bold;
-  color: #FDB722; /*orange*/
+  color: #002F70; /*dark blue*/
 }
 
 #nav-tree .label {
@@ -121,7 +121,7 @@
 
 #nav-tree {
   background-image: none;
-  background-color: #274769; /*DARK BLUE*/
+  background-color: #CBD9FF; #C6C8C9
   -webkit-overflow-scrolling : touch; /* iOS 5+ */
 }
 

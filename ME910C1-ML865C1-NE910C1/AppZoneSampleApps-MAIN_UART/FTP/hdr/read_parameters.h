@@ -38,7 +38,11 @@
 
 #define FTP_USER "user"
 #define FTP_PASS "password"
-
+#define ENABLE_TLS 0
+#define AUTH_TYPE 0  //NO AUTH
+#define CA_CERT_PATH ""
+#define CLIENT_CERT_PATH ""
+#define CLIENT_KEY_PATH ""
 #define REMOTE_FOLDER "/samples"
 /*Remote path of file on FTP server to be downloaded as a local file*/
 #define DLFILE "pattern_big.txt"
@@ -61,6 +65,11 @@ extern char gFTP_ADDR[MAX_PARAMS_STR_LEN];
 extern UINT16 gFTP_PORT;
 extern char gFTP_USER[MAX_PARAMS_STR_LEN];
 extern char gFTP_PASS[MAX_PARAMS_STR_LEN];
+extern UINT16 gENABLE_TLS;
+extern UINT16 gAUTH_TYPE;
+extern char gCA_CERT_PATH[MAX_PARAMS_STR_LEN];
+extern char gCLIENT_CERT_PATH[MAX_PARAMS_STR_LEN];
+extern char gCLIENT_KEY_PATH[MAX_PARAMS_STR_LEN];
 extern char gREMOTE_FOLDER[MAX_PARAMS_STR_LEN];
 extern char gDLFILE[MAX_PARAMS_STR_LEN];
 extern char gDLTOBUF_FILE[MAX_PARAMS_STR_LEN];

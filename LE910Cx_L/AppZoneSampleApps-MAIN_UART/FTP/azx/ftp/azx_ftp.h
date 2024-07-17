@@ -23,14 +23,14 @@
 /*===========================================================================*/
 /**
  * @file azx_ftp.h
- * @version 1.2.0
+ * @version 1.3.0
  * @dependencies
  *
  * @note
  *   Dependencies:
  *      m2mb_types.h
  *
- * @author Fabio Pintus
+ * @author Fabio Pintus, Roberta Galeazzo
  *
  * @date 21/02/2020
  * @brief FTP Library routines
@@ -348,6 +348,11 @@ typedef struct AZX_FTP_OPTIONS_TAG{
   AZX_FTP_DEBUG_HOOK_LEVELS_E level;		   /**< Global debug Level to set */
   unsigned char cid;                       /**< Context id used by active connection*/
   void *cbArg;                             /**< User defined parameter, not used*/
+  #ifdef M2M_M2MB_SSL_H
+  INT8 ssl;                                /*RoGa: new SSL parameters*/
+  M2MB_SSL_CONFIG_HANDLE sslConfigH;
+  M2MB_SSL_CTXT_HANDLE sslCtxtH;
+#endif
 } AZX_FTP_OPTIONS_T;
 
 
@@ -774,6 +779,37 @@ INT32 azx_ftp_login(const CHAR *user, const CHAR *pass, AZX_FTP_NET_BUF_T *nCont
 
 
 /** \cond PRIVATE */
+
+#ifdef M2M_M2MB_SSL_H
+/*-----------------------------------------------------------------------------------------------*/
+/**
+  @brief
+    FTP set data channel security parameters.
+
+  @details
+    This function set PROT and PBSZ data channel security parameters
+
+  @param[in] user
+      FTP prot
+  @param[in] pass
+      FTP bufsize
+  @param[in] nControl
+    Pointer to the FTP client structure
+
+  @return
+    1 if Success
+  @return
+    0 otherwise
+
+  <b>Refer to</b>
+   azx_ftp_init() azx_ftp_connect() FtpQuit()
+
+  @ingroup AZX_FTP_USAGE
+ *
+ */
+/*-----------------------------------------------------------------------------------------------*/
+INT32 azx_ftp_sslCfg(CHAR prot, CHAR buffSise, AZX_FTP_NET_BUF_T *nControl);
+#endif
 
 /*-----------------------------------------------------------------------------------------------*/
 /**

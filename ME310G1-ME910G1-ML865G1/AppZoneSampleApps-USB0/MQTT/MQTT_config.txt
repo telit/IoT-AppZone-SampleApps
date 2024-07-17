@@ -1,7 +1,8 @@
-web.omnitel.it,#APN
+,#APN
 ,#APN_USERNAME
 ,#APN_PASSWORD
-3,#PDP_CDX
+4,#PDP_CDX
+0,#USE_SSL
 ca-cert-pool,#SSL_CERT_CA_NAME
 SSL-Client,#SSL_CLIENT_NAME
 ,#CACERTFILE

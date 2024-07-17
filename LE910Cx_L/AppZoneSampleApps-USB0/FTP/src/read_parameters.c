@@ -46,7 +46,11 @@ char gFTP_ADDR[MAX_PARAMS_STR_LEN] = {0};
 UINT16 gFTP_PORT = {0};
 char gFTP_USER[MAX_PARAMS_STR_LEN] = {0};
 char gFTP_PASS[MAX_PARAMS_STR_LEN] = {0};
-
+UINT16 gENABLE_TLS = 0;
+UINT16 gAUTH_TYPE = 0;
+char gCA_CERT_PATH[MAX_PARAMS_STR_LEN] = {0};
+char gCLIENT_CERT_PATH[MAX_PARAMS_STR_LEN] = {0};
+char gCLIENT_KEY_PATH[MAX_PARAMS_STR_LEN] = {0};
 char gREMOTE_FOLDER[MAX_PARAMS_STR_LEN] = {0};
 char gDLFILE[MAX_PARAMS_STR_LEN] = {0};
 char gDLTOBUF_FILE[MAX_PARAMS_STR_LEN] = {0};
@@ -99,6 +103,11 @@ int readConfigFromFile(void)
   char *_FTP_PORT = NULL;
   char *_FTP_USER = NULL;
   char *_FTP_PASS = NULL;
+  char * _ENABLETLS = NULL;
+  char * _AUTHTYPE = NULL;
+  char *_CA_CERT_PATH = NULL;
+  char *_CLIENT_CERT_PATH = NULL;
+  char *_CLIENT_KEY_PATH = NULL;
   char *_REMOTE_FOLDER = NULL;
   char *_DLFILE = NULL;
   char *_DLTOBUF_FILE = NULL;
@@ -156,6 +165,25 @@ int readConfigFromFile(void)
     _FTP_PASS = mystrtok(&p, NULL,',');
     mystrtok(&p, NULL,'\n'); //strip description
 
+    //ENABLE_TLS
+   _ENABLETLS = mystrtok(&p, NULL,',');
+   mystrtok(&p, NULL,'\n'); //strip description
+
+   //AUTH_TYPE
+    _AUTHTYPE = mystrtok(&p, NULL,',');
+    mystrtok(&p, NULL,'\n'); //strip description
+
+    //CA_CERT_PATH
+    _CA_CERT_PATH = mystrtok(&p, NULL,',');
+    mystrtok(&p, NULL,'\n'); //strip description
+
+    //CLIENT_CERT_PATH
+    _CLIENT_CERT_PATH = mystrtok(&p, NULL,',');
+    mystrtok(&p, NULL,'\n'); //strip description
+
+    //CLIENT_KEY_PATH
+    _CLIENT_KEY_PATH = mystrtok(&p, NULL,',');
+    mystrtok(&p, NULL,'\n'); //strip description
     //REMOTE_FOLDER
     _REMOTE_FOLDER = mystrtok(&p, NULL,',');
     mystrtok(&p, NULL,'\n'); //strip description
@@ -169,7 +197,8 @@ int readConfigFromFile(void)
     mystrtok(&p, NULL,'\n'); //strip description
 
     if( !_APN || !_APN_USERNAME || ! _APN_PASSWORD || !_PDP_CDX ||
-            !_FTP_ADDR || !_FTP_PORT || ! _FTP_USER || !_FTP_PASS ||
+            !_FTP_ADDR || !_FTP_PORT || ! _FTP_USER || !_FTP_PASS ||!_ENABLETLS || !_AUTHTYPE ||
+            !_CA_CERT_PATH ||!_CLIENT_CERT_PATH ||!_CLIENT_KEY_PATH ||
             !_REMOTE_FOLDER || !_DLFILE || !_DLTOBUF_FILE)
     {
       AZX_LOG_CRITICAL("Cannot extract parameters from file!!\r\n");
@@ -187,6 +216,24 @@ int readConfigFromFile(void)
       gFTP_PORT = atoi(_FTP_PORT);
       strcpy(gFTP_USER, _FTP_USER);
       strcpy(gFTP_PASS, _FTP_PASS);
+      gENABLE_TLS = atoi(_ENABLETLS);
+
+      gAUTH_TYPE = atoi(_AUTHTYPE);
+
+      char tmp[100];
+      strcpy(tmp, _CA_CERT_PATH);
+      sprintf(gCA_CERT_PATH, "%s%s",LOCALPATH,tmp);
+      memset(tmp, 0, 100);
+      strcpy(gCLIENT_CERT_PATH, _CLIENT_CERT_PATH);
+      strcpy(gCLIENT_KEY_PATH, _CLIENT_KEY_PATH);
+
+      strcpy(tmp, _CLIENT_CERT_PATH);
+      sprintf(gCLIENT_CERT_PATH, "%s%s",LOCALPATH,tmp);
+      memset(tmp, 0, 100);
+
+      strcpy(tmp, _CLIENT_KEY_PATH);
+      sprintf(gCLIENT_KEY_PATH, "%s%s",LOCALPATH,tmp);
+      memset(tmp, 0, 100);
       strcpy(gREMOTE_FOLDER, _REMOTE_FOLDER);
       strcpy(gDLFILE,_DLFILE);
       strcpy(gDLTOBUF_FILE, _DLTOBUF_FILE);
@@ -199,6 +246,11 @@ int readConfigFromFile(void)
       AZX_LOG_INFO("Set FTP_PORT to: %u\r\n", gFTP_PORT);
       AZX_LOG_INFO("Set FTP_USER to: <<%s>>\r\n", gFTP_USER);
       AZX_LOG_INFO("Set FTP_PASS to: <<%s>>\r\n", gFTP_PASS);
+      AZX_LOG_INFO("Set ENABLE_TLS to: <<%d>>\r\n", gENABLE_TLS);
+      AZX_LOG_INFO("Set AUTH_TYPE to: <<%d>>\r\n", gAUTH_TYPE);
+      AZX_LOG_INFO("Set CA_CERT_PATH to: <<%s>>\r\n", gCA_CERT_PATH);
+      AZX_LOG_INFO("Set CLIENT_CERT_PATH to: <<%s>>\r\n", gCLIENT_CERT_PATH);
+      AZX_LOG_INFO("Set CLIENT_KEY_PATH to: <<%s>>\r\n", gCLIENT_KEY_PATH);
       AZX_LOG_INFO("Set REMOTE_FOLDER to: <<%s>>\r\n", gREMOTE_FOLDER);
       AZX_LOG_INFO("Set DLFILE to: <<%s>>\r\n", gDLFILE);
       AZX_LOG_INFO("Set DLTOBUF_FILE to: <<%s>>\r\n", gDLTOBUF_FILE);
@@ -222,6 +274,12 @@ void configureParameters(void)
   gFTP_PORT = FTP_PORT;
   strcpy(gFTP_USER, FTP_USER);
   strcpy(gFTP_PASS, FTP_PASS);
+  gENABLE_TLS = ENABLE_TLS;
+  gAUTH_TYPE = AUTH_TYPE;
+
+  strcpy(gCA_CERT_PATH, CA_CERT_PATH);
+  strcpy(gCLIENT_CERT_PATH, CLIENT_CERT_PATH);
+  strcpy(gCLIENT_KEY_PATH, CLIENT_KEY_PATH);
   strcpy(gREMOTE_FOLDER, REMOTE_FOLDER);
   strcpy(gDLFILE, DLFILE);
   strcpy(gDLTOBUF_FILE, DLTOBUF_FILE);
