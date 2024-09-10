@@ -1,0 +1,1 @@
+Sample application showing how to protect an AT command with a pwd using EasyAT functionality. Debug prints on USB0

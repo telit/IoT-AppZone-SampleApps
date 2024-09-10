@@ -4,7 +4,7 @@
 
 
 
-Package Version: **1.1.21-CxL**
+Package Version: **1.1.22-CxL**
 
 Minimum Firmware Version: **25.21.000.3**
 
@@ -141,6 +141,8 @@ ROM_START=<new address>
 
 
 ## Main contents
+
+[AUX UART](#aux-uart)
 
 [MAIN UART](#main-uart)
 
@@ -309,8 +311,119 @@ USB0 output received from UART (in RED, the user input data from USB0 )
 
 
 
+## AUX UART 
+*Applications that provide usage examples for various functionalities, log output on Auxiliary UART*
+
+
+### Alarm example 
+
+Sample application that shows how to set an alarm to wake-up module. Debug prints on **AUX UART**
+
+
+**Features**
+
+
+- How to set an alarm
+- How to use it to turn on module
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Init RTC
+- Wait for registration
+- Get current date and time
+- Call function set_alarm
+- Init Power and turn off module
+
+![](pictures/samples/ALARM_bordered.png)
+
+---------------------
+
+
+
+### FOTA_FTP_client example 
+
+Sample application that shows how to download a delta file from an FTP server, stores it in the FOTA partition and deploys it. Debug prints on **AUX UART**
+
+
+**Features**
+
+
+- How to download a delta file from FTP server using FTP client 
+- How to store directly delta file in the FOTA partition 
+- How to deploy delta file to upgrade mdoule fw.
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Print welcome message
+- Create a main task to manage connectivity, delta download and deployment
+
+**`ftp_test.c`**
+
+**msgFTPTask()**
+
+- Initialize Network structure and check registration
+- Initialize PDP structure and start PDP context. Event will be received on 
+- Initialize FOTA system then reset parameters.
+- After PDP context activation notified by PdPCallback() configure fota client parameters as FTP server url, username and password and SSL
+- Get delta filefrom server and store it directly in the FOTA partition 
+- If delta download went fine, check it (m2mb_fota_update_package_check_setup) and if it's correct apply it (m2mb_fota_start).
+- Once completed restart module.
+
+ 
+**PdpCallback()**
+
+- When PDP context is enabled, send a message to fotaTask to start the download
+
+
+**buf_data_cb_OTA()**
+
+- Handles data reception and writing in the FOTA partition (one block size at a time) 
+
+
+
+
+![](pictures/samples/FOTA_ftp_client_bordered.png)
+
+---------------------
+
+
+
 ## USB0 
 *Applications that provide usage examples for various functionalities, log output on USB0*
+
+
+### Alarm example 
+
+Sample application that shows how to set an alarm to wake-up module. Debug prints on **USB0**
+
+
+**Features**
+
+
+- How to set an alarm
+- How to use it to turn on module
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Init RTC
+- Wait for registration
+- Get current date and time
+- Call function set_alarm
+- Init Power and turn off module
+
+![](pictures/samples/ALARM_bordered.png)
+
+---------------------
+
 
 
 ### ATI (AT Instance)
@@ -764,6 +877,57 @@ Sample application showcasing FOTA usage with M2MB API. Debug prints on **USB0**
 
 
 ![](pictures/samples/fota_bordered.png)
+
+---------------------
+
+
+
+### FOTA_FTP_client example 
+
+Sample application that shows how to download a delta file from an FTP server, stores it in the FOTA partition and deploys it. Debug prints on **USB0**
+
+
+**Features**
+
+
+- How to download a delta file from FTP server using FTP client 
+- How to store directly delta file in the FOTA partition 
+- How to deploy delta file to upgrade mdoule fw.
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Print welcome message
+- Create a main task to manage connectivity, delta download and deployment
+
+**`ftp_test.c`**
+
+**msgFTPTask()**
+
+- Initialize Network structure and check registration
+- Initialize PDP structure and start PDP context. Event will be received on 
+- Initialize FOTA system then reset parameters.
+- After PDP context activation notified by PdPCallback() configure fota client parameters as FTP server url, username and password and SSL
+- Get delta filefrom server and store it directly in the FOTA partition 
+- If delta download went fine, check it (m2mb_fota_update_package_check_setup) and if it's correct apply it (m2mb_fota_start).
+- Once completed restart module.
+
+ 
+**PdpCallback()**
+
+- When PDP context is enabled, send a message to fotaTask to start the download
+
+
+**buf_data_cb_OTA()**
+
+- Handles data reception and writing in the FOTA partition (one block size at a time) 
+
+
+
+
+![](pictures/samples/FOTA_ftp_client_bordered.png)
 
 ---------------------
 
@@ -2072,6 +2236,34 @@ AT#M2MWRITE="/data/azc/mod/test.gz",138
 *Applications that provide usage examples for various functionalities, log output on MAIN UART*
 
 
+### Alarm example 
+
+Sample application that shows how to set an alarm to wake-up module. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- How to set an alarm
+- How to use it to turn on module
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Init RTC
+- Wait for registration
+- Get current date and time
+- Call function set_alarm
+- Init Power and turn off module
+
+![](pictures/samples/ALARM_bordered.png)
+
+---------------------
+
+
+
 ### ATI (AT Instance)
 
 Sample application showing how to use AT Instance functionality (sending AT commands from code). The example supports both sync and async (using a callback) modes. Debug prints on **MAIN UART**
@@ -2557,6 +2749,57 @@ Sample application showcasing FOTA usage with M2MB API. Debug prints on **MAIN U
 
 
 ![](pictures/samples/fota_bordered.png)
+
+---------------------
+
+
+
+### FOTA_FTP_client example 
+
+Sample application that shows how to download a delta file from an FTP server, stores it in the FOTA partition and deploys it. Debug prints on **MAIN UART**
+
+
+**Features**
+
+
+- How to download a delta file from FTP server using FTP client 
+- How to store directly delta file in the FOTA partition 
+- How to deploy delta file to upgrade mdoule fw.
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Print welcome message
+- Create a main task to manage connectivity, delta download and deployment
+
+**`ftp_test.c`**
+
+**msgFTPTask()**
+
+- Initialize Network structure and check registration
+- Initialize PDP structure and start PDP context. Event will be received on 
+- Initialize FOTA system then reset parameters.
+- After PDP context activation notified by PdPCallback() configure fota client parameters as FTP server url, username and password and SSL
+- Get delta filefrom server and store it directly in the FOTA partition 
+- If delta download went fine, check it (m2mb_fota_update_package_check_setup) and if it's correct apply it (m2mb_fota_start).
+- Once completed restart module.
+
+ 
+**PdpCallback()**
+
+- When PDP context is enabled, send a message to fotaTask to start the download
+
+
+**buf_data_cb_OTA()**
+
+- Handles data reception and writing in the FOTA partition (one block size at a time) 
+
+
+
+
+![](pictures/samples/FOTA_ftp_client_bordered.png)
 
 ---------------------
 

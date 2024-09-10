@@ -1,0 +1,1 @@
+Sample application that shows how to download a delta file from an FTP server, stores it in the FOTA partition and deploys it. Debug prints on MAIN UART

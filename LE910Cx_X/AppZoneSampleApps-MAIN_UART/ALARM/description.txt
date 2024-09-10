@@ -1,0 +1,1 @@
+Sample application that shows how to set an alarm to wake-up module. Debug prints on MAIN UART
