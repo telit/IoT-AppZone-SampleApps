@@ -1,0 +1,87 @@
+{
+  "name": "Sample App for Alarm settting",
+  "type": "sample-app",
+  "description": "A sample app that shows how to set an alarm and how to use it to wakeup module.",
+  "copyright": "Telit Communications, 2021",
+  "homepage": "https://www.telit.com/",
+  "keywords": [
+    "IoT AppZone",
+    "Alarm",
+	"On Off",
+	"Wake up"
+	
+  ],
+  "availability": {
+    "MXXXXC1": {
+      "firmwares": [
+        "30.00.xx6",
+        "30.00.xx7",
+        "30.00.xx8",
+        "30.00.xx9",
+        "30.01.xx0"
+      ]
+    },
+    "MXXXXG1": {
+      "firmwares": [
+        "37.00.xx1",
+        "37.00.xx2",
+        "37.00.xx3",
+        "37.00.xx4",
+        "37.00.xx5",
+        "37.00.xx6",
+        "37.00.xx7"
+      ]
+    },
+    "LE910Cx-L": {
+      "firmwares": [
+        "25.20.xx8",
+        "25.20.xx9",
+        "25.21.xx0",
+        "25.21.xx2",
+        "25.21.xx3"
+      ]
+    },
+    "LE910Cx-X": {
+      "firmwares": [
+        "25.30.xx1",
+        "25.30.xx2",
+        "25.30.xx3",
+        "25.30.xx4",
+        "25.30.xx5",
+        "25.30.xx6",
+        "25.30.xx8"
+      ]
+    }
+  },
+  "groups": [
+    {
+      "name": "MAIN_UART",
+      "limitations": []
+    },
+    {
+      "name": "AUX_UART",
+      "limitations": []
+    },
+    {
+      "name": "USB0",
+      "limitations": []
+    }
+  ],
+  "platform": "GCC",
+  "license": "MIT",
+  "support": {
+    "email": "ts-emea@telit.com"
+  },
+  "authors": [
+    {
+      "name": "Roberta Galeazzo",
+      "email": "Roberta.Galeazzo@telit.com",
+      "homepage": "http://www.telit.com/",
+      "role": "Developer"
+    }
+  ],
+  "requires": {
+    "core/azx_log": "master",
+    "core/azx_utils": "master"
+  }
+}
