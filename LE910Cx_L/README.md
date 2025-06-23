@@ -4,9 +4,9 @@
 
 
 
-Package Version: **1.1.22-CxL**
+Package Version: **1.1.23-CxL**
 
-Minimum Firmware Version: **25.21.000.3**
+Minimum Firmware Version: **25.21.004.1**
 
 
 ## Features
@@ -21,7 +21,7 @@ This package goal is to provide sample source code for common activities kicksta
 
 To manually deploy the Sample application on the devices perform the following steps:
 
-1. Have **25.21.000.3** FW version flashed (`AT#SWPKGV` will give you the FW version)
+1. Have **25.21.004.1** FW version flashed (`AT#SWPKGV` will give you the FW version)
 
 1. Copy _m2mapz.bin_ to _/data/azc/mod/_
 	```
@@ -394,6 +394,43 @@ Sample application that shows how to download a delta file from an FTP server, s
 
 
 
+### Low power mode 
+
+The application shows how to set the module in low power modes (by disabling UART and RF). Debug prints on **AUX UART** which it is enabled/disabled to reach low power mode, <ins>using AZX log example functions</ins>
+
+
+**Features**
+
+
+- How to enable/disable LOG UART interfaces by azx apis
+- How to enable/disable UART interfaces by m2mb apis
+- How to set radio operating mode
+- How to put the modem in low power mode
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Print welcome message 
+- Print warning message about unplugging USB native port
+- Init system events handler
+- Sleep 20 seconds
+- Disable RF
+- Disable LOG UART
+- Sleep 20 seconds
+- Enable LOG UART
+- Enable RF
+- Sleep 60 seconds
+- Deinit system events handler
+
+
+![](pictures/samples/lowPowerMode_bordered.png)
+
+---------------------
+
+
+
 ## USB0 
 *Applications that provide usage examples for various functionalities, log output on USB0*
 
@@ -737,6 +774,59 @@ Sample application showcasing how to manage JSON objects. Debug prints on **USB0
 - Print the result JSON string from the object
 
 ![](pictures/samples/cjson_bordered.png)
+
+---------------------
+
+
+
+### EEPROM 24AA256
+
+Sample application showing how to communicate with a MicroChip 24AA256T I2C EEPROM chip using azx eeprom utility APIs. Debug prints on **USB0**
+
+**Setup**
+
+This demo application requires that:
+- A0, A1, and A2 pins (1,2,3 chip pins) are connected to ground (pin 4) for device address 0xA0
+- Pin 7 (WP) is connected to ground
+- Pin 6 (SCL) is connected to module GPIO 3
+- Pin 5 (SDA) is connected to module GPIO 2
+- Pin 4 is connected to one of the ground pins of the module
+- Pin 8 is connected to 1v8 supply (e.g. VPWRMON pin on the module)
+
+**Features**
+
+
+- Initialize the logs on the output channel
+- configure the EEPROM utility, setting the slave address and the memory parameters (page size, memory size)
+- Write single bytes on a random address
+- Read written bytes as a page
+- Write data using pages
+- Read the new data using pages
+- Read again using sequential reading
+- Read a single byte from a specific address
+- Read next byte using read from current address
+- Erase the EEPROM
+- Deinit EEPROM utility
+
+
+#### Application workflow
+
+**`M2MB_main.c`**
+
+- call azx_eeprom_init() to set the utility parameters (SDA and SCL pins, page and memory sizes)
+- call azx_eeprom_writeByte() to store a single byte with value '5' at the address 0x0213
+- call azx_eeprom_writeByte() to store a single byte with value '6' at the address 0x0214
+- call azx_eeprom_readPages() from address 0x0213 to retrieve the 2 bytes from the EEPROM
+- call azx_eeprom_writePages to write 1024 bytes from a buffer, starting from address 0x00
+- call azx_eeprom_readPages() again, to read 256 bytes from address 0x00
+- call azx_eeprom_readSequentially() to read 256 bytes from 0x00 by without pages (less overhead on I2C protocol)
+- call azx_eeprom_readByte() to get a single byte from address 0x00
+- call azx_eeprom_readByteFromCurrentAddress() to get a byte from next address (0x01)
+- call azx_eeprom_eraseAll() to completely erase the EEPROM memory (this writes 0xFF in each byte)
+- call azx_eeprom_readPages from address 0x0213 to get 2 bytes and verify the values have been written to 0xFF
+- call azx_eeprom_deinit to close the eeprom handler and the I2C channel
+
+![](pictures/samples/eeprom_AA256_bordered.png)
 
 ---------------------
 
@@ -1293,6 +1383,41 @@ Sample application showing how to communicate with an I2C slave device. Debug pr
 
 
 ![](pictures/samples/i2c_bordered.png)
+
+---------------------
+
+
+
+### I2C Combined
+
+Sample application showing how to communicate with an I2C slave device with I2C raw mode. Debug prints on MAIN UART
+
+
+**Features**
+
+
+- How to open a communication channel with an I2C slave device
+- How to send and receive data to/from the slave device using raw mode API
+
+**Setup**
+
+- Connect sensor VDD to 1v8 supply (e.g. Vaux/PwrMon pin of the module)
+- Connect sensor GND to a GND pin of the module
+- Connect sensor SDA to module GPIO2
+- Connect sensor SCL to module GPIO3
+
+#### Application workflow
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+- Open I2C bus, setting SDA an SCL pins as 2 and 3 respectively
+- Set registers to configure accelerometer
+-Read in a loop the 6 registers carrying the 3 axes values and show the g value for each of them
+
+
+
+![](pictures/samples/i2c_combined_bordered.png)
 
 ---------------------
 
@@ -2614,6 +2739,59 @@ Sample application showcasing how to manage JSON objects. Debug prints on **MAIN
 
 
 
+### EEPROM 24AA256
+
+Sample application showing how to communicate with a MicroChip 24AA256T I2C EEPROM chip using azx eeprom utility APIs. Debug prints on **MAIN UART**
+
+**Setup**
+
+This demo application requires that:
+- A0, A1, and A2 pins (1,2,3 chip pins) are connected to ground (pin 4) for device address 0xA0
+- Pin 7 (WP) is connected to ground
+- Pin 6 (SCL) is connected to module GPIO 3
+- Pin 5 (SDA) is connected to module GPIO 2
+- Pin 4 is connected to one of the ground pins of the module
+- Pin 8 is connected to 1v8 supply (e.g. VPWRMON pin on the module)
+
+**Features**
+
+
+- Initialize the logs on the output channel
+- configure the EEPROM utility, setting the slave address and the memory parameters (page size, memory size)
+- Write single bytes on a random address
+- Read written bytes as a page
+- Write data using pages
+- Read the new data using pages
+- Read again using sequential reading
+- Read a single byte from a specific address
+- Read next byte using read from current address
+- Erase the EEPROM
+- Deinit EEPROM utility
+
+
+#### Application workflow
+
+**`M2MB_main.c`**
+
+- call azx_eeprom_init() to set the utility parameters (SDA and SCL pins, page and memory sizes)
+- call azx_eeprom_writeByte() to store a single byte with value '5' at the address 0x0213
+- call azx_eeprom_writeByte() to store a single byte with value '6' at the address 0x0214
+- call azx_eeprom_readPages() from address 0x0213 to retrieve the 2 bytes from the EEPROM
+- call azx_eeprom_writePages to write 1024 bytes from a buffer, starting from address 0x00
+- call azx_eeprom_readPages() again, to read 256 bytes from address 0x00
+- call azx_eeprom_readSequentially() to read 256 bytes from 0x00 by without pages (less overhead on I2C protocol)
+- call azx_eeprom_readByte() to get a single byte from address 0x00
+- call azx_eeprom_readByteFromCurrentAddress() to get a byte from next address (0x01)
+- call azx_eeprom_eraseAll() to completely erase the EEPROM memory (this writes 0xFF in each byte)
+- call azx_eeprom_readPages from address 0x0213 to get 2 bytes and verify the values have been written to 0xFF
+- call azx_eeprom_deinit to close the eeprom handler and the I2C channel
+
+![](pictures/samples/eeprom_AA256_bordered.png)
+
+---------------------
+
+
+
 ### Easy AT example 
 
 Sample application showcasing Easy AT functionalities. Debug prints on **MAIN UART**
@@ -3170,6 +3348,41 @@ Sample application showing how to communicate with an I2C slave device. Debug pr
 
 
 
+### I2C Combined
+
+Sample application showing how to communicate with an I2C slave device with I2C raw mode. Debug prints on MAIN UART
+
+
+**Features**
+
+
+- How to open a communication channel with an I2C slave device
+- How to send and receive data to/from the slave device using raw mode API
+
+**Setup**
+
+- Connect sensor VDD to 1v8 supply (e.g. Vaux/PwrMon pin of the module)
+- Connect sensor GND to a GND pin of the module
+- Connect sensor SDA to module GPIO2
+- Connect sensor SCL to module GPIO3
+
+#### Application workflow
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+- Open I2C bus, setting SDA an SCL pins as 2 and 3 respectively
+- Set registers to configure accelerometer
+-Read in a loop the 6 registers carrying the 3 axes values and show the g value for each of them
+
+
+
+![](pictures/samples/i2c_combined_bordered.png)
+
+---------------------
+
+
+
 ### Little FileSystem 2 
 
 Sample application showing how use lfs2 porting with RAM disk and SPI data flash. Debug prints on **MAIN UART**
@@ -3257,6 +3470,43 @@ Sample application showing how to print on one of the available output interface
 - Print a message with every log level
 
 ![](pictures/samples/logging_bordered.png)
+
+---------------------
+
+
+
+### Low power mode 
+
+The application shows how to set the module in low power modes (by disabling UART and RF). Debug prints on **MAIN UART** which it is enabled/disabled to reach low power mode, <ins>using AZX log example functions</ins>
+
+
+**Features**
+
+
+- How to enable/disable LOG UART interfaces by azx apis
+- How to enable/disable UART interfaces by m2mb apis
+- How to set radio operating mode
+- How to put the modem in low power mode
+
+
+**Application workflow**
+
+**`M2MB_main.c`**
+
+- Print welcome message 
+- Print warning message about unplugging USB native port
+- Init system events handler
+- Sleep 20 seconds
+- Disable RF
+- Disable LOG UART
+- Sleep 20 seconds
+- Enable LOG UART
+- Enable RF
+- Sleep 60 seconds
+- Deinit system events handler
+
+
+![](pictures/samples/lowPowerMode_bordered.png)
 
 ---------------------
 

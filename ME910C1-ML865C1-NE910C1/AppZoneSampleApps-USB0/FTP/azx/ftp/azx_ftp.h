@@ -348,10 +348,14 @@ typedef struct AZX_FTP_OPTIONS_TAG{
   AZX_FTP_DEBUG_HOOK_LEVELS_E level;		   /**< Global debug Level to set */
   unsigned char cid;                       /**< Context id used by active connection*/
   void *cbArg;                             /**< User defined parameter, not used*/
-  #ifdef M2M_M2MB_SSL_H
+#ifdef M2M_M2MB_SSL_H
   INT8 ssl;                                /*RoGa: new SSL parameters*/
   M2MB_SSL_CONFIG_HANDLE sslConfigH;
   M2MB_SSL_CTXT_HANDLE sslCtxtH;
+#ifdef TLS_REUSE
+  INT8 sslReuse;                           /*RoGa: to be used in case of session reuse*/
+  M2MB_SSL_SESSION_HANDLE sslSessionH;
+#endif
 #endif
 } AZX_FTP_OPTIONS_T;
 

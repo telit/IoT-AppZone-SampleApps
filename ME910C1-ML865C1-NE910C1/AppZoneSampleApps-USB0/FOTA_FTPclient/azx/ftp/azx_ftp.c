@@ -377,7 +377,37 @@ static INT32 net_ssl_write(M2MB_SSL_CONNECTION_HANDLE sslConnHndl, const CHAR *b
 }
 #endif
 
+
 #define net_close m2mb_socket_bsd_close
+
+#ifdef M2M_M2MB_SSL_H
+
+static INT32 net_ssl_close(M2MB_SOCKET_BSD_SOCKET s, M2MB_SSL_CONNECTION_HANDLE sslConnHndl)
+{
+  INT32 ret;
+
+  ret = m2mb_ssl_shutdown(sslConnHndl);
+  if (ret < 0)
+  {
+    AZX_FTP_DEBUG(AZX_FTP_DEBUG_HOOK_DEBUG, "fail to close ssl\r\n");
+  }
+  else
+  {
+    AZX_FTP_DEBUG(AZX_FTP_DEBUG_HOOK_DEBUG, "SSL socket shutdown\r\n");
+  }
+
+  ret = m2mb_socket_bsd_close(s);
+  if(ret < 0 )
+  {
+    AZX_FTP_DEBUG(AZX_FTP_DEBUG_HOOK_DEBUG, "failed to close socket\r\n");
+  }
+  else
+  {
+    AZX_FTP_DEBUG(AZX_FTP_DEBUG_HOOK_DEBUG, "Socket closed\r\n");
+  }
+  return ret;
+}
+#endif
 
 #endif
 
@@ -1220,7 +1250,7 @@ static INT32 FtpXferFile(AZX_FTP_FILE_INFO_T *localfile, AZX_FTP_FILE_INFO_T *re
       //sizeof(nControl->response));
       return 0;
     }
-    //FTP_DEBUG(FTP_DEBUG_HOOK_DEBUG,"local file opened.\r\n");
+   // AZX_FTP_DEBUG(AZX_FTP_DEBUG_HOOK_DEBUG,"local file opened.\r\n");
   }
 
   if(localfile == NULL)
@@ -1449,6 +1479,7 @@ static INT32 FtpXferBuffer( AZX_FTP_BUFFER_T *localinfo, AZX_FTP_FILE_INFO_T *re
   {
     localinfo->buf_cb(NULL, byteTransf, DATA_CB_END); //notify the user of the data completion, passing the number of bytes received
   }
+  //AZX_FTP_DEBUG( AZX_FTP_DEBUG_HOOK_INFO,  "byteTransf: %d\r\n", byteTransf );
   return byteTransf; //returns transferred bytes
 }
 
@@ -1473,6 +1504,9 @@ AZX_FTP_GLOBALDEF  INT32 azx_ftp_init(const AZX_FTP_OPTIONS_T *opt)
   ftp_opts.level = opt->level;
   ftp_opts.cid = opt->cid;
   ftp_opts.ssl = opt->ssl;
+#ifdef TLS_REUSE
+  ftp_opts.sslReuse = opt -> sslReuse;
+#endif
   ftp_opts.sslConfigH = opt->sslConfigH;
   ftp_opts.sslCtxtH = opt->sslCtxtH;
   return 1;
@@ -1611,6 +1645,48 @@ AZX_FTP_GLOBALDEF INT32 azx_ftp_access(const CHAR *path, INT32 typ, INT32 mode, 
  INT32 sslRes;
  if(ftp_opts.ssl)
  {
+#ifdef TLS_REUSE
+   //AZX_FTP_DEBUG(AZX_FTP_DEBUG_HOOK_DEBUG,"ftp_opts.sslReuse: %d \r\n",ftp_opts.sslReuse);
+   if(ftp_opts.sslReuse)
+   {
+     sslData = m2mb_ssl_resume_secure_socket( ftp_opts.sslConfigH, ftp_opts.sslCtxtH, (*nData)->handle, &sslRes);
+     if(sslData == 0)
+     {
+       AZX_FTP_DEBUG(AZX_FTP_DEBUG_HOOK_ERROR,"m2mb_ssl_resume_secure_socket FAILED error %d \r\n",sslRes);
+       azx_ftp_close( *nData );
+       *nData = NULL;
+       return 0;
+     }
+     else
+     {
+       AZX_FTP_DEBUG(AZX_FTP_DEBUG_HOOK_DEBUG,"In reuse - sslData: %d \r\n",sslData);
+       if (ftp_opts.sslSessionH != NULL)
+       {
+         sslRes = m2mb_ssl_set_session(sslData, ftp_opts.sslSessionH);
+         if(sslRes < 0)
+         {
+           AZX_FTP_DEBUG(AZX_FTP_DEBUG_HOOK_ERROR,"m2mb_ssl_set_session FAILED error %d \r\n",sslRes);
+           azx_ftp_close( *nData );
+           *nData = NULL;
+           return 0;
+         }
+         else
+         {
+           sslRes = m2mb_ssl_connect( sslData );
+           if( sslRes != 0 )
+           {
+             AZX_FTP_DEBUG(AZX_FTP_DEBUG_HOOK_ERROR,"m2mb_ssl_connect FAILED error %d. Please verify module clock with AT+CCLK? command \r\n.",sslRes );
+             azx_ftp_close( *nData );
+             *nData = NULL;
+             return 0;
+           }
+         }
+        }
+     }
+   }
+   else
+   {
+#endif
    sslData = m2mb_ssl_secure_socket( ftp_opts.sslConfigH,ftp_opts.sslCtxtH, (*nData)->handle, &sslRes );
    if( sslData == 0 )
    {
@@ -1631,6 +1707,9 @@ AZX_FTP_GLOBALDEF INT32 azx_ftp_access(const CHAR *path, INT32 typ, INT32 mode, 
        return 0;
      }
    }
+#ifdef TLS_REUSE
+   }
+#endif
  }
  (*nData)->sslHandle = sslData;
  (*nData)->AUTHdone = TRUE;
@@ -1788,6 +1867,12 @@ AZX_FTP_GLOBALDEF INT32 azx_ftp_connect(const CHAR *host, AZX_FTP_NET_BUF_T **nC
       else
       {
         ctrl->AUTHdone = TRUE;
+#ifdef TLS_REUSE
+        if(ftp_opts.sslReuse)
+        {
+          ftp_opts.sslSessionH = m2mb_ssl_get_session(sslControl);
+        }
+#endif
       }
     }
   }
@@ -2029,7 +2114,14 @@ AZX_FTP_GLOBALDEF INT32 azx_ftp_close(AZX_FTP_NET_BUF_T *nData)
     }
     /*shutdown is a dummy function*/
     shutdown(nData->handle,2);
+    if(ftp_opts.ssl == 1 && (nData->AUTHdone == TRUE))
+    {
+      net_ssl_close(nData->handle, nData->sslHandle);
+    }
+    else
+    {
     net_close(nData->handle);
+    }
     ctrl = nData->ctrl;
     free(nData);
 
@@ -2048,7 +2140,14 @@ AZX_FTP_GLOBALDEF INT32 azx_ftp_close(AZX_FTP_NET_BUF_T *nData)
       nData->ctrl = NULL;
       azx_ftp_close(nData->data);
     }
+    if(ftp_opts.ssl == 1 && (nData->AUTHdone == TRUE))
+    {
+      net_ssl_close(nData->handle, nData->sslHandle);
+    }
+    else
+    {
     net_close(nData->handle);
+    }
     free(nData);
     return 0;
   }
@@ -2617,7 +2716,14 @@ AZX_FTP_GLOBALDEF void azx_ftp_quit(AZX_FTP_NET_BUF_T *nControl)
   }
 
   FtpSendCmd("QUIT",'2',nControl);
+  if(ftp_opts.ssl == 1 && (nControl->AUTHdone == TRUE))
+  {
+    net_ssl_close(nControl->handle, nControl->sslHandle);
+  }
+  else
+  {
   net_close(nControl->handle);
+  }
   free(nControl->buf);
   free(nControl->response);
   free(nControl);

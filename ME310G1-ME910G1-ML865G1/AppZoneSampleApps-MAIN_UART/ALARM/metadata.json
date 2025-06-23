@@ -7,9 +7,8 @@
   "keywords": [
     "IoT AppZone",
     "Alarm",
-	"On Off",
-	"Wake up"
-	
+    "On Off",
+    "Wake up"
   ],
   "availability": {
     "MXXXXC1": {
@@ -38,7 +37,8 @@
         "25.20.xx9",
         "25.21.xx0",
         "25.21.xx2",
-        "25.21.xx3"
+        "25.21.xx3",
+        "25.21.xx4"
       ]
     },
     "LE910Cx-X": {
