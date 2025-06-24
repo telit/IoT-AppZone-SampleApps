@@ -1,3 +1,6 @@
 @brief ftp client porting in azx style
-@version 1.1.0
+@version 1.5.0
 @dependencies 
+
+TLS reuse is supported only on LE190Cx-Tx products and from 25.00.xx8-B007
+Add CPPFLAGS += -DTLS_REUSE in makefile.in to enable it
