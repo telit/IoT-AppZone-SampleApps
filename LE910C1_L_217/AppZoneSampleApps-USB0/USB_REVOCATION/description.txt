@@ -1,0 +1,1 @@
+Sample application that Debug prints on AUX UART
