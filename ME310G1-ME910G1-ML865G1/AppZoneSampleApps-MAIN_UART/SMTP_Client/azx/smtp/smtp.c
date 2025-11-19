@@ -2511,7 +2511,7 @@ static int smtp_tls_init(struct smtp *const smtp, const char *const server)
 {
 	M2MB_SSL_CONFIG_T sslConfig;
 
-	int32_t sslStatus = 0;
+	INT32 sslStatus = 0;
 
 	sslConfig.CipherSuites = (M2MB_SSL_CIPHER_SUITE_E *)&s_cipher_suite[0];
 	sslConfig.CipherSuitesNum = (sizeof(s_cipher_suite) / sizeof(s_cipher_suite[0]));
