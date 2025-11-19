@@ -118,7 +118,9 @@
 /** End of Functions    **/
 
 /**   Types   **/
+#ifndef _IN_ADDR_T_DECLARED
 typedef UINT32 in_addr_t;
+#endif
 typedef char *__caddr_t;
 typedef UINT8 uint8_t;
 
