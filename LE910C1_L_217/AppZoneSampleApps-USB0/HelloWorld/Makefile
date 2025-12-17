@@ -12,23 +12,48 @@ endif
 
 #### BINARIES
 
-CC := $(TOOLCHAIN_BIN)arm-none-linux-gnueabihf-gcc --sysroot=$(SYSLIB)
-CXX := $(TOOLCHAIN_BIN)arm-none-linux-gnueabihf-g++ --sysroot=$(SYSLIB)
-CPP := $(TOOLCHAIN_BIN)arm-none-linux-gnueabihf-gcc -E --sysroot=$(SYSLIB)
-AR := $(TOOLCHAIN_BIN)arm-none-linux-gnueabihf-ar
-AS := $(TOOLCHAIN_BIN)arm-none-linux-gnueabihf-as
-LD := $(TOOLCHAIN_BIN)arm-none-linux-gnueabihf-ld --sysroot=$(SYSLIB)
-NM := $(TOOLCHAIN_BIN)arm-none-linux-gnueabihf-nm
+# Detect OS
+UNAME_S := $(shell uname -s)
 
-OBJCOPY:=$(TOOLCHAIN_BIN)arm-none-linux-gnueabihf-objcopy
-OBJDUMP:=$(TOOLCHAIN_BIN)arm-none-linux-gnueabihf-objdump
-STRIP:=$(TOOLCHAIN_BIN)arm-none-linux-gnueabihf-strip
-RANLIB:=$(TOOLCHAIN_BIN)arm-none-linux-gnueabihf-ranlib
+ifeq ($(UNAME_S),Linux)
+    CC := $(TOOLCHAIN_BIN)arm-oe-linux-gnueabi-gcc -mfpu=neon -mfloat-abi=hard --sysroot=$(SYSLIB)
+	CXX := $(TOOLCHAIN_BIN)arm-oe-linux-gnueabi-g++ -mfpu=neon -mfloat-abi=hard --sysroot=$(SYSLIB)
+	CPP := $(TOOLCHAIN_BIN)arm-oe-linux-gnueabi-gcc -E -mfpu=neon -mfloat-abi=hard --sysroot=$(SYSLIB)
+	AR := $(TOOLCHAIN_BIN)arm-oe-linux-gnueabi-ar
+	AS := $(TOOLCHAIN_BIN)arm-oe-linux-gnueabi-as
+	LD := $(TOOLCHAIN_BIN)arm-oe-linux-gnueabi-ld --sysroot=$(SYSLIB)
+	NM := $(TOOLCHAIN_BIN)arm-oe-linux-gnueabi-nm
+	
+	OBJCOPY:=$(TOOLCHAIN_BIN)arm-oe-linux-gnueabi-objcopy
+	OBJDUMP:=$(TOOLCHAIN_BIN)arm-oe-linux-gnueabi-objdump
+	STRIP:=$(TOOLCHAIN_BIN)arm-oe-linux-gnueabi-strip
+	RANLIB:=$(TOOLCHAIN_BIN)arm-oe-linux-gnueabi-ranlib
+	
+	###FLAGS
+	CFLAGS=-fexpensive-optimizations   -frename-registers -ftree-vectorize   -finline-functions -finline-limit=64 -Wno-error=maybe-uninitialized -Wno-error=unused-result  
+	CXXFLAGS=-fexpensive-optimizations   -frename-registers -ftree-vectorize   -finline-functions -finline-limit=64   -Wno-error=maybe-uninitialized -Wno-error=unused-result
+	CPPFLAGS=-std=gnu99
+else 
+              
+	CC := $(TOOLCHAIN_BIN)arm-none-linux-gnueabihf-gcc --sysroot=$(SYSLIB)
+	CXX := $(TOOLCHAIN_BIN)arm-none-linux-gnueabihf-g++ --sysroot=$(SYSLIB)
+	CPP := $(TOOLCHAIN_BIN)arm-none-linux-gnueabihf-gcc -E --sysroot=$(SYSLIB)
+	AR := $(TOOLCHAIN_BIN)arm-none-linux-gnueabihf-ar
+	AS := $(TOOLCHAIN_BIN)arm-none-linux-gnueabihf-as
+	LD := $(TOOLCHAIN_BIN)arm-none-linux-gnueabihf-ld --sysroot=$(SYSLIB)
+	NM := $(TOOLCHAIN_BIN)arm-none-linux-gnueabihf-nm
+	
+	OBJCOPY:=$(TOOLCHAIN_BIN)arm-none-linux-gnueabihf-objcopy
+	OBJDUMP:=$(TOOLCHAIN_BIN)arm-none-linux-gnueabihf-objdump
+	STRIP:=$(TOOLCHAIN_BIN)arm-none-linux-gnueabihf-strip
+	RANLIB:=$(TOOLCHAIN_BIN)arm-none-linux-gnueabihf-ranlib
+	
+	###FLAGS
+	CFLAGS=-fexpensive-optimizations -frename-registers -fomit-frame-pointer -ftree-vectorize -Wno-error=maybe-uninitialized -finline-functions -finline-limit=64  -fstack-protector-strong -pie -fpie -Wa,--noexecstack
+	CXXFLAGS=-fexpensive-optimizations -frename-registers -fomit-frame-pointer -ftree-vectorize -Wno-error=maybe-uninitialized -finline-functions -finline-limit=64  -fstack-protector-strong -pie -fpie -Wa,--noexecstack
+	CPPFLAGS=-std=gnu99          
+endif
 
-###FLAGS
-CFLAGS=-fexpensive-optimizations -frename-registers -fomit-frame-pointer -ftree-vectorize -Wno-error=maybe-uninitialized -finline-functions -finline-limit=64  -fstack-protector-strong -pie -fpie -Wa,--noexecstack
-CXXFLAGS=-fexpensive-optimizations -frename-registers -fomit-frame-pointer -ftree-vectorize -Wno-error=maybe-uninitialized -finline-functions -finline-limit=64  -fstack-protector-strong -pie -fpie -Wa,--noexecstack
-CPPFLAGS=-std=gnu99
 
 
 # c compiler flag
@@ -53,7 +78,8 @@ AZ_M2MB_LIBS:= \
 	-lm2mgcom \
 	-lm2mpcom \
 	-lm2mgpub \
-	-lm2mppub
+	-lm2mppub \
+	-lpaho-mqtt-telit
 
 LIBS = $(AZ_M2MB_LIBS) -lc -lm -O2
 
