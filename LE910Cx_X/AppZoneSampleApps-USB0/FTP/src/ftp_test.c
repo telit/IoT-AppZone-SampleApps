@@ -13,9 +13,10 @@
 #include "m2mb_net.h"
 #include "m2mb_pdp.h"
 #include "m2mb_socket.h"
+#include "m2mb_ssl.h"
 #include "m2mb_fs_posix.h" //for file stats
 #include "m2mb_fs_stdio.h"
-#include "m2mb_ssl.h"
+
 
 #include <stdio.h>
 #include <string.h>
@@ -617,8 +618,8 @@ INT32 msgFTPTask(INT32 type, INT32 param1, INT32 param2)
   M2MB_OS_EV_ATTR_HANDLE  evAttrHandle;
   UINT32                  curEvBits;
 
-  AZX_FTP_OPTIONS_T opts;
-  AZX_FTP_CALLBACK_OPTIONS_T cb_opts;
+  AZX_FTP_OPTIONS_T opts = {0};
+  AZX_FTP_CALLBACK_OPTIONS_T cb_opts = {0};
   UINT32 file_size;
 
 
@@ -914,7 +915,7 @@ INT32 msgFTPTask(INT32 type, INT32 param1, INT32 param2)
      *
      * ======================*/
     {
-      //AZX_FTP_XFER_T local;
+      AZX_FTP_XFER_T local;
 
       azx_ftp_clearCallback(ftp_client);
 

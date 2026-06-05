@@ -62,8 +62,8 @@ int cpp_main( int argc, char **argv )
 {
   (void)argc;
   (void)argv;
-  
-  Logger log{LOG_LEVEL_TRACE, LOG_TO_MAIN_UART, false};
+  /* The variables below are defined in Makefile.in */
+  Logger log{LOG_LEVEL, LOG_CHANNEL, false};
 
   log.trace(   "C++ Trace print example\r\n");
   log.debug(   "C++ Debug print example\r\n");

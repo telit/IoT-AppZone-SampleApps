@@ -65,11 +65,12 @@ int cpp_main( int argc, char **argv )
 {
   (void)argc;
   (void)argv;
+  /* The variables below are defined in Makefile.in */
   AZX_LOG_CFG_T cfg =
   {
-    /*.log_level*/   AZX_LOG_LEVEL_DEBUG,
-    /*.log_channel*/ AZX_LOG_TO_MAIN_UART,
-    /*.log_colours*/ 0
+    /*.log_level*/   AZX_LOG_LEVEL,
+    /*.log_channel*/ LOG_CHANNEL,
+    /*.log_colours*/ AZX_LOG_ENABLE_COLOURS
   };
   
   azx_sleep_ms(5000);

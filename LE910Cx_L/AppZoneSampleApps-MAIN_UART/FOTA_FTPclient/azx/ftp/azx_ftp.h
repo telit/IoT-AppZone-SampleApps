@@ -29,6 +29,7 @@
  * @note
  *   Dependencies:
  *      m2mb_types.h
+ *      m2mb_ssl.h
  *
  * @author Fabio Pintus, Roberta Galeazzo
  *

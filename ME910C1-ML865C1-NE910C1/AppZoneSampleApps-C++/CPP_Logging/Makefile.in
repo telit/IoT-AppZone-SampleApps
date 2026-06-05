@@ -2,13 +2,11 @@
 LOGS_ENABLE = 1
 
 # If logs are enabled, channel can be: MAIN_UART AUX_UART USB0 USB1
-LOGS_CHANNEL = AZX_LOG_TO_C++
+LOGS_CHANNEL = LOG_TO_MAIN_UART
 
-# How detailed should the logs be. See AZX_LOG_LEVEL_E
+# How detailed should the logs be. See LOG_LEVEL_E
 LOGS_LEVEL = DEBUG
 
-# Enable to add ANSI colours to the logs
-LOGS_COLOUR = 0
 
 
 # -------------------------
@@ -25,10 +23,9 @@ CPPFLAGS += -DVERSION=\"$(SW_VER)\"
 
 ifeq ($(strip $(LOGS_ENABLE)),1)
 CPPFLAGS += -DLOG_CHANNEL=$(LOGS_CHANNEL)
-CPPFLAGS += -DAZX_LOG_LEVEL=AZX_LOG_LEVEL_$(LOGS_LEVEL)
-CPPFLAGS += -DAZX_LOG_ENABLE_COLOURS=$(LOGS_COLOUR)
+CPPFLAGS += -DLOG_LEVEL=LOG_LEVEL_$(LOGS_LEVEL)
 else
-CPPFLAGS += -DAZX_LOG_DISABLE
+CPPFLAGS += -DLOG_DISABLE
 endif
 
 

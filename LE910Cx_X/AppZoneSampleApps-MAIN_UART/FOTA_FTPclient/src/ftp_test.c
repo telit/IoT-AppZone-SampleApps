@@ -901,10 +901,8 @@ INT32 msgFTPTask(INT32 type, INT32 param1, INT32 param2)
   M2MB_OS_EV_ATTR_HANDLE  evAttrHandle;
   UINT32                  curEvBits;
 
-  AZX_FTP_OPTIONS_T opts;
-
-  AZX_FTP_CALLBACK_OPTIONS_T cb_opts;
-
+  AZX_FTP_OPTIONS_T opts = {0};
+  AZX_FTP_CALLBACK_OPTIONS_T cb_opts = {0};
   UINT32 file_size;
 
 
