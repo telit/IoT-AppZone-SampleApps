@@ -2,7 +2,7 @@
 LOGS_ENABLE = 1
 
 # If logs are enabled, channel can be: MAIN_UART AUX_UART USB0 USB1
-LOGS_CHANNEL = AZX_LOG_TO_C++
+LOGS_CHANNEL = AZX_LOG_TO_MAIN_UART
 
 # How detailed should the logs be. See AZX_LOG_LEVEL_E
 LOGS_LEVEL = DEBUG
