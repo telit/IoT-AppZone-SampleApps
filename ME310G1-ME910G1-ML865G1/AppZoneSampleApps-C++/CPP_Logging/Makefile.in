@@ -13,7 +13,7 @@ LOGS_LEVEL = DEBUG
 
 ## ---- do not touch below this line
 
-SW_VER = 1.1.23
+SW_VER = 1.1.26
 
 CLEAN_BEFORE_BUILD = clean
 

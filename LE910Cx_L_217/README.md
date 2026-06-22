@@ -4,7 +4,7 @@
 
 
 
-Package Version: **1.1.23-CxL217**
+Package Version: **1.1.26-CxL217**
 
 Minimum Firmware Version: **25.21.005.0**
 
@@ -142,6 +142,8 @@ ROM_START=<new address>
 
 ## Main contents
 
+[AUX UART](#aux-uart)
+
 [MAIN UART](#main-uart)
 
 [USB0](#usb0)
@@ -150,6 +152,35 @@ ROM_START=<new address>
 
 
 # Applications
+
+## AUX UART 
+*Applications that provide usage examples for various functionalities, log output on Auxiliary UART*
+
+
+### Hello World
+
+The application prints "Hello World!" over selected output every two seconds. Debug prints on **AUX UART**, <ins>using AZX log example functions</ins>
+
+
+**Features**
+
+
+- How to open an output channel using AZX LOG sample functions
+- How to print logging information on the channel using AZX LOG sample functions
+
+
+#### Application workflow
+
+**`M2MB_main.c`**
+
+- Open USB/UART/UART_AUX
+- Print "Hello World!" every 2 seconds in a while loop
+
+![](pictures/samples/hello_world_bordered.png)
+
+---------------------
+
+
 
 ## USB0 
 *Applications that provide usage examples for various functionalities, log output on USB0*
