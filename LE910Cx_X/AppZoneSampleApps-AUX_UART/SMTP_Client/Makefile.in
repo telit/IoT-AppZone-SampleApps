@@ -61,7 +61,3 @@ CPPFLAGS += -I azx/gnu
 OBJS += $(patsubst %.c,%.o,$(wildcard azx/gnu/*.c))
 CPPFLAGS += -I azx/smtp
 OBJS += $(patsubst %.c,%.o,$(wildcard azx/smtp/*.c))
-
-# How detailed should the logs be. See AZX_LOG_LEVEL_E
-LOGS_LEVEL = INFO
-
