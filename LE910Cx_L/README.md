@@ -6,7 +6,7 @@
 
 Package Version: **1.1.26-CxL**
 
-Minimum Firmware Version: **25.21.004.1**
+Maximum Firmware Version: **25.21.004.1**
 
 
 ## Features
