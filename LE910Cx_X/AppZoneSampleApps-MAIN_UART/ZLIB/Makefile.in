@@ -63,5 +63,7 @@ CPPFLAGS += -I azx/zlib
 OBJS += $(patsubst %.c,%.o,$(wildcard azx/zlib/*.c))
 #do not add c++ flags for LE910 Linux-based modules
 ifeq (,$(strip $(findstring LE910Cx,$(AZ_MODEL))))
-  CPPFLAGS += -std=c++11
+  ifneq (,$(strip $(call is_toolchain,$(TOOLCHAIN),$(GCC_TOOLCHAINS))))
+    CPPFLAGS += -std=c++11
+  endif
 endif

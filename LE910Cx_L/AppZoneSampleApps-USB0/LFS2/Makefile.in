@@ -65,5 +65,7 @@ CPPFLAGS += -I azx/spi_flash
 OBJS += $(patsubst %.c,%.o,$(wildcard azx/spi_flash/*.c))
 #do not add c++ flags for LE910 Linux-based modules
 ifeq (,$(strip $(findstring LE910Cx,$(AZ_MODEL))))
-  CPPFLAGS +=-Wno-literal-suffix
+  ifneq (,$(strip $(call is_toolchain,$(TOOLCHAIN),$(GCC_TOOLCHAINS))))
+    CPPFLAGS +=-Wno-literal-suffix
+  endif
 endif
